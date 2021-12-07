@@ -11,7 +11,6 @@
 3) 로드해서 저장
 4) 화면 출력
 211206_FileIO_0~2까지 디버깅!
-211207 git test
 */
 
 struct AUser
@@ -30,30 +29,30 @@ int main()
 	//int index = 1;
 	//float iKor = 50.5f;
 	FILE* fpdest= fopen("Samplebak.bak", "w");
-	fwrite(UserList, 1, sizeof(AUser) * Byte, fpdest);
+	fwrite (UserList, 1, sizeof(AUser) * Byte, fpdest)
 
-		/*FILE* fpWrite = fopen("Sample.txt", "w");
-		{
-			fprintf(fpWrite, "%s", "== Arim han ==");
-			fprintf(fpWrite, "\n%s ", "User1");
-			//fprintf(fpWrite, "%d %f", index, iKor);
-			fclose(fpWrite);
-		}
+	/*FILE* fpWrite = fopen("Sample.txt", "w");
+	{
+		fprintf(fpWrite, "%s", "== Arim han ==");
+		fprintf(fpWrite, "\n%s ", "User1");
+		//fprintf(fpWrite, "%d %f", index, iKor);
+		fclose(fpWrite);
+	}
 
-		char buffer[256] = { 0, };
-		int indexRead;
-		float iKorRead;
+	char buffer[256] = { 0, };
+	int indexRead;
+	float iKorRead;
 
-		FILE* fpRead = fopen("Sample.txt", "r");
-		{
-			fgets(buffer, 256, fpRead);
-			fscanf(fpRead, "%s %d %f", buffer, &indexRead, &iKorRead);
-			printf("\n%s %d %f", buffer, indexRead, iKorRead);
-			fscanf(fpRead, "%s %d %f", buffer, &indexRead, &iKorRead);
-			printf("\n%s %d %f", buffer, indexRead, iKorRead);
-			fclose(fpRead);
-		}*/
-		return 0;
+	FILE* fpRead = fopen("Sample.txt", "r");
+	{
+		fgets(buffer, 256, fpRead);
+		fscanf(fpRead, "%s %d %f", buffer, &indexRead, &iKorRead);
+		printf("\n%s %d %f", buffer, indexRead, iKorRead);
+		fscanf(fpRead, "%s %d %f", buffer, &indexRead, &iKorRead);
+		printf("\n%s %d %f", buffer, indexRead, iKorRead);
+		fclose(fpRead);
+	}*/
+	return 0;
 }
 
 
