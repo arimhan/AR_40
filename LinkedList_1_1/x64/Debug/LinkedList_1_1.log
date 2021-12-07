@@ -1,0 +1,3 @@
+﻿  Sample.cpp
+D:\AR_40\LinkedList_1_1\Sample.cpp(106,1): warning C4326: 'main'의 반환 형식이 'int'이어야 하는데 'void'입니다.
+  LinkedList_1_1.vcxproj -> D:\AR_40\x64\Debug\LinkedList_1_1.exe

@@ -17,10 +17,10 @@
 211207 git test
 */
 //1) 데이터 초기화 및 입력
-void Create();
+FILE* Create();
 
 //2) 파일생성 후 저장
-void Insert();
+int Insert();
 
 //3) 로드해서 저장
 void Load();
@@ -35,6 +35,28 @@ struct AUser
 	int m_iKor;
 };
 
+
+void AddLink(AUser* pUser)
+{
+	g_pEndUser->pNext = pUser;
+	g_pEndUser = pUser;
+
+}
+void NewNode(AUser* pUser)
+{
+
+}
+
+FILE* Create()
+{
+	AUser* pUser = NewNode();
+	if (g_pHeadList == NULL)
+	{
+
+	}
+	return 
+}
+;
 
 int main()
 {
@@ -70,9 +92,9 @@ int main()
 		return 0;
 }
 
-void Create();
 
-void Insert();
+
+int Insert();
 
 void Load();
 

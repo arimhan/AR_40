@@ -1,0 +1,6 @@
+5
+UWX 95 30 14 53 none 
+XJE 45 89 84 99 none 
+YEB 14 84 51 88 none 
+OPS 72 12 52 86 none 
+CCX 98 95 76 97 none 
