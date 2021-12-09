@@ -7,7 +7,7 @@
 //1) 구조체 OK
 //2) main OK
 //3) 파일 생성, 노드 생성 -> 저장
-//4) 노드 삭제 OK
+//4) 노드 삭제 
 //5) 화면 출력
 //로드해서 저장, 화면 출력, 모든 데이터 삭제
 
@@ -18,7 +18,6 @@ struct AUser
 	int m_Eng;
 	AUser* pNext;
 };
-
 
 int imaxcount = 0;
 AUser* StartUser = 0;
@@ -72,6 +71,7 @@ void SaveNLoad() //파일 생성 및 로드
 { 
 	FILE* fpRead = fopen("Sample.txt", "rb");
 	int countRead = 0;
+	fread(&countRead, sizeof(int), 1, fpRead);
 
 	if (fpRead == NULL)
 	{
@@ -87,27 +87,36 @@ void SaveNLoad() //파일 생성 및 로드
 		fpRead = NULL;
 	}
 }
-void Draw() { return; }
+int Insert(FILE* fp)
+{
+	return imaxcount;
+}
 void AllDelete() //모든 노드 차례대로 삭제, 단 삭제 전 pNext에 이전 노드 연결해주기
 {
 	AUser* pNext = StartUser;
-
 	while(pNext) //pNext가 존재할동안 차례대로 연결 및 삭제처리
 	{
 		AUser* DeleteUser = pNext;
+		//insert함수로 maxusercount를 반환해줘야 pnext 노드가 생성됨. ??
 		pNext = DeleteUser->pNext;
 		free(DeleteUser);
 		DeleteUser = NULL;
 	}
 	StartUser = NULL;
 }
-
+void Draw()
+{
+	for (AUser* user = StartUser; user != NULL; user = user->pNext)
+	{
+		printf("%d %d %d\n", user->m_Idx, user->m_Kor, user->m_Eng);
+	}
+}
 void main()
 {	
 	FILE* fp = Create();
 	fclose(fp);
 	AllDelete();
 	SaveNLoad();
-	//Draw();
+	Draw();
 	AllDelete();
 }

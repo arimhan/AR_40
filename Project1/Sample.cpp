@@ -1,6 +1,4 @@
 //N¸í °í·Á
-
-
 #define _CRT_SECURE_NO_WARNINGS
 #define Byte 16
 #define List 20
