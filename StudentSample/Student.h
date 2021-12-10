@@ -1,5 +1,9 @@
-#pragma once
+#define _CRT_SECURE_NO_WARNINGS
 
+#pragma once
+#include <iostream>
+#include <memory.h>
+#include <stdlib.h>
 
 class AUser
 {

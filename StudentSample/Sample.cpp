@@ -1,36 +1,44 @@
-#define _CRT_SECURE_NO_WARNINGS
-#define MaxCount 20
-#include <stdio.h>
-#include <memory.h>
-#include <stdlib.h>
 #include "Student.h"
+
 //* ~b는 바이너리로 출력
 
-
-struct AUser
+void main()
 {
-	int m_iIndex;
-	int m_iKor;
-	AUser* pNext;
-	//AUser* pPrev;
-};
-struct AReturn
-{
-	FILE* fp;
-	AUser* List;
-};
-int		g_Maxcount = 0;
-AUser*	g_Start = 0;
-AUser*	g_End = 0;
+	AStudent manager;
+	int iNum = 0;
+	while (iNum < 99)
+	{
+		//int iNum = 0;
+		printf("\n-> Create(0), Save(1), DeleteAll(2), Load(3), Draw(4), Exit(9) :  ");
+		//정렬, 검색, 수정 기능 추가 필요
 
+		scanf_s("%d", &iNum);
+		if (iNum == 9) break;
 
-
-void main()//int argc, char* argv[]) cmd나 디버그에서 값을 인자로 받고 싶으면 다음과 같이 처리
-{
-	FILE* fp = Create();
-	fclose(fp);
-	AllDelete();
-	Load();
-	Draw(g_iMaxUserCounter);
-	AllDelete();
+		switch (iNum)
+		{
+		case 0:
+		{
+			manager.Create();
+			iNum = 1;
+		}break;
+		case 1:
+		{
+			manager.SaveFile();
+		}break;
+		case 2:
+		{
+			manager.DeleteAll();
+		}break;
+		case 3:
+		{
+			manager.DeleteAll();
+			manager.Load();
+		}break;
+		case 4:
+		{
+			manager.Draw();
+		}break;
+		}
+	}
 }

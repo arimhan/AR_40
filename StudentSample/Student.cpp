@@ -1,9 +1,4 @@
-﻿#define _CRT_SECURE_NO_WARNINGS
-#define MaxCount 20
-#include <stdio.h>
-#include <memory.h>
-#include <stdlib.h>
-#include "Student.h"
+﻿#include "Student.h"
 
 
 AUser* AStudent::NewNode()
@@ -27,27 +22,14 @@ void AStudent::AddLink(AUser* pUser)
 	g_End->pNext = pUser;
 	g_Maxcount++;
 }
-FILE* AStudent::Create()
+void AStudent::Create()
 {
-	for (int iData = 0; iData < MaxCount; iData++)
+	for (int iData = 0; iData < 1; iData++)
 	{
 		AddLink(NewNode());
 	}
-	FILE* fpWrite = fopen("Sample.txt", "r+b");
-	if (fpWrite == NULL)
-	{
-		fpWrite = fopen("Sample.txt", "wb");
-		int iCounter = g_Start;
-		fwrite(&iCounter, sizeof(int), 1, fpWrite);
-		for (AUser* user = g_Start; user != NULL; user = user->pNext)
-		{
-			fwrite(user, sizeof(AUser), 1, fpWrite);
-		}
-		fseek(fpWrite, 0, SEEK_SET);
-	}
-	return fpWrite;
 }
-void AStudent::AllDelete()
+void AStudent::DeleteAll()
 {
 	AUser* pNext = g_Start;
 	while (pNext)
@@ -59,9 +41,9 @@ void AStudent::AllDelete()
 	}
 	g_Start = NULL;
 }
-int AStudent::Insert(FILE* fp)
+int AStudent::SaveInsert(FILE* fp)
 {
-	return g_Start;
+	return g_Maxcount;
 }
 void AStudent::Load()
 {
@@ -84,7 +66,20 @@ void AStudent::Load()
 		fpRead = NULL;
 	}
 }
-void AStudent::Draw(int iCounter)
+bool AStudent::SaveFile()
+{
+	FILE* fpWrite = fopen("Student1.txt", "wb");
+	int iCouner = g_Maxcount;
+	fwrite(&iCouner, sizeof(int), 1, fpWrite);
+	for (AUser* user = g_Start; user != NULL; user = user->pNext)
+	{
+		fwrite(user, sizeof(AUser), 1, fpWrite);
+	}
+	fclose(fpWrite);
+	return true;
+}
+
+void AStudent::Draw()
 {
 	for (AUser* user = g_Start; user != NULL; user = user->pNext)
 	{
