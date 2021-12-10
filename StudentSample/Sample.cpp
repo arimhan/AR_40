@@ -35,4 +35,3 @@ void main()//int argc, char* argv[]) cmd나 디버그에서 값을 인자로 받고 싶으면 다
 	Draw(g_iMaxUserCounter);
 	AllDelete();
 }
-

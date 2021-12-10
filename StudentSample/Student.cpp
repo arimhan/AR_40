@@ -1,10 +1,10 @@
-#define _CRT_SECURE_NO_WARNINGS
+癤�#define _CRT_SECURE_NO_WARNINGS
 #define MaxCount 20
 #include <stdio.h>
 #include <memory.h>
 #include <stdlib.h>
 #include "Student.h"
-//* ~b는 바이너리로 출력
+
 
 AUser* NewNode()
 {

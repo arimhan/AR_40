@@ -17,9 +17,9 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "LinkedList_1_1", "LinkedLis
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "StudentSample", "StudentSample\StudentSample.vcxproj", "{46FF7B2C-B2A3-4D17-A2C7-7B4A92F3709D}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Student", "..\AR_40\Student\Student.vcxproj", "{F0561FF7-9339-43C5-8942-FA6AC4F13233}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Student", "Student\Student.vcxproj", "{F0561FF7-9339-43C5-8942-FA6AC4F13233}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "StudentSample1", "..\AR_40\StudentSample1\StudentSample1.vcxproj", "{179255ED-E547-44A4-AD68-59446DC7193B}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "StudentSample1", "StudentSample1\StudentSample1.vcxproj", "{179255ED-E547-44A4-AD68-59446DC7193B}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
