@@ -6,28 +6,28 @@
 #include "Student.h"
 
 
-AUser* NewNode()
+AUser* AStudent::NewNode()
 {
 	AUser* pUser = (AUser*)malloc(sizeof(AUser));
-	pUser->m_iIndex = g_iMaxUserCounter;
+	pUser->m_iIndex = g_Maxcount;
 	pUser->m_iKor = rand() % 100;
 	pUser->pNext = NULL;
 	return pUser;
 }
-void AddLink(AUser* pUser)
+void AStudent::AddLink(AUser* pUser)
 {
-	if (g_pHeadUserList == NULL)
+	if (g_Start == NULL)
 	{
-		g_pHeadUserList = pUser;
-		g_pEndUser = pUser;
-		g_iMaxUserCounter++;
+		g_Start = pUser;
+		g_End = pUser;
+		g_Maxcount++;
 		return;
 	}
-	g_pEndUser->pNext = pUser;
-	g_pEndUser = pUser;
-	g_iMaxUserCounter++;
+	g_End->pNext = pUser;
+	g_End->pNext = pUser;
+	g_Maxcount++;
 }
-FILE* Create()
+FILE* AStudent::Create()
 {
 	for (int iData = 0; iData < MaxCount; iData++)
 	{
@@ -37,9 +37,9 @@ FILE* Create()
 	if (fpWrite == NULL)
 	{
 		fpWrite = fopen("Sample.txt", "wb");
-		int iCounter = g_iMaxUserCounter;
+		int iCounter = g_Start;
 		fwrite(&iCounter, sizeof(int), 1, fpWrite);
-		for (AUser* user = g_pHeadUserList; user != NULL; user = user->pNext)
+		for (AUser* user = g_Start; user != NULL; user = user->pNext)
 		{
 			fwrite(user, sizeof(AUser), 1, fpWrite);
 		}
@@ -47,9 +47,9 @@ FILE* Create()
 	}
 	return fpWrite;
 }
-void AllDelete()
+void AStudent::AllDelete()
 {
-	AUser* pNext = g_pHeadUserList;
+	AUser* pNext = g_Start;
 	while (pNext)
 	{
 		AUser* pDeleteUser = pNext;
@@ -57,13 +57,13 @@ void AllDelete()
 		free(pDeleteUser);
 		pDeleteUser = NULL;
 	}
-	g_pHeadUserList = NULL;
+	g_Start = NULL;
 }
-int Insert(FILE* fp)
+int AStudent::Insert(FILE* fp)
 {
-	return g_iMaxUserCounter;
+	return g_Start;
 }
-void Load()
+void AStudent::Load()
 {
 	FILE* fpRead = fopen("Sample.txt", "rb");
 	int iCounterRead = 0;
@@ -84,9 +84,9 @@ void Load()
 		fpRead = NULL;
 	}
 }
-void Draw(int iCounter)
+void AStudent::Draw(int iCounter)
 {
-	for (AUser* user = g_pHeadUserList; user != NULL; user = user->pNext)
+	for (AUser* user = g_Start; user != NULL; user = user->pNext)
 	{
 		printf("%d %d\n", user->m_iIndex, user->m_iKor);
 	}

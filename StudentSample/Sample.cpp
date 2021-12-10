@@ -4,7 +4,6 @@
 #include <memory.h>
 #include <stdlib.h>
 #include "Student.h"
-#include "Student.h"
 //* ~b는 바이너리로 출력
 
 
@@ -20,9 +19,9 @@ struct AReturn
 	FILE* fp;
 	AUser* List;
 };
-int g_iMaxUserCounter = 0;
-AUser* g_pHeadUserList = 0;
-AUser* g_pEndUser = 0;
+int		g_Maxcount = 0;
+AUser*	g_Start = 0;
+AUser*	g_End = 0;
 
 
 
