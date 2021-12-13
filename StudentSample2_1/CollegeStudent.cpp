@@ -2,7 +2,9 @@
 
 void ACollegeStudent::Show()
 {
-	cout << m_iIndex << " " << m_iType << " " << m_iGraphic << " " << m_iPhysics << " " << m_iAI << " " << m_iTotal << " " << m_fAverage << " " << endl;
+	cout << "\t\t=========\t HighSchoolStudent Ãâ·Â \t=========\t\t\n" << endl;
+	cout << "\tIndex:" << m_iIndex << " " << "Type:" << m_iType << " " << "Graphic:" << m_iGraphic << " " << "Physics:" << m_iPhysics << " "<<"AI:" << m_iAI << " " <<"Total:" << m_iTotal << " " << "Average:" << m_fAverage << " " << endl;
+	//cout << m_iIndex << " " << m_iType << " " << m_iGraphic << " " << m_iPhysics << " " << m_iAI << " " << m_iTotal << " " << m_fAverage << " " << endl;
 }
 
 void ACollegeStudent::Save()

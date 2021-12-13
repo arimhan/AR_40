@@ -42,23 +42,6 @@ void AStudentManager::DeleteAll()
 	}
 	g_pHeadUserList = NULL;
 }
-int AStudentManager::Insert(FILE* fp)
-{
-	ANodeBox* pSaveEndNode = g_pEndUser;
-	for (int iData = 0; iData < 2; iData++)
-	{
-		AddLink(NewNode());
-	}
-	fwrite(&g_iMaxUserCounter, sizeof(int), 1, fp);
-	fseek(fp, 0, SEEK_END);
-	for (ANodeBox* user = pSaveEndNode->m_pNext; user != NULL; user = user->m_pNext)
-	{
-		fwrite(user, sizeof(ANodeBox), 1, fp);
-	}
-	fclose(fp);
-	fp = NULL;
-	return g_iMaxUserCounter;
-}
 void AStudentManager::Load(const char* pFileName)
 {
 	FILE* fpRead = fopen(pFileName, "rb");

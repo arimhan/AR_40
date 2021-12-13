@@ -28,7 +28,6 @@ public:
 	ANodeBox* const NewNode();
 	void	DeleteAll();
 	void	Create();
-	int		Insert(FILE* fp);
 	void	Load(const char* pFileName);
 	void	Draw();
 	void	AddLink(ANodeBox* const pUser);
