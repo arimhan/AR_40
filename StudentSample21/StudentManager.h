@@ -16,8 +16,21 @@ public:
 		DeleteAll();
 	}
 
+	void SetUserCounter(int iCnt)
+	{
+		g_iMaxUserCounter = iCnt;
+	}
+	int GetUserCounter() const
+	{
+		return g_iMaxUserCounter;
+	}
+	AStudent* GetHead()
+	{
+		return g_pHeadUserList;
+	}
+
 private:
-	int			g_iMaxUserCounter;
+	int		  g_iMaxUserCounter;
 	AStudent* g_pHeadUserList;
 	AStudent* g_pEndUser;
 
@@ -34,7 +47,6 @@ public:
 	void	AddLink(AStudent* const pUser);
 
 	friend ostream& operator << (ostream& os, const AStudentManager& data);
-
 };
 
 

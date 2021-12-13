@@ -25,9 +25,11 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "OperatorSample", "OperatorS
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "StudentSample2", "StudentSample2\StudentSample2.vcxproj", "{9C57D142-C81C-4C3B-BBF9-8C902736D20D}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "StudentSample2_1", "StudentSample21\StudentSample21.vcxproj", "{EB32AB21-E18F-4BF0-9B09-550A6FE50B5A}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "StudentSample1_1", "StudentSample21\StudentSample21.vcxproj", "{EB32AB21-E18F-4BF0-9B09-550A6FE50B5A}"
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Const", "Const\Const.vcxproj", "{31CB7F98-4B16-4032-81EE-1200C3BBAB60}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "StudentSample2_1", "StudentSample2_1\StudentSample2_1.vcxproj", "{68646446-C129-4DA6-87B3-066D8E324EC8}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -125,6 +127,14 @@ Global
 		{31CB7F98-4B16-4032-81EE-1200C3BBAB60}.Release|x64.Build.0 = Release|x64
 		{31CB7F98-4B16-4032-81EE-1200C3BBAB60}.Release|x86.ActiveCfg = Release|Win32
 		{31CB7F98-4B16-4032-81EE-1200C3BBAB60}.Release|x86.Build.0 = Release|Win32
+		{68646446-C129-4DA6-87B3-066D8E324EC8}.Debug|x64.ActiveCfg = Debug|x64
+		{68646446-C129-4DA6-87B3-066D8E324EC8}.Debug|x64.Build.0 = Debug|x64
+		{68646446-C129-4DA6-87B3-066D8E324EC8}.Debug|x86.ActiveCfg = Debug|Win32
+		{68646446-C129-4DA6-87B3-066D8E324EC8}.Debug|x86.Build.0 = Debug|Win32
+		{68646446-C129-4DA6-87B3-066D8E324EC8}.Release|x64.ActiveCfg = Release|x64
+		{68646446-C129-4DA6-87B3-066D8E324EC8}.Release|x64.Build.0 = Release|x64
+		{68646446-C129-4DA6-87B3-066D8E324EC8}.Release|x86.ActiveCfg = Release|Win32
+		{68646446-C129-4DA6-87B3-066D8E324EC8}.Release|x86.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -141,6 +151,7 @@ Global
 		{9C57D142-C81C-4C3B-BBF9-8C902736D20D} = {2D49E1B3-F4E2-4FF2-8482-AAE118D59CEA}
 		{EB32AB21-E18F-4BF0-9B09-550A6FE50B5A} = {2D49E1B3-F4E2-4FF2-8482-AAE118D59CEA}
 		{31CB7F98-4B16-4032-81EE-1200C3BBAB60} = {2D49E1B3-F4E2-4FF2-8482-AAE118D59CEA}
+		{68646446-C129-4DA6-87B3-066D8E324EC8} = {2D49E1B3-F4E2-4FF2-8482-AAE118D59CEA}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {2DF14580-95EC-4BF6-AB9E-B86BBA01D1F2}

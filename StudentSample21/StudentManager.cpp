@@ -5,6 +5,7 @@ AStudent* const AStudentManager::NewNode()
 	AStudent* pUser = new AStudent();
 	pUser->m_iIndex = g_iMaxUserCounter;
 	pUser->m_iKor = rand() % 100;
+	pUser->m_pNext = NULL; 
 	return pUser;
 }
 void AStudentManager::Create()
@@ -20,6 +21,7 @@ bool AStudentManager::FileSave()
 {
 	FILE* fpWrite = fopen("StudentSample.txt", "wb");
 	int iCouner = g_iMaxUserCounter;
+	fwrite(&iCouner, sizeof(int), 1, fpWrite);
 	for (AStudent* user = g_pHeadUserList; user != NULL; user = user->m_pNext)
 	{
 		fwrite(user, sizeof(AStudent), 1, fpWrite);
@@ -42,7 +44,6 @@ void AStudentManager::DeleteAll()
 	}
 	g_pHeadUserList = NULL;
 }
-
 int AStudentManager::Insert(FILE* fp)
 {
 	AStudent* pSaveEndNode = g_pEndUser;
@@ -62,14 +63,14 @@ int AStudentManager::Insert(FILE* fp)
 }
 void AStudentManager::Load()
 {
-	FILE* fpRead = fopen("Student.txt", "rb");
+	FILE* fpRead = fopen("StudentSample.txt", "rb");
 	int iCounerRead = 0;
 	fread(&iCounerRead, sizeof(int), 1, fpRead);
 	if (fpRead != NULL)
 	{
 		for (int iAdd = 0; iAdd < iCounerRead; iAdd++)
 		{
-			AStudent* pUser = new AStudent(10, 10);
+			AStudent* pUser = new AStudent(0, 0);
 			memset(pUser, 0, sizeof(AStudent));
 			fread(pUser, sizeof(AStudent), 1, fpRead);
 			pUser->m_pNext = 0;
@@ -81,7 +82,6 @@ void AStudentManager::Load()
 }
 void AStudentManager::Draw()
 {
-
 	cout << *g_pHeadUserList;
 }
 void AStudentManager::AddLink(AStudent* const pUser)
@@ -97,7 +97,6 @@ void AStudentManager::AddLink(AStudent* const pUser)
 	g_pEndUser = pUser;
 	g_iMaxUserCounter++;
 }
-
 ostream& operator << (ostream& os, const AStudentManager& manager)
 {
 	for (AStudent* user = manager.g_pHeadUserList; user != NULL; user = user->m_pNext)
