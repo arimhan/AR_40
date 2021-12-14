@@ -17,7 +17,7 @@ public:
 		return m_pHeadNode;
 	}
 public:
-	void	AddLink(ANodeBox<AStudent>* const pUser);//pNode);
+	void	AddLink(ANodeBox<AStudent>* const pNode);//pNode);
 	void	DeleteAll();
 	ALinkedList()
 	{

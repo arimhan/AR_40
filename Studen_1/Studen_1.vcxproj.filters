@@ -13,33 +13,9 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
-    <Filter Include="Library">
-      <UniqueIdentifier>{0c1a55e3-677c-4545-b4d6-572ec6564650}</UniqueIdentifier>
-    </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="Sample.cpp">
-      <Filter>소스 파일</Filter>
-    </ClCompile>
-    <ClCompile Include="StudentManager.cpp">
-      <Filter>소스 파일</Filter>
-    </ClCompile>
-    <ClCompile Include="HighStudent.cpp">
-      <Filter>소스 파일</Filter>
-    </ClCompile>
-    <ClCompile Include="MiddleStudent.cpp">
-      <Filter>소스 파일</Filter>
-    </ClCompile>
-    <ClCompile Include="NodeBox.cpp">
-      <Filter>소스 파일</Filter>
-    </ClCompile>
-    <ClCompile Include="Object.cpp">
-      <Filter>소스 파일</Filter>
-    </ClCompile>
-    <ClCompile Include="Student.cpp">
-      <Filter>소스 파일</Filter>
-    </ClCompile>
-    <ClCompile Include="CollegeStudent.cpp">
+    <ClCompile Include="Main.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
     <ClCompile Include="LinkedList.cpp">
@@ -48,37 +24,28 @@
     <ClCompile Include="FileIO.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
+    <ClCompile Include="Student.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="StdManager.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="StudentManager.h">
-      <Filter>헤더 파일</Filter>
-    </ClInclude>
-    <ClInclude Include="Student.h">
-      <Filter>헤더 파일</Filter>
-    </ClInclude>
-    <ClInclude Include="Object.h">
-      <Filter>헤더 파일</Filter>
-    </ClInclude>
-    <ClInclude Include="NodeBox.h">
-      <Filter>헤더 파일</Filter>
-    </ClInclude>
-    <ClInclude Include="MiddleStudent.h">
-      <Filter>헤더 파일</Filter>
-    </ClInclude>
-    <ClInclude Include="HighStudent.h">
-      <Filter>헤더 파일</Filter>
-    </ClInclude>
-    <ClInclude Include="CollegeStudent.h">
-      <Filter>헤더 파일</Filter>
-    </ClInclude>
     <ClInclude Include="LinkedList.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
     <ClInclude Include="FileIO.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="ClassDiagram.cd" />
+    <ClInclude Include="Student.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="StdManager.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="Object.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

@@ -1,38 +1,30 @@
 #pragma once
-#include "NodeBox.h"
+#include "LinkedList.h"
+#include "FileIO.h"
 
 class AStudentManager
 {
 public:
 	AStudentManager()
 	{
-		g_iMaxUserCounter = 0;
-		g_pHeadUserList = 0;
-		g_pEndUser = 0;
 	}
 
 	~AStudentManager()
 	{
-		DeleteAll();
+		m_List.DeleteAll();
 	}
-
-private:
-	int		  g_iMaxUserCounter;
-	ANodeBox* g_pHeadUserList;
-	ANodeBox* g_pEndUser;
+	ALinkedList<AStudent> m_List;
+	AFileIO m_FileIO;
 
 public:
 	bool	FileSave(const char* pFileName);
 	//연결리스트 출력 기능 구현
 
-	ANodeBox* const NewNode();
-	void	DeleteAll();
+	ANodeBox<AStudent>* const NewNode();
 	void	Create();
 	void	Load(const char* pFileName);
 	void	Draw();
-	void	AddLink(ANodeBox* const pUser);
-
-	friend ostream& operator << (ostream& os, const AStudentManager& data);
+	friend ostream& operator << (ostream& os, const AStudentManager& manager);//data); 
 
 };
 

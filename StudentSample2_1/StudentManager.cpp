@@ -1,8 +1,8 @@
 #include "StudentManager.h"
 
-ANodeBox* const AStudentManager::NewNode()
+ANodeBox<AStudent>* const AStudentManager::NewNode()
 {
-	ANodeBox* pUser = new ANodeBox(g_iMaxUserCounter);
+	ANodeBox<AStudent>* pUser = new ANodeBox<AStudent>();
 	return pUser;
 }
 void AStudentManager::Create()
@@ -12,7 +12,6 @@ void AStudentManager::Create()
 		AddLink(NewNode());
 	}
 }
-
 //연결리스트 출력
 bool AStudentManager::FileSave(const char* pFileName)
 {
@@ -28,19 +27,6 @@ bool AStudentManager::FileSave(const char* pFileName)
 	}
 	fclose(fpWrite);
 	return true;
-}
-void AStudentManager::DeleteAll()
-{
-	ANodeBox* m_pNext = g_pHeadUserList;
-	while(m_pNext)
-	{
-		ANodeBox* pDeleteUser = m_pNext;
-		m_pNext = pDeleteUser->m_pNext;
-		delete pDeleteUser;
-		pDeleteUser = NULL;
-		g_iMaxUserCounter--;
-	}
-	g_pHeadUserList = NULL;
 }
 void AStudentManager::Load(const char* pFileName)
 {
@@ -79,20 +65,6 @@ void AStudentManager::Draw()
 {
 	cout << *g_pHeadUserList;
 }
-void AStudentManager::AddLink(ANodeBox* const pUser)
-{
-	if (g_pHeadUserList == NULL)
-	{
-		g_pHeadUserList = pUser;
-		g_pEndUser = pUser;
-		g_iMaxUserCounter++;
-		return;
-	}
-	g_pEndUser->m_pNext = pUser;
-	g_pEndUser = pUser;
-	g_iMaxUserCounter++;
-}
-
 ostream& operator << (ostream& os, const AStudentManager& manager)
 {
 	for (ANodeBox* pData = manager.g_pHeadUserList; pData != NULL; pData = pData->m_pNext)

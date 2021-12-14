@@ -146,7 +146,6 @@
     <ClCompile Include="HighStudent.cpp" />
     <ClCompile Include="LinkedList.cpp" />
     <ClCompile Include="MiddleStudent.cpp" />
-    <ClCompile Include="Object.cpp" />
     <ClCompile Include="Sample.cpp" />
     <ClCompile Include="Student.cpp" />
     <ClCompile Include="StudentManager.cpp" />

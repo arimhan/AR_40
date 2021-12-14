@@ -39,9 +39,6 @@
     <ClCompile Include="MiddleStudent.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
-    <ClCompile Include="Object.cpp">
-      <Filter>소스 파일</Filter>
-    </ClCompile>
     <ClCompile Include="Student.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
