@@ -22,48 +22,57 @@
       <Filter>소스 파일</Filter>
     </ClCompile>
     <ClCompile Include="StudentManager.cpp">
-      <Filter>Library</Filter>
-    </ClCompile>
-    <ClCompile Include="Student.cpp">
-      <Filter>Library</Filter>
+      <Filter>소스 파일</Filter>
     </ClCompile>
     <ClCompile Include="CollegeStudent.cpp">
-      <Filter>Library</Filter>
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="FileIO.cpp">
+      <Filter>소스 파일</Filter>
     </ClCompile>
     <ClCompile Include="HighStudent.cpp">
-      <Filter>Library</Filter>
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="LinkedList.cpp">
+      <Filter>소스 파일</Filter>
     </ClCompile>
     <ClCompile Include="MiddleStudent.cpp">
-      <Filter>Library</Filter>
-    </ClCompile>
-    <ClCompile Include="NodeBox.cpp">
-      <Filter>Library</Filter>
+      <Filter>소스 파일</Filter>
     </ClCompile>
     <ClCompile Include="Object.cpp">
-      <Filter>Library</Filter>
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="Student.cpp">
+      <Filter>소스 파일</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="CollegeStudent.h">
-      <Filter>Library</Filter>
-    </ClInclude>
-    <ClInclude Include="HighStudent.h">
-      <Filter>Library</Filter>
-    </ClInclude>
-    <ClInclude Include="MiddleStudent.h">
-      <Filter>Library</Filter>
-    </ClInclude>
     <ClInclude Include="NodeBox.h">
-      <Filter>Library</Filter>
-    </ClInclude>
-    <ClInclude Include="Object.h">
-      <Filter>Library</Filter>
-    </ClInclude>
-    <ClInclude Include="Student.h">
-      <Filter>Library</Filter>
+      <Filter>헤더 파일</Filter>
     </ClInclude>
     <ClInclude Include="StudentManager.h">
-      <Filter>Library</Filter>
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="Student.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="Object.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="LinkedList.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="MiddleStudent.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="HighStudent.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="FileIO.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="CollegeStudent.h">
+      <Filter>헤더 파일</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

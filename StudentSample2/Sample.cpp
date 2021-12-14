@@ -1,5 +1,9 @@
 #include "StudentManager.h"
 
+enum Jop { Create, Save, Delete, Load, Draw, Quit,
+};
+
+
 void main()
 {
 	//AStudent* data1 = new AMiddleStudent;

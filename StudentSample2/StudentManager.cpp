@@ -1,61 +1,61 @@
 #include "StudentManager.h"
 
-ANodeBox* const AStudentManager::NewNode()
+ANodeBox<AStudent>* const AStudentManager::NewNode()
 {
-	ANodeBox* pUser = new ANodeBox(g_iMaxUserCounter);
-	return pUser;
+	ANodeBox<AStudent>* pNodeBox = new ANodeBox<AStudent>();
+	int iType = rand() % 3;
+	AStudent* pObject = nullptr;
+	if (iType == 0)
+		pObject = new AMiddleStudent();
+	else if (iType == 1)
+		pObject = new AHighStudent();
+	else if (iType == 2)
+		pObject = new ACollegeStudent();
+	else
+		cout << "error : StudentManager_NewNode";
+
+	pObject->SetData(m_List.m_iNumNode);
+	pNodeBox->m_pData = pObject;
+
+	return pNodeBox;
 }
 void AStudentManager::Create()
 {
 	for (int iData = 0; iData < 1; iData++)
 	{
-		AddLink(NewNode());
+		m_List.AddLink(NewNode());
 	}
 }
-
 //연결리스트 출력
 bool AStudentManager::FileSave(const char* pFileName)
 {
-	FILE* fpWrite = fopen(pFileName, "wb");
-	int iCouner = g_iMaxUserCounter;
-	fwrite(&iCouner, sizeof(int), 1, fpWrite);
-	for (ANodeBox* pData = g_pHeadUserList; pData != NULL; pData = pData->m_pNext)
+	if (m_FileIO.CreateFile(pFileName))
 	{
-		pData->m_pData->Save();
-		fwrite(&pData->m_pData->m_iType, sizeof(int), 1, fpWrite);
-		fwrite(&pData->m_pData->m_iBufferSize, sizeof(int), 1, fpWrite);
-		fwrite(pData->m_pData->m_csBuffer, pData->m_pData->m_iBufferSize, 1, fpWrite);
+		m_FileIO.Write(&m_List.m_iNumNode, sizeof(int));
+		for (ANodeBox<AStudent>* pData = m_List.GetHead(); pData != NULL; pData = pData->m_pNext)
+		{
+			pData->m_pData->Save();
+			m_FileIO.Write(&pData->m_pData->m_iType, sizeof(int));
+			m_FileIO.Write(&pData->m_pData->m_iBufferSize, sizeof(int));
+			m_FileIO.Write(&pData->m_pData->m_csBuffer, pData->m_pData->m_iBufferSize);
+		}
+		m_FileIO.CloseFile();
 	}
-	fclose(fpWrite);
 	return true;
 }
-void AStudentManager::DeleteAll()
-{
-	ANodeBox* m_pNext = g_pHeadUserList;
-	while(m_pNext)
-	{
-		ANodeBox* pDeleteUser = m_pNext;
-		m_pNext = pDeleteUser->m_pNext;
-		delete pDeleteUser;
-		pDeleteUser = NULL;
-		g_iMaxUserCounter--;
-	}
-	g_pHeadUserList = NULL;
-}
+
 void AStudentManager::Load(const char* pFileName)
 {
-	FILE* fpRead = fopen(pFileName, "rb");
-	int iCounerRead = 0;
-	fread(&iCounerRead, sizeof(int), 1, fpRead);
-	if (fpRead != NULL)
+	if (m_FileIO.OpenFile(pFileName))
 	{
+		int iCounerRead = 0;
+		m_FileIO.Read(&iCounerRead, sizeof(int));
 		for (int iAdd = 0; iAdd < iCounerRead; iAdd++)
 		{
-			ANodeBox* pData = new ANodeBox();
-			memset(pData, 0, sizeof(ANodeBox));
+			ANodeBox<AStudent>* pData = new ANodeBox<AStudent>();
 			int iType = -1;
-			fread(&iType, sizeof(int), 1, fpRead);
-			
+			m_FileIO.Read(&iType, sizeof(int));
+
 			if (iType == 1)
 				pData->m_pData = new AMiddleStudent();
 			else if (iType == 2)
@@ -65,39 +65,31 @@ void AStudentManager::Load(const char* pFileName)
 			else
 				cout << "error : StudentManager_Load";
 
-			fread(&pData->m_pData->m_iBufferSize, sizeof(int), 1, fpRead);
-			fread(pData->m_pData->m_csBuffer, pData->m_pData->m_iBufferSize, 1, fpRead);
+			m_FileIO.Read(&pData->m_pData->m_iBufferSize, sizeof(int));
+			m_FileIO.Read(&pData->m_pData->m_csBuffer, pData->m_pData->m_iBufferSize);
 
 			pData->m_pData->Load();
-			AddLink(pData);
+			m_List.AddLink(pData);
 		}
-		fclose(fpRead);
-		fpRead = NULL;
+		m_FileIO.CloseFile();
 	}
 }
 void AStudentManager::Draw()
 {
-	cout << *g_pHeadUserList;
+	cout << m_List.GetHead();
 }
-void AStudentManager::AddLink(ANodeBox* const pUser)
+void AStudentManager::DeleteAll()
 {
-	if (g_pHeadUserList == NULL)
-	{
-		g_pHeadUserList = pUser;
-		g_pEndUser = pUser;
-		g_iMaxUserCounter++;
-		return;
-	}
-	g_pEndUser->m_pNext = pUser;
-	g_pEndUser = pUser;
-	g_iMaxUserCounter++;
+	m_List.DeleteAll();
 }
-
-ostream& operator << (ostream& os, const AStudentManager& manager)
+ostream& operator << (ostream& os, AStudentManager& manager)
 {
-	for (ANodeBox* pData = manager.g_pHeadUserList; pData != NULL; pData = pData->m_pNext)
+	for (ANodeBox<AStudent>* pData = manager.m_List.GetHead(); pData != NULL; pData = pData->m_pNext)
 	{
-		pData->m_pData->Show();
+		if(pData->m_pData != nullptr)
+		{ 
+			pData->m_pData->Show();
+		}
 	}
 	return os;
 }

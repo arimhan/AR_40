@@ -2,7 +2,9 @@
 
 void AMiddleStudent::Show()
 {
-	cout << m_iIndex << " " << m_iType << " " << m_iKor << " " << m_iEng << " " << m_iMat << " " << m_iTotal << " " << m_fAverage << " " << endl;
+	cout << "\tMiddleStudent ¼ºÀûÇ¥" << endl;
+	cout <<"\tIndex: " << m_iIndex << " " << "Type: " << m_iType << " " <<"Kor: " << m_iKor << " " <<"Eng: " << m_iEng << " "
+		<<"Mat: " << m_iMat << " " <<"Total: " << m_iTotal << " "<<"Average: " << m_fAverage << " " << endl<< endl;
 }
 
 void AMiddleStudent::Save()
