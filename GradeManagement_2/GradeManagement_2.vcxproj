@@ -18,26 +18,12 @@
       <Platform>x64</Platform>
     </ProjectConfiguration>
   </ItemGroup>
-  <ItemGroup>
-    <ClCompile Include="FileIO.cpp" />
-    <ClCompile Include="LinkedList.cpp" />
-    <ClCompile Include="Main.cpp" />
-    <ClCompile Include="NodeBox.cpp" />
-    <ClCompile Include="Student.cpp" />
-  </ItemGroup>
-  <ItemGroup>
-    <ClInclude Include="FileIO.h" />
-    <ClInclude Include="LinkedList.h" />
-    <ClInclude Include="NodeBox.h" />
-    <ClInclude Include="Student.h" />
-  </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>16.0</VCProjectVersion>
     <Keyword>Win32Proj</Keyword>
-    <ProjectGuid>{9ffbc803-3d18-469a-a85d-57197361c49f}</ProjectGuid>
-    <RootNamespace>Studen1</RootNamespace>
+    <ProjectGuid>{bf33fbd8-d916-41b4-9d51-d16307a81f49}</ProjectGuid>
+    <RootNamespace>GradeManagement_2</RootNamespace>
     <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
-    <ProjectName>GradeManagement</ProjectName>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
@@ -93,7 +79,7 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <LinkIncremental>true</LinkIncremental>
     <OutDir>../../output/</OutDir>
-    <IntDir>../../output/GradeManagement</IntDir>
+    <IntDir>../../output/GradeManagement_2</IntDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <LinkIncremental>false</LinkIncremental>
@@ -154,6 +140,22 @@
       <GenerateDebugInformation>true</GenerateDebugInformation>
     </Link>
   </ItemDefinitionGroup>
+  <ItemGroup>
+    <ClCompile Include="CollegeStudent.cpp" />
+    <ClCompile Include="FileIO.cpp" />
+    <ClCompile Include="TemLinkedList.cpp" />
+    <ClCompile Include="Sample.cpp" />
+    <ClCompile Include="Student.cpp" />
+    <ClCompile Include="StudentManager.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="FileIO.h" />
+    <ClInclude Include="TemLinkedList.h" />
+    <ClInclude Include="NodeBox.h" />
+    <ClInclude Include="Object.h" />
+    <ClInclude Include="Student.h" />
+    <ClInclude Include="StudentManager.h" />
+  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>

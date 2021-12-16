@@ -1,48 +1,26 @@
 #pragma once
-
-template <class T>
+#include "NodeBox.h"
+template <class A>
 class ALinkedList
 {
 public:
+	int m_iCount;
+	ANodeBox<A>* m_iHeadNode;
+	ANodeBox<A>* m_iEndNode;
+	ALinkedList<A>	m_List;
+	//AFileIO					m_FileIO;
 
-	int					m_iNumNode;
-	ANode<AStudent>*	m_pHeadNode;
-	ANode<AStudent>*	m_pEndNode;
-
-	ANode<T>* GetHeadNode()
-	{
-		return m_pHeadNode;
-	}
-	void AddLink(ANode<AStudent>* const pNode);
+	void AddData(A*);
 	void DeleteAll();
+
+public:
 	ALinkedList()
 	{
-		m_iNumNode = 0;
-		m_pHeadNode = 0;
-		m_pEndNode = 0;
+		m_iCount = 0;
+		m_iHeadNode = 0;
+		m_iEndNode = 0;
 	}
 
-};
-template <class T>
-class ANode
-{
-public:
-	T* m_data;
-	ANode* m_pNext;
-	template <class T>
-	ANode<T>::ANode()
-	{
-		m_pData = nullptr;
-	}
-	template <class T>
-	ANode<T>::ANode(T* data)
-	{
-		m_pData = data;
-	}
-	template <class T>
-	ANode<T>::~ANode()
-	{
-		delete m_pData;
-	}
+	~ALinkedList(){	}
 };
 
