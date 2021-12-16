@@ -4,7 +4,6 @@ void main()
 {
 	//AStudent* data1 = new AMiddleStudent;
 	//*data1 << 1 << 4 << 5.4f;
-
 	//AMiddleStudent* pA = new AMiddleStudent;
 	//AHighStudent* pB = new AHighStudent;
 	//ACollegeStudent * pC = new ACollegeStudent;
@@ -12,7 +11,6 @@ void main()
 	//data[0] = pA;
 	//data[1] = pB;
 	//data[2] = pC;
-
 	//for (int i = 0; i < 3; i++)
 	//{
 	//	data[i]->Show();

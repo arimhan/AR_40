@@ -9,7 +9,7 @@ void AStudentManager::Create()
 {
 	for (int iData = 0; iData < 1; iData++)
 	{
-		AddLink(NewNode());
+		m_List.AddLink(NewNode());
 	}
 }
 //연결리스트 출력

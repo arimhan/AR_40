@@ -21,6 +21,7 @@ public:
 	//연결리스트 출력 기능 구현
 
 	ANodeBox<AStudent>* const NewNode();
+	void	DeleteAll();
 	void	Create();
 	void	Load(const char* pFileName);
 	void	Draw();
