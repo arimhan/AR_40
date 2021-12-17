@@ -1,60 +1,47 @@
-#define _CRT_SECURE_NO_WARNINGS
-
 #pragma once
-#include <iostream>
-#include <memory.h>
-#include <stdlib.h>
+#include "Object.h"
+enum Subject {	Index = 0, Kor =2, Eng =3,  Mat =4, Total, Average, };
 
-class AUser
+class AStudent :public AObject
 {
 public:
-	int		m_iIndex;
-	int		m_iKor;
-	AUser*  pNext;
+	int m_iIndex;
+	string	m_szName;
+	int m_iKor;
+	int m_iEng;
+	int m_iMat;
+	int m_iTotal;
+	int m_fAverage;
+public:
+	//가상함수 : 가상테이블 생성됨
+	virtual void Show();
+	virtual void Save();
+	virtual void Load() override;
+	virtual void SetData(int iIndex);
+public:
+	template <class A>
+	A operator [] (int id);
+	template <>
+	float operator [] (int id);
 
-	AUser()
-	{
-		m_iIndex = 0;
-		m_iKor = 0;
-		pNext = NULL;
-	}
-	AUser(int i, int Kor)
-	{
-		m_iIndex = i;
-		m_iKor = Kor;
-		pNext = NULL;
-	}
-	~AUser() {}
-};
-class AStudent
-{
+	friend ostream& operator << (ostream& os, AStudent& data);
 public:
 	AStudent()
 	{
-		g_Maxcount = 0;
-		g_Start = 0;
-		g_End = 0;
+
+		m_iIndex = 1;
+		m_szName = "name";
+		m_iKor = 0;
+		m_iEng = 0;
+		m_iMat = 0;
 	}
-	~AStudent()
+	AStudent(string name, int Kor, int Eng, int Mat)
 	{
-		DeleteAll();
+
+
 	}
-
-private:
-	int		g_Maxcount = 0;
-	AUser*	g_Start = 0;
-	AUser*	g_End = 0;
-public:
-	bool	SaveFile();
-	//연결리스트 파일 출력 기능
-
-	AUser*	NewNode();
-	void	DeleteAll();
-	void	Create();
-	int		SaveInsert(FILE* fp);
-	void	Load();
-	void	Draw();
-	void	AddLink(AUser* pUser);
+	virtual ~AStudent()
+	{
+		int k = 0;
+	}
 };
-
-

@@ -1,44 +1,68 @@
-#include "Student.h"
+#include "StudentManager.h"
 
-//* ~b는 바이너리로 출력
+enum Jop { Create, Save, Delete, Load, Draw, Quit,
+};
+
 
 void main()
 {
-	AStudent manager;
-	int iNum = 0;
-	while (iNum < 99)
-	{
-		//int iNum = 0;
-		printf("\n-> Create(0), Save(1), DeleteAll(2), Load(3), Draw(4), Exit(9) :  ");
-		//정렬, 검색, 수정 기능 추가 필요
 
+	AStudentManager manager;
+	int iNum = 0;
+	while(iNum < 99)
+	{
+		cout << "\n= = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = =\n" << endl;
+		cout << "\n= = = = = = = = = = = = = = =\t\t학생 성적 관리 프로그램\t\t= = = = = = = = = = = = = = =\n" << endl;
+		cout << "\n= = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = =\n" << endl;
+		printf("-> 생성(0), 저장(1), 모두삭제(2), 불러오기(3), 출력(4), 종료(9) :  ");
 		scanf_s("%d", &iNum);
 		if (iNum == 9) break;
 
 		switch (iNum)
 		{
-		case 0:
+		case 0: //학생 정보 입력
 		{
-			manager.Create();
-			iNum = 1;
+			string name = " ";  int Kor = 0; int Eng = 0; int Mat = 0;
+			cout << "학생 정보를 입력해주세요!\n";
+			cout << "이름: \n";
+			cin >> name;
+			cout << "국어: \n";
+			cin >> Kor;
+			cout << "영어: \n";
+			cin >> Eng;
+			cout << "수학: \n";
+			cin >> Mat;
+
+			AStudent* st = new AStudent(name, Kor, Eng, Mat);
+			manager.m_List.AddData(st);
+			int iNum = 1;
 		}break;
 		case 1:
 		{
-			manager.SaveFile();
+			manager.FileSave("Student.txt");
+			cout << "데이터 저장 완료!\n";
 		}break;
 		case 2:
 		{
 			manager.DeleteAll();
+			cout << "데이터 삭제 완료!\n";
 		}break;
 		case 3:
 		{
 			manager.DeleteAll();
-			manager.Load();
+			manager.Load("Student.txt");
+			cout << "데이터 로드 완료!\n";
 		}break;
 		case 4:
 		{
-			manager.Draw();
+			cout << manager;
+		}break;
+		case 5: //샘플 생성
+		{
+			manager.Create();
+			cout << "샘플 학생 데이터 생성 완료!\n";
 		}break;
 		}
 	}
+	cout << "error : sample main";
 }

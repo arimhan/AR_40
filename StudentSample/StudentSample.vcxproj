@@ -21,7 +21,7 @@
   <PropertyGroup Label="Globals">
     <VCProjectVersion>16.0</VCProjectVersion>
     <Keyword>Win32Proj</Keyword>
-    <ProjectGuid>{a1e2053a-0f8a-4e78-87ec-25433bc16edf}</ProjectGuid>
+    <ProjectGuid>{9d49687c-630b-424c-8e83-d0b8c9a8b230}</ProjectGuid>
     <RootNamespace>StudentSample</RootNamespace>
     <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
   </PropertyGroup>
@@ -141,11 +141,21 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="FileIO.cpp" />
+    <ClCompile Include="LinkedList.cpp" />
+    <ClCompile Include="MiddleStudent.cpp" />
     <ClCompile Include="Sample.cpp" />
     <ClCompile Include="Student.cpp" />
+    <ClCompile Include="StudentManager.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="FileIO.h" />
+    <ClInclude Include="LinkedList.h" />
+    <ClInclude Include="MiddleStudent.h" />
+    <ClInclude Include="NodeBox.h" />
+    <ClInclude Include="Object.h" />
     <ClInclude Include="Student.h" />
+    <ClInclude Include="StudentManager.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

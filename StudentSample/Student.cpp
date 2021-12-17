@@ -1,88 +1,54 @@
-﻿#include "Student.h"
+#include "Student.h"
 
+template<class A>
+A AStudent::operator[] (int id)
+{
+	if (id == Total) return m_iTotal;
+	return -1;
+}
 
-AUser* AStudent::NewNode()
+template<>
+float AStudent::operator[] (int id)
 {
-	AUser* pUser = (AUser*)malloc(sizeof(AUser));
-	pUser->m_iIndex = g_Maxcount;
-	pUser->m_iKor = rand() % 100;
-	pUser->pNext = NULL;
-	return pUser;
+	if (id == Average) return m_iTotal;
+	return -1.0f;
 }
-void AStudent::AddLink(AUser* pUser)
+
+void AStudent::Show()
 {
-	if (g_Start == NULL)
-	{
-		g_Start = pUser;
-		g_End = pUser;
-		g_Maxcount++;
-		return;
-	}
-	g_End->pNext = pUser;
-	g_End->pNext = pUser;
-	g_Maxcount++;
+	cout << "Index: " << operator[]<int>(Index) << " " << "Total: " << operator[]<int>(Total) 
+		<< " " << "Average: " << operator[]<float>(Average) << " ";
 }
-void AStudent::Create()
+void AStudent::Save()
 {
-	for (int iData = 0; iData < 1; iData++)
-	{
-		AddLink(NewNode());
-	}
-}
-void AStudent::DeleteAll()
-{
-	AUser* pNext = g_Start;
-	while (pNext)
-	{
-		AUser* pDeleteUser = pNext;
-		pNext = pDeleteUser->pNext;
-		free(pDeleteUser);
-		pDeleteUser = NULL;
-	}
-	g_Start = NULL;
-}
-int AStudent::SaveInsert(FILE* fp)
-{
-	return g_Maxcount;
+	char* pData = &m_csBuffer[m_iCurrentPosition];
+	memcpy(pData, &m_iIndex, sizeof(int));
+	m_iCurrentPosition += sizeof(int);
+
+	pData = &m_csBuffer[m_iCurrentPosition];
+	memcpy(pData, &m_iType, sizeof(int));
+	m_iCurrentPosition += sizeof(int);
 }
 void AStudent::Load()
 {
-	FILE* fpRead = fopen("Sample.txt", "rb");
-	int iCounterRead = 0;
-	fread(&iCounterRead, sizeof(int), 1, fpRead);
+	char* pData = &m_csBuffer[m_iCurrentPosition];
+	memcpy(&m_iIndex, pData, sizeof(int));
+	m_iCurrentPosition += sizeof(int);
 
-	if (fpRead != NULL)
-	{
-		for (int iAdd = 0; iAdd < iCounterRead; iAdd++)
-		{
-			AUser* pUser = (AUser*)malloc(sizeof(AUser));
-			memset(pUser, 0, sizeof(AUser));
-			fread(pUser, sizeof(AUser), 1, fpRead);
-			pUser->pNext = 0;
-			AddLink(pUser);
-		}
-
-		fclose(fpRead);
-		fpRead = NULL;
-	}
+	pData = &m_csBuffer[m_iCurrentPosition];
+	memcpy(&m_iType, pData, sizeof(int));
+	m_iCurrentPosition += sizeof(int);
 }
-bool AStudent::SaveFile()
+void AStudent::SetData(int iIndex)
 {
-	FILE* fpWrite = fopen("Student1.txt", "wb");
-	int iCouner = g_Maxcount;
-	fwrite(&iCouner, sizeof(int), 1, fpWrite);
-	for (AUser* user = g_Start; user != NULL; user = user->pNext)
-	{
-		fwrite(user, sizeof(AUser), 1, fpWrite);
-	}
-	fclose(fpWrite);
-	return true;
+	m_iIndex = iIndex;
+	m_iTotal = 0;
+	//strcpy(m_szName, "none");
+	m_fAverage = m_iTotal / 3.0f;
 }
 
-void AStudent::Draw()
+ostream& operator << (ostream& os, AStudent& data)
 {
-	for (AUser* user = g_Start; user != NULL; user = user->pNext)
-	{
-		printf("%d %d\n", user->m_iIndex, user->m_iKor);
-	}
+	os << data.m_iIndex << " " << data.m_iTotal << " " << data.m_fAverage << " " << endl;
+	return os;
 }
