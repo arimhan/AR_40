@@ -9,10 +9,10 @@ public:
 	int m_iAI;
 
 public:
-	virtual void Show() override;
-	virtual void Save() override;
-	virtual void Load() override;
-	virtual void SetData(int iIndex);
+	void Show() override;
+	void Save() override;
+	void Load() override;
+	void SetData(int iIndex) override;
 public:
 	ACollegeStudent()
 	{

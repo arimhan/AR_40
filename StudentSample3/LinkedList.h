@@ -17,12 +17,8 @@ public:
 		return m_pHeadNode;
 	}
 public:
-	void	Init();
-	//void	AddLink(ANodeBox<AStudent>* const pNode);//pNode);
-	void	AddData(A*);
+	void	AddLink(ANodeBox<AStudent>* const pNode);//pNode);
 	void	DeleteAll();
-	int		NodeCounter();
-
 	ALinkedList()
 	{
 		m_iNumNode = 0;

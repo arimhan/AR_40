@@ -1,6 +1,6 @@
 #pragma once
 #include "Object.h"
-enum Subject {	Index = 0, Kor =2, Eng =3,  Mat =4, Total, Average, };
+enum Subject {	Index = 0, Name =1, Kor =2, Eng =3,  Mat =4, Total, Average, };
 
 class AStudent :public AObject
 {
@@ -28,7 +28,6 @@ public:
 public:
 	AStudent()
 	{
-
 		m_iIndex = 1;
 		m_szName = "name";
 		m_iKor = 0;
@@ -37,8 +36,13 @@ public:
 	}
 	AStudent(string name, int Kor, int Eng, int Mat)
 	{
-
-
+		m_iIndex = 1;
+		m_szName = name;
+		m_iKor = Kor;
+		m_iEng = Eng;
+		m_iMat = Mat;
+		m_iTotal = Kor + Eng + Mat;
+		m_fAverage = m_iTotal / 3;
 	}
 	virtual ~AStudent()
 	{

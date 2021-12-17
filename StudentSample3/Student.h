@@ -18,10 +18,10 @@ public:
 	virtual void Show();
 	virtual void Save();
 	virtual void Load() override;
-	//virtual void SetData(int iIndex);
+	virtual void SetData(int iIndex);
 public:
-	template <typename T>
-	T operator [] (int id);
+	template <typename A>
+	A operator [] (int id);
 	template <>
 	float operator [] (int id);
 

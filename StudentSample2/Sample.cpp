@@ -1,28 +1,7 @@
 #include "StudentManager.h"
 
-enum Jop { Create, Save, Delete, Load, Draw, Quit,
-};
-
-
 void main()
 {
-	//AStudent* data1 = new AMiddleStudent;
-	//*data1 << 1 << 4 << 5.4f;
-	//AMiddleStudent* pA = new AMiddleStudent;
-	//AHighStudent* pB = new AHighStudent;
-	//ACollegeStudent * pC = new ACollegeStudent;
-	//AStudent* data[3] = { 0, };
-	//data[0] = pA;
-	//data[1] = pB;
-	//data[2] = pC;
-	//for (int i = 0; i < 3; i++)
-	//{
-	//	data[i]->Show();
-	//}
-	//for (int i = 0; i < 3; i++)
-	//{
-	//	delete data[i];
-	//}
 
 	AStudentManager manager;
 	int iNum = 0;
