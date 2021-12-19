@@ -25,12 +25,12 @@ ANodeBox<A>::ANodeBox()
 	m_pData = nullptr;
 }
 template<class A>
-ANodeBox<A>::ANodeBox(A* data)
-{
-	m_pData = data;
+ANodeBox<A>::ANodeBox(A* data) 
+{ 
+	m_pData = data; 
 }
 template<class A>
-ANodeBox<A>::~ANodeBox()
-{
-	delete m_pData;
+ANodeBox<A>::~ANodeBox() 
+{ 
+	delete m_pData; 
 }

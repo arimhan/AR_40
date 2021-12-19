@@ -3,8 +3,8 @@
 void AMiddleStudent::Show()
 {
 	cout << "\n\tMiddleStudent 성적표" << endl;
-	cout <<"\tIndex: " << m_iIndex << " " << " Type: " << m_iType << " " <<" Kor: " << m_iKor << " " <<" Eng: " << m_iEng << " "
-		<<" Mat: " << m_iMat << " " <<" Total: " << m_iTotal << " "<<" Average: " << m_fAverage << " " << endl;
+	cout <<"\tIndex: " << m_iIndex << "번" << " Type: " << m_iType << "(Middle)" <<" Kor: " << m_iKor << "점" <<" Eng: " << m_iEng << "점"
+		<<" Mat: " << m_iMat << "점" <<" Total: " << m_iTotal << "점"<<" Average: " << m_fAverage << "점" << endl;
 }
 
 void AMiddleStudent::Save()

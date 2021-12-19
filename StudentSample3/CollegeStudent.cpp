@@ -3,8 +3,8 @@
 void ACollegeStudent::Show()
 {
 	cout << "\n\tCollegeStudent 성적표" << endl;
-	cout << "\tIndex: " << m_iIndex << " " << " Type: " << m_iType << " " << " Graphic: " << m_iGraphic << " " << " Physic: " << m_iPhysics << " "
-		<< " AI: " << m_iAI << " " << " ToTal: " << m_iTotal << " " << " Average: " << m_fAverage << " " << endl;
+	cout << "\tIndex:" << m_iIndex << "번" << " Type: " << m_iType << "(College)" << " Graphic: " << m_iGraphic << "점" << " Physic: " << m_iPhysics << "점"
+		<< " AI: " << m_iAI << "점" << " ToTal: " << m_iTotal << "점" << " Average: " << m_fAverage << "점" << endl;
 }
 
 void ACollegeStudent::Save()

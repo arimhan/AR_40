@@ -1,46 +1,52 @@
 #include "StudentManager.h"
+#include "windows.h"
+enum menu { Sample =0, Save, DeleteAll, Load, Draw,};
 
 void main()
 {
 
 	AStudentManager manager;
 	int iNum = 0;
-	while(iNum < 99)
+	while(iNum < 77)
 	{
-		cout << "\n= = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = =" << endl;
-		cout << "= = = = = = = = = = = = =\t  학생 성적 관리 프로그램\t= = = = = = = = = = = = =" << endl;
-		cout << "= = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = =\n" << endl;
-		cout << "\t-> 샘플생성(0), 저장(1), 삭제(2), 불러오기(3), 출력(4), 종료(9) :  ";
+		Sleep(1000);
+		system("cls");
+
+		cout << "\n= = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = =" << endl;
+		cout << "= = = = = = = = = = = = = = = = =\t학생 성적 관리 프로그램\t      = = = = = = = = = = = = = = =" << endl;
+		cout << "= = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = =\n" << endl;
+		cout << "\t-> 샘플생성(0), 저장(1), 삭제(2), 불러오기(3), 출력(4), 종료(77) :  ";
 		scanf_s("%d", &iNum);
-		if (iNum == 9) break;
+		if (iNum == 77) break;
 
 		switch (iNum)
 		{
-		case 0:
+		case Sample:
 		{
 			manager.Create();
-			cout << "샘플 데이터 생성 완료!\n";
+			cout << "\t샘플 데이터 생성 완료!\n";
 			iNum = 1;
 		}break;
-		case 1:
+		case Save:
 		{
 			manager.FileSave("Student.txt");
-			cout << "현재 데이터 저장 완료!\n";
+			cout << "\t현재 데이터 저장 완료!\n";
 		}break;
-		case 2:
+		case DeleteAll:
 		{
 			manager.DeleteAll();
-			cout << "현재 모든 데이터 삭제 완료!\n";
+			cout << "\t현재 모든 데이터 삭제 완료!\n";
 		}break;
-		case 3:
+		case Load:
 		{
 			manager.DeleteAll();
 			manager.Load("Student.txt");
-			cout << "TXT 파일 불러오기 완료!\n";
+			cout << "\tTXT 파일 불러오기 완료!\n";
 		}break;
-		case 4:
+		case Draw:
 		{
-			cout << manager;
+			cout << manager << "\n\n";
+			system("pause");
 		}break;
 		}
 	}

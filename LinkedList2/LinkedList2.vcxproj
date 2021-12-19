@@ -21,8 +21,8 @@
   <PropertyGroup Label="Globals">
     <VCProjectVersion>16.0</VCProjectVersion>
     <Keyword>Win32Proj</Keyword>
-    <ProjectGuid>{fab90a11-50ad-4278-9b9c-d4f550ecb62c}</ProjectGuid>
-    <RootNamespace>StudentSample3</RootNamespace>
+    <ProjectGuid>{6b07acd3-c35f-4626-9a59-5aaf24ed0837}</ProjectGuid>
+    <RootNamespace>LinkedList2</RootNamespace>
     <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
@@ -78,8 +78,6 @@
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <LinkIncremental>true</LinkIncremental>
-    <OutDir>../../output/</OutDir>
-    <IntDir>../../output/StudentSample3</IntDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <LinkIncremental>false</LinkIncremental>
@@ -141,25 +139,11 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="CollegeStudent.cpp" />
-    <ClCompile Include="FileIO.cpp" />
-    <ClCompile Include="HighStudent.cpp" />
     <ClCompile Include="LinkedList.cpp" />
-    <ClCompile Include="MiddleStudent.cpp" />
-    <ClCompile Include="Sample.cpp" />
-    <ClCompile Include="Student.cpp" />
-    <ClCompile Include="StudentManager.cpp" />
+    <ClCompile Include="Main.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="CollegeStudent.h" />
-    <ClInclude Include="FileIO.h" />
-    <ClInclude Include="HighStudent.h" />
     <ClInclude Include="LinkedList.h" />
-    <ClInclude Include="MiddleStudent.h" />
-    <ClInclude Include="NodeBox.h" />
-    <ClInclude Include="Object.h" />
-    <ClInclude Include="Student.h" />
-    <ClInclude Include="StudentManager.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

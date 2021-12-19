@@ -5,7 +5,6 @@ enum Subject {	Index = 0, Type,
 				Eng =3, Physics =3, 
 				Mat =4, AI =4, 
 				Total, Average,
-
 };
 class AStudent :public AObject
 {
@@ -14,7 +13,7 @@ public:
 	int m_iTotal;
 	int m_fAverage;
 public:
-	//가상함수 : 가상테이블 생성됨
+	//가상함수 : 가상테이블 생성됨 (부모클래스만 virtual, 자식클래스 override)
 	virtual void Show();
 	virtual void Save();
 	virtual void Load() override;
@@ -29,16 +28,16 @@ public:
 public:
 	AStudent()
 	{
-		m_iIndex = 0;
+		m_iIndex = 0; 
 		m_iType = 0;
 	}
 	AStudent(int i, int kor)
 	{
-		m_iIndex = i;
+		m_iIndex = i; 
 		m_iType = 0;
 	}
-	virtual ~AStudent()
+	virtual ~AStudent() 
 	{
-		int k = 0;
+		int k = 0; 
 	}
 };

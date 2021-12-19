@@ -16,7 +16,7 @@ float AStudent::operator[] (int id)
 }
 void AStudent::Show()
 {
-	cout << "Index: " << operator[]<int>(Index) << " " << " Total: " << operator[]<int>(Total) << " " << " Average: " << operator[]<float>(Average) << " ";
+	cout << "Index: " << operator[]<int>(Index) << " ¹ø" << " Total: " << operator[]<int>(Total) << " " << " Average: " << operator[]<float>(Average) << " ";
 	//cout << m_iIndex << " " << m_iTotal << " " << m_fAverage << " " << endl;
 }
 void AStudent::Save()

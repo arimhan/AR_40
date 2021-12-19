@@ -5,24 +5,22 @@ using namespace std;
 
 class Node
 {
-public:
+private:
 	int m_iData;
 	Node* m_pNext;
 	Node* m_pPrev;
-
+public:
 	int GetData() { return m_iData; }
 	Node* GetNext() { return m_pNext; }
+	void SetNext(Node* ptr) { m_pNext = ptr; }
 
-	Node() 
+	Node() {}; //더미노드 생성자
+	Node(int m_iData)
 	{
-		m_iData = 0;
-		m_pNext = nullptr;
-		m_pPrev = nullptr;
-	};
-	Node(int data)
-	{
-		m_iData = data;
-	};
+		this->m_iData = m_iData; this->m_pNext = nullptr;
+	}
+	//data 받는 생성자
+
 	~Node() {};
 };
 

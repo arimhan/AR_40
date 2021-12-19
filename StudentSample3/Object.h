@@ -13,7 +13,9 @@ public:
 	char	m_csBuffer[1000];
 	int		m_iBufferSize;
 	int		m_iCurrentPosition;
-	virtual void	Show() = 0; //순수가상함수 (함수 몸체 정의X, 인터페이스를 자식 클래스에게 전달하기 위해 사용)
+
+	//순수가상함수 (함수 몸체 정의X, 인터페이스를 자식 클래스에게 전달하기 위해 사용)
+	virtual void	Show() = 0; 
 	virtual void	Save() = 0;
 	virtual void	Load() = 0;
 	AObject()
