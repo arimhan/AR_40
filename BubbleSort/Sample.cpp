@@ -1,7 +1,11 @@
 #include <iostream>
-
 using namespace std;
-
+//거품정렬 https://hsho.tistory.com/26
+// https://dojang.io/mod/page/view.php?id=637
+//선택정렬 https://blockdmask.tistory.com/153
+// https://yjg-lab.tistory.com/160
+// 
+// 
 //bool Swap(int* a, int* b)
 //{
 //	int temp = *a;
