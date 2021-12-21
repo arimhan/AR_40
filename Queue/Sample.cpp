@@ -1,5 +1,6 @@
 #include <stdio.h>
 #define MAX 10
+//C++ 원형 Queue 구현 https://dpdpwl.tistory.com/67
 int Queue[MAX];
 int front, rear;
 
