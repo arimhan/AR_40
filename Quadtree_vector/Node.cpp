@@ -1,0 +1,53 @@
+#include "Node.h"
+bool ANode::IsRect(int x, int y)
+{
+	if (m_rt.p1.x <= x && m_rt.p2.x >= x && m_rt.p1.y <= y && m_rt.p2.y >= y)
+	{
+		return true;
+	}
+	return false;
+}
+void ANode::AddObject(int fX, int fY)
+{
+	m_ObjList.push_back(new AObject(fX, fY)); //Node.h 생성자 내 int fX, int fY값
+}
+
+ANode::ANode() 
+{
+	m_pParent = nullptr;
+	m_iDepth = 0;
+	pChild[0] = nullptr;
+	pChild[1] = nullptr;
+	pChild[2] = nullptr;
+	pChild[3] = nullptr;
+
+	for (list<AObject*>::iterator iter = m_ObjList.begin(); iter != m_ObjList.end(); iter++)
+	{
+		AObject* pObj = *iter;
+		delete pObj;
+	}
+	m_ObjList.clear();
+}
+ANode::ANode(float x, float y, float w, float h) 
+{
+	m_rt.p1.x = x;
+	m_rt.p1.y = y;
+	m_rt.p2.x = x + w;
+	m_rt.p2.y = y + h;
+	m_rt.middle.x = x + (w / 2.0f);
+	m_rt.middle.y = y + (h / 2.0f);
+	m_rt.size.x = w;
+	m_rt.size.y = h;
+
+	pChild[0] = nullptr;
+	pChild[1] = nullptr;
+	pChild[2] = nullptr;
+	pChild[3] = nullptr;
+}
+ANode::~ANode() 
+{
+	delete pChild[0];
+	delete pChild[1];
+	delete pChild[2];
+	delete pChild[3];
+}
