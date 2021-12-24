@@ -1,15 +1,11 @@
 #include "Node.h"
-bool ANode::IsRect(int x, int y)
+
+void ANode::AddObject(AObject*obj)
 {
-	if (m_rt.p1.x <= x && m_rt.p2.x >= x && m_rt.p1.y <= y && m_rt.p2.y >= y)
-	{
-		return true;
-	}
-	return false;
-}
-void ANode::AddObject(int fX, int fY)
-{
-	m_ObjList.push_back(new AObject(fX, fY)); //Node.h 생성자 내 int fX, int fY값
+	m_ObjList.push_back(new AObject(
+						obj->m_Pos.x, 
+						obj->m_Pos.y)); 
+	//Node.h 생성자 내 int fX, int fY값
 }
 
 ANode::ANode() 

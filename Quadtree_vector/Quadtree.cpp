@@ -33,12 +33,13 @@ void AQuadtree::BuildTree(ANode* pParent)
 	pParent->pChild[3] = CreateNode(pParent, pParent->m_rt.p1.x, pParent->m_rt.middle.y, pParent->m_rt.size.x / 2.0f, pParent->m_rt.size.y / 2.0f);
 	BuildTree(pParent->pChild[3]);
 }
-bool AQuadtree::AddObject(int fX, int fY) 
+bool AQuadtree::AddObject(AObject* obj) 
 {
-	ANode* pFindNode = FindNode(m_pRootNode, fX, fY);
+	ANode* pFindNode = FindNode(m_pRootNode, obj->m_Pos.x, obj->m_Pos.y);
 	if (pFindNode != nullptr)
 	{
-		pFindNode->AddObject(fX, fY); return true;
+		pFindNode->AddObject(obj);
+		return true;
 	}
 	return false;
 }

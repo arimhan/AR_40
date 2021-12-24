@@ -3,6 +3,9 @@
 void main()
 {
 	
+
+
+
 	//AVector2 *a = new AVector2(3,2);
 	//cout << "vector x : " << a->x << ",  y " << a->y << endl;
 	float fvalue = 3.0f;

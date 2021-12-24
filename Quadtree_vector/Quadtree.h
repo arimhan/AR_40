@@ -15,7 +15,7 @@ public:
 	void Init(int iWidth, int iHeight, int iMaxDepth);
 	ANode* CreateNode(ANode* pParenct, float x, float y, float w, float h);
 	void BuildTree(ANode* pParent);
-	bool AddObject(int fX, int fY);
+	bool AddObject(AObject* obj);
 	ANode* FindNode(ANode* pNode, int x, int y);
 	void PrintList(ANode* pNode);
 };

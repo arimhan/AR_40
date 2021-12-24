@@ -78,8 +78,8 @@
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <LinkIncremental>true</LinkIncremental>
-    <IntDir>../../output/RecursiveCall</IntDir>
-    <OutDir>../../output/</OutDir>
+    <IntDir>../../output/Debug/RecursiveCall</IntDir>
+    <OutDir>../../output/Debug/</OutDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <LinkIncremental>false</LinkIncremental>
