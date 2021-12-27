@@ -7,7 +7,7 @@ struct ARect
 {
 	AVector2 vMin;
 	AVector2 vMax;
-	AVector2 middle;
+	AVector2 vMiddle;
 	AVector2 size;
 
 	bool operator ==(const ARect& v)
@@ -26,7 +26,7 @@ struct ARect
 	{
 		this->vMin = vMin;
 		this->vMax = vMax;
-		middle = (vMax + vMin) / 2.0f;
+		vMiddle = (vMax + vMin) / 2.0f;
 		size.x = vMax.x - vMin.x;
 		size.y = vMax.y - vMin.y;
 	};
@@ -34,7 +34,7 @@ struct ARect
 	{
 		this->vMin = v;
 		this->vMax = vMin + AVector2(w,h);
-		middle = (vMax + vMin) / 2.0f;
+		vMiddle = (vMax + vMin) / 2.0f;
 		this->size.x = w;
 		this->size.y = h;
 	};
@@ -79,15 +79,15 @@ class ACollision
 {
 public:
 	//2D (ARect)
-	static bool RectToPoint(ABox rt, int x, int y); //IsRect -> RectToRect
-	static bool RectToPoint(ABox rt, AVector3 v);
-	static ACollisionType RectToRect(ABox, ABox); //Rect충돌값 반환값 0, 1, 2로 처리 => enum 
-	static ABox UnionRect(ABox r1, ABox r2); //합집합
-	static bool IntersectRect(ABox rt1, ABox rt2, ABox* rt); //교집합
+	static bool RectToPoint(ARect rt, int x, int y); //IsRect -> RectToRect
+	static bool RectToPoint(ARect rt, AVector2 v);
+	static ACollisionType RectToRect(ARect, ARect); //Rect충돌값 반환값 0, 1, 2로 처리 => enum 
+	static ARect UnionRect(ARect r1, ARect r2); //합집합
+	static bool IntersectRect(ARect rt1, ARect rt2, ARect* rt); //교집합
 
 	//3D (ABox)
-	static bool BoxToPoint(ABox rt, int x, int y); //IsRect -> RectToRect
-	static bool BoxToPoint(ABox rt, AVector3 v);
+	static bool BoxToPoint(ABox rt, int x, int y, int z); //3D box와 point 충돌 체크
+	static bool BoxToPoint(ABox rt, AVector3 v); //rect와 vector 비교
 	static ACollisionType BoxToBox(ABox, ABox); //Rect충돌값 반환값 0, 1, 2로 처리 => enum 
 	static ABox UnionBox(ABox r1, ABox r2); //합집합
 	static bool IntersectBox(ABox rt1, ABox rt2, ABox* rt); //교집합

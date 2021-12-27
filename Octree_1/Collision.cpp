@@ -27,7 +27,7 @@ ARect ACollision::UnionRect(ARect rt1, ARect rt2) //합집합
 	rt.vMax.y = rt1.vMax.y < rt2.vMax.y ? rt1.vMax.y : rt2.vMax.y;
 	rt.size.x = rt.vMax.x - rt.vMin.x;
 	rt.size.x = rt.vMax.y - rt.vMin.y;
-	rt.middle = (rt.vMin + rt.vMax) / 2.0f;
+	rt.vMiddle = (rt.vMin + rt.vMax) / 2.0f;
 	return rt;
 }
 bool ACollision::IntersectRect(ARect rt1, ARect rt2, ARect* pRect) 
@@ -51,7 +51,7 @@ bool ACollision::IntersectRect(ARect rt1, ARect rt2, ARect* pRect)
 
 			pRect->size.x = pRect->vMax.x - pRect->vMin.x;
 			pRect->size.x = pRect->vMax.y - pRect->vMin.y;
-			pRect->middle = (pRect->vMax + pRect->vMin) / 2.0f;
+			pRect->vMiddle = (pRect->vMax + pRect->vMin) / 2.0f;
 		}
 		return true;
 	}
@@ -71,3 +71,47 @@ ACollisionType ACollision::RectToRect(ARect rt1, ARect rt2)
 	//rt2와 rtInterection가 같으면 겹쳐짐. (확인 필요)
 	return ACollisionType::RECT_IN;
 }
+bool ACollision::BoxToPoint(ABox rt, int x, int y, int z) 
+{
+	if (rt.vMin.x <= x && rt.vMin.x >= x &&
+		rt.vMin.y <= y && rt.vMin.y >= y &&
+		rt.vMin.z <= z && rt.vMin.x >= z)
+	{
+		return true;
+	}
+	return false;
+}
+bool ACollision::BoxToPoint(ABox rt, AVector3 v) 
+{
+	if (rt.vMin.x <= v.x && rt.vMin.x >= v.x &&
+		rt.vMin.y <= v.y && rt.vMin.y >= v.y &&
+		rt.vMin.z <= v.z && rt.vMin.x >= v.z)
+	{
+		return true;
+	}
+	return false;
+}
+ABox ACollision::UnionBox(ABox rt1, ABox rt2) 
+{
+	ABox rt;
+	rt.vMin.x = rt1.vMin.x < rt2.vMin.x ? rt1.vMin.x : rt2.vMin.x;
+	rt.vMin.y = rt1.vMin.y < rt2.vMin.y ? rt1.vMin.y : rt2.vMin.y;
+	rt.vMin.z = rt1.vMin.z < rt2.vMin.z ? rt1.vMin.z : rt2.vMin.z;
+
+	rt.vMax.x = rt1.vMax.x < rt2.vMax.x ? rt1.vMax.x : rt2.vMax.x;
+	rt.vMax.y = rt1.vMax.y < rt2.vMax.y ? rt1.vMax.y : rt2.vMax.y;
+	rt.vMin.z = rt1.vMin.z < rt2.vMin.z ? rt1.vMin.z : rt2.vMin.z;
+
+
+	rt.size = rt.vMax - rt.vMin; // rect와 달리 size는 vMax - vMin만 계산해도 된다
+	rt.vMiddle = (rt.vMin + rt.vMax) / 2.0f;
+	return rt;
+}
+
+bool ACollision::IntersectBox(ABox rt1, ABox rt2, ABox* rt) {}
+ACollisionType ACollision::BoxToBox(ABox rt1, ABox rt2) 
+{
+	//ABox 
+
+}
+
