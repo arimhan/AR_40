@@ -1,4 +1,6 @@
 #include "Sample.h"
+//RGB Ç¥ https://m.blog.naver.com/PostView.nhn?blogId=winterwolfs&logNo=10165283140&proxyReferer=https:%2F%2Fwww.google.com%2F&view=img_1
+
 bool Sample::Init()
 {
 	UINT Flags = 0;
@@ -58,7 +60,7 @@ bool Sample::Init()
 bool Sample::Frame() {return true;}
 bool Sample::Render() 
 { 
-	float color[4] = { 0.0f, 0.225f, 0.225f, 1.0f }; //ÇØ´ç ÄÃ·¯·Î ·»´õÅ¸°ÙÀ» µ¤¾î¾º¿ò (ÃÊ±âÈ­)
+	float color[4] = { 0.0, 0.5f, 0.5f, 1.0f }; //ÇØ´ç ÄÃ·¯·Î ·»´õÅ¸°ÙÀ» µ¤¾î¾º¿ò (ÃÊ±âÈ­)
 	m_pImmediateContext->ClearRenderTargetView(m_pRenderTargetView, color);
 	m_pSwapChain->Present(0,0);
 	return true; 

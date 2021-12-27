@@ -24,7 +24,7 @@ bool ACore::CoreFrame()
 }
 bool ACore::CoreRender()
 {
-    float color[4] = { 0.1154, 0.222f, 0.0f, 1.0f };
+    float color[4] = { 102.0f, 204.0f, 255.0f, 1.0f }; // 102 204 255
     m_pImmediateContext->ClearRenderTargetView(m_pRenderTargetView, color);
     Render();
     m_pSwapChain->Present(0, 0);
