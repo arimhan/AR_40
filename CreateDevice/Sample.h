@@ -1,6 +1,6 @@
 #pragma once
 
-class Sample : public AWindow
+class Sample : public AWindow // 클래스 생성해서 연결
 {
 	//I~~ interface란뜻~~
 	//ID3D11Device* m_pd3dDevice; 

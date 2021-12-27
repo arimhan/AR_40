@@ -1,15 +1,13 @@
 #include "Window.h"
 #include <Windows.h>
 
-//메시지 기반 처리
-//운영체제 -> 메시지 전달 -> 메시지 큐 저장 ->WndProc 호출
-//윈도우 프로시져 : 윈도우의 각종 메시지 처리 함수(루틴)
 
-int APIENTRY wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCmdLine, int nCmdShow)
 //WinMain 앞에 w - 유니코드 명시
+int APIENTRY wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCmdLine, int nCmdShow)
 {
     AWindow win;
-
-
+    if (win.WinRegisterClass(hInstance) == FALSE) return 1;
+    if (win.SetWindow(L"Set Window_1 Sample") == FALSE) return 1;
+        win.WinRun();
     return 1;
 }
