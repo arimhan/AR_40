@@ -1,5 +1,6 @@
-#include "Sample.h"
-bool Sample::Init()
+#include "Device.h"
+
+bool ADevice::CreateDevice()
 {
 	UINT Flags = 0;
 	D3D_FEATURE_LEVEL fl[]
@@ -55,15 +56,7 @@ bool Sample::Init()
 
 	return true;
 }
-bool Sample::Frame() {return true;}
-bool Sample::Render() 
-{ 
-	float color[4] = { 0.0f, 0.225f, 0.225f, 1.0f }; //ÇØ´ç ÄÃ·¯·Î ·»´õÅ¸°ÙÀ» µ¤¾î¾º¿ò (ÃÊ±âÈ­)
-	m_pImmediateContext->ClearRenderTargetView(m_pRenderTargetView, color);
-	m_pSwapChain->Present(0,0);
-	return true; 
-}
-bool Sample::Release() 
+bool ADevice::CleanUpDevice()
 {
 	if (m_pd3dDevice) m_pd3dDevice->Release();
 	if (m_pImmediateContext)m_pImmediateContext->Release();
@@ -76,23 +69,10 @@ bool Sample::Release()
 
 	return true;
 }
-Sample::Sample()
+ADevice::ADevice()
 {
 	m_pd3dDevice = nullptr;
 	m_pImmediateContext = nullptr;
 	m_pSwapChain = nullptr;
 	m_pRenderTargetView = nullptr;
-}
-
-
-//GAME_RUN(CreateDevice, 1024, 768);
-
-int APIENTRY wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCmdLine, int nCmdShow)
-{
-	Sample core;
-
-	if (core.SetWinClass(hInstance) == FALSE) return 1;
-	if (core.SetWindow(L"Set Window_1 Sample") == FALSE) return 1;
-	core.GameRun();
-	return 1;
 }

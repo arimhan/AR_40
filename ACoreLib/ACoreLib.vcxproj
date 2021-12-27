@@ -150,13 +150,13 @@ copy "..\\..\\output\\Debug\\ACoreLib.lib" "..\\..\\ACoreLib\\Lib"</Command>
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="Core.h" />
-    <ClInclude Include="Sample.h" />
+    <ClInclude Include="Device.h" />
     <ClInclude Include="Std.h" />
     <ClInclude Include="Window.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Core.cpp" />
-    <ClCompile Include="Sample.cpp" />
+    <ClCompile Include="Device.cpp" />
     <ClCompile Include="Window.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

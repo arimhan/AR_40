@@ -148,6 +148,11 @@
   <ItemGroup>
     <ClInclude Include="Sample.h" />
   </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\ACoreLib\ACoreLib.vcxproj">
+      <Project>{e57618f9-f8c7-4eb5-a909-0e1072112ae0}</Project>
+    </ProjectReference>
+  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>

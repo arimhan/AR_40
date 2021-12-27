@@ -1,9 +1,8 @@
 #pragma once
-#include "Core.h"
-#include <d3d11.h>
-#pragma comment (lib, "d3d11.lib")
-class Sample : public ACore // 클래스 생성해서 연결
+#include "Window.h"
+class ADevice : public AWindow
 {
+public:
 	ID3D11Device*				m_pd3dDevice;				// 디바이스 객체 생성
 	ID3D11DeviceContext*		m_pImmediateContext;		// 디바이스 컨텍스트 객체
 	IDXGISwapChain*				m_pSwapChain;				// 스왑체인 객체
@@ -14,11 +13,9 @@ class Sample : public ACore // 클래스 생성해서 연결
 	DXGI_SWAP_CHAIN_DESC		m_SwapChainDesc;			// 스왑체인 속성 값
 	D3D11_VIEWPORT				m_ViewPort;					// 뷰포트 속성 값
 public:
-	virtual bool Init() override;
-	virtual bool Frame() override;
-	virtual bool Render() override;
-	virtual bool Release() override;
-
-	Sample(); //생성자로 초기화 값 지정
+	virtual bool CreateDevice();
+	virtual bool CleanUpDevice();
+public:
+	ADevice();
 };
 

@@ -9,11 +9,11 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
             PostQuitMessage(0);
         }break;
     default:
-        return DefWindowProc(hWnd, msg, wParam, lParam); //입력받은 값 그대로 리턴
+        return DefWindowProc(hWnd, msg, wParam, lParam);
     }
     return 0;
 }
-BOOL AWindow::WinRegisterClass(HINSTANCE hInstance)
+BOOL AWindow::SetWinClass(HINSTANCE hInstance)
 {
     m_hInstance = hInstance;
     WNDCLASSW wc;
@@ -31,8 +31,7 @@ BOOL AWindow::WinRegisterClass(HINSTANCE hInstance)
 BOOL AWindow::SetWindow(const WCHAR* szTitle, int iClientWidth, int iClientHeight)
 {
     RECT rt = {0,0 ,iClientWidth, iClientHeight };
-    AdjustWindowRect(&rt, WS_OVERLAPPEDWINDOW, FALSE); // 원하는 사이즈대로 클라이언트 세팅
-    //hWnd => m_hWnd 멤버변수 그대로 사용
+    AdjustWindowRect(&rt, WS_OVERLAPPEDWINDOW, FALSE);
     m_hWnd = CreateWindow(
         L"Class Name",
         szTitle,
@@ -64,8 +63,8 @@ bool AWindow::WinRun()
         {
             return false;
         }
-        TranslateMessage(&msg); //메시지 번역
-        DispatchMessage(&msg); // 윈도우프로시져 호출
+        TranslateMessage(&msg);
+        DispatchMessage(&msg);
     }
     return true;
 }

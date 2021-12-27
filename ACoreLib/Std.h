@@ -2,6 +2,9 @@
 #include <windows.h>
 #include <vector>
 #include <list>
+#include <d3d11.h>
+#pragma comment (lib, "ACoreLib")
+#pragma comment (lib, "d3d11.lib")
 using namespace std;
 
 //#define GAME_START int APIENTRY wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCmdLine, int nCmdShow) { Sample core;
