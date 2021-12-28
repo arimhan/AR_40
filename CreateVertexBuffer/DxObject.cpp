@@ -34,6 +34,10 @@ void ADxObject::Convert(vector<SimpleVertex>& list, vector<SimpleVertex>& retLis
 }
 bool ADxObject::Create(ID3D11Device* pd3dDevice, ID3D11DeviceContext* pContext, AVector2 vPos, float fWidth, float fHeight)
 {
+	//if ((vPos.x - fWidth / 2.0f) < 0) return false; //vPos.x - (400/2) = -100 - 200 = -300 vPos°ª È®ÀÎ
+	//if ((vPos.x + fWidth / 2.0f) > g_rtClient.right) return false;
+	//if ((vPos.y - fHeight / 2.0f) < 0) return false;
+	//if ((vPos.y - fHeight / 2.0f) > g_rtClient.bottom) return false;
 	SetDevice(pd3dDevice, pContext);
 	HRESULT hr;
 
