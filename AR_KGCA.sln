@@ -87,6 +87,8 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "CreateDevice", "CreateDevic
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Window_2", "Window_2\Window_2.vcxproj", "{F41389F0-7FA0-4AF7-A929-E4D17B6AC29A}"
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "CreateVertexBuffer", "CreateVertexBuffer\CreateVertexBuffer.vcxproj", "{1E056C4E-3C17-42CA-A056-B6065C016E7E}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|x64 = Debug|x64
@@ -383,6 +385,14 @@ Global
 		{F41389F0-7FA0-4AF7-A929-E4D17B6AC29A}.Release|x64.Build.0 = Release|x64
 		{F41389F0-7FA0-4AF7-A929-E4D17B6AC29A}.Release|x86.ActiveCfg = Release|Win32
 		{F41389F0-7FA0-4AF7-A929-E4D17B6AC29A}.Release|x86.Build.0 = Release|Win32
+		{1E056C4E-3C17-42CA-A056-B6065C016E7E}.Debug|x64.ActiveCfg = Debug|x64
+		{1E056C4E-3C17-42CA-A056-B6065C016E7E}.Debug|x64.Build.0 = Debug|x64
+		{1E056C4E-3C17-42CA-A056-B6065C016E7E}.Debug|x86.ActiveCfg = Debug|Win32
+		{1E056C4E-3C17-42CA-A056-B6065C016E7E}.Debug|x86.Build.0 = Debug|Win32
+		{1E056C4E-3C17-42CA-A056-B6065C016E7E}.Release|x64.ActiveCfg = Release|x64
+		{1E056C4E-3C17-42CA-A056-B6065C016E7E}.Release|x64.Build.0 = Release|x64
+		{1E056C4E-3C17-42CA-A056-B6065C016E7E}.Release|x86.ActiveCfg = Release|Win32
+		{1E056C4E-3C17-42CA-A056-B6065C016E7E}.Release|x86.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -424,6 +434,7 @@ Global
 		{6811E852-01AB-4E03-A1EB-BED78DFEA7DC} = {A3A9592C-86C3-4F09-B6E6-F332030BE1B3}
 		{E09B2FA6-ACF8-4038-AB9A-3786C120759F} = {A3A9592C-86C3-4F09-B6E6-F332030BE1B3}
 		{F41389F0-7FA0-4AF7-A929-E4D17B6AC29A} = {5D80AD22-81A8-47FD-A853-8E02549EBF9F}
+		{1E056C4E-3C17-42CA-A056-B6065C016E7E} = {A3A9592C-86C3-4F09-B6E6-F332030BE1B3}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {2DF14580-95EC-4BF6-AB9E-B86BBA01D1F2}

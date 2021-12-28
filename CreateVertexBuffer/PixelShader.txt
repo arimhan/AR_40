@@ -1,0 +1,5 @@
+float4 PS(float4 p: POSITION) : SV_TARGET
+{
+	return float4(0.5, 0.5, 1, 1);
+}
+//이전 쉐이더 결과를 받아서 입력값 처리. 픽쉘쉐이더 1픽쉘마다 호출.

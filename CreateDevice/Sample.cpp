@@ -85,16 +85,13 @@ Sample::Sample()
 	m_pSwapChain = nullptr;
 	m_pRenderTargetView = nullptr;
 }
-
-
-//GAME_RUN(CreateDevice, 1024, 768);
-
-int APIENTRY wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCmdLine, int nCmdShow)
-{
-	Sample core;
-
-	if (core.SetWinClass(hInstance) == FALSE) return 1;
-	if (core.SetWindow(L"Set Window_1 Sample") == FALSE) return 1;
-	core.GameRun();
-	return 1;
-}
+GAME_RUN(title, 1024, 768);
+//int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCmdLine, int nCmdShow)
+//{
+//	Sample core;
+//
+//	if (core.SetWinClass(hInstance) == FALSE) return 1;
+//	if (core.SetWindow(L"Set Window_1 Sample") == FALSE) return 1;
+//	core.GameRun();
+//	return 1;
+//}

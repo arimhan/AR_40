@@ -1,4 +1,5 @@
 #include "Window.h"
+RECT g_rtClient;  //외부변수 선언하여 SetWindow시 변수 지정될 수 있도록 세팅
 
 LRESULT CALLBACK WndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
 {
@@ -49,6 +50,7 @@ BOOL AWindow::SetWindow(const WCHAR* szTitle, int iClientWidth, int iClientHeigh
     }
     GetClientRect(m_hWnd, &m_rtClient);
     GetWindowRect(m_hWnd, &m_rtWindow);
+    g_rtClient = m_rtClient; //외부변수 선언 
 
     ShowWindow(m_hWnd, SW_SHOW);
     return TRUE;

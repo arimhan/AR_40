@@ -1,0 +1,5 @@
+float4 VS(float2 p: POSITION) : SV_POSITION
+{
+	return float4(p.x, p.y, 0.0f, 1.0f);
+}
+//정점쉐이더는 반드시 float4:SV_POSITION(레지스터)로 반환. 정점버퍼의 정점 1개마다 호출. POSITION(시멘틱 : 의미구조)

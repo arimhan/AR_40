@@ -1,5 +1,37 @@
 #include "Device.h"
 
+HRESULT ADevice::InitDevice()
+{
+	HRESULT hr = S_OK;
+	CreateDevice();
+	CreateRenderTargetView();
+	SetViewPort();
+	return hr;
+}
+bool ADevice::CreateRenderTargetView()
+{
+	ID3D11Texture2D* backBuffer = nullptr;
+	m_pSwapChain->GetBuffer(0, __uuidof(ID3D11Texture2D), (LPVOID*)&backBuffer);
+	m_pd3dDevice->CreateRenderTargetView(backBuffer, NULL, &m_pRenderTargetView);
+	if (backBuffer)backBuffer->Release();
+	m_pImmediateContext->OMSetRenderTargets(1, &m_pRenderTargetView, NULL);
+	return true;
+}
+bool ADevice::SetViewPort()
+{
+	//ºäÆ÷Æ® ¼¼ÆÃ 
+	//DXGI_SWAP_CHAIN_DESC swapDesc;
+	//m_pSwapChain->GetDesc(&swapDesc);
+	m_ViewPort.TopLeftX = 0;
+	m_ViewPort.TopLeftY = 0;
+	m_ViewPort.Width = m_SwapChainDesc.BufferDesc.Width;
+	m_ViewPort.Height = m_SwapChainDesc.BufferDesc.Height;
+	m_ViewPort.MinDepth = 0.0f;
+	m_ViewPort.MaxDepth = 1.0f;
+	m_pImmediateContext->RSSetViewports(1, &m_ViewPort);
+
+	return true;
+}
 bool ADevice::CreateDevice()
 {
 	UINT Flags = 0;
@@ -37,23 +69,6 @@ bool ADevice::CreateDevice()
 
 	if (FAILED(hr)) { return false; }
 
-	ID3D11Texture2D* backBuffer = nullptr;
-	m_pSwapChain->GetBuffer(0, __uuidof(ID3D11Texture2D), (LPVOID*)&backBuffer);
-	m_pd3dDevice->CreateRenderTargetView(backBuffer, NULL, &m_pRenderTargetView);
-	if (backBuffer)backBuffer->Release();
-	m_pImmediateContext->OMSetRenderTargets(1, &m_pRenderTargetView, NULL);
-
-	//ºäÆ÷Æ® ¼¼ÆÃ 
-	//DXGI_SWAP_CHAIN_DESC swapDesc;
-	//m_pSwapChain->GetDesc(&swapDesc);
-	m_ViewPort.TopLeftX = 0;
-	m_ViewPort.TopLeftY = 0;
-	m_ViewPort.Width = m_SwapChainDesc.BufferDesc.Width;
-	m_ViewPort.Height = m_SwapChainDesc.BufferDesc.Height;
-	m_ViewPort.MinDepth = 0.0f;
-	m_ViewPort.MaxDepth = 1.0f;
-	m_pImmediateContext->RSSetViewports(1, &m_ViewPort);
-
 	return true;
 }
 bool ADevice::CleanUpDevice()
@@ -69,6 +84,7 @@ bool ADevice::CleanUpDevice()
 
 	return true;
 }
+
 ADevice::ADevice()
 {
 	m_pd3dDevice = nullptr;
@@ -76,3 +92,4 @@ ADevice::ADevice()
 	m_pSwapChain = nullptr;
 	m_pRenderTargetView = nullptr;
 }
+ADevice::~ADevice(){}
