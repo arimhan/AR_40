@@ -70,3 +70,6 @@ bool AWindow::WinRun()
     }
     return true;
 }
+
+AWindow::AWindow(){}
+AWindow::~AWindow(){}

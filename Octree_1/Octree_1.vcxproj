@@ -145,7 +145,7 @@
     <ClCompile Include="Collision.cpp" />
     <ClCompile Include="Node.cpp" />
     <ClCompile Include="Object.cpp" />
-    <ClCompile Include="Quadtree.cpp" />
+    <ClCompile Include="Octree.cpp" />
     <ClCompile Include="Sample.cpp" />
     <ClCompile Include="Vector2.cpp" />
     <ClCompile Include="Vector3.cpp" />
@@ -154,7 +154,7 @@
     <ClInclude Include="Collision.h" />
     <ClInclude Include="Node.h" />
     <ClInclude Include="Object.h" />
-    <ClInclude Include="Quadtree.h" />
+    <ClInclude Include="Octree.h" />
     <ClInclude Include="Vector2.h" />
     <ClInclude Include="Vector3.h" />
   </ItemGroup>

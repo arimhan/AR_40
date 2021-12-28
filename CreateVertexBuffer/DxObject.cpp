@@ -28,7 +28,7 @@ void ADxObject::Convert(vector<SimpleVertex>& list, vector<SimpleVertex>& retLis
 		retList[i].v.x = list[i].v.x / g_rtClient.right;
 		retList[i].v.y = list[i].v.y / g_rtClient.bottom;
 
-		retList[i].v.x = list[i].v.x * 2.0f - 1.0f;
+		retList[i].v.x = retList[i].v.x * 2.0f - 1.0f;
 		retList[i].v.y = -1.0f * (retList[i].v.y * 2.0f - 1.0f);
 	}
 }

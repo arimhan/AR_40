@@ -24,7 +24,6 @@ public:
 	bool operator != (const AVector3& v);
 
 	//크기(거리)
-	float LengthSquared();
 	float Length();
 	//정규화
 	AVector3 Normal();

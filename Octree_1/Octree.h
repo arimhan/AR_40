@@ -1,6 +1,6 @@
 #pragma once
 #include "Node.h"
-class AQuadtree
+class AOctree
 {
 public:
 	int m_iWidth;
