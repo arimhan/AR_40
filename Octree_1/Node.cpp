@@ -26,8 +26,8 @@ ANode::ANode(float x, float y, float w, float h) : ANode()
 	m_rt.vMin.y = y;
 	m_rt.vMax.x = x + w;
 	m_rt.vMax.y = y + h;
-	m_rt.middle.x = x + (w / 2.0f);
-	m_rt.middle.y = y + (h / 2.0f);
+	m_rt.vMiddle.x = x + (w / 2.0f);
+	m_rt.vMiddle.y = y + (h / 2.0f);
 	m_rt.size.x = w;
 	m_rt.size.y = h;
 
