@@ -21,8 +21,8 @@ class ADxObject
 	ID3D11DeviceContext*	m_pContext;
 
 public:
-	void SetDevice(ID3D11Device* pd3dDevice, ID3D11DeviceContext* pContext);
-	bool Create(ID3D11Device* pd3dDevice, ID3D11DeviceContext* pContext, AVector2 pos, float fWidth, float fHeight);
+	void SetDevice(ID3D11Device* m_pd3dDevice, ID3D11DeviceContext* m_pContext);
+	bool Create(ID3D11Device* m_pd3dDevice, ID3D11DeviceContext* m_pContext, AVector2 pos, float fWidth, float fHeight);
 	void Convert(AVector2 center, float fWidth, float fHeight, vector<SimpleVertex>& retList);
 	void Convert(vector<SimpleVertex> & list, vector<SimpleVertex>& retlist);
 
