@@ -15,7 +15,7 @@ AVector3::AVector3(const AVector3& v)
 }
 AVector3 AVector3::operator+(const AVector3& v)
 {
-	return AVector3(v.x + x, v.y + y, v.z + x);
+	return AVector3(v.x + x, v.y + y, v.z + z);
 }
 AVector3 AVector3::operator-(const AVector3& v)
 {
@@ -61,19 +61,19 @@ bool AVector3::operator !=(const AVector3& v)
 AVector3 AVector3::Normal() //자기자신만 정규화
 {
 	AVector3 ret;
-	float normal = 1.0f / Length();
-	return AVector3(ret.x = x * normal, ret.y = y * normal, ret.z * normal);
+	float length = 1.0f / Length();
+	return AVector3(ret.x = x * length, ret.y = y * length, ret.z * length);
 }
 AVector3 AVector3::Normalization()
 {
-	float normal = 1.0f / Length();
-	return AVector3(x *= normal, y *= normal, z *= normal);
+	float length = 1.0f / Length();
+	return AVector3(x *= length, y *= length, z *= length);
 }
 AVector3 Normalization(AVector3& v) //다른 기능의 정규화 추가 (v를 받아 정규화 처리)
 {
 	AVector3 ret;
-	float normal = 1.0f / v.Length();
-	return AVector3(ret.x = v.x * normal, ret.y = v.y * normal, ret.z = v.z * normal);
+	float length = 1.0f / v.Length();
+	return AVector3(ret.x = v.x * length, ret.y = v.y * length, ret.z = v.z * length);
 }
 float AVector3::Length()
 {

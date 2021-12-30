@@ -3,21 +3,23 @@
 class AOctree
 {
 public:
-	int m_iWidth;
-	int m_iHeight;
+	int m_iSizeX;
+	int m_iSizeY;
+	int m_iSizeZ;
 	int m_iMaxDepth;
+	static int g_iCount;
+	AVector3 m_vSize;
 	ANode* m_pRootNode;
 
 	vector<ANode*> g_ppArray;
 	queue<ANode*> g_Queue;
 	int g_iValue = 0;
 
-	void Init(int iWidth, int iHeight, int iMaxDepth);
-	ANode* CreateNode(ANode* pParenct, float x, float y, float w, float h);
+	void Init(int iXSize, int iYSize, int iZSize, int iMaxDepth);
+	ANode* CreateNode(ANode* pParenct, float x, float y, float z, float w, float h, float q);
 	void BuildTree(ANode* pParent);
 	bool AddObject(AObject* obj);
-	ANode* FindNode(ANode* pNode, int x, int y);
-	ANode* FindNode(ANode* pNode, ARect rt);
-	void PrintList(ANode* pNode);
+	ANode* FindNode(ANode* pNode, ABox rt);
+	void PrintObjList(ANode* pNode);
 };
 

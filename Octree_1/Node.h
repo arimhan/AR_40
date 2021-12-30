@@ -11,17 +11,18 @@ class ANode
 {
 public:
 	ANode* m_pParent;
-	ARect m_rt;
-	ABox m_box;
-	int m_iDepth;
-	ANode* pChild[4];
-	list<AObject*> m_ObjList;
-	list<AObject*> m_DynamicObjList; // 동적 obj
+	ABox	m_rt;
+	int		m_iDepth;
+	int		m_iIndex;
+
+	ANode*	pChild[8];
+	list<AObject*>	m_ObjList;
+	//list<AObject*> m_DynamicObjList; // 동적 obj
 public:
 	void AddObject(AObject* obj);
 
 	ANode();
-	ANode(float x, float y, float w, float h);
+	ANode(float x, float y, float z,float w, float h, float q);
 	~ANode();
 };
 

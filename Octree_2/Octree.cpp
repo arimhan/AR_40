@@ -35,7 +35,6 @@ bool Octree::Init(float fMaxX, float fMaxY, float fMaxZ)
 	AddObject(m_Player);
 	return true;
 }
-
 void Octree::Buildtree(Node* pNode)
 {
 	if (pNode->m_Rect.vSize.x >= 30.0f && pNode->m_Rect.vSize.y >= 30.0f && pNode->m_Rect.vSize.z >= 30.0f)
@@ -73,7 +72,6 @@ void Octree::Buildtree(Node* pNode)
 		Buildtree(pNode->m_Child[7]);
 	}
 }
-
 int Octree::CheckRect(Node* pNode, Object* Obj)
 {
 	if (pNode->m_Rect.vMin.x <= Obj->m_Rect.vMin.x &&
@@ -91,7 +89,6 @@ int Octree::CheckRect(Node* pNode, Object* Obj)
 	}
 	return 0;
 }
-
 Node* Octree::FindNode(Node* pNode, Object* pObj)
 {
 	do {
@@ -112,7 +109,6 @@ Node* Octree::FindNode(Node* pNode, Object* pObj)
 	}while(pNode);
 	return pNode;
 }
-
 bool Octree::AddObject(Object* pObj)
 {
 	Node* pFindNode = FindNode(m_RootNode, pObj);
@@ -125,7 +121,6 @@ bool Octree::AddObject(Object* pObj)
 	}
 	return false;
 }
-
 void Octree::Release()
 {
 	delete m_RootNode;
@@ -136,7 +131,6 @@ void Octree::Release()
 	}
 	m_ObjectList.clear();
 }
-
 Node* Octree::CreateNode(Node* Parent, Vector3 vPivot, Vector3 vSize)
 {
 	Node* pNode = new Node(vPivot, vSize);
@@ -149,7 +143,6 @@ Node* Octree::CreateNode(Node* Parent, Vector3 vPivot, Vector3 vSize)
 	Node::g_Counter++;
 	return pNode;
 }
-
 Octree::Octree()
 {
 	m_RootNode = nullptr;

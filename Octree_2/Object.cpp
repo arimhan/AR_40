@@ -15,7 +15,6 @@ Object::Object()
 	m_Rect.vMin = { m_Pos.x - vHalf.x, m_Pos.y - vHalf.y, m_Pos.z - vHalf.z };
 	m_Rect.vMax = { m_Pos.x +- vHalf.x, m_Pos.y + vHalf.y, m_Pos.z + vHalf.z };
 }
-
 Object::Object(Vector3 Pos, Vector3 vSize)
 {
 	m_NodeIndex = -1;

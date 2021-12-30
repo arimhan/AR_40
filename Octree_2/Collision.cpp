@@ -23,7 +23,6 @@ Box Collision::UnionRegion(const Box& r1, const Box& r2)
 
 	return rt;
 }
-
 bool Collision::IntersectRegion(const Box& r1, const Box& r2, Box* rtIntersect) //교집합
 {
 	Box rtUnion = UnionRegion(r1, r2); //합집합의 r1, r2값을 이용해서

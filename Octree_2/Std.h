@@ -19,35 +19,6 @@ using namespace std;
 static const float T_EPSILON = 0.001f;
 static const float T_PI = 3.141592654f;
 
-struct Rect //2D
-{
-	Vector2 vPivot;
-	Vector2 vMin;
-	Vector2 vMax;
-	Vector2 vSize;
-	Vector2 vCenter;
-
-	Rect()
-	{
-		vPivot = { 0,0 };
-		vMin = { 0,0 };
-		vMax = { 0,0 };
-		vSize = { 0,0 };
-		vCenter = { 0,0 };
-	}
-	Rect(Vector2 vMin, Vector2 vMax)
-	{
-		vCenter = (vMax + vMin) / 2.0f;
-		vSize = vMax - vCenter; 
-		Vector2 vHalf = vSize / 2.0f;
-		vPivot = { vCenter.x - vHalf.x, vCenter.y - vHalf.y};
-
-		this->vMin = vMin;
-		this->vMax = vMax;
-	}
-};
-
-
 //직각좌표계
 struct Box
 {

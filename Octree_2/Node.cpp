@@ -7,7 +7,6 @@ bool Node::AddObject(int Index)
 	m_ObjectList.push_back(Index);
 	return true;
 }
-
 bool Node::IsRect(Vector3 pos)
 {
 	if (this->m_Rect.vMin.x <= pos.x && this->m_Rect.vMax.x >= pos.x &&
@@ -18,7 +17,6 @@ bool Node::IsRect(Vector3 pos)
 	}
 	return false;
 }
-
 Node::Node(float x, float y, float z, float w, float h, float t)
 {
 	m_Parent = nullptr;
@@ -37,7 +35,6 @@ Node::Node(Vector3 vPivot, Vector3 vSize)
 	this->m_Rect.vMax = Vector3(vPivot.x+ vSize.x, vPivot.y + vSize.y, vPivot.z);
 	this->m_Rect.vSize = vSize;
 }
-
 Node::~Node()
 {
 	for (int Child = 0; Child < 4; Child++)
