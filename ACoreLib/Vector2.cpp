@@ -11,7 +11,7 @@ AVector2::AVector2(float x, float y)
 }
 AVector2::AVector2(const AVector2& v)
 {
-	x = v.x; y = v.y;
+	x = v.x;  y = v.y;
 }
 AVector2 AVector2::operator+(const AVector2 & v)
 {
@@ -43,6 +43,7 @@ AVector2 AVector2::operator /(float fValue)
 	return *this;
 	//return AVector2(fValue / x, fValue / y);
 }
+<<<<<<< HEAD
 float AVector2::Length() //제곱에 루트씌워서 거리계산
 {
 	float ret = x * x + y * y;
@@ -79,6 +80,13 @@ AVector2 Normalization(AVector2& v) //다른 기능의 정규화 추가 (v를 받아 정규화 �
 	return AVector2( ret.x = v.x* normal, ret.y = v.y*normal );
 }
 bool AVector2::operator ==(const AVector2& v)  
+=======
+AVector2 AVector2::operator /(float fValue)
+{
+	return AVector2(fValue / x, fValue / y);
+}
+bool AVector2::operator ==(const AVector2& v)
+>>>>>>> 75e3da97d6de4e92a326993dfda6eb745a0d22b7
 // 기존 값 - obj의 x,y값의 차가 0에 가까우면 (실수니까 오차범위땜시 fabs와 0.0001f 로 비교) 같기 때문에 true 반환
 {
 	if (fabs(x - v.x) < 0.0001f)
@@ -90,7 +98,7 @@ bool AVector2::operator ==(const AVector2& v)
 	}
 	return false;
 }
-bool AVector2::operator !=(const AVector2& v) 
+bool AVector2::operator !=(const AVector2& v)
 {
 	if (fabs(x - v.x) < 0.0001f)
 	{
@@ -100,4 +108,26 @@ bool AVector2::operator !=(const AVector2& v)
 		}
 	}
 	return true;
+}
+AVector2 AVector2::Normal() //자기자신만 정규화
+{
+	AVector2 ret;
+	float length = 1.0f / Length();
+	return AVector2(ret.x = x * length, ret.y = y * length);
+}
+AVector2 AVector2::Normalization()
+{
+	float length = 1.0f / Length();
+	return AVector2(x = x * length, y = y * length);
+}
+AVector2 Normalization(AVector2& v) //다른 기능의 정규화 추가 (v를 받아 정규화 처리)
+{
+	AVector2 ret;
+	float length = 1.0f / v.Length();
+	return AVector2(ret.x = v.x * length, ret.y = v.y * length);
+}
+float AVector2::Length() //제곱에 루트씌워서 거리계산
+{
+	float ret = x * x + y * y;
+	return sqrt(ret);
 }

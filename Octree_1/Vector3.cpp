@@ -1,16 +1,17 @@
 #include "Vector3.h"
 AVector3::AVector3()
 {
-	x = y = 0.0f;
+	x = y = z = 0.0f;
 }
 AVector3::AVector3(float x, float y, float z)
 {
 	this->x = x;
 	this->y = y;
+	this->z = z;
 }
 AVector3::AVector3(const AVector3& v)
 {
-	x = v.x; y = v.y;
+	x = v.x; y = v.y; z = v.z;
 }
 AVector3 AVector3::operator+(const AVector3& v)
 {
@@ -23,28 +24,6 @@ AVector3 AVector3::operator-(const AVector3& v)
 AVector3 AVector3::operator*(float fValue)
 {
 	return AVector3(fValue * x, fValue * y, fValue * z);
-}
-float AVector3::Length()
-{
-	float ret = x * x + y * y + z * z;
-	return sqrt(ret);
-}
-AVector3 AVector3::Normal() //자기자신만 정규화
-{
-	AVector3 ret;
-	float normal = 1.0f / Length();
-	return AVector3(ret.x = x * normal, ret.y = y * normal, ret.z * normal);
-}
-AVector3 AVector3::Normalization()
-{
-	float normal = 1.0f / Length();
-	return AVector3(x *= normal, y *= normal, z *= normal);
-}
-AVector3 Normalization(AVector3& v) //다른 기능의 정규화 추가 (v를 받아 정규화 처리)
-{
-	AVector3 ret;
-	float normal = 1.0f / v.Length();
-	return AVector3(ret.x = v.x * normal, ret.y = v.y * normal, ret.z = v.z * normal);
 }
 AVector3 AVector3::operator /(float fValue)
 {
@@ -79,3 +58,26 @@ bool AVector3::operator !=(const AVector3& v)
 	}
 	return true;
 }
+AVector3 AVector3::Normal() //자기자신만 정규화
+{
+	AVector3 ret;
+	float normal = 1.0f / Length();
+	return AVector3(ret.x = x * normal, ret.y = y * normal, ret.z * normal);
+}
+AVector3 AVector3::Normalization()
+{
+	float normal = 1.0f / Length();
+	return AVector3(x *= normal, y *= normal, z *= normal);
+}
+AVector3 Normalization(AVector3& v) //다른 기능의 정규화 추가 (v를 받아 정규화 처리)
+{
+	AVector3 ret;
+	float normal = 1.0f / v.Length();
+	return AVector3(ret.x = v.x * normal, ret.y = v.y * normal, ret.z = v.z * normal);
+}
+float AVector3::Length()
+{
+	float ret = x * x + y * y + z * z;
+	return sqrt(ret);
+}
+

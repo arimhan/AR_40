@@ -1,5 +1,5 @@
-#include "Quadtree.h"
-void AQuadtree::Init(int iWidth, int iHeight, int iMaxDepth)
+#include "Octree.h"
+void AOctree::Init(int iWidth, int iHeight, int iMaxDepth)
 {
 	m_iMaxDepth = iMaxDepth;
 	m_iWidth = iWidth;
@@ -8,7 +8,7 @@ void AQuadtree::Init(int iWidth, int iHeight, int iMaxDepth)
 	m_pRootNode = CreateNode(nullptr, 0, 0, m_iWidth, m_iHeight);
 	BuildTree(m_pRootNode);
 }
-ANode* AQuadtree::CreateNode(ANode* pParent, float x, float y, float w, float h)
+ANode* AOctree::CreateNode(ANode* pParent, float x, float y, float w, float h)
 {
 	ANode* pNode = new ANode(x, y, w, h);
 	if (pParent != nullptr)
@@ -17,7 +17,7 @@ ANode* AQuadtree::CreateNode(ANode* pParent, float x, float y, float w, float h)
 	}
 	return pNode;
 }
-void AQuadtree::BuildTree(ANode* pParent)
+void AOctree::BuildTree(ANode* pParent)
 {
 	if (pParent->m_iDepth == m_iMaxDepth) return;
 
@@ -33,7 +33,7 @@ void AQuadtree::BuildTree(ANode* pParent)
 	pParent->pChild[3] = CreateNode(pParent, pParent->m_rt.vMin.x, pParent->m_rt.middle.y, pParent->m_rt.size.x / 2.0f, pParent->m_rt.size.y / 2.0f);
 	BuildTree(pParent->pChild[3]);
 }
-bool AQuadtree::AddObject(AObject* obj)
+bool AOctree::AddObject(AObject* obj)
 {
 	ANode* pFindNode = FindNode(m_pRootNode, obj->m_rt);
 	if (pFindNode != nullptr)
@@ -43,7 +43,7 @@ bool AQuadtree::AddObject(AObject* obj)
 	}
 	return false;
 }
-ANode* AQuadtree::FindNode(ANode* pNode, int x, int y)
+ANode* AOctree::FindNode(ANode* pNode, int x, int y)
 {
 	do {
 		for (int iNode = 0; iNode < 4; iNode++)
@@ -63,7 +63,7 @@ ANode* AQuadtree::FindNode(ANode* pNode, int x, int y)
 	} while (pNode);
 	return pNode;
 }
-ANode* AQuadtree::FindNode(ANode* pNode, ARect rt)
+ANode* AOctree::FindNode(ANode* pNode, ARect rt)
 {
 	do {
 		for (int iNode = 0; iNode < 4; iNode++)
@@ -86,7 +86,7 @@ ANode* AQuadtree::FindNode(ANode* pNode, ARect rt)
 	} while (pNode);
 	return pNode;
 }
-void AQuadtree::PrintList(ANode* pNode)
+void AOctree::PrintList(ANode* pNode)
 {
 	if (pNode == nullptr) return;
 

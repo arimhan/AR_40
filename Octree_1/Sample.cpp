@@ -1,8 +1,8 @@
-#include "Quadtree.h"
+#include "Octree.h"
 
 void main()
 {
-	AQuadtree tree;
+	AOctree tree;
 	tree.Init(100, 100, 2);
 	for (int iObj = 0; iObj < 10; iObj++)
 	{

@@ -21,10 +21,9 @@
   <PropertyGroup Label="Globals">
     <VCProjectVersion>16.0</VCProjectVersion>
     <Keyword>Win32Proj</Keyword>
-    <ProjectGuid>{7fe93899-1a8c-42e3-9e19-cc32e8af1cf4}</ProjectGuid>
-    <RootNamespace>Octree_1</RootNamespace>
+    <ProjectGuid>{db8032d3-52cf-4c42-aba0-563c2e589608}</ProjectGuid>
+    <RootNamespace>Octree2</RootNamespace>
     <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
-    <ProjectName>Octree_1</ProjectName>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
@@ -79,8 +78,8 @@
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <LinkIncremental>true</LinkIncremental>
-    <OutDir>../../outputDebug/</OutDir>
-    <IntDir>../../output/Debug/Octree_1</IntDir>
+    <OutDir>../../output/Debug</OutDir>
+    <IntDir>../../output/Debug/Octree_2</IntDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <LinkIncremental>false</LinkIncremental>
@@ -143,20 +142,19 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="Collision.cpp" />
+    <ClCompile Include="Main.cpp" />
     <ClCompile Include="Node.cpp" />
     <ClCompile Include="Object.cpp" />
     <ClCompile Include="Octree.cpp" />
-    <ClCompile Include="Sample.cpp" />
-    <ClCompile Include="Vector2.cpp" />
-    <ClCompile Include="Vector3.cpp" />
+    <ClCompile Include="Vector.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Collision.h" />
     <ClInclude Include="Node.h" />
     <ClInclude Include="Object.h" />
     <ClInclude Include="Octree.h" />
-    <ClInclude Include="Vector2.h" />
-    <ClInclude Include="Vector3.h" />
+    <ClInclude Include="Std.h" />
+    <ClInclude Include="Vector.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

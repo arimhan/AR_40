@@ -15,45 +15,42 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="Sample.cpp">
-      <Filter>소스 파일</Filter>
-    </ClCompile>
-    <ClCompile Include="Object.cpp">
+    <ClCompile Include="Collision.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
     <ClCompile Include="Node.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
+    <ClCompile Include="Object.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
     <ClCompile Include="Octree.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
-    <ClCompile Include="Vector2.cpp">
+    <ClCompile Include="Vector.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
-    <ClCompile Include="Collision.cpp">
-      <Filter>소스 파일</Filter>
-    </ClCompile>
-    <ClCompile Include="Vector3.cpp">
+    <ClCompile Include="Main.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Object.h">
+    <ClInclude Include="Collision.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
     <ClInclude Include="Node.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
+    <ClInclude Include="Object.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
     <ClInclude Include="Octree.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
-    <ClInclude Include="Vector2.h">
+    <ClInclude Include="Std.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
-    <ClInclude Include="Collision.h">
-      <Filter>헤더 파일</Filter>
-    </ClInclude>
-    <ClInclude Include="Vector3.h">
+    <ClInclude Include="Vector.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
   </ItemGroup>

@@ -91,8 +91,6 @@ public:
 	static ACollisionType BoxToBox(ABox, ABox); //Rect충돌값 반환값 0, 1, 2로 처리 => enum 
 	static ABox UnionBox(ABox rt1, ABox rt2); //합집합
 	static bool IntersectBox(ABox rt1, ABox rt2, ABox* rt); //교집합
-
-	//여기까지 진행함
 };
 
 

@@ -39,5 +39,5 @@ bool ACore::CoreRelease()
     return true;
 }
 
-ACore::ACore() {};
-ACore::~ACore() {};
+ACore::ACore() {}
+ACore::~ACore() {}

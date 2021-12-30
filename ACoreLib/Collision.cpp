@@ -74,9 +74,9 @@ ACollisionType ACollision::RectToRect(ARect rt1, ARect rt2)
 }
 bool ACollision::BoxToPoint(ABox rt, int x, int y, int z) 
 {
-	if (rt.vMin.x <= x && rt.vMin.x >= x &&
-		rt.vMin.y <= y && rt.vMin.y >= y &&
-		rt.vMin.z <= z && rt.vMin.z >= z)
+	if (rt.vMin.x <= x && rt.vMax.x >= x &&
+		rt.vMin.y <= y && rt.vMax.y >= y &&
+		rt.vMin.z <= z && rt.vMax.z >= z)
 	{
 		return true;
 	}
@@ -84,9 +84,9 @@ bool ACollision::BoxToPoint(ABox rt, int x, int y, int z)
 }
 bool ACollision::BoxToPoint(ABox rt, AVector3 v) 
 {
-	if (rt.vMin.x <= v.x && rt.vMin.x >= v.x &&
-		rt.vMin.y <= v.y && rt.vMin.y >= v.y &&
-		rt.vMin.z <= v.z && rt.vMin.z >= v.z)
+	if (rt.vMin.x <= v.x && rt.vMax.x >= v.x &&
+		rt.vMin.y <= v.y && rt.vMax.y >= v.y &&
+		rt.vMin.z <= v.z && rt.vMax.z >= v.z)
 	{
 		return true;
 	}
