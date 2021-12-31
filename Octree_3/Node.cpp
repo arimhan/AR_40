@@ -37,7 +37,7 @@ ANode::ANode(AVector3 vPivot, AVector3 vSize)
 }
 ANode::~ANode()
 {
-	for (int Child = 0; Child < 4; Child++)
+	for (int Child = 0; Child < 8; Child++)
 	{
 		if (m_Child[Child] != nullptr)
 		{

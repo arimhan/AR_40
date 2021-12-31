@@ -3,7 +3,7 @@
 
 int main()
 {
-	ABox a(AVector3(-10.0f, -10.0f, -10.0f), AVector3(10.0f, 10.0f, 10.0f));
+	ABox a(AVector3(10.0f, 10.0f, 10.0f), AVector3(50.0f, 50.0f, 50.0f));
 	ABox b(AVector3(-5.0f, -5.0f, -5.0f), AVector3(15.0f, 15.0f, 15.0f));
 	ABox rtUnion = ACollision::UnionRegion(a, b);
 	ABox rtIntersect;
@@ -16,16 +16,16 @@ int main()
 		AOctree g_Octree;
 		g_Octree.Init(100, 100, 100);
 
-		for (int iObj = 0; iObj < 15; iObj++)
+		for (int iObj = 0; iObj < 5; iObj++)
 		{
 			AVector3 pos, rect;
 			pos.x = (float)(rand() % 100);
 			pos.y = (float)(rand() % 100);
 			pos.z = (float)(rand() % 100);
 
-			rect.x = (float)(rand() % 10) + 1.0f;
-			rect.y = (float)(rand() % 10) + 1.0f;
-			rect.z = (float)(rand() % 10) + 1.0f;
+			rect.x = (float)(rand() % 100);//+ 1.0f;
+			rect.y = (float)(rand() % 100);//+ 1.0f;
+			rect.z = (float)(rand() % 100);//+ 1.0f;
 
 			g_Octree.AddObject(new AObject(pos, rect));
 		}

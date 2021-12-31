@@ -4,7 +4,7 @@ ABox ACollision::UnionRegion(const ABox& r1, const ABox& r2)
 {
 	// (조건)? A : B ; 삼항연산자
 	//rt.vMin.x의 값은
-	//r1.vMin.x의 값보다 r2.vMin.x 값이 크다? -> r1.vMinx.2의 값을 넣어주고
+	//r1.vMin.x의 값보다 r2.vMin.x 값이 크다? -> r1.vMin.x 2의 값을 넣어주고
 	//아니면 r2.Min.x의 값을 넣어줌.
 
 	ABox rt;

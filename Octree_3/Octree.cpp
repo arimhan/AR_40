@@ -8,7 +8,8 @@ void AOctree::Frame(float time)
 		fDirection *= -1.0f;
 	}
 	m_Player->m_Velocity.x = 10.0f * fDirection;
-	m_Player->m_Velocity.y = 0.0f;
+	m_Player->m_Velocity.y = 10.0f * fDirection;
+	m_Player->m_Velocity.z = 10.0f * fDirection;
 	m_Player->m_Pos += m_Player -> m_Velocity * time;
 
 	AVector3 vHalf = m_Player->m_Rect.vSize / 2.0f;
@@ -22,7 +23,7 @@ void AOctree::Frame(float time)
 	ANode* pFind = FindNode(m_RootNode, m_Player);
 	if (pFind != nullptr)
 	{
-		cout << "idx:" << pFind->m_Index <<", position:("<<m_Player->m_Pos.x<<","<<m_Player->m_Pos.y<<","<<m_Player->m_Pos.z<< ")"<<endl;
+		cout << "idx:" << pFind->m_Index << ", position:(" << m_Player->m_Pos.x << ", " << m_Player->m_Pos.y << ", " << m_Player->m_Pos.z<< ")"<<endl;
 	}
 }
 bool AOctree::Init(float fMaxX, float fMaxY, float fMaxZ)
