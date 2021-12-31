@@ -21,9 +21,10 @@
   <PropertyGroup Label="Globals">
     <VCProjectVersion>16.0</VCProjectVersion>
     <Keyword>Win32Proj</Keyword>
-    <ProjectGuid>{c2d66b44-d861-4591-95c1-1deda2f61efd}</ProjectGuid>
-    <RootNamespace>Soket0</RootNamespace>
+    <ProjectGuid>{ae8dfe3b-e9be-4254-b831-3eeb4dde64fe}</ProjectGuid>
+    <RootNamespace>SoketS</RootNamespace>
     <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
+    <ProjectName>Soket_C2(X)</ProjectName>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
@@ -79,7 +80,7 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <LinkIncremental>true</LinkIncremental>
     <OutDir>../../output/Debug</OutDir>
-    <IntDir>../../output/Debug/Soket_0</IntDir>
+    <IntDir>../../output/Debug/Soket_C2</IntDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <LinkIncremental>false</LinkIncremental>
