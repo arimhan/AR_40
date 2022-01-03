@@ -14,7 +14,6 @@ using namespace std;
 
 void main()
 {
-
 	WSADATA wsa;
 	if (WSAStartup(MAKEWORD(2, 2), &wsa) != 0)
 	{
@@ -24,7 +23,7 @@ void main()
 	SOCKADDR_IN sa;
 	ZeroMemory(&sa, sizeof(sa));
 	sa.sin_family = AF_INET;
-	sa.sin_port = htons(9110); // 서버 포트 번호
+	sa.sin_port = htons(PORT_NUM); // 서버 포트 번호
 	sa.sin_addr.s_addr = inet_addr(ADRESS_NUM);
 	int iRet = connect(ClientSock, (sockaddr*)&sa, sizeof(sa));
 	if (iRet == SOCKET_ERROR)
@@ -33,9 +32,9 @@ void main()
 	}
 	cout << "서버 접속 성공!" << endl;
 
-	u_long nonblockingon = 1; 
+	u_long on = 1; 
 	//	u_long nonblockingoff = 0; //0, 1로 사용 가능.
-	ioctlsocket(ClientSock, FIONBIO, &nonblockingon);
+	ioctlsocket(ClientSock, FIONBIO, &on);
 	//------------------서버 정상 연결까지 확인 후 string 입력 처리 진행
 	char szBuffer[256] = { 0, };	//string 저장 버퍼
 	int iECount = 0;				// 버퍼에 저장 전 끝 입력값(커서)를 나타냄.
@@ -62,9 +61,9 @@ void main()
 						break;
 					}
 					//서버 종료 되면서 입력받은 string buffer 초기화 처리
-					iECount = 0;
-					ZeroMemory(szBuffer, sizeof(char) * 256);
 				}
+				iECount = 0;
+				ZeroMemory(szBuffer, sizeof(char) * 256);
 			}
 			else // 엔터 안 누르면 string 입력 포인터 끝 부분 증가~~
 			{
@@ -96,7 +95,7 @@ void main()
 			}
 		}
 	}
-	cout << "line 98" << endl;
+	cout << "line 98" << endl; //while반복문 종료 시 출력
 	closesocket(ClientSock);
 	WSACleanup();
 	_getch();
