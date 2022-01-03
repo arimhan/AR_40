@@ -24,7 +24,7 @@ struct AUser
 		m_csName = inet_ntoa(addr.sin_addr);
 		m_iPort = ntohs(addr.sin_port);
 	}
-}
+};
 
 
 void main()
@@ -73,9 +73,10 @@ void main()
 		else //정상 작동 -> usercount, ip , port 정보 출력
 		{
 			AUser user;
-			user.Set();
-			
-			UserList.push_back(ClientSock);
+			user.Set(ClientSock, ClientAddr);
+			UserList.push_back(user);
+
+			//cout << "IP: " << user.m_Addr << ", Port: " << ntohs(ClientAddr.sin_port) << " " << endl; //ip, port 출력
 			cout << "IP: " << inet_ntoa(ClientAddr.sin_addr) << ", Port: " << ntohs(ClientAddr.sin_port) << " " << endl; //ip, port 출력
 			u_long on = 1;
 			ioctlsocket(ClientSock, FIONBIO, &on);
@@ -83,7 +84,7 @@ void main()
 		}
 		if (UserList.size() > 0) //User 접속 시 처리
 		{
-			list<SOCKET>::iterator iter;
+			list<AUser>::iterator iter;
 			for (iter = UserList.begin(); iter != UserList.end();) //iter ++ 위치 확인
 			{
 				SOCKET iterSock = *iter;
@@ -111,7 +112,7 @@ void main()
 				}
 				else
 				{
-					list<SOCKET>::iterator iterSend;
+					list<AUser>::iterator iterSend;
 					for (iterSend = UserList.begin(); iterSend != UserList.end(););
 					{
 						SOCKET iterSendSock = *iterSend;
