@@ -4,7 +4,7 @@
 #include <winSock2.h>
 #include <WS2tcpip.h>
 using namespace std;
-#define PORT_NUM 9090 // 포트번호, 내 포트번호는 내가 정할 수 있다. 1024~ 부터!
+#define PORT_NUM 9110 // 포트번호, 내 포트번호는 내가 정할 수 있다. 1024~ 부터!
 #define ADRESS_NUM "127.0.0.1" // 컴퓨터 IP 주소 , 나는 48, 192.168.219.101
 // Soket_Client
 //<소켓 생성>
@@ -19,7 +19,7 @@ void main()
 	{
 		return;
 	}
-	SOCKET sock = socket (AF_INET,SOCK_STREAM,0);
+	SOCKET ClientSock = socket (AF_INET,SOCK_STREAM,0);
 	//프로토콜 지정 그런데 중간 TYPE값 명시되면 0으로 설정해도 OK
 	//SOCK_STREAM : TCP
 	//SOCK_DGRAM : UDP
@@ -34,20 +34,30 @@ void main()
 	//inet_addr문자열을 4byte로 바꿔서 저장
 
 	//연결한다~
-	int iRet = connect(sock, (sockaddr*)&sa, sizeof(sa));
+	int iRet = connect(ClientSock, (sockaddr*)&sa, sizeof(sa));
 
-	//보내는~ 받는 버퍼 생성
+	//int iSendCount = 3; //3번만 보냄
+	while(1)//(iSendCount--> 0)
+	{ 
+		//보내는~ 받는 버퍼 생성
+		char szBuffer[] = "Client입니다."; // [] 비워두면 해당한 사이즈대로 전송됨.
+		int iSendByte = send(ClientSock, szBuffer, sizeof(szBuffer), 0);
 
-	char szBuffer[] = "마이크 테스트"; // [] 비워두면 해당한 사이즈대로 전송됨.
-	char szRecvBuffer[256] = { 0, };
 
-	// data 전송
-	int iSendByte = send(sock, szBuffer, sizeof(szBuffer), 0);
+		char szRecvBuffer[256] = { 0, };
 
-	//서버는 에코시스템이 있음 (리시브 가능)
-	int iRetByte = recv(sock, szRecvBuffer, 256, 0);
-	cout << szRecvBuffer << endl;
+		if(iSendByte == SOCKET_ERROR)
+		{
+			cout << "비정상 서버 종료" << endl;
+			break;
+		}
+		//서버는 에코시스템이 있음 (리시브 가능)
+		int iRetByte = recv(ClientSock, szRecvBuffer, 256, 0);
+		cout << szRecvBuffer << endl;
+	}
+	Sleep(1000);
 
 	//닫기~
+	closesocket(ClientSock);
 	WSACleanup();
 }
