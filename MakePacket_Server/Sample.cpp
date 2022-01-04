@@ -1,9 +1,9 @@
 #define _WINSOCK_DEPRECATED_NO_WARNINGS
-
 #include <iostream>
 #include <winSock2.h>
+#include <conio.h> //_kbhit();
 #include <list>
-#include "Protocol.h"
+#include "Packet.h"
 #pragma comment (lib, "ws2_32.lib")
 using namespace std;
 
@@ -31,23 +31,43 @@ int SendMsg(SOCKET sock, char*msg, WORD type)
 	// 1. 패킷 생성
 	UPACKET packet;
 	ZeroMemory(&packet, sizeof(packet));
-	packet.ph.len = strlen(msg) + PACKET_HEADER_SIZE; //규칙을 정해서 동일하게 처리해야함.
+	packet.ph.len = strlen(msg) + PACKET_HEADER_SIZE;//규칙을 정해서 동일하게 처리해야함.
 	packet.ph.type = type;
 	memcpy(packet.msg, msg, strlen(msg)); //txt 메모리 카피 처리
-	
 	char* pMsg = (char*)&packet;
-	int iTotalSize = packet.ph.len;
+	//packet은 구조체 -> 문자열로 캐스팅하여 전송한다.
 	int iSendSize = 0;
+	//int iTotalSize = packet.ph.len - iSendSize; //strlen(msg) + PACKET_HEADER_SIZE;
 	do {
 		// 2. 패킷 전송 : 운영체제는 sendbuffer(short byte), recvbuffer 내 크기가 정해져 있음.
-		int iSendByte = send(sock, &pMsg[iSendSize], packet.ph.len, 0);
+		int iSendByte = send(sock, &pMsg[iSendSize], packet.ph.len - iSendSize, 0);
+		if (iSendByte == SOCKET_ERROR)
+		{
+			cout << "Error_sock" << endl;
+			return -1;
+		}
 		iSendSize += iSendByte;
-		//packet은 구조체 -> 문자열로 캐스팅하여 전송한다.
-	} while (iSendSize < iTotalSize);
+	} while (iSendSize < packet.ph.len);
 	return iSendSize;
 }
+int SendMsg(SOCKET sock, UPACKET&packet)
+{
+	// 생성된 packet 전송
 
+	char* pMsg = (char*)&packet;
+	//packet은 구조체 -> 문자열로 캐스팅하여 전송한다.
+	int iSendSize = 0;
 
+	do {
+		int iSendByte = send(sock, &pMsg[iSendSize], packet.ph.len - iSendSize, 0);
+		if (iSendByte ==SOCKET_ERROR)
+		{
+			if (WSAGetLastError() != WSAEWOULDBLOCK) return -1;
+		}
+		iSendSize += iSendByte;
+	} while (iSendSize < packet.ph.len);
+	return iSendSize;
+}
 void main()
 {
 	WSADATA wsa;
@@ -55,52 +75,50 @@ void main()
 	{
 		return;
 	}
-	SOCKET ListenSock = socket(AF_INET, SOCK_STREAM, 0);
+	SOCKET Lsock = socket(AF_INET, SOCK_STREAM, 0);
 	//Server 소켓
 	SOCKADDR_IN sa;
 	ZeroMemory(&sa, sizeof(sa));
 	sa.sin_family = AF_INET;
 	sa.sin_port = htons(PORT_NUM); // 서버 포트 번호, 내 포트번호에 접속하는 애들 다 접속 가능하도록 설정
 	sa.sin_addr.s_addr = htonl(INADDR_ANY); //모든 IP 접속 허용
-	int iRet = bind(ListenSock, (sockaddr*)&sa, sizeof(sa));
+	int iRet = bind(Lsock, (sockaddr*)&sa, sizeof(sa));
 	if (iRet == SOCKET_ERROR) return;
-	iRet = listen(ListenSock, SOMAXCONN);
+	iRet = listen(Lsock, SOMAXCONN);
 	if (iRet == SOCKET_ERROR) return;
 
-	SOCKADDR_IN ClientAddr;
-	int iLen = sizeof(ClientAddr);
+	SOCKADDR_IN CAddr;
+	int iLen = sizeof(CAddr);
 	cout << "서버 가동중 ... " << endl;
 
-	//---------------------논블로킹 적용
 	u_long on = 1;
-	ioctlsocket(ListenSock, FIONBIO, &on);
+	ioctlsocket(Lsock, FIONBIO, &on);
 
 	list<AUser> UserList;
 
 	while (1)
 	{
-		//SOCKET이 존재할 동안
-		SOCKET ClientSock = accept(ListenSock, (sockaddr*)&ClientAddr, &iLen);
+		SOCKET Csock = accept(Lsock, (sockaddr*)&CAddr, &iLen);
 
-		if (ClientSock == SOCKET_ERROR) //Client가 유효한 소켓이 아닐 경우
+		if (Csock == SOCKET_ERROR) //Client가 유효한 소켓이 아닐 경우
 		{
 			int iError = WSAGetLastError();
 			if (iError != WSAEWOULDBLOCK) //에러가 아닐 경우 처리
 			{
-				cout << "ErrorCode: " << iError << endl;
+				cout << "ErrorCode: " <<iError << endl;
 				break;
 			}
 		}
 		else //정상 작동 -> usercount, ip , port 정보 출력
 		{
 			AUser user;
-			user.Set(ClientSock, ClientAddr);
+			user.Set(Csock, CAddr);
 			UserList.push_back(user);
 
-			cout << "IP: " << inet_ntoa(ClientAddr.sin_addr) << ", Port: " << ntohs(ClientAddr.sin_port) << " " << endl; //ip, port 출력
+			cout << "IP: " << inet_ntoa(CAddr.sin_addr) << ",  Port: " << ntohs(CAddr.sin_port) << " " << endl; //ip, port 출력
 			u_long on = 1;
-			ioctlsocket(ClientSock, FIONBIO, &on);
-			cout << UserList.size() << " 명 접속중.." << endl;
+			ioctlsocket(Csock, FIONBIO, &on);
+			cout << UserList.size() << "명 접속중.." << endl;
 		}
 		if (UserList.size() > 0) //User 접속 시 처리
 		{
@@ -109,6 +127,8 @@ void main()
 			{
 				AUser user = *iter;
 				char szRecvBuffer[256] = { 0, };
+
+				//패킷 헤더 받기
 				UPACKET recvPacket;
 				ZeroMemory(&recvPacket, sizeof(recvPacket));
 				int iRecvSize = 0;
@@ -129,51 +149,70 @@ void main()
 						if (iError != WSAEWOULDBLOCK) //Soket 에러가 nonblock상태가 아닐 경우 == 진짜 오류일 경우
 						{
 							//cout << "ErrorCode2: " << iError << endl;
-							iter = UserList.erase(iter);
+							iter = UserList.erase(iter); //list<AUser> 사용 불가
 							cout << user.m_csName << " 비정상 접속종료" << endl;
-						}
-						else
-						{
 							break;
 						}
+						else { break; }
 					}
 				} while (iRecvSize < PACKET_HEADER_SIZE);
 				if (iRecvSize == SOCKET_ERROR)
 				{
-					int iError = WSAGetLastError();
-					if (iError != WSAEWOULDBLOCK) //Soket 에러가 nonblock상태가 아닐 경우 == 진짜 오류일 경우
+					if (iter != UserList.end())
 					{
-						//cout << "ErrorCode2: " << iError << endl;
-						iter = UserList.erase(iter);
-						cout << user.m_csName << " 비정상 접속종료" << endl;
+						//UserList의 맨 마지막이면 continue
+						iter++;
 					}
-				}
-				if (iRecvSize == 0)
-				{
-					iter++;
+					continue;
 				}
 
 				memcpy(&recvPacket.ph, szRecvBuffer, PACKET_HEADER_SIZE);
-				//Client 에서 string이 1개라도 입력되면, 그 뒤 for문이 계속 돌면서 연속출력 되는 현상 발생
-				//PACKET_HEADER_SIZE 대로 recv
-				list<AUser>::iterator iterSend;
-				for (iterSend = UserList.begin(); iterSend != UserList.end();)
-				{
-					AUser user = *iterSend;
-					cout << "=>  " << szRecvBuffer << endl;
-					int iSendByte = send(user.m_Sock, szRecvBuffer, PACKET_HEADER_SIZE, 0);
-					cout << "User:" << user.m_Sock << ", " << iSendByte << "[byte]  <=" << endl;
+				// 데이터 받기
+				iRecvSize = 0;
+				do {
+					int iRecvByte = recv(user.m_Sock, recvPacket.msg, recvPacket.ph.len - PACKET_HEADER_SIZE - iRecvSize, 0);
+					iRecvSize += iRecvByte;
 
-					if (iSendByte == SOCKET_ERROR)
+					if (iRecvByte == 0)
+					{
+						closesocket(user.m_Sock);
+						iter = UserList.erase(iter); // user 로그아웃 시 지울 것. 
+						cout << user.m_csName << " 접속종료" << endl;
+						continue;
+					}
+					if (iRecvByte == SOCKET_ERROR)
 					{
 						int iError = WSAGetLastError();
 						if (iError != WSAEWOULDBLOCK) //Soket 에러가 nonblock상태가 아닐 경우 == 진짜 오류일 경우
 						{
 							//cout << "ErrorCode2: " << iError << endl;
-							closesocket(user.m_Sock);
-							iterSend = UserList.erase(iterSend);
+							iter = UserList.erase(iter);
 							cout << user.m_csName << " 비정상 접속종료" << endl;
 						}
+						else { iter++; }
+					}
+				} while (iRecvSize < recvPacket.ph.len - PACKET_HEADER_SIZE);
+
+				APacket data;
+				data.m_uPacket = recvPacket;
+				AChatMsg recvdata;
+				ZeroMemory(&recvdata, sizeof(recvdata));
+
+				//메시지 출력
+				data >> recvdata.index >> recvdata.name >> recvdata.damage >> recvdata.message;
+				cout << "\n" << "[ " << recvdata.name << " ]" << recvdata.message;
+
+				// 패킷 완성
+				list<AUser>::iterator iterSend;
+				for (iterSend = UserList.begin(); iterSend != UserList.end();)
+				{
+					AUser user = *iterSend;
+					int iSendMsgSize = SendMsg(user.m_Sock, recvPacket);
+					if (iSendMsgSize < 0)
+					{
+						closesocket(user.m_Sock);
+						iterSend = UserList.erase(iterSend);
+						cout << user.m_csName << " 비정상 접속종료" << endl;
 					}
 					else
 					{
@@ -187,6 +226,6 @@ void main()
 			}
 		}
 	}
-	closesocket(ListenSock);
+	closesocket(Lsock);
 	WSACleanup();
 }

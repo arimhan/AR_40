@@ -1,6 +1,7 @@
 #pragma once
 #include <windows.h>
 #define PACKET_HEADER_SIZE 4
+using namespace std;
 
 #pragma pack(push,1) //여기부터 pop까지 모두 1byte로 발송한단 뜻.
 typedef struct

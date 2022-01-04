@@ -1,7 +1,6 @@
 #define _WINSOCK_DEPRECATED_NO_WARNINGS
 #include <iostream>
 #include <winSock2.h>
-#include <WS2tcpip.h>
 #include <conio.h> //_kbhit();
 #include "Packet.h"
 #pragma comment (lib, "ws2_32.lib")
@@ -12,46 +11,113 @@ using namespace std;
 
 // Soket_Client
 // chat client : string입력 후 엔터 입력 시 string을 서버로 전송
-int SendMsg(SOCKET sock, char* msg, WORD type)
+int SendMsg(SOCKET Csock, char* msg, WORD type)
 {
 	// 1. 패킷 생성
 	UPACKET packet;
 	ZeroMemory(&packet, sizeof(packet));
-	packet.ph.len = strlen(msg) + PACKET_HEADER_SIZE; //규칙을 정해서 동일하게 처리해야함.
+	packet.ph.len = strlen(msg); //규칙을 정해서 동일하게 처리해야함.
 	packet.ph.type = type;
 	memcpy(packet.msg, msg, strlen(msg)); //txt 메모리 카피 처리
-
 	char* pMsg = (char*)&packet;
-	int iTotalSize = packet.ph.len;
+	//packet은 구조체 -> 문자열로 캐스팅하여 전송한다.
 	int iSendSize = 0;
+	//int iTotalSize = packet.ph.len - iSendSize; //strlen(msg) + PACKET_HEADER_SIZE;
 	do {
 		// 2. 패킷 전송 : 운영체제는 sendbuffer(short byte), recvbuffer 내 크기가 정해져 있음.
-		int iSendByte = send(sock, &pMsg[iSendSize], packet.ph.len, 0);
+		int iSendByte = send(Csock, &pMsg[iSendSize], packet.ph.len - iSendSize, 0);
+		if (iSendByte <= 0)
+		{
+			cout << "Error_sock" << endl;
+			return iSendSize;
+		}
 		iSendSize += iSendByte;
-		//packet은 구조체 -> 문자열로 캐스팅하여 전송한다.
-	} while (iSendSize < iTotalSize);
+	} while (iSendSize < packet.ph.len);
 	return iSendSize;
 }
-int SendPacket(SOCKET sock, char* msg, WORD type)
+int SendPacket(SOCKET Csock, char* msg, WORD type)
 {
 	// 1. 패킷 생성
 	APacket aPacket(type);
-	aPacket << 12 <<"KGCA"<<(short)30 << msg;
+	aPacket << 12 <<"Arim"<<(short)30 << msg;
 	APacket aPacketTest(aPacket);
 	AChatMsg recvdata;
 	ZeroMemory(&recvdata, sizeof(recvdata));
-
 	aPacketTest >> recvdata.index >> recvdata.name >> recvdata.damage >> recvdata.message;
-
 	char* pData = (char*)&aPacket.m_uPacket;
 	int iSendSize = 0;
 	do {
 		// 2. 패킷 전송 : 운영체제는 sendbuffer(short byte), recvbuffer 내 크기가 정해져 있음.
-		int iSendByte = send(sock, &pData[iSendSize], aPacket.m_pOffset[iSendSize], 0);
+		int iSendByte = send(Csock, &pData[iSendSize], aPacket.m_uPacket.ph.len - iSendSize, 0);
+		if (iSendByte == SOCKET_ERROR)
+		{
+			if (WSAGetLastError() != WSAEWOULDBLOCK) {return -1;}
+		}
 		iSendSize += iSendByte;
 		//packet은 구조체 -> 문자열로 캐스팅하여 전송한다.
-	} while (iSendSize < aPacket.m_pOffset[iSendSize]);
+	} while (iSendSize < aPacket.m_uPacket.ph.len);
 	return iSendSize;
+}
+int RecvPacketHeader(SOCKET Csock, UPACKET& recvPacket)
+{ 
+	// 패킷 헤더 받음
+	char szRecvBuffer[256] = { 0, };
+	ZeroMemory(&recvPacket, sizeof(recvPacket));
+	bool bRun = true;
+	int iRecvSize = 0;
+	do{
+		int iRecvByte = recv(Csock, szRecvBuffer, PACKET_HEADER_SIZE, 0);
+		iRecvSize += iRecvByte;
+		//위 문장으로 인해 실행부터 -1값 발생
+		if (iRecvByte == 0)
+		{
+			cout << "서버가 종료되었습니다." << endl; //서버 종료 시 처리
+			return -1;
+		}
+		if (iRecvByte == SOCKET_ERROR) // -1일때
+		{
+			int iError = WSAGetLastError();
+			if (iError != WSAEWOULDBLOCK) //Soket 에러가 nonblock상태가 아닐 경우 == 진짜 오류일 경우
+			{
+				cout << "비정상 서버 종료 Error "<< iError << endl;
+				return -1;
+			}
+			else 
+			{
+				//AChatMsg test;
+				//cout << " " << iError << test.name<< endl;
+				return 0; 
+			} //진짜 오류는 아니니 일단 실행
+		}
+	} while (iRecvSize < PACKET_HEADER_SIZE);
+	memcpy(&recvPacket.ph, szRecvBuffer, PACKET_HEADER_SIZE);
+	return 1;
+}
+int RecvPacketData(SOCKET Csock, UPACKET& recvPacket)
+{
+	//데이터 받음
+	int iRecvSize = 0;
+	do {
+		int iRecvByte = recv(Csock, recvPacket.msg, recvPacket.ph.len - PACKET_HEADER_SIZE - iRecvSize, 0);
+		iRecvSize += iRecvByte;
+		if (iRecvByte == 0)
+		{
+			closesocket(Csock);
+			cout << "서버가 종료되었습니다." << endl; //서버 종료 시 처리
+			return -1;
+		}
+		if (iRecvByte == SOCKET_ERROR)
+		{
+			if (WSAGetLastError() != WSAEWOULDBLOCK)
+			{
+				cout << "비정상 서버 종료" << endl;
+				return -1;
+			}
+			else { return 0; }
+		}
+	} while (iRecvSize < recvPacket.ph.len - PACKET_HEADER_SIZE);
+
+	return 1;
 }
 void main()
 {
@@ -60,13 +126,13 @@ void main()
 	{
 		return;
 	}
-	SOCKET ClientSock = socket(AF_INET, SOCK_STREAM, 0);
+	SOCKET Csock = socket(AF_INET, SOCK_STREAM, 0);
 	SOCKADDR_IN sa;
 	ZeroMemory(&sa, sizeof(sa));
 	sa.sin_family = AF_INET;
 	sa.sin_port = htons(PORT_NUM); // 서버 포트 번호
 	sa.sin_addr.s_addr = inet_addr(ADRESS_NUM);
-	int iRet = connect(ClientSock, (sockaddr*)&sa, sizeof(sa));
+	int iRet = connect(Csock, (sockaddr*)&sa, sizeof(sa));
 	if (iRet == SOCKET_ERROR)
 	{
 		return;
@@ -74,8 +140,7 @@ void main()
 	cout << "서버 접속 성공!" << endl;
 
 	u_long on = 1;
-	//	u_long nonblockingoff = 0; //0, 1로 사용 가능.
-	ioctlsocket(ClientSock, FIONBIO, &on);
+	ioctlsocket(Csock, FIONBIO, &on);
 	//------------------서버 정상 연결까지 확인 후 string 입력 처리 진행
 	char szBuffer[256] = { 0, };	//string 저장 버퍼
 	int iECount = 0;				// 버퍼에 저장 전 끝 입력값(커서)를 나타냄.
@@ -87,20 +152,21 @@ void main()
 			int iValue = _getche(); // 읽은 문자 반환
 			if (iValue == '\r' && strlen(szBuffer) == 0) //
 			{
+				cout << "정상 종료" << endl;
 				break;
 				//continue;
 			}
 			if (iValue == '\r') // 엔터 입력 시 string 발송
 			{
-				int iSendByte = send(ClientSock, szBuffer, iECount, 0);
+				//방법 1
+				//int iSendByte = SendMsg(ClientSock, szBuffer, PACKET_CHAT_MSG);
+				//방법2
+				int iSendByte = SendPacket(Csock, szBuffer, PACKET_CHAT_MSG);
 
-				if (iSendByte == SOCKET_ERROR)
+				if (iSendByte <0)
 				{
-					if (WSAGetLastError() != WSAEWOULDBLOCK) //Soket 에러가 nonblock상태가 아닐 경우 == 진짜 오류일 경우
-					{
-						cout << "비정상 서버 종료" << endl;
-						break;
-					}
+					cout << "비정상 서버 종료" << endl;
+					break;
 					//서버 종료 되면서 입력받은 string buffer 초기화 처리
 				}
 				iECount = 0;
@@ -111,33 +177,31 @@ void main()
 				szBuffer[iECount++] = iValue;
 			}
 		}
-		else // 키 입력 안 했을 경우 받은 메시지 처리
+		else //키 입력 안함. 받은 메시지 출력
 		{
-			char szRecvBuffer[256] = { 0, };
-			int iRecvByte = recv(ClientSock, szRecvBuffer, 256, 0);
+			//첫 번째 넘어올 때 -1 -> 0이므로 처리가 안됨
+			UPACKET packet;
+			int iRet = RecvPacketHeader(Csock, packet);
+			if (iRet < 0) break;
+			if (iRet == 1)
+			{
+				int iRet = RecvPacketData(Csock, packet);
+				if (iRet < 0) break;
+				if (iRet == 0) continue;
 
-			if (iRecvByte == 0)
-			{
-				cout << "서버가 종료되었습니다." << endl; //서버 종료 시 처리
-				break;
-			}
-			if (iRecvByte == SOCKET_ERROR)
-			{
-				if (WSAGetLastError() != WSAEWOULDBLOCK) //Soket 에러가 nonblock상태가 아닐 경우 == 진짜 오류일 경우
-				{
-					cout << "비정상 서버 종료" << endl;
-					break;
-				}
-			}
-			else //string 출력 처리
-			{
-				cout << " " << szRecvBuffer << endl;
-				ZeroMemory(szRecvBuffer, sizeof(char) * 256);
+				APacket data;
+				data.m_uPacket = packet;
+				AChatMsg recvdata;
+				ZeroMemory(&recvdata, sizeof(recvdata));
+				
+				//메시지 출력
+				data >> recvdata.index >> recvdata.name >> recvdata.damage >> recvdata.message;
+				cout << "\n" << "[ " << recvdata.name << " ]" << recvdata.message;
 			}
 		}
 	}
-	cout << "line 98" << endl; //while반복문 종료 시 출력
-	closesocket(ClientSock);
+	cout << "접속종료 162" << endl; //while반복문 종료 시 출력
+	closesocket(Csock);
 	WSACleanup();
-	_getch();
+	//_getch();
 }

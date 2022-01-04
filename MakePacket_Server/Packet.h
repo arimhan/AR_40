@@ -13,7 +13,7 @@
 class APacket
 {
 public:
-	char* m_pOffset;
+	char*		m_pOffset;
 	char* c_str() { return m_pOffset; };
 	UPACKET		m_uPacket;
 	void		PutData(const char* pData, int iSize);
