@@ -3,6 +3,7 @@
 #include <winSock2.h>
 #include <WS2tcpip.h>
 #include <conio.h> //_kbhit();
+#include "Packet.h"
 #pragma comment (lib, "ws2_32.lib")
 using namespace std;
 
@@ -11,7 +12,47 @@ using namespace std;
 
 // Soket_Client
 // chat client : string입력 후 엔터 입력 시 string을 서버로 전송
+int SendMsg(SOCKET sock, char* msg, WORD type)
+{
+	// 1. 패킷 생성
+	UPACKET packet;
+	ZeroMemory(&packet, sizeof(packet));
+	packet.ph.len = strlen(msg) + PACKET_HEADER_SIZE; //규칙을 정해서 동일하게 처리해야함.
+	packet.ph.type = type;
+	memcpy(packet.msg, msg, strlen(msg)); //txt 메모리 카피 처리
 
+	char* pMsg = (char*)&packet;
+	int iTotalSize = packet.ph.len;
+	int iSendSize = 0;
+	do {
+		// 2. 패킷 전송 : 운영체제는 sendbuffer(short byte), recvbuffer 내 크기가 정해져 있음.
+		int iSendByte = send(sock, &pMsg[iSendSize], packet.ph.len, 0);
+		iSendSize += iSendByte;
+		//packet은 구조체 -> 문자열로 캐스팅하여 전송한다.
+	} while (iSendSize < iTotalSize);
+	return iSendSize;
+}
+int SendPacket(SOCKET sock, char* msg, WORD type)
+{
+	// 1. 패킷 생성
+	APacket aPacket(type);
+	aPacket << 12 <<"KGCA"<<(short)30 << msg;
+	APacket aPacketTest(aPacket);
+	AChatMsg recvdata;
+	ZeroMemory(&recvdata, sizeof(recvdata));
+
+	aPacketTest >> recvdata.index >> recvdata.name >> recvdata.damage >> recvdata.message;
+
+	char* pData = (char*)&aPacket.m_uPacket;
+	int iSendSize = 0;
+	do {
+		// 2. 패킷 전송 : 운영체제는 sendbuffer(short byte), recvbuffer 내 크기가 정해져 있음.
+		int iSendByte = send(sock, &pData[iSendSize], aPacket.m_pOffset[iSendSize], 0);
+		iSendSize += iSendByte;
+		//packet은 구조체 -> 문자열로 캐스팅하여 전송한다.
+	} while (iSendSize < aPacket.m_pOffset[iSendSize]);
+	return iSendSize;
+}
 void main()
 {
 	WSADATA wsa;
@@ -32,7 +73,7 @@ void main()
 	}
 	cout << "서버 접속 성공!" << endl;
 
-	u_long on = 1; 
+	u_long on = 1;
 	//	u_long nonblockingoff = 0; //0, 1로 사용 가능.
 	ioctlsocket(ClientSock, FIONBIO, &on);
 	//------------------서버 정상 연결까지 확인 후 string 입력 처리 진행
@@ -90,7 +131,7 @@ void main()
 			}
 			else //string 출력 처리
 			{
-				cout << " " <<szRecvBuffer<< endl;
+				cout << " " << szRecvBuffer << endl;
 				ZeroMemory(szRecvBuffer, sizeof(char) * 256);
 			}
 		}
