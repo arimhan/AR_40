@@ -43,8 +43,7 @@ APacket& APacket::operator <<(byte data)
 }
 APacket& APacket::operator <<(char* data)
 {
-	int iSize = strlen(data) + 1;
-	PutData((char*)&data, iSize);
+	PutData(data, strlen(data)+1);
 	return *this;
 }
 APacket& APacket::operator <<(DWORD data)
@@ -54,7 +53,7 @@ APacket& APacket::operator <<(DWORD data)
 }
 APacket& APacket::operator <<(string data)
 {
-	PutData(const_cast<char*>(data.c_str()), data.size()+1);
+	PutData(data.c_str(), data.size()+1);
 	return *this;
 }
 
@@ -86,8 +85,8 @@ APacket& APacket::operator >>(byte& data)
 }
 APacket& APacket::operator >>(char* data)
 {
-	int iSize = strlen(data) + 1;
-	GetData((char*)&data, iSize);
+	int iSize = strlen(m_pOffset) + 1;
+	GetData(data, iSize);
 	return *this;
 }
 APacket& APacket::operator >>(DWORD& data)
@@ -97,7 +96,8 @@ APacket& APacket::operator >>(DWORD& data)
 }
 APacket& APacket::operator >>(string& data)
 {
-	GetData(const_cast<char*>(data.c_str()), data.size()+1);
+	int iSize = strlen(m_pOffset) + 1;
+	GetData(data.c_str(), iSize);
 	return *this;
 }
 
@@ -115,6 +115,14 @@ APacket::APacket(WORD Type)
 	ZeroMemory(&m_uPacket, sizeof(UPACKET));
 	m_uPacket.ph.len = PACKET_HEADER_SIZE;
 	m_uPacket.ph.type = Type;
+	m_pOffset = m_uPacket.msg;
+}
+APacket::APacket(const APacket& packet)
+{
+	//const APacket
+	m_uPacket.ph = packet.m_uPacket.ph;
+	memcpy(m_uPacket.msg, packet.m_uPacket.msg, sizeof(char) * 4096);
+	//memcpy로 msg는 최대길이를 정해서 복사처리
 	m_pOffset = m_uPacket.msg;
 }
 APacket::~APacket(){}

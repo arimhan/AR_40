@@ -18,9 +18,9 @@ typedef struct
 //data는 UPACKET으로 전송 (msg안에 존재)
 struct AChatMsg
 {
-	int				index;
+	long			index;
 	char			name[20];
-	long			damage;
+	short			damage;
 	char			message[256]; 
 	//msg 내 int, float, char...등 다양한 type이 들어갈 수 있기 때문에 구조 정의 필요
 	//보통 구조체에 가변적인 길이 사용 하지 않음. 채팅때문에 어쩔 수 없이 사용중. -> 맨 마지막에 큰 배열로 넘기기.

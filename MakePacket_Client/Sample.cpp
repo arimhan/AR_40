@@ -4,7 +4,7 @@
 #include <conio.h> //_kbhit();
 #include "Packet.h"
 #pragma comment (lib, "ws2_32.lib")
-using namespace std;
+//using namespace std;
 
 #define PORT_NUM 9110 // 포트번호, 내 포트번호는 내가 정할 수 있다. 1024~ 부터!
 #define ADRESS_NUM "127.0.0.1" // 컴퓨터 IP 주소 , 나는 48, 192.168.219.101 "127.0.0.1"
@@ -16,20 +16,19 @@ int SendMsg(SOCKET Csock, char* msg, WORD type)
 	// 1. 패킷 생성
 	UPACKET packet;
 	ZeroMemory(&packet, sizeof(packet));
-	packet.ph.len = strlen(msg); //규칙을 정해서 동일하게 처리해야함.
+	packet.ph.len = strlen(msg) + PACKET_HEADER_SIZE; //규칙을 정해서 동일하게 처리해야함.
 	packet.ph.type = type;
 	memcpy(packet.msg, msg, strlen(msg)); //txt 메모리 카피 처리
 	char* pMsg = (char*)&packet;
 	//packet은 구조체 -> 문자열로 캐스팅하여 전송한다.
+
 	int iSendSize = 0;
-	//int iTotalSize = packet.ph.len - iSendSize; //strlen(msg) + PACKET_HEADER_SIZE;
 	do {
 		// 2. 패킷 전송 : 운영체제는 sendbuffer(short byte), recvbuffer 내 크기가 정해져 있음.
 		int iSendByte = send(Csock, &pMsg[iSendSize], packet.ph.len - iSendSize, 0);
-		if (iSendByte <= 0)
+		if (iSendByte == SOCKET_ERROR)
 		{
-			cout << "Error_sock" << endl;
-			return iSendSize;
+			if (WSAGetLastError() != WSAEWOULDBLOCK) { return -1; }
 		}
 		iSendSize += iSendByte;
 	} while (iSendSize < packet.ph.len);
@@ -39,7 +38,7 @@ int SendPacket(SOCKET Csock, char* msg, WORD type)
 {
 	// 1. 패킷 생성
 	APacket aPacket(type);
-	aPacket << 12 <<"Arim"<<(short)30 << msg;
+	aPacket << 12 <<"Arim"<<(short)50 << msg;
 	APacket aPacketTest(aPacket);
 	AChatMsg recvdata;
 	ZeroMemory(&recvdata, sizeof(recvdata));
@@ -71,6 +70,7 @@ int RecvPacketHeader(SOCKET Csock, UPACKET& recvPacket)
 		//위 문장으로 인해 실행부터 -1값 발생
 		if (iRecvByte == 0)
 		{
+			closesocket(Csock);
 			cout << "서버가 종료되었습니다." << endl; //서버 종료 시 처리
 			return -1;
 		}
@@ -82,12 +82,7 @@ int RecvPacketHeader(SOCKET Csock, UPACKET& recvPacket)
 				cout << "비정상 서버 종료 Error "<< iError << endl;
 				return -1;
 			}
-			else 
-			{
-				//AChatMsg test;
-				//cout << " " << iError << test.name<< endl;
-				return 0; 
-			} //진짜 오류는 아니니 일단 실행
+			else { return 0; }
 		}
 	} while (iRecvSize < PACKET_HEADER_SIZE);
 	memcpy(&recvPacket.ph, szRecvBuffer, PACKET_HEADER_SIZE);
@@ -108,7 +103,8 @@ int RecvPacketData(SOCKET Csock, UPACKET& recvPacket)
 		}
 		if (iRecvByte == SOCKET_ERROR)
 		{
-			if (WSAGetLastError() != WSAEWOULDBLOCK)
+			int iError = WSAGetLastError();
+			if (iError != WSAEWOULDBLOCK)
 			{
 				cout << "비정상 서버 종료" << endl;
 				return -1;
@@ -116,27 +112,20 @@ int RecvPacketData(SOCKET Csock, UPACKET& recvPacket)
 			else { return 0; }
 		}
 	} while (iRecvSize < recvPacket.ph.len - PACKET_HEADER_SIZE);
-
 	return 1;
 }
 void main()
 {
 	WSADATA wsa;
-	if (WSAStartup(MAKEWORD(2, 2), &wsa) != 0)
-	{
-		return;
-	}
+	if (WSAStartup(MAKEWORD(2, 2), &wsa) != 0) { return; }
 	SOCKET Csock = socket(AF_INET, SOCK_STREAM, 0);
-	SOCKADDR_IN sa;
-	ZeroMemory(&sa, sizeof(sa));
-	sa.sin_family = AF_INET;
-	sa.sin_port = htons(PORT_NUM); // 서버 포트 번호
-	sa.sin_addr.s_addr = inet_addr(ADRESS_NUM);
-	int iRet = connect(Csock, (sockaddr*)&sa, sizeof(sa));
-	if (iRet == SOCKET_ERROR)
-	{
-		return;
-	}
+	SOCKADDR_IN CAddr;
+	ZeroMemory(&CAddr, sizeof(CAddr));
+	CAddr.sin_family = AF_INET;
+	CAddr.sin_port = htons(PORT_NUM); // 서버 포트 번호
+	CAddr.sin_addr.s_addr = inet_addr(ADRESS_NUM);
+	int iRet = connect(Csock, (sockaddr*)&CAddr, sizeof(CAddr));
+	if (iRet == SOCKET_ERROR) { return; }
 	cout << "서버 접속 성공!" << endl;
 
 	u_long on = 1;
@@ -150,32 +139,28 @@ void main()
 			//_kbhit : 0이 아닌 값을 반환하면 키 입력이 버퍼에서 대기중인 상태, 키 입력 시 처리
 		{
 			int iValue = _getche(); // 읽은 문자 반환
-			if (iValue == '\r' && strlen(szBuffer) == 0) //
+			if (iValue == '\r' && strlen(szBuffer) == 0) //msg를 입력하지 않고 엔터만 친 경우 종료처리 한다.
 			{
 				cout << "정상 종료" << endl;
 				break;
-				//continue;
 			}
 			if (iValue == '\r') // 엔터 입력 시 string 발송
 			{
 				//방법 1
-				//int iSendByte = SendMsg(ClientSock, szBuffer, PACKET_CHAT_MSG);
+				//int iSendByte = SendMsg(Csock, szBuffer, PACKET_CHAT_MSG);
 				//방법2
 				int iSendByte = SendPacket(Csock, szBuffer, PACKET_CHAT_MSG);
-
 				if (iSendByte <0)
 				{
 					cout << "비정상 서버 종료" << endl;
 					break;
-					//서버 종료 되면서 입력받은 string buffer 초기화 처리
 				}
+				//서버 종료 되면서 입력받은 string buffer 초기화 처리
 				iECount = 0;
 				ZeroMemory(szBuffer, sizeof(char) * 256);
 			}
 			else // 엔터 안 누르면 string 입력 포인터 끝 부분 증가~~
-			{
-				szBuffer[iECount++] = iValue;
-			}
+			{	szBuffer[iECount++] = iValue;	}
 		}
 		else //키 입력 안함. 받은 메시지 출력
 		{
@@ -200,7 +185,7 @@ void main()
 			}
 		}
 	}
-	cout << "접속종료 162" << endl; //while반복문 종료 시 출력
+	cout << "접속종료 191" << endl; //while반복문 종료 시 출력
 	closesocket(Csock);
 	WSACleanup();
 	//_getch();

@@ -1,8 +1,7 @@
 #pragma once
 #include <windows.h>
-
-using namespace std;
 #define PACKET_HEADER_SIZE 4
+using namespace std;
 
 #pragma pack(push,1) //여기부터 pop까지 모두 1byte로 발송한단 뜻.
 typedef struct
@@ -15,15 +14,18 @@ typedef struct
 	PACKET_HEADER	ph;
 	char			msg[4096];
 
-}UPACKET, *P_UPACKET;
+}UPACKET, * P_UPACKET;
 //data는 UPACKET으로 전송 (msg안에 존재)
 struct AChatMsg
 {
-	int				index;
+	long			index;
 	char			name[20];
-	long			damage;
+	short			damage;
 	char			message[256];
 	//msg 내 int, float, char...등 다양한 type이 들어갈 수 있기 때문에 구조 정의 필요
+	//보통 구조체에 가변적인 길이 사용 하지 않음. 채팅때문에 어쩔 수 없이 사용중. -> 맨 마지막에 큰 배열로 넘기기.
+	//memcpy해서 넘겨도 상관없지만 너무 많은 메모리를 소모하기 때문에 권하지 않음. -> 테스트로 멤버 추가하게되면 그 멤버도 적용되므로 사용권장X
+	//구조체 내 필요한 데이터만 넘길 수 있는 직렬화 기능이 필요하다.
 };
 #pragma pack(pop)
 
