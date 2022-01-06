@@ -6,9 +6,6 @@
 #include "Packet.h"
 #pragma comment (lib, "ws2_32.lib")
 //using namespace std;
-
-#define PORT_NUM 9110 
-#define ADRESS_NUM "127.0.0.1" 
 // chat server : client에서 서버 접속 -> n명 카운트 , client string 받은 뒤 출력처리
 
 struct AUser
