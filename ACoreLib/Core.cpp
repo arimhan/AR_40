@@ -2,7 +2,7 @@
 
 bool ACore::CoreInit()
 {
-    InitDevice();
+    //InitDevice();
     Init();
     return true;
 }
@@ -12,7 +12,7 @@ bool ACore::GameRun()
     while(WinRun())
     {
         CoreFrame();
-        CoreRender();
+        //CoreRender();
     }
     CoreRelease();
     return true;

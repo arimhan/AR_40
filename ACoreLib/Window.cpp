@@ -1,5 +1,7 @@
 #include "Window.h"
 RECT g_rtClient;  //외부변수 선언하여 SetWindow시 변수 지정될 수 있도록 세팅
+HWND g_hWnd; //채팅 클라이언트에서 사용되는 핸들값
+AWindow* g_pWindow = nullptr;
 
 LRESULT CALLBACK WndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
 {
