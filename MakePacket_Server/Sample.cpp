@@ -77,7 +77,7 @@ void main()
 	SOCKADDR_IN LAddr;
 	ZeroMemory(&LAddr, sizeof(LAddr));
 	LAddr.sin_family = AF_INET;
-	LAddr.sin_port = htons(PORT_NUM); 
+	LAddr.sin_port = htons(9110); 
 	LAddr.sin_addr.s_addr = htonl(INADDR_ANY); //모든 IP 접속 허용
 	int iRet = bind(Lsock, (sockaddr*)&LAddr, sizeof(LAddr));
 	if (iRet == SOCKET_ERROR) return;
@@ -87,7 +87,7 @@ void main()
 	//Client 주소 세팅
 	SOCKADDR_IN CAddr;
 	int iLen = sizeof(CAddr);
-	cout << "서버 가동중 ...\ " << endl;
+	cout << "서버 가동중 ... " << endl;
 
 	//논블로킹 적용
 	u_long on = 1;
@@ -199,8 +199,8 @@ void main()
 				ZeroMemory(&recvdata, sizeof(recvdata));
 				//전달받은 패킷정보를 출력하는 항목. [이름] 데이터 순으로 출력된다.
 				data >> recvdata.index >> recvdata.name >> recvdata.damage >> recvdata.message;
-				cout << recvdata.index << " ," << recvdata.name << "  ," << recvdata.damage << "  ," << recvdata.message << endl;;
-				//cout << "\n" << "[ " << recvdata.name << " ]" << recvdata.message;
+				//cout << recvdata.index << " ," << recvdata.name << "  ," << recvdata.damage << "  ," << recvdata.message << endl;;
+				cout << "\n" << "[ " << recvdata.name << " ]" << recvdata.message;
 
 				// 패킷 완성
 				list<AUser>::iterator iterSend;

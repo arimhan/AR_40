@@ -1,9 +1,9 @@
 #include "Network.h"
 #define PORT_NUM 9110 
-#define ADRESS_NUM "127.0.0.1" 
+//#define ADRESS_NUM "127.0.0.1" 
 list<ANetUser> UserList;
 
-int SendMsg(SOCKET Sock, char* msg, WORD type)
+int SendMsg(SOCKET sock, char* msg, WORD type)
 {
 	// 1. 패킷 생성
 	UPACKET packet;
@@ -16,7 +16,7 @@ int SendMsg(SOCKET Sock, char* msg, WORD type)
 	char* pMsg = (char*)&packet;
 	int iSendSize = 0;
 	do {
-		int iSendByte = send(Sock, &pMsg[iSendSize], packet.ph.len - iSendSize, 0);
+		int iSendByte = send(sock, &pMsg[iSendSize], packet.ph.len - iSendSize, 0);
 		if (iSendByte == SOCKET_ERROR)
 		{
 			if (WSAGetLastError() != WSAEWOULDBLOCK) { return -1; }
@@ -25,13 +25,13 @@ int SendMsg(SOCKET Sock, char* msg, WORD type)
 	} while (iSendSize < packet.ph.len);
 	return iSendSize;
 }
-int SendMsg(SOCKET LSock, UPACKET &packet)
+int SendMsg(SOCKET Sock, UPACKET &packet)
 {
 	//생성된 UPACKET 전송 구조
 	char* pMsg = (char*)&packet;
 	int iSendSize = 0;
 	do {
-		int iSendByte = send(LSock, &pMsg[iSendSize], packet.ph.len - iSendSize, 0);
+		int iSendByte = send(Sock, &pMsg[iSendSize], packet.ph.len - iSendSize, 0);
 		if (iSendByte == SOCKET_ERROR)
 		{
 			if (WSAGetLastError() != WSAEWOULDBLOCK) { return -1; }
@@ -46,28 +46,25 @@ int AddUser(SOCKET sock)
 	int iLen = sizeof(CAddr);
 	SOCKET CSock = accept(sock, (sockaddr*)&CAddr, &iLen);
 		
-	if (CSock == SOCKET_ERROR)
-	{
-		return -1; 
-	}
+	if (CSock == SOCKET_ERROR)	{return -1; }
 	else //정상 작동 -> usercount, ip , port 정보 출력
 	{
-		ANetUser Nuser;
-		Nuser.Set(CSock, CAddr);
-		UserList.push_back(Nuser);
+		ANetUser user;
+		user.Set(CSock, CAddr);
+		UserList.push_back(user);
 
 		cout << "IP: " << inet_ntoa(CAddr.sin_addr) << ",  Port: " << ntohs(CAddr.sin_port) << " " << endl;
 		cout << UserList.size() << "명 접속중 입니다." << endl;
 	}
 	return 1;
 }
-int RecvUser(ANetUser& Nuser)
+int RecvUser(ANetUser& user)
 {
 	char szRecvBuffer[1024] = { 0, }; //2048의 절반
-	int iRecvByte = recv(Nuser.m_Sock, szRecvBuffer, 1024, 0);
+	int iRecvByte = recv(user.m_Sock, szRecvBuffer, 1024, 0);
 	if (iRecvByte == 0) { return 0; }
 	if (iRecvByte == SOCKET_ERROR) { return -1; }
-	Nuser.DispatchRead(szRecvBuffer, iRecvByte);
+	user.DispatchRead(szRecvBuffer, iRecvByte);
 	return 1;
 }
 void main()
@@ -112,10 +109,7 @@ void main()
 		if (iRet == 0) { continue; }
 		if (FD_ISSET(net.m_LSock, &rSet))
 		{
-			if (AddUser(net.m_LSock <= 0)) 
-			{
-				break; 
-			}
+			if (AddUser(net.m_LSock) <= 0) { break; }
 		}
 		for (ANetUser& user : UserList)
 		{
@@ -139,8 +133,9 @@ void main()
 							int iRet = SendMsg(senduser.m_Sock, (*iter).m_uPacket);
 							if (iRet <= 0) { senduser.m_bConnect = false; }
 						}
+						iter = user.m_PacketPool.erase(iter);
 					}
-					iter = user.m_PacketPool.erase(iter);
+					
 				}
 			}
 		}

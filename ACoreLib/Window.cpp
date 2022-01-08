@@ -5,6 +5,7 @@ AWindow* g_pWindow = nullptr;
 
 LRESULT CALLBACK WndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
 {
+    g_pWindow->MsgProc(hWnd, msg, wParam, lParam);
     switch (msg) //메시지마다 WndProc 처리
     {
         case WM_DESTROY:
@@ -25,6 +26,7 @@ BOOL AWindow::SetWinClass(HINSTANCE hInstance)
     wc.lpfnWndProc = WndProc;
     wc.hInstance = hInstance;
     wc.lpszClassName = L"Class Name";
+    wc.hbrBackground = (HBRUSH)GetStockObject(DKGRAY_BRUSH);//(GRAY_BRUSH);
     if (RegisterClass(&wc) == false)
     {
         return FALSE;
@@ -50,9 +52,10 @@ BOOL AWindow::SetWindow(const WCHAR* szTitle, int iClientWidth, int iClientHeigh
     {
         return FALSE;
     }
+    g_hWnd = m_hWnd;
     GetClientRect(m_hWnd, &m_rtClient);
     GetWindowRect(m_hWnd, &m_rtWindow);
-    g_rtClient = m_rtClient; //외부변수 선언 
+    g_rtClient = m_rtClient; //외부변수 선언 , Client Size 800*600
 
     ShowWindow(m_hWnd, SW_SHOW);
     return TRUE;
@@ -63,15 +66,15 @@ bool AWindow::WinRun()
     //기본 메시지 루프
     while (PeekMessage(&msg, nullptr, 0, 0, PM_REMOVE))
     {
-        if (msg.message == WM_QUIT)
-        {
-            return false;
-        }
+        if (msg.message == WM_QUIT) { return false; }
         TranslateMessage(&msg);
         DispatchMessage(&msg);
     }
     return true;
 }
-
-AWindow::AWindow(){}
+LRESULT AWindow::MsgProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
+{
+    return LRESULT();
+}
+AWindow::AWindow() { g_pWindow = this; }
 AWindow::~AWindow(){}
