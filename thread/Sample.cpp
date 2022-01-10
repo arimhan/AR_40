@@ -4,48 +4,12 @@
 #include <conio.h> //_kbhit();
 #include "Packet.h"
 #pragma comment (lib, "ws2_32.lib")
-//using namespace std;
+
 
 #define PORT_NUM 9110 // 포트번호, 내 포트번호는 내가 정할 수 있다. 1024~ 부터!
 #define ADRESS_NUM "127.0.0.1" // 컴퓨터 IP 주소 , 나는 48, 192.168.219.101 "127.0.0.1"
 
-DWORD WINAPI SendThread(LPVOID lpThreadParameter) // sendthread 처리 후 반환. 1개체 1스레드 반환받음
-{
-	SOCKET Csock = (SOCKET)lpThreadParameter; //파라미터를 소켓으로 형변환
-	char szBuffer[256] = { 0, };
 
-	while (1)
-	{
-		ZeroMemory(szBuffer, sizeof(char) * 256);
-		fgets(szBuffer, 256, stdin); // 엔터 쳐야 반환함수
-
-		if (strlen(szBuffer) == '\r' && strlen(szBuffer) == 0) //msg를 입력하지 않고 엔터만 친 경우 종료처리 한다.
-		{
-			cout << "\n정상 종료" << endl;
-			break;
-		}
-		if (strlen(szBuffer) == '\r') // 엔터 입력 시 string 발송
-		{
-			//방법 1
-			//int iSendByte = SendMsg(Csock, szBuffer, PACKET_CHAT_MSG);
-			//방법2
-			int iSendByte = SendPacket(Csock, szBuffer, PACKET_CHAT_MSG);
-			if (iSendByte < 0)
-			{
-				cout << "비정상 서버 종료" << endl;
-				break;
-			}
-			//서버 종료 되면서 입력받은 string buffer 초기화 처리
-			ZeroMemory(szBuffer, sizeof(char) * 256);
-		}
-		break;
-	}
-	return;
-}
-
-
-// Soket_Client
-// chat client : string입력 후 엔터 입력 시 string을 서버로 전송
 int SendMsg(SOCKET Csock, char* msg, WORD type)
 {
 	// 1. 패킷 생성
@@ -149,6 +113,59 @@ int RecvPacketData(SOCKET Csock, UPACKET& recvPacket)
 	} while (iRecvSize < recvPacket.ph.len - PACKET_HEADER_SIZE);
 	return 1;
 }
+
+DWORD WINAPI SendThread(LPVOID lpThreadParameter) // sendthread 처리 후 반환. 1개체 1스레드 반환받음
+{
+	SOCKET Csock = (SOCKET)lpThreadParameter; //파라미터를 소켓으로 형변환
+	char szBuffer[256] = { 0, };
+
+	while (1)
+	{
+		ZeroMemory(szBuffer, sizeof(char) * 256);
+		fgets(szBuffer, 256, stdin); // 엔터 쳐야 반환함수
+
+		if (strlen(szBuffer) == 0) //msg를 입력하지 않고 엔터만 친 경우 종료처리 한다.
+		{
+			cout << "\n정상 종료" << endl;
+			break;
+		}
+		int iSendByte = SendPacket(Csock, szBuffer, PACKET_CHAT_MSG);
+		if (iSendByte < 0)
+		{
+			cout << "비정상 서버 종료" << endl;
+			break;
+		}
+	}
+	return 0;
+}
+DWORD WINAPI RecvThread(LPVOID param) // sendthread 처리 후 반환. 1개체 1스레드 반환받음
+{
+	SOCKET Csock = (SOCKET)param; //파라미터를 소켓으로 형변환
+	char szBuffer[256] = { 0, };
+
+	while (1)
+	{
+		UPACKET packet;
+		int iRet = RecvPacketHeader(Csock, packet);
+		if (iRet < 0) continue;
+		if (iRet == 1)
+		{
+			int iRet = RecvPacketData(Csock, packet);
+			if (iRet < 0) break;
+			if (iRet == 0) continue;
+
+			APacket data;
+			data.m_uPacket = packet;
+			AChatMsg recvdata;
+			ZeroMemory(&recvdata, sizeof(recvdata));
+			data >> recvdata.index >> recvdata.name >> recvdata.damage >> recvdata.message;
+			cout << "\n" << "[" << recvdata.name<<"]" << recvdata.message;
+		}
+	}
+	return 0;
+}
+
+
 void main()
 {
 	WSADATA wsa;
@@ -178,35 +195,23 @@ void main()
 		0, //서스펜디드. 일을 언제 시킬지? => 만들고 아직 진행하지 마~ 등을 세팅함.
 		&ThreadId);  //스레드 아이디. 리턴을 시켜주겠다.
 
-	while (1) //키 입력 안함. 받은 메시지 출력
+	DWORD ThreadIdRecv;
+	HANDLE hThreadRecv = ::CreateThread( // 반환값이 핸들임
+		0,
+		0,
+		RecvThread,
+		(LPVOID)Csock, 
+		0, 
+		&ThreadIdRecv); 
+
+	while (1)
 	{
-		//첫 번째 넘어올 때 -1 -> 0이므로 처리가 안됨
-		UPACKET packet;
-		int iRet = RecvPacketHeader(Csock, packet);
-		if (iRet < 0) break;
-		if (iRet == 1)
-		{
-			int iRet = RecvPacketData(Csock, packet);
-			if (iRet < 0) break;
-			if (iRet == 0) continue;
-
-			APacket data;
-			data.m_uPacket = packet;
-			AChatMsg recvdata;
-			ZeroMemory(&recvdata, sizeof(recvdata));
-
-			//메시지 출력
-			data >> recvdata.index >> recvdata.name >> recvdata.damage >> recvdata.message;
-			cout << "\n" << "[ " << recvdata.name << " ]" << recvdata.message;
-		}
-
+		Sleep(1);
+		// return -1값일 경우 무한루프 발생
 	}
+	cout << "접속 종료" << endl;
 
-	//------------------서버 정상 연결까지 확인 후 string 입력 처리 진행
-	char szBuffer[256] = { 0, };	//string 저장 버퍼
-	int iECount = 0;				// 버퍼에 저장 전 끝 입력값(커서)를 나타냄.
-
-	cout << "접속종료 191" << endl; //while반복문 종료 시 출력
+	CloseHandle(hThread);
 	closesocket(Csock);
 	WSACleanup();
 	//_getch();

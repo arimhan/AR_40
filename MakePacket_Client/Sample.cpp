@@ -7,7 +7,7 @@
 //using namespace std;
 
 #define PORT_NUM 9110 // 포트번호, 내 포트번호는 내가 정할 수 있다. 1024~ 부터!
-#define ADRESS_NUM "127.0.0.1" // 컴퓨터 IP 주소 , 나는 48, 192.168.219.101 "127.0.0.1"
+#define ADRESS_NUM "127.0.0.1" // 컴퓨터 IP 주소 , 나는 48, 192.168.219.101 "127.0.0.1" , "192.168.0.12" 선생님
 
 // Soket_Client
 // chat client : string입력 후 엔터 입력 시 string을 서버로 전송
