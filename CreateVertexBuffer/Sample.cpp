@@ -40,13 +40,13 @@ bool Sample::Release()
 }
 Sample::Sample() {};
 Sample::~Sample() {};
-SIMPLE_RUN();
-//int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCmdLine, int nCmdShow)
-//{
-//	Sample core;
-//
-//	if (core.SetWinClass(hInstance) == FALSE) return 1;
-//	if (core.SetWindow(L"Set Window_1 Sample") == FALSE) return 1;
-//	core.GameRun();
-//	return 1;
-//}
+//SIMPLE_ARUN();
+int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCmdLine, int nCmdShow)
+{
+	Sample core;
+
+	if (core.SetWinClass(hInstance) == FALSE) return 1;
+	if (core.SetWindow(L"Set Window_1 Sample") == FALSE) return 1;
+	core.GameRun();
+	return 1;
+}

@@ -71,8 +71,8 @@ bool ASample::Release()
     m_Net.CloseNetWork();
     return true;
 }
-ASample::ASample(){}
-ASample::~ASample(){}
+ASample::ASample() {}
+ASample::~ASample() {}
 SIMPLE_ARUN();
 
 //int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCmdLine, int nCmdShow)

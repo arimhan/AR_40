@@ -5,8 +5,12 @@
 #include <list>
 #include <d3d11.h>
 #include "Collision.h"
-#pragma comment (lib, "ACoreLib")
 #pragma comment (lib, "d3d11.lib")
+#ifdef _DEBUG
+#pragma comment (lib, "ACoreLib_d.lib")
+#else
+#pragma comment (lib, "ACoreLib_r.lib")
+#endif
 #pragma comment (lib, "ws2_32.lib")
 using namespace std;
 

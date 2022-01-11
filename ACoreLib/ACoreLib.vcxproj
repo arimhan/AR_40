@@ -127,8 +127,8 @@
       <GenerateDebugInformation>true</GenerateDebugInformation>
     </Link>
     <PostBuildEvent>
-      <Command>copy "*.h" "../../ACoreLib/include"
-copy "..\\..\\output\\Debug\\ACoreLib.lib" "..\\..\\ACoreLib\\Lib"</Command>
+      <Command>copy "*.h" "../../include/Core3D/"
+copy "..\\..\\output\\Debug\\ACoreLib.lib" "..\\..\\Lib\\ACoreLib_d.lib"</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
