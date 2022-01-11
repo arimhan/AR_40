@@ -27,7 +27,7 @@ void main()
 	SOCKADDR_IN sa;
 	ZeroMemory(&sa, sizeof(sa));
 	sa.sin_family = AF_INET;
-	sa.sin_port= htons(9110); // 서버 포트 번호
+	sa.sin_port= htons(PORT_NUM); // 서버 포트 번호
 	sa.sin_addr.s_addr = inet_addr(ADRESS_NUM);
 	//inet_addr("ADRESS_NUM");
 	//IP 매크로로 지정한 곳에 넣음. 원래는 S_un.S_addr에 넣음.
