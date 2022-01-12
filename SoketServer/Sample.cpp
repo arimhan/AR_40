@@ -16,7 +16,7 @@ void main()
 		return;
 	}
 	SOCKET ListenSock = socket(AF_INET, SOCK_STREAM, 0);
-	//Client 家南
+	//Server 家南
 	SOCKADDR_IN sa;
 	ZeroMemory(&sa, sizeof(sa));
 	sa.sin_family = AF_INET;
