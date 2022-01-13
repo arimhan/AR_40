@@ -1,12 +1,20 @@
 #include <stdio.h>
+#include <vector>
 
 void maximun(float a, float b) 
 {
-	max = 
+	if (a > b)
+	{
+		printf("max°ª : %f", a);
+	}
 }
 
 void minimun(float a, float b)
 {
+	if (a > b)
+	{
+		printf("max°ª : %f", a);
+	}
 }
 
 void main()
@@ -16,6 +24,8 @@ void main()
 	scanf("%f, %f", &a, &b);
 	max = maximun(a, b);
 	min = minimun(a, b);
+	
+
 }
 
 
