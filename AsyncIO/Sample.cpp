@@ -17,45 +17,45 @@ void main()
 
     setlocale(LC_ALL, "");//"KOREAN");
     
-    //"KOREAN"); =>""해당 지역의 언어를 따름. "" <모든 컴퓨터, "언어"
-    {
-    // --------------비동기 사용XXX-------------------
-        //파일 생성 , 전부 유니코드 (W)
-        HANDLE hFile = CreateFile(L"test.txt", GENERIC_WRITE, 0, NULL, CREATE_ALWAYS, FILE_ATTRIBUTE_NORMAL, NULL);
-        if (hFile != NULL) //파일포인터 오류여부 처리
-        {
-            //all 2byte
-            WCHAR buffer[] = L"test string";
-            DWORD dwLength = sizeof(buffer);
-            DWORD dwWritten; //return값 (사용한 size)
-            //얼만큼 썼는지, 성공여부 반환값이 발생 => BOOL 타입 지정
-            BOOL ret = WriteFile(hFile, buffer, dwLength,& dwWritten, NULL);
-            // LPCVOID lpBuffer 버퍼 시작 주소 nNumberOfBytesToWrite 이 주소부터 , ~ LPDWORD lpNumberOfBytesWritten 이 주소까지
-            // LPOVERLAPPED lpOverlapped 비동기 처리 (null = 사용X)
-            if (ret == TRUE)
-            {
-                //유니코드 -> wcout 사용, 한글 출력X =>상단에  setlocale(LC_ALL, "") 처리를 하면 정상출력된다.
-                wcout << "Create Succese" << endl;
-                //wcout << "성공!" << endl;;
-            }
-        }
-        CloseHandle(hFile);
-        //파일 생성 , 전부 유니코드 (W)
-        HANDLE hReadFile = CreateFile(L"test.txt", GENERIC_READ, 0, NULL, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, NULL);
-        if (hReadFile != NULL) //파일포인터 오류여부 처리
-        {
-            WCHAR buffer[512] = { 0, };
-            DWORD dwLength = sizeof(buffer);
-            DWORD dwRead; //return값 (사용한 size)
-            //얼만큼 썼는지, 성공여부 반환값이 발생 => BOOL 타입 지정
-            BOOL ret = ReadFile(hReadFile, buffer, dwLength, &dwRead, NULL);
-            if (ret == TRUE)
-            {
-                wcout << buffer << endl;
-            }
-        }
-        CloseHandle(hReadFile);
-    }
+    ////"KOREAN"); =>""해당 지역의 언어를 따름. "" <모든 컴퓨터, "언어"
+    //{
+    //// --------------비동기 사용XXX-------------------
+    //    //파일 생성 , 전부 유니코드 (W)
+    //    HANDLE hFile = CreateFile(L"test.txt", GENERIC_WRITE, 0, NULL, CREATE_ALWAYS, FILE_ATTRIBUTE_NORMAL, NULL);
+    //    if (hFile != NULL) //파일포인터 오류여부 처리
+    //    {
+    //        //all 2byte
+    //        WCHAR buffer[] = L"test string";
+    //        DWORD dwLength = sizeof(buffer);
+    //        DWORD dwWritten; //return값 (사용한 size)
+    //        //얼만큼 썼는지, 성공여부 반환값이 발생 => BOOL 타입 지정
+    //        BOOL ret = WriteFile(hFile, buffer, dwLength,& dwWritten, NULL);
+    //        // LPCVOID lpBuffer 버퍼 시작 주소 nNumberOfBytesToWrite 이 주소부터 , ~ LPDWORD lpNumberOfBytesWritten 이 주소까지
+    //        // LPOVERLAPPED lpOverlapped 비동기 처리 (null = 사용X)
+    //        if (ret == TRUE)
+    //        {
+    //            //유니코드 -> wcout 사용, 한글 출력X =>상단에  setlocale(LC_ALL, "") 처리를 하면 정상출력된다.
+    //            wcout << "Create Succese" << endl;
+    //            //wcout << "성공!" << endl;;
+    //        }
+    //    }
+    //    CloseHandle(hFile);
+    //    //파일 생성 , 전부 유니코드 (W)
+    //    HANDLE hReadFile = CreateFile(L"test.txt", GENERIC_READ, 0, NULL, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, NULL);
+    //    if (hReadFile != NULL) //파일포인터 오류여부 처리
+    //    {
+    //        WCHAR buffer[512] = { 0, };
+    //        DWORD dwLength = sizeof(buffer);
+    //        DWORD dwRead; //return값 (사용한 size)
+    //        //얼만큼 썼는지, 성공여부 반환값이 발생 => BOOL 타입 지정
+    //        BOOL ret = ReadFile(hReadFile, buffer, dwLength, &dwRead, NULL);
+    //        if (ret == TRUE)
+    //        {
+    //            wcout << buffer << endl;
+    //        }
+    //    }
+    //    CloseHandle(hReadFile);
+    //}
 
     WCHAR* g_buffer = NULL;
     LARGE_INTEGER filesize; //longlong (8byte)
