@@ -51,7 +51,9 @@ int AServer::Broadcast(ANetUser& user)
 			for (ANetUser& senduser : g_UserList)
 			{
 				int iRet = SendMsg(senduser.m_Sock, (*iter).m_uPacket);
-				if (iRet <= 0) { senduser.m_bConnect = false; }
+				if (iRet <= 0) { 
+					senduser.m_bConnect = false; 
+				}
 			}
 			iter = user.m_PacketPool.erase(iter);
 		}
@@ -71,7 +73,7 @@ int AServer::RecvUser(ANetUser& user)
 	user.DispatchRead(szRecvBuffer, iRecvByte);
 	return 1;
 }
-bool AServer::Init()
+bool AServer::Init(int iPort)
 {
 	InitializeCriticalSection(&g_CS);
 	g_hMutex = CreateMutex(NULL, FALSE, NULL);
@@ -82,8 +84,8 @@ bool AServer::Init()
 	SOCKADDR_IN Addr;
 	ZeroMemory(&Addr, sizeof(Addr));
 	Addr.sin_family = AF_INET;
-	Addr.sin_port = htons(PORT_NUM); // 서버 포트 번호
-	Addr.sin_addr.s_addr = inet_addr(ADRESS_NUM);
+	Addr.sin_port = htons(iPort); // 서버 포트 번호
+	Addr.sin_addr.s_addr = htonl(INADDR_ANY);
 
 	int iRet = bind(m_LSock, (sockaddr*)&Addr, sizeof(Addr));
 	if (iRet == SOCKET_ERROR) { return false; }
@@ -127,6 +129,8 @@ bool AServer::RunServer()
 			ReleaseMutex(g_hMutex);
 
 			cout << "IP: " << inet_ntoa(CAddr.sin_addr) << "Port: " << ntohs(CAddr.sin_port) << " " << endl;
+			u_long on = 1;
+			ioctlsocket(CSock, FIONBIO, &on);
 			cout << g_UserList.size() << "명 접속중..." << endl;
 		}
 		Sleep(1);
