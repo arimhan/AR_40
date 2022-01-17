@@ -143,17 +143,15 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Accept.cpp" />
+    <ClCompile Include="ChatUser.cpp" />
+    <ClCompile Include="LobbyServer.cpp" />
     <ClCompile Include="Sample.cpp" />
-    <ClCompile Include="ServerObj.cpp" />
-    <ClCompile Include="Thread.cpp" />
-    <ClCompile Include="ThreadRecv.cpp" />
-    <ClCompile Include="ThreadSend.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="ServerObj.h" />
-    <ClInclude Include="Thread.h" />
-    <ClInclude Include="ThreadRecv.h" />
-    <ClInclude Include="ThreadSend.h" />
+    <ClInclude Include="Accept.h" />
+    <ClInclude Include="ChatUser.h" />
+    <ClInclude Include="LobbyServer.h" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\CoreServer\CoreServer.vcxproj">

@@ -15,7 +15,7 @@ public:
 	void Create(LPVOID pValue);
 	void Join();
 	void Detach();
-	virtual bool Run();
+	virtual bool RunServer();
 	static unsigned int WINAPI	Runner(LPVOID param);
 
 public:

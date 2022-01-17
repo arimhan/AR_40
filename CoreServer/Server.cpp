@@ -41,42 +41,27 @@ int AServer::SendMsg(SOCKET Csock, UPACKET& packet)
 	} while (iSendSize < packet.ph.len);
 	return iSendSize;
 }
-int AServer::Broadcast(ANetUser& user)
+int AServer::Broadcast(ANetUser *user)
 {
-	if (user.m_PacketPool.size() > 0)
+	if (user->m_PacketPool.size() > 0)
 	{
 		list<APacket>::iterator iter;
-		for (iter = user.m_PacketPool.begin(); iter != user.m_PacketPool.end();)
+		for (iter = user->m_PacketPool.begin(); iter != user->m_PacketPool.end();)
 		{
-			for (ANetUser& senduser : g_UserList)
+			for (ANetUser* senduser : m_UserList)
 			{
-				int iRet = SendMsg(senduser.m_Sock, (*iter).m_uPacket);
+				int iRet = SendMsg(senduser->m_Sock, (*iter).m_uPacket);
 				if (iRet <= 0) { 
-					senduser.m_bConnect = false; 
+					senduser->m_bConnect = false; 
 				}
 			}
-			iter = user.m_PacketPool.erase(iter);
+			iter = user->m_PacketPool.erase(iter);
 		}
 	}
 	return 1;
 }
-int AServer::RecvUser(ANetUser& user)
-{
-	char szRecvBuffer[1024] = { 0, };
-	int iRecvByte = recv(user.m_Sock, szRecvBuffer, 1024, 0);
-	if (iRecvByte == 0) { return 0; }
-	if (iRecvByte == SOCKET_ERROR)
-	{
-		if (WSAGetLastError() != WSAEWOULDBLOCK) { return -1; }
-		return 2;
-	}
-	user.DispatchRead(szRecvBuffer, iRecvByte);
-	return 1;
-}
 bool AServer::Init(int iPort)
 {
-	InitializeCriticalSection(&g_CS);
-	g_hMutex = CreateMutex(NULL, FALSE, NULL);
 
 	WSADATA wsa;
 	if (WSAStartup(MAKEWORD(2, 2), &wsa) != 0) { return false; }
@@ -101,40 +86,6 @@ bool AServer::Init(int iPort)
 }
 bool AServer::RunServer()
 {
-	SOCKADDR_IN CAddr;
-	int iLen = sizeof(CAddr);
-
-	while (1) //Client accept 후 정보 출력
-	{
-
-		SOCKET CSock = accept(m_LSock, (sockaddr*)&CAddr, &iLen);
-		if (CSock == SOCKET_ERROR)
-		{
-			int iError = WSAGetLastError();
-			if (iError != WSAEWOULDBLOCK)
-			{
-				cout << "Error : " << iError << endl; //ERROR : 10038 // 10035 정상진행
-				break;
-			}
-		}
-		else
-		{
-			ANetUser user;
-			user.Set(CSock, CAddr);
-			//EnterCriticalSection(&g_CS);
-			WaitForSingleObject(g_hMutex, INFINITE);
-
-			g_UserList.push_back(user);
-			//LeaveCriticalSection(&g_CS);
-			ReleaseMutex(g_hMutex);
-
-			cout << "IP: " << inet_ntoa(CAddr.sin_addr) << "Port: " << ntohs(CAddr.sin_port) << " " << endl;
-			u_long on = 1;
-			ioctlsocket(CSock, FIONBIO, &on);
-			cout << g_UserList.size() << "명 접속중..." << endl;
-		}
-		Sleep(1);
-	}
 	return true;
 }
 bool AServer::Release()
@@ -142,7 +93,10 @@ bool AServer::Release()
 	closesocket(m_LSock);
 	WSACleanup();
 	//DeleteCriticalSection(&g_CS);
-	CloseHandle(g_hMutex);
-
+	return true;
+}
+bool AServer::AddUser(SOCKET sock, SOCKADDR_IN CAddr)
+{
+	//LobbyServer에서 실제구현함!!
 	return true;
 }

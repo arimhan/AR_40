@@ -23,13 +23,13 @@ void AThread::Create(LPVOID pObject)
     m_pObject = pObject;
     m_bStarted = true;
 }
-bool AThread::Run() { return false; }
+bool AThread::RunServer() { return false; }
 unsigned int WINAPI	AThread::Runner(LPVOID param)
 {
     AThread* pThread = (AThread*)param;
     if (pThread != nullptr)
     {
-        pThread->Run();
+        pThread->RunServer();
         return 1;
     }
     return 0;

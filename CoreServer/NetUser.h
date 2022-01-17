@@ -1,9 +1,16 @@
 #pragma once
 #define _WINSOCK_DEPRECATED_NO_WARNINGS
-#include "ServerStd.h" //winsock등 헤더때문에 먼저 돌려야 함.
+#include "ServerObj.h"
 #include "Packet.h"
 
-class ANetUser
+
+struct TOV
+{
+	OVERLAPPED ov;
+	int type;
+};
+
+class ANetUser : public AServerObj
 {
 public:
 	bool			m_bConnect = false;
@@ -11,14 +18,32 @@ public:
 	SOCKADDR_IN		m_Addr;
 	string			m_csName;
 	short			m_iPort;
-	
+public:
 	//buffer 관련
+	TOV			m_ovRecv;
+	TOV			m_ovSend;
+	WSABUF		m_wsaRecvBuffer;
+	WSABUF		m_wsaSendBuffer;
+	char		m_szRecv[256];
+	char		m_szSend[256];
+	//-------------------------------------------
 	char			m_szRecvBuffer[2048];
 	int				m_iPacketPos;
 	int				m_iWritePos;
 	int				m_iReadPos;
+
 	list<APacket>	m_PacketPool;
-	int				DispatchRead(char* szRecvBuffer, int iRecvByte);
+public:
+	int				Recv();
+	int				Dispatch(DWORD dwTrans, TOV* tov);
+	int				DispatchRecv(char* szRecvBuffer, int iRecvByte);
+	int				DispatchSend(DWORD dwTrans);
+
 	void			Set(SOCKET LSock, SOCKADDR_IN LAddr);
+	bool			DisConnect();
+public:
+	ANetUser();
+	virtual ~ANetUser();
+
 };
 

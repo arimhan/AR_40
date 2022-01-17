@@ -1,6 +1,39 @@
 #include "NetUser.h"
 
-int		ANetUser::DispatchRead(char* szRecvBuffer, int iRecvByte)
+
+int		ANetUser::Recv()
+{//비동기로드
+	//wsa recv buffer, ovrecvtype설정
+	//wsarecv
+	m_wsaRecvBuffer.len = sizeof(char)*256;
+	m_wsaRecvBuffer.buf = m_szRecv;
+	m_ovRecv.type = 1000;
+	DWORD dwRead;
+	DWORD lpFlags = 0;
+	BOOL Ret = WSARecv(m_Sock, &m_wsaRecvBuffer, 1, &dwRead, &lpFlags, (WSAOVERLAPPED*)&m_ovRecv, nullptr);
+
+	return 0;
+}
+int ANetUser::Dispatch(DWORD dwTrans, TOV* tov)
+{
+	if (m_bConnect == false)
+	{
+		return 0;
+	}
+	if (tov->type == 1000)
+	{
+		if (!DispatchRecv(m_szRecv, dwTrans)) {}Recv();
+	}
+	if (tov->type == 2000)
+	{
+		if (!DispatchSend(dwTrans)) {};
+	}
+	//type 1000 -> recv
+	// 2000 -> send
+
+	return 1;
+}
+int		ANetUser::DispatchRecv(char* szRecvBuffer, int iRecvByte)
 {
 	if (m_iWritePos + iRecvByte >= 2048)
 	{
@@ -38,6 +71,10 @@ int		ANetUser::DispatchRead(char* szRecvBuffer, int iRecvByte)
 	}
 	return 1;
 }
+int ANetUser::DispatchSend(DWORD dwTrans)
+{
+	return 0;
+}
 void	ANetUser::Set(SOCKET sock, SOCKADDR_IN addr)
 {
 	m_bConnect = true;
@@ -53,3 +90,10 @@ void	ANetUser::Set(SOCKET sock, SOCKADDR_IN addr)
 	m_csName = inet_ntoa(addr.sin_addr);
 	m_iPort = ntohs(addr.sin_port);
 }
+bool ANetUser::DisConnect()
+{
+	closesocket(m_Sock);
+	return true;
+}
+ANetUser::ANetUser(){}
+ANetUser::~ANetUser(){}
