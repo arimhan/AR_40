@@ -27,6 +27,7 @@ HANDLE g_hWorkThread[MAX_WORKER_THREAD];
 HANDLE g_hIOCP;
 LARGE_INTEGER g_LargeRead;
 LARGE_INTEGER g_LargeWrite;
+HANDLE g_hKillEvent;
 //------------------------------------------------------------------
 
 bool DispatchRead(DWORD dwTransfer, OVERLAPPED* pOverlapped)
@@ -73,6 +74,11 @@ DWORD WINAPI WorkerThread(LPVOID lParam)
 
     while(1)
     {
+        if (WaitForSingleObject(g_hKillEvent, 1) == WAIT_OBJECT_0)
+        {
+            break;
+        }
+        
         //완료 큐에 데이터가 있으면 작업시작
         BOOL bReturn = ::GetQueuedCompletionStatus(g_hIOCP, &dwTransfer, &KeyValue, &pOverlapped,1);
 
@@ -80,20 +86,29 @@ DWORD WINAPI WorkerThread(LPVOID lParam)
         {
             if (KeyValue == 1000) // Read
             {
-                DispatchRead(dwTransfer, pOverlapped);
+                if (!DispatchRead(dwTransfer, pOverlapped))
+                {
+                    ::SetEvent(g_hKillEvent);
+                    break;
+                }
+
             }
             if (KeyValue == 2000) // Write
             {
-                DispatchWrite(dwTransfer, pOverlapped);
+                if (!DispatchRead(dwTransfer, pOverlapped))
+                {
+                    ::SetEvent(g_hKillEvent);
+                    break;
+                }
             }
-            else
-            {
-
-            }
-
         }
         else
         {
+            if (GetLastError() != WAIT_TIMEOUT)
+            {
+                ::SetEvent(g_hKillEvent);
+                break;
+            }
             //오류
         }
     }
