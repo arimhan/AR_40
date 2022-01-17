@@ -11,7 +11,7 @@ public:
 	HANDLE g_hWorkThread[MAX_WORKER_THREAD];
 	
 public:
-	virtual bool AddUser(SOCKET sock, SOCKADDR_IN CAddr);
+	virtual bool AddUser(SOCKET Csock, SOCKADDR_IN CAddr);
 	virtual bool Init(int iPort) override;
 	virtual bool RunServer();
 	virtual bool Release();

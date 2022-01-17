@@ -1,8 +1,8 @@
-#include "Accept.h"
+#include "Accepter.h"
 #include "Server.h"
 #include <WS2tcpip.h> //inet_ntop
 
-bool Accept::RunServer()
+bool AAccepter::RunServer()
 {
 	AServer* pServer = (AServer*)m_pObject;
 	SOCKET sock = pServer->m_LSock;
@@ -31,5 +31,5 @@ bool Accept::RunServer()
 	return 1;
 }
 
-Accept::Accept() {}
-Accept::Accept(LPVOID value) {}
+AAccepter::AAccepter() {}
+AAccepter::AAccepter(LPVOID value) {}

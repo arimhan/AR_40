@@ -21,7 +21,7 @@ public:
 	virtual bool RunServer();
 	virtual bool Release();
 public:
-	virtual bool AddUser(SOCKET sock, SOCKADDR_IN CAddr);
+	virtual bool AddUser(SOCKET Csock, SOCKADDR_IN CAddr);
 
 };
 

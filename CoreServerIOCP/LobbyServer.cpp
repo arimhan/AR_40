@@ -8,7 +8,6 @@ DWORD WINAPI WorkerThread(LPVOID param)
     ULONG_PTR KeyValue; //완료시 반환하는 포트값 ex 1000 : Read..
     OVERLAPPED* pOverlapped;
 
-
     while (1)
     {
         if (WaitForSingleObject(pServer->m_hKillEvent, 1) == WAIT_OBJECT_0)
@@ -43,8 +42,7 @@ DWORD WINAPI WorkerThread(LPVOID param)
     }
     return 1;
 }
-
-bool ALobbyServer::AddUser(SOCKET sock, SOCKADDR_IN CAddr)
+bool ALobbyServer::AddUser(SOCKET Csock, SOCKADDR_IN CAddr)
 {
     //실구현
     //chat user의 user 동적할당 후 queue방식으로 활용
@@ -54,15 +52,15 @@ bool ALobbyServer::AddUser(SOCKET sock, SOCKADDR_IN CAddr)
     //ip, port번호 넘길 시 inet_ntop함수사용으로 ip를 담는 buffer생성 필요
 
     AChatUser* pUser = new AChatUser;
-    pUser->Set(sock, CAddr);
+    pUser->Set(Csock, CAddr);
     u_long on = 1;
-    ioctlsocket(sock, FIONBIO, &on);
+    ioctlsocket(Csock, FIONBIO, &on);
 
     EnterCriticalSection(&m_cs);
     m_UserList.push_back(pUser);
     LeaveCriticalSection(&m_cs);
 
-    ::CreateIoCompletionPort((HANDLE)sock, g_hIOCP, (ULONG_PTR)pUser, 0);
+    ::CreateIoCompletionPort((HANDLE)Csock, g_hIOCP, (ULONG_PTR)pUser, 0);
     pUser->Recv();
 
     char ipbuf[INET_ADDRSTRLEN];
@@ -72,27 +70,14 @@ bool ALobbyServer::AddUser(SOCKET sock, SOCKADDR_IN CAddr)
 }
 bool ALobbyServer::Init(int iPort)
 {
-    InitializeCriticalSection(&m_cs);
+    AServer::Init(iPort);
+    g_hIOCP = ::CreateIoCompletionPort(INVALID_HANDLE_VALUE, 0, 0, 0);
 
-    WSADATA wsa;
-    if (WSAStartup(MAKEWORD(2, 2), &wsa) != 0) { return false; }
-    m_LSock = socket(AF_INET, SOCK_STREAM, 0);
-    SOCKADDR_IN Addr;
-    ZeroMemory(&Addr, sizeof(Addr));
-    Addr.sin_family = AF_INET;
-    Addr.sin_port = htons(iPort); // 서버 포트 번호
-    Addr.sin_addr.s_addr = htonl(INADDR_ANY);
-
-    int iRet = bind(m_LSock, (sockaddr*)&Addr, sizeof(Addr));
-    if (iRet == SOCKET_ERROR) { return false; }
-    iRet = listen(m_LSock, SOMAXCONN);
-    if (iRet == SOCKET_ERROR) { return false; }
-
-    cout << "서버 접속 성공!" << endl;
-
-    u_long on = 1;
-    ioctlsocket(m_LSock, FIONBIO, &on);
-
+    for (int iThread = 0; iThread < MAX_WORKER_THREAD; iThread++)
+    {
+        DWORD id;
+        g_hWorkThread[iThread] = ::CreateThread(0, 0, WorkerThread, this, 0, &id);
+    }
     return true;
 }
 bool ALobbyServer::RunServer()
@@ -129,10 +114,8 @@ bool ALobbyServer::RunServer()
 }
 bool ALobbyServer::Release()
 {
-    closesocket(m_LSock);
-    WSACleanup();
-    //DeleteCriticalSection(&g_CS);
-
+    CloseHandle(g_hIOCP);
+    AServer::Release();
     return true;
 }
 

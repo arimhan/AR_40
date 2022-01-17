@@ -1,5 +1,44 @@
 #include "Server.h"
+bool AServer::Init(int iPort)
+{
 
+	WSADATA wsa;
+	if (WSAStartup(MAKEWORD(2, 2), &wsa) != 0) { return false; }
+	m_LSock = socket(AF_INET, SOCK_STREAM, 0);
+	SOCKADDR_IN Addr;
+	ZeroMemory(&Addr, sizeof(Addr));
+	Addr.sin_family = AF_INET;
+	Addr.sin_port = htons(iPort); // 서버 포트 번호
+	Addr.sin_addr.s_addr = htonl(INADDR_ANY);
+
+	int iRet = bind(m_LSock, (sockaddr*)&Addr, sizeof(Addr));
+	if (iRet == SOCKET_ERROR) { return false; }
+	iRet = listen(m_LSock, SOMAXCONN);
+	if (iRet == SOCKET_ERROR) { return false; }
+
+	cout << "서버 접속 성공!" << endl;
+
+	u_long on = 1;
+	ioctlsocket(m_LSock, FIONBIO, &on);
+
+	return true;
+}
+bool AServer::RunServer()
+{
+	return true;
+}
+bool AServer::AddUser(SOCKET Csock, SOCKADDR_IN CAddr)
+{
+	//LobbyServer에서 실제구현함!!
+	return true;
+}
+bool AServer::Release()
+{
+	closesocket(m_LSock);
+	WSACleanup();
+	//DeleteCriticalSection(&g_CS);
+	return true;
+}
 int AServer::SendMsg(SOCKET Csock, char* msg, WORD type)
 {
 	// 1. 패킷 생성
@@ -60,43 +99,7 @@ int AServer::Broadcast(ANetUser *user)
 	}
 	return 1;
 }
-bool AServer::Init(int iPort)
-{
 
-	WSADATA wsa;
-	if (WSAStartup(MAKEWORD(2, 2), &wsa) != 0) { return false; }
-	m_LSock = socket(AF_INET, SOCK_STREAM, 0);
-	SOCKADDR_IN Addr;
-	ZeroMemory(&Addr, sizeof(Addr));
-	Addr.sin_family = AF_INET;
-	Addr.sin_port = htons(iPort); // 서버 포트 번호
-	Addr.sin_addr.s_addr = htonl(INADDR_ANY);
 
-	int iRet = bind(m_LSock, (sockaddr*)&Addr, sizeof(Addr));
-	if (iRet == SOCKET_ERROR) { return false; }
-	iRet = listen(m_LSock, SOMAXCONN);
-	if (iRet == SOCKET_ERROR) { return false; }
 
-	cout << "서버 접속 성공!" << endl;
 
-	u_long on = 1;
-	ioctlsocket(m_LSock, FIONBIO, &on);
-
-	return true;
-}
-bool AServer::RunServer()
-{
-	return true;
-}
-bool AServer::Release()
-{
-	closesocket(m_LSock);
-	WSACleanup();
-	//DeleteCriticalSection(&g_CS);
-	return true;
-}
-bool AServer::AddUser(SOCKET sock, SOCKADDR_IN CAddr)
-{
-	//LobbyServer에서 실제구현함!!
-	return true;
-}

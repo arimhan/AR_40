@@ -49,5 +49,6 @@ AThread::AThread(LPVOID pValue)
     Create(pValue);
 }
 AThread::~AThread() 
-{ CloseHandle((HANDLE)m_hThread); 
+{ 
+    CloseHandle((HANDLE)m_hThread); 
 }

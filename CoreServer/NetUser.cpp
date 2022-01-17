@@ -26,7 +26,7 @@ int ANetUser::Dispatch(DWORD dwTrans, TOV* tov)
 	}
 	if (tov->type == 2000)
 	{
-		if (!DispatchSend(dwTrans)) {};
+		if (!DispatchSend(dwTrans)) {}
 	}
 	//type 1000 -> recv
 	// 2000 -> send
@@ -82,8 +82,6 @@ void	ANetUser::Set(SOCKET sock, SOCKADDR_IN addr)
 	m_iPacketPos = 0;
 	m_iWritePos = 0;
 	m_iReadPos = 0;
-	int m_iWritePos;
-	int m_iReadPos;
 
 	m_Sock = sock;
 	m_Addr = addr;
