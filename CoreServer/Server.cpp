@@ -1,7 +1,6 @@
 #include "Server.h"
 bool AServer::Init(int iPort)
 {
-
 	WSADATA wsa;
 	if (WSAStartup(MAKEWORD(2, 2), &wsa) != 0) { return false; }
 	m_LSock = socket(AF_INET, SOCK_STREAM, 0);

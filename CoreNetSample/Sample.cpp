@@ -1,5 +1,5 @@
 #include "Sample.h"
-#define PORT_NUM 9110 / /9110
+#define PORT_NUM 9110 //9110
 #define ADRESS_NUM "127.0.0.1" //"127.0.0.1"
 LRESULT ASample::MsgProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
 {
@@ -34,7 +34,7 @@ bool ASample::Init()
 
     SendMessageA(m_hListBox, LB_ADDSTRING, 0, (LPARAM)"< 채팅이 가능합니다! >");
     m_Net.InitNetwork();
-    m_Net.Connect(g_hWnd, SOCK_STREAM, 9110, ADRESS_NUM);// "127.0.0.1"); //IP
+    m_Net.Connect(g_hWnd, SOCK_STREAM, PORT_NUM, ADRESS_NUM);// "127.0.0.1"); //IP
     return true;
 }
 bool ASample::Frame()

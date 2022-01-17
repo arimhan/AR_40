@@ -7,6 +7,5 @@ public:
 
 	AAccepter();
 	AAccepter(LPVOID value);
-
 };
 

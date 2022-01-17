@@ -32,4 +32,4 @@ bool AAccepter::RunServer()
 }
 
 AAccepter::AAccepter() {}
-AAccepter::AAccepter(LPVOID value) {}
+AAccepter::AAccepter(LPVOID value) : AThread(value) {}
