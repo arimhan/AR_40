@@ -90,6 +90,9 @@ bool ALobbyServer::RunServer()
             AChatUser* pChat = (AChatUser*)tUser;
             if (pChat->m_PacketPool.size() > 0)
             {
+                //패킷 처리 필요
+                //1. 받은 패킷을 m_UserList-packet대로 돌면서 체크
+                //2. m_PacketPool or m_UserList둘 중 해당하는 곳에 데이터를 넣도록 처리
                 Broadcast(tUser);
             }
         }
