@@ -3,16 +3,16 @@
 #include "ServerObj.h"
 #include "Packet.h"
 
-
+class AServer;
 struct TOV
 {
 	OVERLAPPED ov;
 	int type;
 };
-
 class ANetUser : public AServerObj
 {
 public:
+	AServer*		m_pServer = nullptr;
 	bool			m_bConnect = false;
 	SOCKET			m_Sock;
 	SOCKADDR_IN		m_Addr;
@@ -38,12 +38,12 @@ public:
 	int				Dispatch(DWORD dwTrans, TOV* tov);
 	int				DispatchRecv(char* szRecvBuffer, int iRecvByte);
 	int				DispatchSend(DWORD dwTrans);
-
+	int				SendMsg(char* msg, int iSize, WORD type);
+	int				SendMsg(UPACKET& packet);
 	void			Set(SOCKET LSock, SOCKADDR_IN LAddr);
 	bool			DisConnect();
 public:
 	ANetUser();
 	virtual ~ANetUser();
-
 };
 

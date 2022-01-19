@@ -38,17 +38,11 @@ bool AServer::Release()
 	//DeleteCriticalSection(&g_CS);
 	return true;
 }
-int AServer::SendMsg(SOCKET Csock, char* msg, WORD type)
+int AServer::SendMsg(SOCKET Csock, UPACKET& packet)
 {
-	// 1. 패킷 생성
-	UPACKET packet;
-	ZeroMemory(&packet, sizeof(packet));
-	packet.ph.len = strlen(msg) + PACKET_HEADER_SIZE; //규칙을 정해서 동일하게 처리해야함.
-	packet.ph.type = type;
-	memcpy(packet.msg, msg, strlen(msg)); //txt 메모리 카피 처리
+	//생성 완료 된 패킷 전송
 	char* pMsg = (char*)&packet;
 	//packet은 구조체 -> 문자열로 캐스팅하여 전송한다.
-
 	int iSendSize = 0;
 	do {
 		// 2. 패킷 전송 : 운영체제는 sendbuffer(short byte), recvbuffer 내 크기가 정해져 있음.
@@ -61,23 +55,16 @@ int AServer::SendMsg(SOCKET Csock, char* msg, WORD type)
 	} while (iSendSize < packet.ph.len);
 	return iSendSize;
 }
-int AServer::SendMsg(SOCKET Csock, UPACKET& packet)
+int AServer::SendMsg(ANetUser* pUser, char* msg, int iSize, WORD type)
 {
-	//생성 완료 된 패킷 전송
-
-	char* pMsg = (char*)&packet;
-	//packet은 구조체 -> 문자열로 캐스팅하여 전송한다.
-	int iSendSize = 0;
-	do {
-		// 2. 패킷 전송 : 운영체제는 sendbuffer(short byte), recvbuffer 내 크기가 정해져 있음.
-		int iSendByte = send(Csock, &pMsg[iSendSize], packet.ph.len - iSendSize, 0);
-		if (iSendByte == SOCKET_ERROR)
-		{
-			if (WSAGetLastError() != WSAEWOULDBLOCK) { return -1; }
-		}
-		iSendSize += iSendByte;
-	} while (iSendSize < packet.ph.len);
-	return iSendSize;
+	//보내는 패킷 -> packetpool에 저장 후 한꺼번에 전송
+	pUser->SendMsg(msg, iSize, type);
+	return 0;
+}
+int AServer::SendMsg(ANetUser* pUser, UPACKET& packet)
+{
+	pUser->SendMsg(packet);
+	return 0;
 }
 int AServer::Broadcast(ANetUser *user)
 {
