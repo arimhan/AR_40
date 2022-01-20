@@ -35,6 +35,13 @@ struct ALoginAck
 	int iRet;
 	//1: ½ÂÀÎ, -1 ID/PW¾øÀ½
 };
+struct ANetResult
+{
+	int iRet;
+	SOCKET sock_id;
+};
+
+
 #pragma pack(pop)
 #define PACKET_HEADER_SIZE		10
 #define PACKET_ALoginReq_Size	40

@@ -66,7 +66,7 @@ int AServer::SendMsg(ANetUser* pUser, UPACKET& packet)
 	pUser->SendMsg(packet);
 	return 0;
 }
-int AServer::Broadcast(ANetUser *user)
+/*int AServer::Broadcast(ANetUser *user)
 {
 	if (user->m_PacketPool.size() > 0)
 	{
@@ -84,8 +84,38 @@ int AServer::Broadcast(ANetUser *user)
 		}
 	}
 	return 1;
+}*/
+int AServer::Broadcast(APacket& a)
+{
+	for (ANetUser* senduser : m_UserList)
+	{
+		int iRet = SendMsg(senduser->m_Sock, a.m_uPacket);
+		if (iRet <= 0) {
+			senduser->m_bConnect = false;
+		}
+	}
+	return 1;
 }
-
+int AServer::BroadcasePool(ANetUser* user)
+{
+	if (user->m_PacketPool.size() > 0)
+	{
+		list<APacket>::iterator iter;
+		for (iter = user->m_PacketPool.begin(); iter != user->m_PacketPool.end(); )
+		{
+			for(ANetUser* senduser : m_UserList)
+			{
+				int iRet = SendMsg(senduser->m_Sock, (*iter).m_uPacket);
+				if (iRet < 0)
+				{
+					senduser->m_bConnect == false;
+				}
+			}
+			iter = user->m_PacketPool.erase(iter);
+		}
+	}
+	return 1;
+}
 
 
 

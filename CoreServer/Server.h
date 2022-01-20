@@ -15,13 +15,15 @@ public:
 	list<ANetUser*>		m_UserList;
 	SOCKET				m_LSock;
 	list<XPacket>		m_packetPool;
-	list<ANetUser*>::iterator m_UserIter;
+	typedef list<ANetUser*>::iterator m_UserIter;
 
 public:
 	int SendMsg(SOCKET Csock, UPACKET& packet);
 	int SendMsg(ANetUser *pUser, char* msg, int iSize, WORD type);
 	int SendMsg(ANetUser* pUser, UPACKET& packet);
-	int Broadcast(ANetUser* user);
+	int Broadcast(APacket& a);
+	//int Broadcast(ANetUser* user);
+	int BroadcasePool(ANetUser* user);
 
 public:
 	virtual bool Init(int iPort);

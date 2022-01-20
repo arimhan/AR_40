@@ -54,7 +54,7 @@ bool ASample::Frame()
         {
             AChatMsg recvdata;
             ZeroMemory(&recvdata, sizeof(recvdata));
-            (*iter) >> recvdata.index >> recvdata.name >> recvdata.damage >> recvdata.message;
+            (*iter) >> recvdata.index >> recvdata.name >> recvdata.message;
             SendMessageA(m_hListBox, LB_ADDSTRING, 0, (LPARAM)recvdata.message);
             //iter = m_Net.m_PlayerUser.m_PacketPool.erase(iter);
             (*iter).Reset();

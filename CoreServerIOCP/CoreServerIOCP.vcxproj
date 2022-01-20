@@ -146,6 +146,7 @@
     <ClCompile Include="Accepter.cpp" />
     <ClCompile Include="ChatUser.cpp" />
     <ClCompile Include="LobbyServer.cpp" />
+    <ClCompile Include="LoginServer.cpp" />
     <ClCompile Include="Sample.cpp" />
   </ItemGroup>
   <ItemGroup>

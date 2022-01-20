@@ -15,6 +15,19 @@ int	ANetUser::Recv()
 
 	return 0;
 }
+//int	ANetUser::Send()
+//{//비동기로드
+//	//wsa recv buffer, ovrecvtype설정
+//	//wsarecv
+//	m_wsaSendBuffer.len = sizeof(char) * 256;
+//	m_wsaSendBuffer.buf = m_szSend;
+//	m_ovSend.type = 2000;
+//	DWORD dwWrite;
+//	DWORD lpFlags = 0;
+//	BOOL Ret = WSASend(m_Sock, &m_wsaRecvBuffer, 1, &dwWrite, &lpFlags, (WSAOVERLAPPED*)&m_ovRecv, nullptr);
+//
+//	return 0;
+//}
 int ANetUser::Dispatch(DWORD dwTrans, TOV* tov)
 {
 	if (m_bConnect == false)
@@ -27,7 +40,7 @@ int ANetUser::Dispatch(DWORD dwTrans, TOV* tov)
 	}
 	if (tov->type == 2000)
 	{
-		if (!DispatchSend(dwTrans)) {}//Send();
+		if (!DispatchSend(m_szSend,dwTrans)) {}
 	}
 	//type 1000 -> recv
 	// 2000 -> send
@@ -81,8 +94,10 @@ int	ANetUser::DispatchRecv(char* szRecvBuffer, int iRecvByte)
 	}
 	return 1;
 }
-int ANetUser::DispatchSend(DWORD dwTrans)
+int ANetUser::DispatchSend(char* szSendBuffer, int iSendByte)
 {
+
+
 	return 0;
 }
 int ANetUser::SendMsg(char* msg, int iSize, WORD type)
@@ -131,8 +146,9 @@ int ANetUser::SendMsg(UPACKET& packet)
 	}
 	return 0;
 }
-void	ANetUser::Set(SOCKET sock, SOCKADDR_IN addr)
+void	ANetUser::Set(SOCKET sock, SOCKADDR_IN addr, AServer* pServer)
 {
+	m_pServer = pServer;
 	m_bConnect = true;
 	ZeroMemory(m_szRecvBuffer, sizeof(char) * 2048);
 	m_iPacketPos = 0;

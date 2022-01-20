@@ -1,5 +1,6 @@
 #include "LobbyServer.h"
 
+
 DWORD WINAPI WorkerThread(LPVOID param)
 {
     ALobbyServer* pServer = (ALobbyServer*)param;
@@ -51,7 +52,7 @@ bool ALobbyServer::AddUser(SOCKET Csock, SOCKADDR_IN CAddr)
     //ip, port번호 넘길 시 inet_ntop함수사용으로 ip를 담는 buffer생성 필요
 
     AChatUser* pUser = new AChatUser;
-    pUser->Set(Csock, CAddr);
+    pUser->Set(Csock, CAddr, this);
     u_long on = 1;
     ioctlsocket(Csock, FIONBIO, &on);
 
@@ -77,6 +78,8 @@ bool ALobbyServer::Init(int iPort)
         DWORD id;
         g_hWorkThread[iThread] = ::CreateThread(0, 0, WorkerThread, this, 0, &id);
     }
+    m_fnExecutePacket.insert(make_pair(PACKET_CHAT_MSG, bind(&ALobbyServer::ChatMsg, this, placeholders::_1, placeholders::_2)));
+
     return true;
 }
 bool ALobbyServer::Release()
@@ -85,4 +88,16 @@ bool ALobbyServer::Release()
     AServer::Release();
     return true;
 }
-
+//void ALobbyServer::SendLogout(ANetUser* user)
+//{
+//    //UPACKET
+//    //NetResult -> 연결결과 struct
+//    //NR를 기준으로 makepacket();
+//    //system : UName님이 나가셨습니다.
+//}
+//void ALobbyServer::CreateAccount(ANetUser* user)
+//{
+//    //Login -> packet msg
+//    //string -> id /pw 
+//    TCHAR szUName = ();
+//}

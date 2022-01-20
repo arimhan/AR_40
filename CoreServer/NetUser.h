@@ -35,12 +35,13 @@ public:
 	list<APacket>	m_PacketPool;
 public:
 	int				Recv();
+	//int				Send();
 	int				Dispatch(DWORD dwTrans, TOV* tov);
 	int				DispatchRecv(char* szRecvBuffer, int iRecvByte);
-	int				DispatchSend(DWORD dwTrans);
+	int				DispatchSend(char* szSendBuffer, int iRecvByte);
 	int				SendMsg(char* msg, int iSize, WORD type);
 	int				SendMsg(UPACKET& packet);
-	void			Set(SOCKET LSock, SOCKADDR_IN LAddr);
+	void			Set(SOCKET LSock, SOCKADDR_IN LAddr, AServer* pServer);
 	bool			DisConnect();
 public:
 	ANetUser();
