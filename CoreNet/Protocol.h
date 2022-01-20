@@ -25,40 +25,40 @@ struct AChatMsg
 	char			name[20];
 	char			message[256];
 };
-struct ALoginReq
-{
-	char szID[20];
-	char szPS[20];
-};
-struct ALoginAck
-{
-	int iRet;
-	//1: ½ÂÀÎ, -1 ID/PW¾øÀ½
-};
-struct ANetResult
-{
-	int iRet;
-	SOCKET sock_id;
-};
+//struct ALoginReq
+//{
+//	char szID[20];
+//	char szPS[20];
+//};
+//struct ALoginAck
+//{
+//	int iRet;
+//	//1: ½ÂÀÎ, -1 ID/PW¾øÀ½
+//};
+//struct ANetResult
+//{
+//	int iRet;
+//	SOCKET sock_id;
+//};
 
 
 #pragma pack(pop)
 #define PACKET_HEADER_SIZE		10
-#define PACKET_ALoginReq_Size	40
-#define PACKET_ALoginAck_Size	4
-//#define PACKET_CHAT_MSG		1000
-
-enum PACKET_TYPE
-{
-	PACKET_CHECK_REQ = 1,
-	PACKET_CHECK_ACK,
-
-	PACKET_CHAT_NAME_REQ = 100,
-	PACKET_CHAT_NAME_ACK,			//USER NAME
-	PACKET_CHAT_MSG,				//CHAT MSG
-	PACKET_LOGIN_REQ,				//
-	PACKET_LOGIN_ACK,				//LOGIN
-	PACKET_LOGOUT_REQ,				//
-	PACKET_LOGOUT_ACK,				//LOGOUT
-	PACKET_LOGOUT_USER,				//"~´ÔÀÌ ³ª°¡¼Ì½À´Ï´Ù" 
-};
+//#define PACKET_ALoginReq_Size	40
+//#define PACKET_ALoginAck_Size	4
+#define PACKET_CHAT_MSG		1000
+//
+//enum PACKET_TYPE
+//{
+//	PACKET_CHECK_REQ = 1,
+//	PACKET_CHECK_ACK,
+//
+//	PACKET_CHAT_NAME_REQ = 100,
+//	PACKET_CHAT_NAME_ACK,			//USER NAME
+//	PACKET_CHAT_MSG,				//CHAT MSG
+//	PACKET_LOGIN_REQ,				//
+//	PACKET_LOGIN_ACK,				//LOGIN
+//	PACKET_LOGOUT_REQ,				//
+//	PACKET_LOGOUT_ACK,				//LOGOUT
+//	PACKET_LOGOUT_USER,				//"~´ÔÀÌ ³ª°¡¼Ì½À´Ï´Ù" 
+//};

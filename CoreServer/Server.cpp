@@ -46,7 +46,7 @@ int AServer::SendMsg(SOCKET Csock, UPACKET& packet)
 	int iSendSize = 0;
 	do {
 		// 2. 패킷 전송 : 운영체제는 sendbuffer(short byte), recvbuffer 내 크기가 정해져 있음.
-		int iSendByte = send(Csock, &pMsg[iSendSize], packet.ph.len - iSendSize, 0);
+		int iSendByte = send(Csock, &pMsg[iSendSize], 11, 0); //packet.ph.len, 0);//- iSendSize, 0);
 		if (iSendByte == SOCKET_ERROR)
 		{
 			if (WSAGetLastError() != WSAEWOULDBLOCK) { return -1; }
