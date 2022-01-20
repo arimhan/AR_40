@@ -10,14 +10,14 @@ bool ALobbyServer::RunServer()
             AChatUser* pChat = (AChatUser*)tUser;
             if (pChat->m_PacketPool.size() > 0)
             {
-                //패킷 처리 필요
-                //1. 받은 패킷을 m_UserList-packet대로 돌면서 체크
-                //2. m_PacketPool or m_UserList둘 중 해당하는 곳에 데이터를 넣도록 처리
-                //Broadcast(tUser);
+                /*패킷 처리 필요
+                1. 받은 패킷을 m_UserList-packet대로 돌면서 체크
+                2. m_PacketPool or m_UserList둘 중 해당하는 곳에 데이터를 넣도록 처리*/
+                Broadcast(pChat);
             }
         }
-
         //패킷 처리
+        /*
         list<XPacket>::iterator iter;
         for (iter = m_packetPool.begin(); iter != m_packetPool.end(); )
         {
@@ -46,34 +46,24 @@ bool ALobbyServer::RunServer()
             {
                 iter++;
             }
-        }
-        /*
-        switch (xp->packet.m_uPacket.ph.type)
+        }*/
+
+        list<ANetUser*>::iterator iter;
+        for (iter = m_UserList.begin(); iter != m_UserList.end();)
         {
-            case PACKET_LOGIN_REQ:
+            if ((*iter)->m_bConnect == false)
             {
-                ALoginReq loginreq;
-                memcpy(&loginreq, xp->packet.m_uPacket.msg, sizeof(ALoginReq));
-                ALoginAck loginack;
-                loginack.iRet = 1;
-                SendMsg(xp->pUser, (char*)&loginack, sizeof(ALoginAck), PACKET_LOGIN_ACK);
-            }break;
+                (*iter)->DisConnect();
+                delete (*iter);
+                iter = m_UserList.erase(iter);
+            }
+            else
+            {
+                iter++;
+            }
         }
-
-            PACKET_CHECK_REQ = 1,
-            PACKET_CHECK_ACK,
-
-            PACKET_CHAT_NAME_REQ = 100,
-            PACKET_CHAT_NAME_ACK,			//USER NAME
-
-            PACKET_LOGOUT_REQ,				//
-            PACKET_LOGOUT_ACK,				//LOGOUT
-            PACKET_LOGOUT_USER,				//"~님이 나가셨습니다"
-
-        */
         LeaveCriticalSection(&m_cs);
         Sleep(1);
     }
     return true;
 }
-

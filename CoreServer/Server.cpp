@@ -55,7 +55,7 @@ int AServer::SendMsg(SOCKET Csock, UPACKET& packet)
 	} while (iSendSize < packet.ph.len);
 	return iSendSize;
 }
-int AServer::SendMsg(ANetUser* pUser, char* msg, int iSize, WORD type)
+/*int AServer::SendMsg(ANetUser* pUser, char* msg, int iSize, WORD type)
 {
 	//보내는 패킷 -> packetpool에 저장 후 한꺼번에 전송
 	pUser->SendMsg(msg, iSize, type);
@@ -65,8 +65,8 @@ int AServer::SendMsg(ANetUser* pUser, UPACKET& packet)
 {
 	pUser->SendMsg(packet);
 	return 0;
-}
-/*int AServer::Broadcast(ANetUser *user)
+}*/
+int AServer::Broadcast(ANetUser *user)
 {
 	if (user->m_PacketPool.size() > 0)
 	{
@@ -84,19 +84,19 @@ int AServer::SendMsg(ANetUser* pUser, UPACKET& packet)
 		}
 	}
 	return 1;
-}*/
-int AServer::Broadcast(APacket& a)
-{
-	for (ANetUser* senduser : m_UserList)
-	{
-		int iRet = SendMsg(senduser->m_Sock, a.m_uPacket);
-		if (iRet <= 0) {
-			senduser->m_bConnect = false;
-		}
-	}
-	return 1;
 }
-int AServer::BroadcasePool(ANetUser* user)
+//int AServer::Broadcast(APacket& a)
+//{
+//	for (ANetUser* senduser : m_UserList)
+//	{
+//		int iRet = SendMsg(senduser->m_Sock, a.m_uPacket);
+//		if (iRet <= 0) {
+//			senduser->m_bConnect = false;
+//		}
+//	}
+//	return 1;
+//}
+/*int AServer::BroadcasePool(ANetUser* user)
 {
 	if (user->m_PacketPool.size() > 0)
 	{
@@ -115,7 +115,7 @@ int AServer::BroadcasePool(ANetUser* user)
 		}
 	}
 	return 1;
-}
+}*/
 
 
 

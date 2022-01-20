@@ -21,8 +21,8 @@ public:
 	int SendMsg(SOCKET Csock, UPACKET& packet);
 	int SendMsg(ANetUser *pUser, char* msg, int iSize, WORD type);
 	int SendMsg(ANetUser* pUser, UPACKET& packet);
-	int Broadcast(APacket& a);
-	//int Broadcast(ANetUser* user);
+	//int Broadcast(APacket& a);
+	int Broadcast(ANetUser* user);
 	int BroadcasePool(ANetUser* user);
 
 public:

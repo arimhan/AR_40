@@ -40,7 +40,7 @@ int ANetUser::Dispatch(DWORD dwTrans, TOV* tov)
 	}
 	if (tov->type == 2000)
 	{
-		if (!DispatchSend(m_szSend,dwTrans)) {}
+		if (!DispatchSend(m_szSend, dwTrans)) {}
 	}
 	//type 1000 -> recv
 	// 2000 -> send
@@ -96,8 +96,7 @@ int	ANetUser::DispatchRecv(char* szRecvBuffer, int iRecvByte)
 }
 int ANetUser::DispatchSend(char* szSendBuffer, int iSendByte)
 {
-
-
+	cout << "DispatchSend";
 	return 0;
 }
 int ANetUser::SendMsg(char* msg, int iSize, WORD type)
@@ -146,9 +145,9 @@ int ANetUser::SendMsg(UPACKET& packet)
 	}
 	return 0;
 }
-void	ANetUser::Set(SOCKET sock, SOCKADDR_IN addr, AServer* pServer)
+void	ANetUser::Set(SOCKET sock, SOCKADDR_IN addr)// , AServer* pServer)
 {
-	m_pServer = pServer;
+	//m_pServer = pServer;
 	m_bConnect = true;
 	ZeroMemory(m_szRecvBuffer, sizeof(char) * 2048);
 	m_iPacketPos = 0;

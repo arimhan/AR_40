@@ -41,7 +41,7 @@ public:
 	int				DispatchSend(char* szSendBuffer, int iRecvByte);
 	int				SendMsg(char* msg, int iSize, WORD type);
 	int				SendMsg(UPACKET& packet);
-	void			Set(SOCKET LSock, SOCKADDR_IN LAddr, AServer* pServer);
+	void			Set(SOCKET LSock, SOCKADDR_IN LAddr);//, AServer* pServer);
 	bool			DisConnect();
 public:
 	ANetUser();
