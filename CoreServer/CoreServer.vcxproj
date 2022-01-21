@@ -19,14 +19,18 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="Accepter.cpp" />
     <ClCompile Include="NetUser.cpp" />
+    <ClCompile Include="ObjectPool.cpp" />
     <ClCompile Include="Packet.cpp" />
     <ClCompile Include="Server.cpp" />
     <ClCompile Include="ServerObj.cpp" />
     <ClCompile Include="Thread.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Accepter.h" />
     <ClInclude Include="NetUser.h" />
+    <ClInclude Include="ObjectPool.h" />
     <ClInclude Include="Packet.h" />
     <ClInclude Include="Protocol.h" />
     <ClInclude Include="Server.h" />

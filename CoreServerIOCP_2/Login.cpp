@@ -1,4 +1,6 @@
 #include "LobbyServer.h"
+
+
 void ALobbyServer::LoginReq(APacket& a, ANetUser* user)
 {
     ALoginReq loginreq;
@@ -19,30 +21,29 @@ void ALobbyServer::LogoutUser(APacket& a, ANetUser* user)
     m_SendBroadcastPacketPool.AddPacket(t);
     m_pSessionMgr->DelUser(t.pUser);*/
 }
-
 bool ALobbyServer::RunServer()
 {
     while (1) //Client accept 후 정보 출력
     {
         EnterCriticalSection(&m_cs);
-        //for (ANetUser* tUser : m_UserList)
-        //{
-        //    AChatUser* pChat = (AChatUser*)tUser;
-        //    if (pChat->m_PacketPool.size() > 0)
-        //    {
-        //        //패킷 처리 필요
-        //        //1. 받은 패킷을 m_UserList-packet대로 돌면서 체크
-        //        //2. m_PacketPool or m_UserList둘 중 해당하는 곳에 데이터를 넣도록 처리
-        //        //Broadcast(tUser);
-        //        cout << "LobbyServer::RunServer_01"
-        //    }
-        //}
+        /*for (ANetUser* tUser : m_UserList)
+        {
+            AChatUser* pChat = (AChatUser*)tUser;
+            if (pChat->m_PacketPool.size() > 0)
+            {
+                //패킷 처리 필요
+                //1. 받은 패킷을 m_UserList-packet대로 돌면서 체크
+                //2. m_PacketPool or m_UserList둘 중 해당하는 곳에 데이터를 넣도록 처리
+                //Broadcast(tUser);
+                cout << "LobbyServer::RunServer_01"
+            }
+        }*/
         //패킷 처리
         list<XPacket>::iterator iter;
         for (iter = m_packetPool.begin(); iter != m_packetPool.end(); iter++)
         {
             XPacket* xp = (XPacket*)&(*iter);
-            FunctionIterator iter = m_fnExecutePacket.find(xp->packet.m_uPacket.ph.type);
+            FuncionIterator iter = m_fnExecutePacket.find(xp->packet.m_uPacket.ph.type);
             if (iter != m_fnExecutePacket.end())
             {
                 CallFunction call = iter->second;
@@ -87,7 +88,7 @@ bool ALobbyServer::RunServer()
         {
             if ((*iter)->m_bConnect == false) //User가 나갈 경우 list에서 삭제 처리
             {
-                (*iter)->DisConnect();
+                DelUser((*iter));
                 delete (*iter);
                 iter = m_UserList.erase(iter);
             }
@@ -95,7 +96,6 @@ bool ALobbyServer::RunServer()
             {
                 iter++;
             }
-
         }
         LeaveCriticalSection(&m_cs);
         Sleep(1);

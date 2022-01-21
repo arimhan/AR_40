@@ -14,16 +14,16 @@ DWORD WINAPI WorkerThread(LPVOID param)
         {
             break;
         }
-
         //완료 큐에 데이터가 있으면 작업시작
         BOOL bReturn = ::GetQueuedCompletionStatus(pServer->g_hIOCP, &dwTransfer, &KeyValue, &pOverlapped, 1);
         AChatUser* pUser = (AChatUser*)KeyValue;
-        TOV* pOV = (TOV*)pOverlapped;
+        AOV* pOV = (AOV*)pOverlapped;
 
         if (bReturn == TRUE && pUser && pOV)      //작업
         {
-            if (dwTransfer == 0 && pOV->type == 1000)
+            if (dwTransfer == 0)
             {
+                pOV->type == AOV::MODE_EXIT;
                 pUser->m_bConnect = false;
             }
             else

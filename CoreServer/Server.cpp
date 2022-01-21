@@ -1,24 +1,10 @@
 #include "Server.h"
 bool AServer::Init(int iPort)
 {
-	WSADATA wsa;
-	if (WSAStartup(MAKEWORD(2, 2), &wsa) != 0) { return false; }
-	m_LSock = socket(AF_INET, SOCK_STREAM, 0);
-	SOCKADDR_IN Addr;
-	ZeroMemory(&Addr, sizeof(Addr));
-	Addr.sin_family = AF_INET;
-	Addr.sin_port = htons(iPort); // 서버 포트 번호
-	Addr.sin_addr.s_addr = htonl(INADDR_ANY);
-
-	int iRet = bind(m_LSock, (sockaddr*)&Addr, sizeof(Addr));
-	if (iRet == SOCKET_ERROR) { return false; }
-	iRet = listen(m_LSock, SOMAXCONN);
-	if (iRet == SOCKET_ERROR) { return false; }
-
-	cout << "서버 접속 성공!" << endl;
-
-	u_long on = 1;
-	ioctlsocket(m_LSock, FIONBIO, &on);
+	m_fnExecutePacket[PACKET_LOGIN_REQ] = bind(&AServer::LoginReq, this, placeholders::_1, placeholders::_2);
+	m_Accept.Set();
+	m_Accept.Create(this);
+	m_Accept.Detach();
 
 	return true;
 }
@@ -31,10 +17,24 @@ bool AServer::AddUser(SOCKET Csock, SOCKADDR_IN CAddr)
 	//LobbyServer에서 실제구현함!!
 	return true;
 }
+bool AServer::DelUser(SOCKET sock)
+{
+	return true;
+}
+bool AServer::DelUser(ANetUser* pUser)
+{
+	pUser->DisConnect();
+	return true;
+}
+bool AServer::DelUser(m_UserIter& iter)
+{
+	DelUser((ANetUser*)*iter);
+	return true;
+}
 bool AServer::Release()
 {
-	closesocket(m_LSock);
-	WSACleanup();
+	AObjectPool<ANetUser>::AllFree();
+	AObjectPool<AOV>::AllFree();
 	//DeleteCriticalSection(&g_CS);
 	return true;
 }
@@ -55,7 +55,7 @@ int AServer::SendMsg(SOCKET Csock, UPACKET& packet)
 	} while (iSendSize < packet.ph.len);
 	return iSendSize;
 }
-/*int AServer::SendMsg(ANetUser* pUser, char* msg, int iSize, WORD type)
+int AServer::SendMsg(ANetUser* pUser, char* msg, int iSize, WORD type)
 {
 	//보내는 패킷 -> packetpool에 저장 후 한꺼번에 전송
 	pUser->SendMsg(msg, iSize, type);
@@ -65,8 +65,8 @@ int AServer::SendMsg(ANetUser* pUser, UPACKET& packet)
 {
 	pUser->SendMsg(packet);
 	return 0;
-}*/
-int AServer::Broadcast(ANetUser *user)
+}
+/*int AServer::Broadcast(ANetUser* user)
 {
 	if (user->m_PacketPool.size() > 0)
 	{
@@ -84,18 +84,18 @@ int AServer::Broadcast(ANetUser *user)
 		}
 	}
 	return 1;
+}*/
+int AServer::Broadcast(APacket& a)
+{
+	for (ANetUser* senduser : m_UserList)
+	{
+		int iRet = SendMsg(senduser->m_Sock, a.m_uPacket);
+		if (iRet <= 0) {
+			senduser->m_bConnect = false;
+		}
+	}
+	return 1;
 }
-//int AServer::Broadcast(APacket& a)
-//{
-//	for (ANetUser* senduser : m_UserList)
-//	{
-//		int iRet = SendMsg(senduser->m_Sock, a.m_uPacket);
-//		if (iRet <= 0) {
-//			senduser->m_bConnect = false;
-//		}
-//	}
-//	return 1;
-//}
 /*int AServer::BroadcasePool(ANetUser* user)
 {
 	if (user->m_PacketPool.size() > 0)
