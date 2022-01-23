@@ -1,6 +1,7 @@
 #pragma once
 #include "Protocol.h"
 #include <string>
+using namespace std;
 
 class APacket
 {

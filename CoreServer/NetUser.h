@@ -25,8 +25,8 @@ struct AOV	:	public AObjectPool<AOV>
 };
 class ANetUser : public AServerObj
 {
+	AServer* m_pServer = nullptr;
 public:
-	AServer*		m_pServer = nullptr;
 	bool			m_bConnect = false;
 	SOCKET			m_Sock;
 	SOCKADDR_IN		m_Addr;
@@ -55,7 +55,7 @@ public:
 	int				DispatchSend(DWORD dwTrans);
 	int				SendMsg(char* msg, int iSize, WORD type);
 	int				SendMsg(UPACKET& packet);
-	void			Set(SOCKET LSock, SOCKADDR_IN LAddr, AServer* pServer);
+	void			Set(SOCKET Sock, SOCKADDR_IN Addr, AServer* pServer);
 	bool			DisConnect();
 public:
 	ANetUser();

@@ -30,7 +30,6 @@ bool AAccepter::RunServer()
 	}
 	return 1;
 }
-
 bool AAccepter::Set(int iPort)
 {
 	WSADATA wsa;
@@ -61,4 +60,8 @@ bool AAccepter::Set(int iPort)
 }
 AAccepter::AAccepter() {}
 AAccepter::AAccepter(LPVOID value) : AThread(value) {}
-AAccepter::~AAccepter() {}
+AAccepter::~AAccepter() 
+{
+	closesocket(m_LSock);
+	WSACleanup();
+}

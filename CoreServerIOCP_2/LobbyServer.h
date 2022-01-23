@@ -11,7 +11,7 @@ public:
 public:
 	virtual void LoginReq(APacket& a, ANetUser* user) override;
 	virtual void ChatMsg(APacket& a, ANetUser* user);
-	virtual void LogoutUser(APacket& a, ANetUser* user);
+	//virtual void LogoutUser(APacket& a, ANetUser* user);
 	
 public:
 	virtual bool Init(int iPort) override;

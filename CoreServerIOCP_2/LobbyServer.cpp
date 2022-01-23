@@ -14,7 +14,7 @@ DWORD WINAPI WorkerThread(LPVOID param)
         {
             break;
         }
-        //완료 큐에 데이터가 있으면 작업시작
+        //완료 큐에 데이터가 있으면 작업 시작하기.
         BOOL bReturn = ::GetQueuedCompletionStatus(pServer->g_hIOCP, &dwTransfer, &KeyValue, &pOverlapped, 1);
         AChatUser* pUser = (AChatUser*)KeyValue;
         AOV* pOV = (AOV*)pOverlapped;

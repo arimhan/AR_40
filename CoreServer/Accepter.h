@@ -1,6 +1,6 @@
 #pragma once
 #include "Thread.h"
-class AAccepter :public AThread
+class AAccepter : public AThread
 {
 	SOCKET			m_LSock;
 public:

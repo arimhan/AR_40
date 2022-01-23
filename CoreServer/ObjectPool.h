@@ -1,7 +1,7 @@
 #pragma once
 #include <string>
 //#include "winnt.h" interlock함수
-#define		POOL_MAX_SIZE 8 //1024로 변경
+#define		POOL_MAX_SIZE 2 //1024로 변경
 #define		POOL_SIZE_MASK (POOL_MAX_SIZE-1)
 
 template <class T>

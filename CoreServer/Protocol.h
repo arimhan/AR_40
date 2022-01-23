@@ -1,8 +1,7 @@
 #pragma once
 #include <windows.h>
-using namespace std;
+#include <iostream>
 //PROTOCOL 수정 후 모든 구조가 변경되어야 함. (기존 소스 작동 불가), 클라랑 맞추기.
-
 #pragma pack(push,1) //여기부터 pop까지 모두 1byte로 발송한단 뜻. 
 typedef struct
 {
@@ -34,11 +33,11 @@ struct ALoginAck
 	int iRet;
 	//1: 승인, -1 ID/PW없음
 };
-struct ANetResult
-{
-	int iRet;
-	SOCKET sock_id;
-};
+//struct ANetResult
+//{
+//	int iRet;
+//	SOCKET sock_id;
+//};
 #pragma pack(pop)
 
 #define PACKET_HEADER_SIZE		10

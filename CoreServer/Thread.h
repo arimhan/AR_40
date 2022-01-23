@@ -7,9 +7,9 @@ class AThread : public AServerObj
 public:
 	uintptr_t	 m_hThread;
 	unsigned int m_iID;
-	bool	m_bStarted;
-	LPVOID	m_pObject;
-				 
+	bool		 m_bStarted;
+	LPVOID		 m_pObject;
+					 
 public:			 
 	void  Create();
 	void  Create(LPVOID pValue);

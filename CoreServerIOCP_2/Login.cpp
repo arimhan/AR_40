@@ -1,4 +1,5 @@
 #include "LobbyServer.h"
+
 void ALobbyServer::LoginReq(APacket& a, ANetUser* user)
 {
     ALoginReq loginreq;
@@ -11,14 +12,14 @@ void ALobbyServer::ChatMsg(APacket& a, ANetUser* user)
 {
     Broadcast(a);
 }
-void ALobbyServer::LogoutUser(APacket& a, ANetUser* user)
+/*void ALobbyServer::LogoutUser(APacket& a, ANetUser* user)
 {
     //packetpool에 addpacket처리(packet)
     //userlist -> deluser (packet.user)
-    /*
+
     m_SendBroadcastPacketPool.AddPacket(t);
-    m_pSessionMgr->DelUser(t.pUser);*/
-}
+    m_pSessionMgr->DelUser(t.pUser);
+}*/
 bool ALobbyServer::RunServer()
 {
     while (1) //Client accept 후 정보 출력

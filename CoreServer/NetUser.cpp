@@ -1,7 +1,6 @@
 #include "NetUser.h"
 #include "Server.h"
 
-
 int	ANetUser::Recv()
 {
 	AOV* ov = new AOV(AOV::MODE_RECV);
@@ -10,6 +9,52 @@ int	ANetUser::Recv()
 	DWORD dwRead;
 	DWORD lpFlags = 0;
 	BOOL Ret = WSARecv(m_Sock, &m_wsaRecvBuffer, 1, &dwRead, &lpFlags, 
+		(WSAOVERLAPPED*)ov, nullptr);
+
+	if (Ret == SOCKET_ERROR)
+	{
+		if (WSAGetLastError() != WSA_IO_PENDING)
+		{
+			return false;
+		}
+	}
+	return 0;
+}
+int ANetUser::SendMsg(char* msg, int iSize, WORD type)
+{
+	//비동기 로드
+	UPACKET uPacket;
+	uPacket.ph.len = iSize + PACKET_HEADER_SIZE;
+	uPacket.ph.type = type;
+	memcpy(uPacket.msg, msg, iSize);
+
+	AOV* ov = new AOV(AOV::MODE_SEND);
+	m_wsaSendBuffer.len = uPacket.ph.len;
+	m_wsaSendBuffer.buf = (char*)&uPacket;
+
+	DWORD dwWrite;
+	DWORD lpFlags = 0;
+	BOOL Ret = WSASend(m_Sock, &m_wsaSendBuffer, 1, &dwWrite, 0,
+		(WSAOVERLAPPED*)ov, nullptr);
+
+	if (Ret == SOCKET_ERROR)
+	{
+		if (WSAGetLastError() != WSA_IO_PENDING)
+		{
+			return false;
+		}
+	}
+	return 0;
+}
+int ANetUser::SendMsg(UPACKET& packet)
+{
+	AOV* ov = new AOV(AOV::MODE_SEND);
+	m_wsaSendBuffer.len = packet.ph.len;
+	m_wsaSendBuffer.buf = (char*)&packet;
+
+	DWORD dwWrite;
+	DWORD lpFlags = 0;
+	BOOL Ret = WSASend(m_Sock, &m_wsaSendBuffer, 1, &dwWrite, 0,
 		(WSAOVERLAPPED*)ov, nullptr);
 
 	if (Ret == SOCKET_ERROR)
@@ -43,7 +88,10 @@ int ANetUser::Dispatch(DWORD dwTrans, AOV* aov)
 	}
 	if (aov->type == AOV::MODE_RECV)
 	{
-		if (!DispatchRecv(m_szRecv, dwTrans)) {}Recv();
+		if (!DispatchRecv(m_szRecv, dwTrans)) 
+		{}
+		Recv();
+		return 1;
 	}
 	if (aov->type == AOV::MODE_SEND)
 	{
@@ -104,52 +152,6 @@ int	ANetUser::DispatchRecv(char* szRecvBuffer, int iRecvByte)
 int ANetUser::DispatchSend(DWORD dwTrans)
 {
 	cout << "DispatchSend";
-	return 0;
-}
-int ANetUser::SendMsg(char* msg, int iSize, WORD type)
-{
-	//비동기 로드
-	UPACKET uPacket;
-	uPacket.ph.len = iSize + PACKET_HEADER_SIZE;
-	uPacket.ph.type = type;
-	memcpy(uPacket.msg, msg, iSize);
-
-	AOV* ov = new AOV(AOV::MODE_SEND);
-	m_wsaSendBuffer.len = uPacket.ph.len;
-	m_wsaSendBuffer.buf = (char*)&uPacket;
-
-	DWORD dwWrite;
-	DWORD lpFlags = 0; 
-	BOOL Ret = WSASend(m_Sock, &m_wsaSendBuffer, 1, &dwWrite, 0, 
-		(WSAOVERLAPPED*)ov, nullptr);
-
-	if (Ret == SOCKET_ERROR)
-	{
-		if (WSAGetLastError() != WSA_IO_PENDING)
-		{
-			return false;
-		}
-	}
-	return 0;
-}
-int ANetUser::SendMsg(UPACKET& packet)
-{
-	AOV* ov = new AOV(AOV::MODE_SEND);
-	m_wsaSendBuffer.len = packet.ph.len;
-	m_wsaSendBuffer.buf = (char*)&packet;
-
-	DWORD dwWrite;
-	DWORD lpFlags = 0;
-	BOOL Ret = WSASend(m_Sock, &m_wsaSendBuffer, 1, &dwWrite, 0, 
-		(WSAOVERLAPPED*)ov, nullptr);
-
-	if (Ret == SOCKET_ERROR)
-	{
-		if (WSAGetLastError() != WSA_IO_PENDING)
-		{
-			return false;
-		}
-	}
 	return 0;
 }
 void	ANetUser::Set(SOCKET sock, SOCKADDR_IN addr, AServer* pServer)
