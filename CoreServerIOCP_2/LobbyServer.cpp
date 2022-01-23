@@ -23,7 +23,7 @@ DWORD WINAPI WorkerThread(LPVOID param)
         {
             if (dwTransfer == 0)
             {
-                pOV->type == AOV::MODE_EXIT;
+                pOV->type = AOV::MODE_EXIT;
                 pUser->m_bConnect = false;
             }
             else

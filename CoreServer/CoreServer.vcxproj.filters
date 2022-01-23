@@ -30,9 +30,6 @@
     <ClCompile Include="Thread.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
-    <ClCompile Include="ObjectPool.cpp">
-      <Filter>소스 파일</Filter>
-    </ClCompile>
     <ClCompile Include="Accepter.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>

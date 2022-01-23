@@ -23,7 +23,7 @@ struct AOV	:	public AObjectPool<AOV>
 		type = MODE_RECV;
 	}
 };
-class ANetUser : public AServerObj, public AObjectPool<ANetUser>
+class ANetUser : public AServerObj
 {
 public:
 	AServer*		m_pServer = nullptr;

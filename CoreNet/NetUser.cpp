@@ -1,6 +1,7 @@
 #include "NetUser.h"
 
-int		ANetUser::DispatchRecv(char* szRecvBuffer, int iRecvByte)
+
+int		ANetUser::DispatchRead(char* szRecvBuffer, int iRecvByte)
 {
 	if (m_iWritePos + iRecvByte >= 2048)
 	{

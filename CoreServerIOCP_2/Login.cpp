@@ -1,6 +1,4 @@
 #include "LobbyServer.h"
-
-
 void ALobbyServer::LoginReq(APacket& a, ANetUser* user)
 {
     ALoginReq loginreq;
@@ -43,7 +41,7 @@ bool ALobbyServer::RunServer()
         for (iter = m_packetPool.begin(); iter != m_packetPool.end(); iter++)
         {
             XPacket* xp = (XPacket*)&(*iter);
-            FuncionIterator iter = m_fnExecutePacket.find(xp->packet.m_uPacket.ph.type);
+            FunctionIterator iter = m_fnExecutePacket.find(xp->packet.m_uPacket.ph.type);
             if (iter != m_fnExecutePacket.end())
             {
                 CallFunction call = iter->second;

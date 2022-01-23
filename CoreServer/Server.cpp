@@ -1,8 +1,9 @@
 #include "Server.h"
+void AServer::LoginReq(APacket& a, ANetUser* user){	}
 bool AServer::Init(int iPort)
 {
 	m_fnExecutePacket[PACKET_LOGIN_REQ] = bind(&AServer::LoginReq, this, placeholders::_1, placeholders::_2);
-	m_Accept.Set();
+	m_Accept.Set(9110);
 	m_Accept.Create(this);
 	m_Accept.Detach();
 

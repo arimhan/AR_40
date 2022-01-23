@@ -36,6 +36,7 @@ int	ANetUser::Recv()
 //}
 int ANetUser::Dispatch(DWORD dwTrans, AOV* aov)
 {
+	delete aov;
 	if (m_bConnect == false)
 	{
 		return 0;
@@ -79,11 +80,11 @@ int	ANetUser::DispatchRecv(char* szRecvBuffer, int iRecvByte)
 			do {
 				APacket aPacket(pPacket->ph.type);
 				memcpy(&aPacket.m_uPacket, &m_szRecvBuffer[m_iPacketPos], pPacket->ph.len);
-				if (pPacket->ph.type == PACKET_CHAT_MSG)
+				/*if (pPacket->ph.type == PACKET_CHAT_MSG)
 				{
 					m_PacketPool.push_back(aPacket);
 				}
-				else
+				else*/
 				{
 					XPacket xPacket;
 					xPacket.pUser = this;
@@ -153,7 +154,7 @@ int ANetUser::SendMsg(UPACKET& packet)
 }
 void	ANetUser::Set(SOCKET sock, SOCKADDR_IN addr, AServer* pServer)
 {
-	//m_pServer = pServer;
+	m_pServer = pServer;
 	m_bConnect = true;
 	ZeroMemory(m_szRecvBuffer, sizeof(char) * 2048);
 	m_iPacketPos = 0;
