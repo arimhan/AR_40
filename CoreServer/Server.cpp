@@ -48,7 +48,7 @@ int AServer::SendMsg(SOCKET Csock, UPACKET& packet)
 	int iSendSize = 0;
 	do {
 		// 2. 패킷 전송 : 운영체제는 sendbuffer(short byte), recvbuffer 내 크기가 정해져 있음.
-		int iSendByte = send(Csock, &pMsg[iSendSize],packet.ph.len, 0);//- iSendSize, 0);
+		int iSendByte = send(Csock, &pMsg[iSendSize],packet.ph.len - iSendSize, 0);//- iSendSize, 0);
 		if (iSendByte == SOCKET_ERROR)
 		{
 			if (WSAGetLastError() != WSAEWOULDBLOCK) { return -1; }
@@ -67,17 +67,6 @@ int AServer::SendMsg(ANetUser* pUser, UPACKET& packet)
 {
 	pUser->SendMsg(packet);
 	return 0;
-}
-int AServer::Broadcast(APacket& a)
-{
-	for (ANetUser* senduser : m_UserList)
-	{
-		int iRet = SendMsg(senduser->m_Sock, a.m_uPacket);
-		if (iRet <= 0) {
-			senduser->m_bConnect = false;
-		}
-	}
-	return 1;
 }
 int AServer::BroadcastPool(ANetUser* user)
 {
@@ -99,3 +88,15 @@ int AServer::BroadcastPool(ANetUser* user)
 	}
 	return 1;
 }
+int AServer::Broadcast(APacket& a)
+{
+	for (ANetUser* senduser : m_UserList)
+	{
+		int iRet = SendMsg(senduser->m_Sock, a.m_uPacket);
+		if (iRet <= 0) {
+			senduser->m_bConnect = false;
+		}
+	}
+	return 1;
+}
+

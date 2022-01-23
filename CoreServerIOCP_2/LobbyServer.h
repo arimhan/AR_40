@@ -14,7 +14,7 @@ public:
 	//virtual void LogoutUser(APacket& a, ANetUser* user);
 	
 public:
-	virtual bool Init(int iPort) override;
+	virtual bool Init(int iPort);
 	virtual bool RunServer();
 	virtual bool Release();
 	virtual bool AddUser(SOCKET Csock, SOCKADDR_IN CAddr);
