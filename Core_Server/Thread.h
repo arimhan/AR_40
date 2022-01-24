@@ -12,7 +12,7 @@ public:
 					 
 public:			 
 	void  Create();
-	void  Create(LPVOID pValue);
+	void  Create(LPVOID pObject);
 	void  Join();
 	void  Detach();
 	virtual bool RunServer();

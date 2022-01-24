@@ -14,10 +14,10 @@ LRESULT ASample::MsgProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
             char buffer[MAX_PATH] = { 0, };
             SendMessageA(m_hEdit, WM_GETTEXT, MAX_PATH, (LPARAM)buffer);
             APacket aPacket(PACKET_CHAT_MSG);
-            aPacket << aPacket.<<buffer;
+            aPacket << 77 << "<ArimHan>" << (short)10 << buffer;
             m_Net.SendMsg(m_Net.m_Sock, aPacket.m_uPacket);
 
-            SendMessageA(m_hEdit, WM_SETTEXT, 0, (LPARAM)"");
+            SendMessageA(m_hEdit, WM_SETTEXT, 0, (LPARAM)"<ArimHan>: ");//
         }break;
         }
     }break;
@@ -29,10 +29,11 @@ bool ASample::Init()
     DWORD style = WS_CHILD | WS_VISIBLE | ES_MULTILINE;
     m_hEdit = CreateWindow(L"Edit", NULL, style, 0, g_rtClient.bottom - 50, 300, 50, m_hWnd, (HMENU)100, m_hInstance, NULL);
     style = WS_CHILD | WS_VISIBLE;
-    m_hButton = CreateWindow(L"Button", L"전송", style, 310, g_rtClient.bottom - 50, 50, 50, m_hWnd, (HMENU)200, m_hInstance, NULL);
+    m_hButton = CreateWindow(L"Button", L"Send", style, 310, g_rtClient.bottom - 50, 50, 50, m_hWnd, (HMENU)200, m_hInstance, NULL);
     m_hListBox = CreateWindow(L"ListBox", NULL, style, 0, 0, 300, g_rtClient.bottom - 70, m_hWnd, (HMENU)300, m_hInstance, NULL);
 
-    SendMessageA(m_hListBox, LB_ADDSTRING, 0, (LPARAM)"< 채팅이 가능합니다! >");
+    SendMessageA(m_hListBox, LB_ADDSTRING, 0, (LPARAM)"             < 채팅이 가능합니다! >     ");
+    SendMessageA(m_hEdit, WM_SETTEXT, 0, (LPARAM)"메시지를 입력하세요 !"); //LB_DELETESTRING, WM_SETTEXT, LB_ADDSTRING
     m_Net.InitNetwork();
     m_Net.Connect(g_hWnd, SOCK_STREAM, PORT_NUM, ADRESS_NUM);// "127.0.0.1"); //IP
     return true;
@@ -54,9 +55,8 @@ bool ASample::Frame()
         {
             AChatMsg recvdata;
             ZeroMemory(&recvdata, sizeof(recvdata));
-            (*iter) >> recvdata.name >> recvdata.message;
-            //(*iter) >> recvdata.index >> recvdata.name >> recvdata.message;
-            SendMessageA(m_hListBox, LB_ADDSTRING, 0, (LPARAM)"<Arimhan>:");
+            (*iter) >> recvdata.index >> recvdata.name >> recvdata.damage >> recvdata.message;
+            //SendMessageA(m_hListBox, LB_ADDSTRING, 0, (LPARAM)recvdata.name);
             SendMessageA(m_hListBox, LB_ADDSTRING, 0, (LPARAM)recvdata.message);
             (*iter).Reset();
         }

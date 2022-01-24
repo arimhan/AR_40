@@ -5,10 +5,10 @@
 #pragma pack(push,1) //여기부터 pop까지 모두 1byte로 발송한단 뜻. 
 typedef struct
 {
-	WORD			ioType;		//패킷 입출력 종류
+	//WORD			ioType;		//패킷 입출력 종류
 	WORD			len;		//MSG바이트 크기
 	WORD			type;		//패킷 종류
-	DWORD			time;		//패킷전송 시간
+	//DWORD			time;		//패킷전송 시간
 }PACKET_HEADER; // => 이제 10BYTE!
 typedef struct
 {
@@ -21,6 +21,7 @@ struct AChatMsg
 {
 	long			index;
 	char			name[20];
+	short			damage;
 	char			message[256];
 };
 struct ALoginReq
@@ -40,9 +41,9 @@ struct ALoginAck
 //};
 #pragma pack(pop)
 
-#define PACKET_HEADER_SIZE		10
-#define PACKET_ALoginReq_Size	40
-#define PACKET_ALoginAck_Size	4
+#define PACKET_HEADER_SIZE		4
+//#define PACKET_ALoginReq_Size	40
+//#define PACKET_ALoginAck_Size	4
 //#define PACKET_CHAT_MSG		1000
 //
 enum PACKET_TYPE
