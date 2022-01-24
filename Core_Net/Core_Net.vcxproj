@@ -158,6 +158,9 @@ copy "..\\..\\output\\Debug\\Core_Net.lib" "..\\..\\Lib\\Core_Net_d.lib"</Comman
     <ClInclude Include="Packet.h" />
     <ClInclude Include="Protocol.h" />
   </ItemGroup>
+  <ItemGroup>
+    <None Include="ClassDiagram.cd" />
+  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>
