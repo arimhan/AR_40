@@ -15,13 +15,13 @@ typedef struct
 	PACKET_HEADER	ph;
 	char			msg[4096];
 
-}UPACKET, * P_UPACKET;
+}UPACKET, *P_UPACKET;
 //data는 UPACKET으로 전송 (msg안에 존재)
 struct AChatMsg
 {
 	long			index;
 	char			name[20];
-	char			message[256];
+	char			message[256]; 
 };
 struct ALoginReq
 {

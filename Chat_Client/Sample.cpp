@@ -14,8 +14,7 @@ LRESULT ASample::MsgProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
             char buffer[MAX_PATH] = { 0, };
             SendMessageA(m_hEdit, WM_GETTEXT, MAX_PATH, (LPARAM)buffer);
             APacket aPacket(PACKET_CHAT_MSG);
-            //aPacket << 77 << "arimhan" << (short)30 << buffer;
-            aPacket << "arimhan" << buffer;
+            aPacket << aPacket.<<buffer;
             m_Net.SendMsg(m_Net.m_Sock, aPacket.m_uPacket);
 
             SendMessageA(m_hEdit, WM_SETTEXT, 0, (LPARAM)"");
@@ -55,9 +54,10 @@ bool ASample::Frame()
         {
             AChatMsg recvdata;
             ZeroMemory(&recvdata, sizeof(recvdata));
-            (*iter) >> recvdata.index >> recvdata.name >> recvdata.message;
+            (*iter) >> recvdata.name >> recvdata.message;
+            //(*iter) >> recvdata.index >> recvdata.name >> recvdata.message;
+            SendMessageA(m_hListBox, LB_ADDSTRING, 0, (LPARAM)"<Arimhan>:");
             SendMessageA(m_hListBox, LB_ADDSTRING, 0, (LPARAM)recvdata.message);
-            //iter = m_Net.m_PlayerUser.m_PacketPool.erase(iter);
             (*iter).Reset();
         }
     }
