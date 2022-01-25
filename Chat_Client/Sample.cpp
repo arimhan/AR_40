@@ -60,6 +60,7 @@ bool ASample::Frame()
             SendMessageA(m_hListBox, LB_ADDSTRING, 0, (LPARAM)recvdata.message);
             (*iter).Reset();
         }
+        //m_Net.m_PlayerUser.m_PacketPool.erase(iter);
     }
     return true;
 }

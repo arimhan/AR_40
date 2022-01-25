@@ -73,7 +73,7 @@ int	ANetUser::DispatchRecv(char* szRecvBuffer, int iRecvByte)
 				//next packet
 				m_iPacketPos += pPacket->ph.len;
 				m_iReadPos -= pPacket->ph.len;
-				if (m_iReadPos < PACKET_HEADER_SIZE) 
+				if (m_iReadPos < PACKET_HEADER_SIZE)
 				{
 					break; 
 				} //패킷 안 오면 중단.

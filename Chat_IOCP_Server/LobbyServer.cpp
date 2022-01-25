@@ -89,16 +89,3 @@ bool ALobbyServer::Release()
     AServer::Release();
     return true;
 }
-//void ALobbyServer::SendLogout(ANetUser* user)
-//{
-//    //UPACKET
-//    //NetResult -> 연결결과 struct
-//    //NR를 기준으로 makepacket();
-//    //system : UName님이 나가셨습니다.
-//}
-//void ALobbyServer::CreateAccount(ANetUser* user)
-//{
-//    //Login -> packet msg
-//    //string -> id /pw 
-//    TCHAR szUName = ();
-//}
