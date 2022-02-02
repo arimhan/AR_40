@@ -232,6 +232,18 @@ bool AOdbc::ExecSelect(const TCHAR* sql, int iTableIndex)
 		return false;
 	}
 
+	ret = SQLBindCol(m_hStmt, 1, SQL_UNICODE, Name, sizeof(Name), &lName);
+	ret = SQLBindCol(m_hStmt, 2, SQL_C_ULONG, &Price, 0, &lPrice);
+	ret = SQLBindCol(m_hStmt, 3, SQL_C_ULONG, &Korean, 0, &lKorean);
+	ret = SQLExecDirect(m_hStmt, (SQLTCHAR*)&sql, SQL_NTS);
+
+	while (SQLFetch(m_hStmt) != SQL_NO_DATA)
+	{
+		std::wcout << Name << " " << Price << " " << Korean << std::endl;
+	}
+	SQLCloseCursor(m_hStmt);
+
+
 	SQLLEN len;
 	SQLSMALLINT iNumCols;
 	//Select문 제외
@@ -251,10 +263,10 @@ bool AOdbc::ExecSelect(const TCHAR* sql, int iTableIndex)
 }
 bool AOdbc::ExecUpdata(const TCHAR* sql, int iTableIndex)
 {	
-	TCHAR sql4[MAX_PATH] = { 0, };// L"select name,price,korean from tblCigar='%s'";
-	wsprintf(sql4, L"update tblCigar set name='%s' where name='%s'",
+	TCHAR sql[MAX_PATH] = { 0, };// L"select name,price,korean from tblCigar='%s'";
+	wsprintf((TCHAR*)sql, L"update tblCigar set name='%s' where name='%s'",
 		L"코로나", L"88 Light");
-	SQLRETURN ret = SQLExecDirect(m_hStmt, (SQLTCHAR*)&sql4, SQL_NTS);
+	SQLRETURN ret = SQLExecDirect(m_hStmt, (SQLTCHAR*)&sql, SQL_NTS);
 	if (ret != SQL_SUCCESS && ret != SQL_NO_DATA) // 성공여부 및 data여부 동시체크
 	{
 		Check();
@@ -272,9 +284,9 @@ bool AOdbc::ExecUpdata(const TCHAR* sql, int iTableIndex)
 }
 bool AOdbc::ExecDelete(const TCHAR* sql, int iTableIndex)
 {
-	TCHAR sql3[MAX_PATH] = { 0, };// L"select name,price,korean from tblCigar='%s'";
-	wsprintf(sql3, L"delete from tblCigar where name='%s'", L"xxxxxx");
-	SQLRETURN ret = SQLExecDirect(m_hStmt, (SQLTCHAR*)&sql3, SQL_NTS);
+	TCHAR sql2[MAX_PATH] = { 0, };// L"select name,price,korean from tblCigar='%s'";
+	wsprintf(sql2, L"delete from tblCigar where name='%s'", L"xxxxxx");
+	SQLRETURN ret = SQLExecDirect(m_hStmt, (SQLTCHAR*)&sql2, SQL_NTS);
 	if (ret != SQL_SUCCESS)
 	{
 		Check();

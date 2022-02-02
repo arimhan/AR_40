@@ -7,9 +7,10 @@
 #include <sqlext.h>
 
 
-SQLHENV		g_hEnv;
-SQLHDBC		g_hDbc;
-SQLHSTMT	g_hStmt;
+SQLHENV		g_hEnv;			//환경핸들
+SQLHDBC		g_hDbc;			//연결핸들
+SQLHSTMT	g_hStmt;		//명령핸들
+//SQLHDESC	g_hDesc;		//설명자 핸들
 
 void Check()
 {
@@ -28,6 +29,8 @@ void Check()
 }
 void main()
 {
+
+
 	setlocale(LC_ALL, "korean");
 	if (SQLAllocHandle(SQL_HANDLE_ENV, SQL_NULL_HANDLE, &g_hEnv) != SQL_SUCCESS)
 	{
