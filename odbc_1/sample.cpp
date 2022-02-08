@@ -5,16 +5,19 @@ void main()
 	setlocale(LC_ALL, "korean");
 	AOdbc odbc;
 	odbc.Init();
-	wstring dsn = L"\\..\\..\\data\\db\\cigarette.dsn";
-	if (odbc.Connect(dsn.c_str()))
+	SQLWCHAR dir[MAX_PATH] = { 0, };
+	GetCurrentDirectory(MAX_PATH, dir);
+	wstring dbpath = dir;
+
+	dbpath += L"\\gameuser.dsn";
+	if (odbc.Connect(4, dbpath.c_str()))
 	{
-		odbc.ExecTableInfo(L"tblCigar");
+		odbc.ExecTableInfo(L"gameuser");
 	}
-	wstring sql = L"select * from tblCigar";
+	//wstring sql = L"select * from tblCigar";
 	//odbc.Result(sql.c_str(), 0);
-	odbc.ExecUpdata(sql.c_str(), 0);
-	odbc.ExecSelect(sql.c_str(), 0);
-	
+	//odbc.ExecUpdata(sql.c_str(), 0);
+	//odbc.ExecSelect(sql.c_str(), 0);
 	odbc.Release();
 }
 

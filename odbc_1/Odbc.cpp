@@ -17,25 +17,59 @@ bool AOdbc::Init()
 	}
 	return true;
 }
-bool AOdbc::Connect(const TCHAR* dsn)
+bool AOdbc::Connect(int iType, const TCHAR* dsn)
 {
-	SQLWCHAR dir[MAX_PATH] = { 0, };
-	GetCurrentDirectory(MAX_PATH, dir);
-	std::wstring dbpath = dir;
-	dbpath += dsn; //L"\\cigarette.dsn";// L"\\cigarette.accdb";
 
 	SQLTCHAR OutCon[255];
-	SQLSMALLINT cbOutCon;
+	//SQLSMALLINT cbOutCon;
 	TCHAR InCon[256] = { 0, };
 	//_stprintf(InCon, 
 	//	_T("DRIVER={Microsoft Access Driver (*.mdb, *.accdb)};DBQ=%s;"), dbpath.c_str());
 	int iSize = sizeof(OutCon);
-	_stprintf(InCon, _T("FileDsn=%s"), dbpath.c_str());
+	
 	SQLSMALLINT cbOutLen;
-	SQLRETURN ret = SQLDriverConnect(m_hDbc, NULL,
-		InCon, _countof(InCon),
-		OutCon, _countof(OutCon),
-		&cbOutLen, SQL_DRIVER_NOPROMPT);
+	SQLRETURN ret;
+
+	switch (iType)
+	{
+		case 0: 
+		{
+			_stprintf(InCon, _T("%s"), 
+				_T("Driver={SQL Server};Server=directx.kr;Address=127.0.0.1;Network=dbmssocn;Database=KGCAGAME;Uid=sa;Pwd=rksk!312;"));
+			ret = SQLDriverConnect(m_hDbc, NULL, InCon, _countof(InCon), OutCon, _countof(OutCon), &cbOutLen, SQL_DRIVER_NOPROMPT);
+		}break;
+
+		case 1:
+		{
+			_stprintf(InCon, _T("Dsn=%s"), dsn);
+			ret = SQLConnect(m_hDbc, (SQLTCHAR*)dsn, SQL_NTS, (SQLTCHAR*)L"sa", SQL_NTS, (SQLTCHAR*)L"rksk!312", SQL_NTS);
+		}break;
+
+		case 2:
+		{
+			_stprintf(InCon, _T("FileDsn=%s"), dsn);
+			ret = SQLDriverConnect(m_hDbc, NULL, InCon, _countof(InCon), OutCon, _countof(OutCon), &cbOutLen, SQL_DRIVER_NOPROMPT);
+		}break;
+
+		// access 대화상자
+		case 3:
+		{
+			HWND hWnd = GetDesktopWindow();
+			SQLSMALLINT len;
+			ret = SQLDriverConnect(m_hDbc, hWnd, (SQLWCHAR*)L"Driver={Microsoft Access Driver (*.mdb, *.accdb)}",
+				SQL_NTS, (SQLWCHAR*)InCon, _countof(InCon), &len, SQL_DRIVER_PROMPT);
+		}break;
+
+		//SQL server 대화상자
+		case 4:
+		{
+			HWND hWnd = GetDesktopWindow();
+			SQLSMALLINT len;
+			ret = SQLDriverConnect(m_hDbc, hWnd, (SQLWCHAR*)L"Driver={SQL Server}",
+				SQL_NTS, (SQLWCHAR*)InCon, _countof(InCon), &len, SQL_DRIVER_PROMPT);
+		}break;
+	}
+		
 	if (ret != SQL_SUCCESS && ret != SQL_SUCCESS_WITH_INFO)
 	{
 		Check();
@@ -61,7 +95,7 @@ bool AOdbc::ExecTableInfo(const TCHAR* szTableName)
 		return false;
 	}
 
-	SQLSMALLINT iNumCols;
+	//SQLSMALLINT iNumCols;
 	SQLNumResultCols(m_hStmt, &table.iNumCol);
 	for (int iCols = 1; iCols <= table.iNumCol; iCols++)
 	{
@@ -83,6 +117,18 @@ bool AOdbc::ExecTableInfo(const TCHAR* szTableName)
 	{
 		switch (table.ColumnList[iBind].pfSqlType)
 		{
+		case SQL_TYPE_TIMESTAMP:
+		{
+			AField data;
+			data.iDataType = SQL_UNICODE;
+			ret = SQLBindCol(m_hStmt, iBind + 1, SQL_TYPE_TIMESTAMP, &szData[iBind],0, &ITemp);
+			if (ret != SQL_SUCCESS)
+			{
+				Check();
+				return false;
+			}
+			rData.record.push_back(data);
+		}break;
 		case SQL_WCHAR:
 		case SQL_WVARCHAR:
 		{
@@ -232,6 +278,7 @@ bool AOdbc::ExecSelect(const TCHAR* sql, int iTableIndex)
 		return false;
 	}
 
+	/*
 	ret = SQLBindCol(m_hStmt, 1, SQL_UNICODE, Name, sizeof(Name), &lName);
 	ret = SQLBindCol(m_hStmt, 2, SQL_C_ULONG, &Price, 0, &lPrice);
 	ret = SQLBindCol(m_hStmt, 3, SQL_C_ULONG, &Korean, 0, &lKorean);
@@ -241,8 +288,7 @@ bool AOdbc::ExecSelect(const TCHAR* sql, int iTableIndex)
 	{
 		std::wcout << Name << " " << Price << " " << Korean << std::endl;
 	}
-	SQLCloseCursor(m_hStmt);
-
+	*/
 
 	SQLLEN len;
 	SQLSMALLINT iNumCols;
@@ -250,15 +296,8 @@ bool AOdbc::ExecSelect(const TCHAR* sql, int iTableIndex)
 	SQLRowCount(m_hStmt, &len);
 	SQLNumResultCols(m_hStmt, &iNumCols);
 
-	// 결과
-	//ret = SQLBindCol(m_hStmt, 1, SQL_UNICODE, Name, sizeof(Name), &lName);
-	//ret = SQLBindCol(m_hStmt, 2, SQL_C_ULONG, &Price, 0, &lPrice);
-	//ret = SQLBindCol(m_hStmt, 3, SQL_C_ULONG, &Korean, 0, &lKorean);
-	//while (SQLFetch(m_hStmt) != SQL_NO_DATA)
-	//{
-	//	std::wcout << Name << " " << Price << " " << Korean << std::endl;
-	//}
 	SQLCloseCursor(m_hStmt);
+
 	return true;
 }
 bool AOdbc::ExecUpdata(const TCHAR* sql, int iTableIndex)

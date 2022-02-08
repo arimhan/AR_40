@@ -84,6 +84,14 @@ void main()
 	ret = SQLBindCol(g_hStmt, 3, SQL_C_ULONG, &Korean, 0, &lKorean);
 
 	TCHAR sql[MAX_PATH] = L"select * from tblCigar";
+
+
+	//SQLRETURN SQL_API SQLExecDirectW
+	//(
+	//	SQLHSTMT    hstmt,				//연결 핸들
+	//	_In_reads_opt_(TextLength) SQLWCHAR * szSqlStr, //실행한 SQL문
+	//	SQLINTEGER  TextLength			//SQL문의 문자열 길이
+	//);
 	ret = SQLExecDirect(g_hStmt, (SQLTCHAR*)&sql, SQL_NTS);
 
 	while (SQLFetch(g_hStmt) != SQL_NO_DATA)
@@ -92,12 +100,21 @@ void main()
 	}
 	SQLCloseCursor(g_hStmt);
 
-
+	//SQLRETURN  SQL_API SQLBindCol(
+	//	SQLHSTMT StatementHandle,            //명령 핸들
+	//	SQLUSMALLINT ColumnNumber,			 //바인딩 될 컬럼의 번호
+	//	SQLSMALLINT TargetType,				 //데이터 타입
+	//	_Inout_updates_opt_(_Inexpressible_(BufferLength)) SQLPOINTER TargetValue,
+	//	//결과값을 저장하는 버퍼
+	//	SQLLEN BufferLength,				 //버퍼의 길이
+	//	_Inout_opt_ SQLLEN * StrLen_or_Ind); //컬럼의 길이나 상태를 리턴
 	ret = SQLBindCol(g_hStmt, 1, SQL_C_ULONG, &Price, 0, &lPrice);
+
 	TCHAR sql2[MAX_PATH] = { 0, };// L"select name,price,korean from tblCigar='%s'";
 	wsprintf(sql2, L"select price from tblCigar where  name='%s'", L"장미");
 	ret = SQLExecDirect(g_hStmt, (SQLTCHAR*)&sql2, SQL_NTS);
 
+	//SQLRETURN  SQL_API SQLFetch(SQLHSTMT StatementHandle);
 	while (SQLFetch(g_hStmt) != SQL_NO_DATA)
 	{
 		std::wcout << Price << std::endl;
