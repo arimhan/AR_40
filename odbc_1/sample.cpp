@@ -14,10 +14,10 @@ void main()
 	{
 		odbc.ExecTableInfo(L"gameuser");
 	}
-	//wstring sql = L"select * from tblCigar";
+	wstring sql = L"select * from gameuser";
 	//odbc.Result(sql.c_str(), 0);
-	//odbc.ExecUpdata(sql.c_str(), 0);
-	//odbc.ExecSelect(sql.c_str(), 0);
+	odbc.ExecUpdata(sql.c_str(), 0);
+	odbc.ExecSelect(sql.c_str(), 0);
 	odbc.Release();
 }
 
