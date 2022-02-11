@@ -8,20 +8,52 @@ bool main()
 
 	odbc.Init();
 	//연결
-	//odbc.Connect(0, L"\\gameuser.dsn");
+	odbc.Connect(1, L"\\gameuser.dsn");
+	int Select = 0;
+
+	while (Select < 9)
+	{
+
+		cout << "                   <<DB관리 프로그램>>" << endl;
+		cout << "해당하는 번호 기입 후 엔터를 눌러주세요!" << endl;
+		cout << "계정 생성 1, 계정 삭제 2, 비밀번호 수정 3, 전체계정 조회 4, 종료 9   : ";
+		cin >> Select;
+
+		if (Select == 9) break;
+
+		switch (Select)
+		{
+			case CreateAccount:
+			{
+				odbc.CreatePrepare();
+			}break;
+			case Delete:
+			{
+				odbc.DeleteProcedure();
+			}break;
+			case Correction:
+			{
+
+			}break;
+			case AllAccount:
+			{
+
+				system("pause");
+			}break;
+		}
+		Sleep(1000);
+		system("cls");
+	}
+
+
+
 	//1. 프로시저 삭제 및 업데이트 만들기
-	odbc.CreatePrepare();	// 저장프로시저 호출 -> AccountCreate
-	odbc.DeleteProcedure();	// 저장프로시저 내 값 1개 삭제 후
-	/*
+	//odbc.CreatePrepare();	// 저장프로시저 호출 -> AccountCreate
+	//odbc.DeleteProcedure();	// 저장프로시저 내 값 1개 삭제 후
 
-	SQLSMALLINT cbCon;
-	SQLWCHAR connStrbuf[1024] = { 0, };
-	ret = SQLConnect(hDbc, (SQLWCHAR*)SQLID, SQL_NTS, (SQLWCHAR*)SQLSV, SQL_NTS, (SQLWCHAR*)SQLPW, SQL_NTS);
-	
+	//odbc.InsertProcedure();
+	//odbc.UpdateProcedure();	// DB값 수정
 
-	InsertProcedure();
-	UpdateProcedure();	// DB값 수정
-	*/
 	odbc.Release();
 	return true;
 
