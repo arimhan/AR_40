@@ -10,8 +10,9 @@ bool AODBC::Init()
 }
 bool AODBC::Connect(int iType, const TCHAR* dsn)
 {
-	cout << "서버와 연결을 시도합니다...대화상자가 뜨면 서버 : 127.0.0.1" << endl;
-	cout << "ID : sa, PW : rksk!312 입력 후 KGCAGAME을 선택해 연결해주세요!" << endl;
+	//cout << "서버와 연결을 시도합니다...대화상자가 뜨면 서버 : 127.0.0.1" << endl;
+	//cout << "ID : sa, PW : rksk!312 입력 후 KGCAGAME을 선택해 연결해주세요!" << endl;
+	cout << "서버와 연결을 시도합니다..연결이 안 될 경우 DB파일 내 SQL로 DB를 등록해주세요." << endl;
 
 	SQLTCHAR OutCon[255];
 	//SQLSMALLINT cbOutCon;
@@ -30,6 +31,7 @@ bool AODBC::Connect(int iType, const TCHAR* dsn)
 		} break;
 		case 1:
 		{
+			//현재 사용중인 연결방식. DB등록 후 프로젝트 폴더 내 dsn파일을 확인하여 연결처리
 			SQLWCHAR dir[MAX_PATH] = { 0, };
 			GetCurrentDirectory(MAX_PATH, dir);
 			wstring dbpath = dir;
@@ -78,6 +80,131 @@ void AODBC::Check()
 	MessageBox(NULL, errorBuffer, szSQLState, MB_OK);
 }
 
+bool AODBC::ExecTableInfo(const TCHAR* szTableName)
+{
+	ATableInfo info;
+	info.szTableName = szTableName;
+	wstring sql = L"select * from ";
+	sql += szTableName;
+	SQLRETURN ret = SQLExecDirect(m_hStmt, (SQLTCHAR*)sql.c_str(), SQL_NTS);
+	
+	if (ret != SQL_SUCCESS )
+	{
+		Check();
+		return false;
+	}
+
+	SQLSMALLINT iNumCols;
+	SQLNumResultCols(m_hStmt, &info.iNumcol);
+	for (int iCols = 1; iCols <= info.iNumcol; iCols++)
+	{
+		AColInfo col;
+		col.iCol = iCols;
+		int iSize = _countof(col.szColName);
+		SQLDescribeCol(m_hStmt, iCols, col.szColName, iSize, &col.NameLenPtr, &col.pfSqlType, &col.ColSizePtr, &col.DecimalDigitsPtr, &col.pfNullable);
+		info.ColList.push_back(col);
+	}
+
+	SQLLEN iTemp;
+	TCHAR szData[100][21] = { 0, };
+	int iData[100];
+	ARecord rData;
+
+	for (int iBind = 0; iBind < info.ColList.size(); iBind++)
+	{
+		switch (info.ColList[iBind].pfSqlType)
+		{
+		case SQL_TYPE_TIMESTAMP:
+		{
+			AField data;
+			data.iDataType = SQL_UNICODE;
+			ret = SQLBindCol(m_hStmt, iBind + 1,
+				SQL_TYPE_TIMESTAMP,
+				&szData[iBind],
+				0,
+				&iTemp);
+			if (ret != SQL_SUCCESS)
+			{
+				Check();
+				return false;
+			}
+			rData.record.push_back(data);
+		}break;
+		case SQL_WCHAR:
+		case SQL_WVARCHAR: {
+			AField data;
+			data.iDataType = SQL_UNICODE;
+			ret = SQLBindCol(m_hStmt, iBind + 1,
+				SQL_UNICODE,
+				szData[iBind],
+				sizeof(szData[iBind]),
+				&iTemp);
+			if (ret != SQL_SUCCESS)
+			{
+				Check();
+				return false;
+			}
+			rData.record.push_back(data);
+		}break;
+		case SQL_INTEGER: {
+			AField data;
+			data.iDataType = SQL_INTEGER;
+			ret = SQLBindCol(m_hStmt, iBind + 1,
+				SQL_INTEGER,
+				&iData[iBind],
+				0,
+				&iTemp);
+			if (ret != SQL_SUCCESS)
+			{
+				Check();
+				return false;
+			}
+			rData.record.push_back(data);
+		}break;
+		case -7: {
+			AField data;
+			data.iDataType = SQL_C_ULONG;
+			ret = SQLBindCol(m_hStmt, iBind + 1,
+				SQL_C_ULONG,
+				&iData[iBind],
+				0,
+				&iTemp);
+			if (ret != SQL_SUCCESS)
+			{
+				Check();
+				return false;
+			}
+			rData.record.push_back(data);
+		};
+		}
+	}
+
+
+	while (SQLFetch(m_hStmt) != SQL_NO_DATA)
+	{
+		for (int iCol = 0; iCol < info.ColList.size(); iCol++)
+		{
+			rData.record[iCol].iDataType = rData.record[iCol].iDataType;
+			if (rData.record[iCol].iDataType == SQL_UNICODE)
+			{
+				rData.record[iCol].szData = szData[iCol];
+			}
+			else
+			{
+				rData.record[iCol].szData = to_wstring(iData[iCol]);
+			}
+		}
+		m_StringData.push_back(rData);
+		wcout << L"ID: " << rData.record[1].szData << L"  ";
+		wcout << L"PW: " << rData.record[2].szData << endl << endl;
+	}
+	SQLCloseCursor(m_hStmt);
+	m_TableList.push_back(info);
+
+	return true;
+
+}
+
 void AODBC::CreatePrepare()
 {
 	SQLRETURN ret = SQLAllocHandle(SQL_HANDLE_STMT, m_hDbc, &m_stmtAccount);
@@ -96,7 +223,8 @@ void AODBC::CreatePrepare()
 void AODBC::ExecutePrepare()
 {
 	SQLRETURN ret;
-
+	SQLWCHAR	ID[10] = { 0, };
+	SQLWCHAR	PW[10] = { 0, };
 	wcout << L"생성 ID: ";
 	wcin >> ID;
 	wcout << L"생성 PW: ";
@@ -116,6 +244,7 @@ void AODBC::ExecutePrepare()
 void AODBC::DeleteProcedure()
 {
 	SQLRETURN ret;
+
 	ret = SQLAllocHandle(SQL_HANDLE_STMT, m_hDbc, &m_stmtAccountDel);
 	SWORD sReturn = 0;
 	SQLLEN cbRetParam = SQL_NTS;
@@ -126,19 +255,6 @@ void AODBC::DeleteProcedure()
 	TCHAR callspDel[] = L"{? = call DeleteUser(?)}";
 	ret = SQLPrepare(m_stmtAccountDel, callspDel, SQL_NTS);
 
-	wcout << L"삭제 ID: ";
-	wcin >> ID;
-	memcpy(id, ID, sizeof(id));
-
-	ret = SQLExecute(m_stmtAccount);
-	if (ret != SQL_SUCCESS && ret != SQL_SUCCESS_WITH_INFO)
-	{
-		Check();
-		return;
-	}
-	while (SQLMoreResults(m_stmtAccount) != SQL_NO_DATA);
-	SQLFreeStmt(m_stmtAccountDel, SQL_CLOSE);
-	SQLCloseCursor(m_stmtAccountDel);
 	
 	/*
 	TCHAR callspDel[MAX_PATH] = { 0, };
@@ -156,35 +272,61 @@ void AODBC::DeleteProcedure()
 	SQLCloseCursor(m_hStmt);
 	*/
 }
-void AODBC::ExecuteDelPrepare()
+void AODBC::ExecuteDeletePrepare()
 {
+	SQLRETURN	ret;
+	SQLWCHAR	ID[10] = { 0, };
+	wcout << L"삭제 ID: ";
+	wcin >> ID;
+	memcpy(id, ID, sizeof(id));
+
+	ret = SQLExecute(m_stmtAccountDel);
+	if (ret != SQL_SUCCESS && ret != SQL_SUCCESS_WITH_INFO)
+	{
+		Check();
+		return;
+	}
+	while (SQLMoreResults(m_stmtAccountDel) != SQL_NO_DATA);
+	SQLFreeStmt(m_stmtAccountDel, SQL_CLOSE);
+	SQLCloseCursor(m_stmtAccountDel);
 }
 void AODBC::UpdateProcedure()
 {
 	SQLRETURN ret;
 	ret = SQLAllocHandle(SQL_HANDLE_STMT, m_hDbc, &m_stmtUpdate);
 	SWORD sReturn = 0;
+	SQLLEN cbRetParam = SQL_NTS;
 
+	ret = SQLBindParameter(m_stmtUpdate, 1, SQL_PARAM_OUTPUT, SQL_C_SSHORT, SQL_INTEGER, 0, 0, &sReturn, 0, &cbRetParam);
+	ret = SQLBindParameter(m_stmtUpdate, 2, SQL_PARAM_INPUT, SQL_C_WCHAR, SQL_WVARCHAR, sizeof(id), 0, id, sizeof(id), NULL);
+	ret = SQLBindParameter(m_stmtUpdate, 3, SQL_PARAM_INPUT, SQL_C_WCHAR, SQL_WVARCHAR, sizeof(pw), 0, pw, sizeof(pw), NULL);
 
-
-	TCHAR callspIn[MAX_PATH] = { 0, };
-	wsprintf(callspIn, L"update from gameuser ()values ('%s')", L"3333");
-	SQLRETURN ret = SQLExecDirect(m_hStmt, (SQLTCHAR*)&callspIn, SQL_NTS);
-	if (ret != SQL_SUCCESS)
-	{
-		//check();
-		return;
-	}
-	SQLLEN len;
-	SQLSMALLINT cols;
-	SQLRowCount(m_hStmt, &len);
-	SQLNumResultCols(m_hStmt, &cols);
-
-	SQLCloseCursor(m_hStmt);
+	TCHAR callupdate[] = L"{? = call UpdateUser(?,?)}";
+	ret = SQLPrepare(m_stmtUpdate, callupdate, SQL_NTS);
 }
-
 void AODBC::ExecuteUpDatePrepare()
 {
+	SQLRETURN ret;
+	SQLWCHAR ID[10] = { 0, };
+	SQLWCHAR UpdatePW[10] = { 0, };
+	wcout << L"비밀번호를 변경합니다." << endl;
+	wcout << L"비밀번호 변경할 ID: ";
+	wcin >> ID;
+	wcout << L"수정할 비밀번호 : ";
+	wcin >> UpdatePW;
+	memcpy(id, ID, sizeof(id));
+	memcpy(pw, UpdatePW, sizeof(pw));
+
+	ret = SQLExecute(m_stmtUpdate);
+	if (ret != SQL_SUCCESS && ret != SQL_SUCCESS_WITH_INFO)
+	{
+		Check();
+		return;
+	}
+	while (SQLMoreResults(m_stmtUpdate) != SQL_NO_DATA);
+	SQLFreeStmt(m_stmtUpdate, SQL_CLOSE);
+	SQLCloseCursor(m_stmtUpdate);
+
 }
 
 void AODBC::Release()

@@ -59,8 +59,7 @@ public:
 	vector<ARecord>	   m_StringData;
 	SQLWCHAR	id[10];
 	SQLWCHAR	pw[10];
-	SQLWCHAR	ID[10] = { 0, };
-	SQLWCHAR	PW[10] = { 0, };
+
 public:
 	bool Init();
 	bool Connect(int iType, const TCHAR* dsn);
@@ -70,8 +69,10 @@ public:
 
 	void CreatePrepare();
 	void ExecutePrepare();
+
 	void DeleteProcedure();
-	void ExecuteDelPrepare();
+	void ExecuteDeletePrepare();
+
 	void UpdateProcedure();
 	void ExecuteUpDatePrepare();
 

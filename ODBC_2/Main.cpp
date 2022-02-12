@@ -14,7 +14,7 @@ bool main()
 	while (Select < 9)
 	{
 
-		cout << "                   <<DB관리 프로그램>>" << endl;
+		cout << "                   <<DB관리 프로그램>>    " << endl;
 		cout << "해당하는 번호 기입 후 엔터를 눌러주세요!" << endl;
 		cout << "계정 생성 1, 계정 삭제 2, 비밀번호 수정 3, 전체계정 조회 4, 종료 9   : ";
 		cin >> Select;
@@ -30,18 +30,20 @@ bool main()
 			case Delete:
 			{
 				odbc.DeleteProcedure();
+				odbc.ExecuteDeletePrepare();
 			}break;
 			case Correction:
 			{
-
+				odbc.UpdateProcedure();
+				odbc.ExecuteUpDatePrepare();
 			}break;
 			case AllAccount:
 			{
-
-				system("pause");
+				odbc.ExecTableInfo(L"gameuser");
 			}break;
+
 		}
-		Sleep(1000);
+		system("pause");
 		system("cls");
 	}
 
