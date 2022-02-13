@@ -1,7 +1,7 @@
 #pragma once
 #include <string>
 //#include "winnt.h" interlock함수
-#define		POOL_MAX_SIZE 2 //1024로 변경
+#define		POOL_MAX_SIZE 4096
 #define		POOL_SIZE_MASK (POOL_MAX_SIZE-1)
 
 template <class T>
@@ -31,8 +31,6 @@ public:
 			}
 		}
 	}
-
-public:
 	/*thread에서 run하는 부분으로, 문제가 발생함.
 	메모리 변수 -> 값을 갱신 -> 메모리에 '가서' 값 확인 -> //캐쉬//-> 확인
 	캐쉬데이터와 메모리 주소값은 다르기 때문에 여기서 thread가 돌아가면 큰 문제가 발생한다. 그래서 캐쉬사용을 막아야 한다.
