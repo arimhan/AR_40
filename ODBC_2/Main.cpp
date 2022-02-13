@@ -11,7 +11,7 @@ bool main()
 	odbc.Connect(1, L"\\gameuser.dsn");
 	int Select = 0;
 
-	while (Select < 9)
+	while (cin)
 	{
 
 		cout << "                   <<DB관리 프로그램>>    " << endl;
@@ -39,7 +39,7 @@ bool main()
 			}break;
 			case AllAccount:
 			{
-				odbc.ExecTableInfo(L"gameuser");
+				odbc.ExecuteTableInfo(L"gameuser");
 			}break;
 
 		}

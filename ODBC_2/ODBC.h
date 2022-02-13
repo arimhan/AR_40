@@ -64,7 +64,7 @@ public:
 	bool Init();
 	bool Connect(int iType, const TCHAR* dsn);
 	void Check();
-	bool ExecTableInfo(const TCHAR* szTableName);
+	bool ExecuteTableInfo(const TCHAR* szTableName);
 	void Release();
 
 	void CreatePrepare();

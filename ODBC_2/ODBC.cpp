@@ -35,7 +35,7 @@ bool AODBC::Connect(int iType, const TCHAR* dsn)
 			SQLWCHAR dir[MAX_PATH] = { 0, };
 			GetCurrentDirectory(MAX_PATH, dir);
 			wstring dbpath = dir;
-			dbpath += L"\\gameuser.dsn";
+			dbpath += dsn;//L"\\gameuser.dsn";
 			_stprintf(InCon, _T("FileDsn=%s"),dbpath.c_str());
 			//_stprintf(InCon, _T("%S"), _T("Driver = {SQL Server};Server=directx.kr;Address=127.0.0.1,1433;Network=dbmssocn;Database=KGCAGAME;id=sa;pw=rksk!312}"));
 			ret = SQLDriverConnect(m_hDbc, NULL, InCon, _countof(InCon), OutCon, _countof(OutCon), &cbOutLen, SQL_DRIVER_NOPROMPT);
@@ -80,7 +80,7 @@ void AODBC::Check()
 	MessageBox(NULL, errorBuffer, szSQLState, MB_OK);
 }
 
-bool AODBC::ExecTableInfo(const TCHAR* szTableName)
+bool AODBC::ExecuteTableInfo(const TCHAR* szTableName)
 {
 	ATableInfo info;
 	info.szTableName = szTableName;
