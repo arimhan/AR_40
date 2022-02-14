@@ -1,6 +1,6 @@
 #include "Timer.h"
-//float g_fSecPerFrame = 0.0f;
-//float g_fGameTimer = 0.0f;
+float g_fSecPerFrame = 0.0f;
+float g_fGameTimer = 0.0f;
 
 bool ATimer::Init()
 {
@@ -16,8 +16,10 @@ bool ATimer::Frame()
     m_fSecondPerFrame = dwElapseTime / 1000.0f;
     m_fTimer += m_fSecondPerFrame;
 
-    m_fSecPerFrame = m_fSecondPerFrame;
-    m_fGameTimer = m_fTimer;
+    g_fSecPerFrame = m_fSecondPerFrame;
+    g_fGameTimer = m_fTimer;
+    //m_fSecPerFrame = m_fSecondPerFrame;
+    //m_fGameTimer = m_fTimer;
 
     m_dwBeforeTime = dwCurrentTime;
     return true;//false;

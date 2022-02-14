@@ -118,7 +118,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>../../include/Core3D;../../include/Core_Net</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>../../include/dxtk;../../include/Core3D;../../include/Core_Net</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -143,11 +143,17 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="DxObject.cpp" />
+    <ClCompile Include="Object2D.cpp" />
+    <ClCompile Include="Object3D.cpp" />
+    <ClCompile Include="ObjectNpc2D.cpp" />
+    <ClCompile Include="PlayerObj2D.cpp" />
     <ClCompile Include="Sample.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="DxObject.h" />
+    <ClInclude Include="Object2D.h" />
+    <ClInclude Include="Object3D.h" />
+    <ClInclude Include="ObjectNpc2D.h" />
+    <ClInclude Include="PlayerObj2D.h" />
     <ClInclude Include="Sample.h" />
   </ItemGroup>
   <ItemGroup>
@@ -157,6 +163,11 @@
     <ProjectReference Include="..\Core_Net\Core_Net.vcxproj">
       <Project>{7be0b6fe-7fac-456d-bcb2-9646bbf07917}</Project>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="PixelShader.txt" />
+    <Text Include="Player.txt" />
+    <Text Include="VertexShader.txt" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

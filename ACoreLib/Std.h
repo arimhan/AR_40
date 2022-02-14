@@ -16,6 +16,9 @@ using namespace std;
 
 extern RECT g_rtClient;
 extern HWND g_hWnd;
+//모든곳에서 접근하기 위해 extern 처리한다.
+extern float g_fSecPerFrame;
+extern float g_fGameTimer;
 
 #define GAME_START int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCmdLine, int nCmdShow){ASample core;
 #define GAME_WIN(s,x,y) if (core.SetWinClass(hInstance) == FALSE) return 1; if (core.SetWindow(L#s, x, y) == FALSE) return 1;core.GameRun();return 1;}
