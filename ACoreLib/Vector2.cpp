@@ -13,23 +13,35 @@ AVector2::AVector2(const AVector2& v)
 {
 	x = v.x;  y = v.y;
 }
-AVector2 AVector2::operator+(const AVector2 & v)
+AVector2 AVector2::operator + (const AVector2& v)
 {
 	return AVector2(v.x + x, v.y + y);
 }
-AVector2 AVector2::operator-(const AVector2& v)
+AVector2 AVector2::operator - (const AVector2& v)
 {
 	return AVector2(x - v.x, y - v.y);
 }
-AVector2 AVector2::operator*(float fValue)
+AVector2 AVector2::operator * (float fValue)
 {
 	return AVector2(fValue * x, fValue * y);
 }
-AVector2 AVector2::operator /(float fValue)
+AVector2 AVector2::operator / (float fValue)
 {
 	return AVector2(fValue / x, fValue / y);
 }
-bool AVector2::operator ==(const AVector2& v)
+AVector2 AVector2::operator += (const AVector2& v)
+{
+	this->x = this->x + v.x;
+	this->y = this->y + v.y;
+	return *this;
+}
+AVector2 AVector2::operator -=( const AVector2& v)
+{
+	this->x = this->x - v.x;
+	this->y = this->y - v.y;
+	return *this;
+}
+bool AVector2::operator == (const AVector2& v)
 // 기존 값 - obj의 x,y값의 차가 0에 가까우면 (실수니까 오차범위땜시 fabs와 0.0001f 로 비교) 같기 때문에 true 반환
 {
 	if (fabs(x - v.x) < 0.0001f)
@@ -41,7 +53,7 @@ bool AVector2::operator ==(const AVector2& v)
 	}
 	return false;
 }
-bool AVector2::operator !=(const AVector2& v)
+bool AVector2::operator != (const AVector2& v)
 {
 	if (fabs(x - v.x) < 0.0001f)
 	{
