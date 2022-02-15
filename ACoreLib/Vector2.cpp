@@ -15,6 +15,10 @@ AVector2::AVector2(const AVector2& v)
 }
 AVector2 AVector2::operator + (const AVector2& v)
 {
+	/*AVector2 ret;
+	ret.x = this->x + v.x;
+	ret.y = this->y + v.y;
+	return ret;*/
 	return AVector2(v.x + x, v.y + y);
 }
 AVector2 AVector2::operator - (const AVector2& v)

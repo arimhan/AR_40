@@ -1,7 +1,13 @@
 #pragma once
 #include "Device.h"
+#include "DxObject.h"
+#include "ObjectMgr.h" //I_ObjectMgr 
+#include "Input.h"
+#include "Timer.h"
 class ACore :public ADevice
 {
+public:
+	ATimer		m_GameTimer;
 private:
 	bool CoreInit();
 	//----------------------------------------------------
