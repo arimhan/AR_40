@@ -4,12 +4,14 @@
 #include "DDSTextureLoader.h"
 #include "WICTextureLoader.h"
 #pragma comment	(lib, "d3dcompiler.lib")
+
 struct ASimplevertex
 {
 	AVector2 v;
 	AVector2 t;
 };
 enum ACollisionType { Block = 0, Overlap, Ignore, };
+
 class ABaseObject
 {
 public:
@@ -24,7 +26,7 @@ public:
 	bool		m_bAlphaBlend = true;
 
 public:
-	virtual void HitOverlap();
+	virtual void HitOverlap(ABaseObject* pObj, DWORD dwState);
 	ABaseObject()
 	{
 		m_iCollisionID = -1;
@@ -64,7 +66,7 @@ public:
 	virtual bool LoadTexture(const TCHAR* szColorFileName, const TCHAR* szMaskFileName);
 	virtual bool SetVertexData();
 	virtual bool Create(ID3D11Device* m_pd3dDevice, ID3D11DeviceContext* m_pContext, 
-		const TCHAR* szColorFileName =nullptr, const TCHAR* szMaskFileNmae= nullptr);
+		const TCHAR* szTectureFileName =nullptr, const TCHAR* szMaskFileNmae= nullptr);
 
 	virtual bool Init();
 	virtual bool Frame();

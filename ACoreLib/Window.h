@@ -3,7 +3,6 @@
 class AWindow
 {
 public:
-	//전역변수들
 	HINSTANCE	m_hInstance;
 	HWND		m_hWnd;
 	RECT		m_rtClient;

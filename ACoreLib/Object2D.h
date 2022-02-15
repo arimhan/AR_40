@@ -12,9 +12,9 @@ public:
 	virtual void	SetPosition(AVector2 vPos);
 	virtual void	UpDateRectDraw(RECT rt);
 
-	void Convert(AVector2 center, float fWidth, float fHeight, vector<ASimplevertex>& retList);
+	virtual void Convert(AVector2 center, float fWidth, float fHeight, vector<ASimplevertex>& retList);
 	//화면좌표 위치를 중점으로 NDC 변환
-	void Convert(vector<ASimplevertex>& list, vector<ASimplevertex>& retList);
+	virtual void Convert(vector<ASimplevertex>& list, vector<ASimplevertex>& retList);
 	//화면좌표계를 NDC로 변환
 	virtual bool	SetVertexData() override;
 

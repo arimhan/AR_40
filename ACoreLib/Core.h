@@ -1,7 +1,6 @@
 #pragma once
 #include "Device.h"
 #include "DxObject.h"
-#include "ObjectMgr.h" //I_ObjectMgr 
 #include "Input.h"
 #include "Timer.h"
 class ACore :public ADevice

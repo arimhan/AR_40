@@ -118,12 +118,13 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>../../include/dxtk;../../include/Core3D;../../include/Core_Net</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>../../include/Core3D;../../include/dxtk;../../include/CoreNet</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <AdditionalLibraryDirectories>../../lib/</AdditionalLibraryDirectories>
+      <AdditionalDependencies>DirectXTK.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -143,15 +144,11 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="Object2D.cpp" />
-    <ClCompile Include="Object3D.cpp" />
     <ClCompile Include="ObjectNpc2D.cpp" />
     <ClCompile Include="PlayerObj2D.cpp" />
     <ClCompile Include="Sample.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Object2D.h" />
-    <ClInclude Include="Object3D.h" />
     <ClInclude Include="ObjectNpc2D.h" />
     <ClInclude Include="PlayerObj2D.h" />
     <ClInclude Include="Sample.h" />
@@ -160,8 +157,8 @@
     <ProjectReference Include="..\ACoreLib\ACoreLib.vcxproj">
       <Project>{e57618f9-f8c7-4eb5-a909-0e1072112ae0}</Project>
     </ProjectReference>
-    <ProjectReference Include="..\Core_Net\Core_Net.vcxproj">
-      <Project>{7be0b6fe-7fac-456d-bcb2-9646bbf07917}</Project>
+    <ProjectReference Include="..\CoreNet\CoreNet.vcxproj">
+      <Project>{1d84b747-d141-475c-a4f5-fec5fc6217dc}</Project>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

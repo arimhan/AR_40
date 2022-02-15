@@ -1,4 +1,5 @@
 #include "Core.h"
+#include "ObjectMgr.h" //I_ObjectMgr 
 
 bool ACore::CoreInit()
 {

@@ -1,9 +1,9 @@
 #pragma once
 #include <winsock2.h>
 #include <windows.h>
+#include <d3d11.h>
 #include <vector>
 #include <list>
-#include <d3d11.h>
 #include <map>
 #include <functional>
 #include <iostream>

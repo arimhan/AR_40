@@ -1,4 +1,7 @@
 #include "Sample.h"
+#define PORT_NUM 9110 //9110
+#define ADRESS_NUM "127.0.0.1" //"127.0.0.1"
+
 
 LRESULT ASample::MsgProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
 {
@@ -25,37 +28,36 @@ LRESULT ASample::MsgProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
 }
 bool ASample::Init()
 {
- 
     m_PlayerObj.Init();
+    m_PlayerObj.SetPosition(AVector2(400, 500));
     m_PlayerObj.SetRectSource({ 91,1,42,56 });
     m_PlayerObj.SetRectDraw({ 0,0,42,56 });
-    m_PlayerObj.SetPosition(AVector2(400, 300));
+
     if (!m_PlayerObj.Create(m_pd3dDevice, m_pImmediateContext, L"../../data/bitmap1.bmp", L"../../data/bitmap2.bmp"))
     {
         return false;
     }
     for (int iNpc = 0; iNpc < 5; iNpc++)
     {
-        AObjectNpc2D npc;
-        npc.Init();
+        AObjectNpc2D* npc = new AObjectNpc2D;
+        npc->Init();
         if (iNpc % 2 == 0)
         {
-            npc.SetRectSource({ 46,63,69,79 });
-            npc.SetRectDraw({ 0,0,69,79 });
+            npc->SetRectSource({ 46,63,69,79 });
+            npc->SetRectDraw({ 0,0,69,79 });
         }
         else
         {
-            npc.SetRectSource({ 1,63,42,76 });
-            npc.SetRectDraw({ 0,0,42,76 });
+            npc->SetRectSource({ 1,63,42,76 });
+            npc->SetRectDraw({ 0,0,42,76 });
         }
-        npc.SetPosition(AVector2(50 + iNpc * 150, 50));
-        if (!npc.Create(m_pd3dDevice, m_pImmediateContext, L"../../data/bitmap1.bmp", L"../../data/bitmap2.bmp"))
+        npc->SetPosition(AVector2(50 + iNpc * 50, 50));
+        if (!npc->Create(m_pd3dDevice, m_pImmediateContext, L"../../data/bitmap1.bmp", L"../../data/bitmap2.bmp"))
         {
             return false;
         }
         m_NpcList.push_back(npc);
     }
-
     m_Net.InitNetwork();
     m_Net.Connect(g_hWnd, SOCK_STREAM, PORT_NUM, ADRESS_NUM);// "127.0.0.1"); //IP
     return true;
@@ -63,15 +65,15 @@ bool ASample::Init()
 bool ASample::Frame()
 {
     m_PlayerObj.Frame();
-    for (int iObj = 0; iObj < m_NpcList.size(), iObj++)
+
+    for (int iObj = 0; iObj < m_NpcList.size(); iObj++)
     {
-        RECT rt = m_NpcList[iObj].m_rtDraw;
+        /*RECT rt = m_NpcList[iObj].m_rtDraw;
         rt.right = rt.right + (cos(g_fGameTimer) * 0.5f + 0.5f) * 50.0f;
         rt.bottom = rt.bottom + (cos(g_fGameTimer) * 0.5f + 0.5f) * 50.0f;
-        m_NpcList[iObj].UpDateRectDraw(rt);
-        m_NpcList[iObj].Frame();
+        m_NpcList[iObj].UpDateRectDraw(rt);*/
+        m_NpcList[iObj]->Frame();
     }
-
     int iChatCnt = m_Net.m_PlayerUser.m_PacketPool.size();
     if (iChatCnt > 0 && m_iChatCnt != iChatCnt)
     {
@@ -94,7 +96,7 @@ bool ASample::Frame()
                     DWORD dwEnd = 0;
                     dwEnd = dwCurrent - uPacket.ph.time;
                     ALoginAck ack;
-                    memccpy(&ack, (*iter).m_uPacket.msg, sizeof(ALoginAck));
+                    memcpy(&ack, (*iter).m_uPacket.msg, sizeof(ALoginAck));
                     if (ack.iRet == 1)
                     {
                         int k = 0;
@@ -127,13 +129,21 @@ bool ASample::Render()
 {
     for (int iObj = 0; iObj < m_NpcList.size(); iObj++)
     {
-        m_NpcList[iObj].Render();
+        m_NpcList[iObj]->Render();
     }
     m_PlayerObj.Render();
     return true;
 }
 bool ASample::Release()
 {
+    //각 클래스별로 Release재정의한것 불러오기
+    for (int iObj = 0; iObj < m_NpcList.size(); iObj++)
+    {
+        m_NpcList[iObj]->Release();
+        delete m_NpcList[iObj];
+    }
+    m_PlayerObj.Release();
+    m_NpcList.clear();
     m_Net.CloseNetWork();
     return true;
 }

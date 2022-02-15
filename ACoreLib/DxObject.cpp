@@ -1,5 +1,9 @@
 #include "DxObject.h"
-
+#include "ObjectMgr.h" //I_ObjectMgr. »ç¿ë
+void ABaseObject::HitOverlap(ABaseObject* pObj, DWORD dwState)
+{
+	int test = 0;
+}
 void ADxObject::SetDevice(ID3D11Device* m_pd3dDevice, ID3D11DeviceContext* m_pContext)
 {
 	m_pd3dDevice = m_pd3dDevice;
@@ -35,6 +39,9 @@ bool ADxObject::SetVertexData() { return true; }
 bool ADxObject::Create(ID3D11Device* pd3dDevice, ID3D11DeviceContext* pContext, const TCHAR* szColorFileName , const TCHAR* szMaskFileName )
 {
 	HRESULT hr;
+	m_rtCollision = ARect(m_vPos, m_fWidth, m_fHeight);
+	I_ObjectMgr.AddCollisionExecute(this, bind(&ABaseObject::HitOverlap, this, placeholders::_1, placeholders::_2));
+
 	SetDevice(pd3dDevice, pContext);
 	if (!LoadTexture(szColorFileName, szMaskFileName)) { return false; }
 	if (!SetVertexData()) { return false; }
@@ -119,8 +126,15 @@ bool ADxObject::Render()
 {
 	m_pContext->PSSetShaderResources(0, 1, &m_pSRV0);
 	m_pContext->PSSetShaderResources(1, 1, &m_pSRV1);
-	m_pContext->OMSetBlendState(m_AlphaBlend, 0, -1);
-
+	if (m_bAlphaBlend)
+	{
+		m_pContext->OMSetBlendState(m_AlphaBlend, 0, -1);
+	}
+	else
+	{
+		m_pContext->OMSetBlendState(m_AlphaBlendDisable, 0, -1);
+	}
+	//m_pContext->OMSetBlendState(m_AlphaBlend, 0, -1);
 	m_pContext->IASetInputLayout(m_pVertexLayout);
 	m_pContext->VSSetShader(m_pVertexShader, NULL, 0);
 	m_pContext->PSSetShader(m_pPixelShader, NULL, 0);
@@ -140,11 +154,13 @@ bool ADxObject::Render()
 bool ADxObject::Release() 
 {
 	if (m_AlphaBlend) m_AlphaBlend->Release();
+	if (m_AlphaBlendDisable) m_pSRV1->Release();
 	if (m_pTexture0)  m_pTexture0 ->Release();
+	if (m_pSRV0)      m_pSRV0->Release();
 	if (m_pTexture1)  m_pTexture1 ->Release();
-	if (m_pSRV0)      m_pSRV0     ->Release();
 	if (m_pSRV1)      m_pSRV1     ->Release();
 	m_AlphaBlend   = nullptr;
+	m_AlphaBlendDisable = nullptr;
 	m_pTexture0	   = nullptr;
 	m_pTexture1	   = nullptr;
 	m_pSRV0		   = nullptr;
