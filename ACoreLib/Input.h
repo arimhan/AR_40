@@ -22,7 +22,5 @@ private:
 	AInput();
 public:
 	virtual ~AInput();
-
-
 };
 

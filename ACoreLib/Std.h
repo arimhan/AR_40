@@ -4,6 +4,9 @@
 #include <vector>
 #include <list>
 #include <d3d11.h>
+#include <map>
+#include <functional>
+#include <iostream>
 #include "Collision.h"
 #pragma comment (lib, "d3d11.lib")
 #ifdef _DEBUG
@@ -19,6 +22,18 @@ extern HWND g_hWnd;
 //모든곳에서 접근하기 위해 extern 처리한다.
 extern float g_fSecPerFrame;
 extern float g_fGameTimer;
+
+template<class T>
+class ASingleton
+{
+public:
+	static T& Get()
+	{
+		static T theSingle;
+		return theSingle;
+	}
+};
+
 
 #define GAME_START int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCmdLine, int nCmdShow){ASample core;
 #define GAME_WIN(s,x,y) if (core.SetWinClass(hInstance) == FALSE) return 1; if (core.SetWindow(L#s, x, y) == FALSE) return 1;core.GameRun();return 1;}

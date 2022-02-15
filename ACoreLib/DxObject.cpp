@@ -13,37 +13,31 @@ bool ADxObject::LoadTexture(const TCHAR* szColorFileName, const TCHAR* szMaskFil
 		&m_pSRV0);
 	if (FAILED(hr))
 	{
-		DirectX::CreateDDSTextureFromFile(m_pd3dDevice,
+		hr = DirectX::CreateDDSTextureFromFile(m_pd3dDevice,
 			szColorFileName,
 			(ID3D11Resource**)&m_pTexture0,
 			&m_pSRV0);
 		if (FAILED(hr)) { return false; }
-
 	}
 	m_pTexture0->GetDesc(&m_TextureDesc);
-	hr = DirectX::CreateDDSTextureFromFile(m_pd3dDevice, szMaskFileName, (ID3D11Resource**)&m_pTexture0, &m_pSRV0);
+	hr = DirectX::CreateWICTextureFromFile(m_pd3dDevice, szMaskFileName, (ID3D11Resource**)&m_pTexture1, &m_pSRV1);
 	if (FAILED(hr))
 	{
-		DirectX::CreateDDSTextureFromFile(m_pd3dDevice,
-			szColorFileName,
+		hr = DirectX::CreateDDSTextureFromFile(m_pd3dDevice,
+			szMaskFileName,
 			(ID3D11Resource**)&m_pTexture0,
 			&m_pSRV0);
 		if (FAILED(hr)) { return false; }
-
 	}
 	return true;
 }
-bool ADxObject::SetVertexData()
-{
-	return true;
-}
-bool ADxObject::Create(ID3D11Device* pd3dDevice, ID3D11DeviceContext* pContext, const TCHAR* szColorFileName , const TCHAR* szMaskFileNmae )
+bool ADxObject::SetVertexData() { return true; }
+bool ADxObject::Create(ID3D11Device* pd3dDevice, ID3D11DeviceContext* pContext, const TCHAR* szColorFileName , const TCHAR* szMaskFileName )
 {
 	HRESULT hr;
 	SetDevice(pd3dDevice, pContext);
-	if (!LoadTexture(szColorFileName, szMaskFileNmae)) { return false; }
+	if (!LoadTexture(szColorFileName, szMaskFileName)) { return false; }
 	if (!SetVertexData()) { return false; }
-	
 
 	//m_vPos = vPos;
 	//Convert(m_vPos, fWidth, fHeight, m_VertexList);
@@ -119,43 +113,6 @@ bool ADxObject::Create(ID3D11Device* pd3dDevice, ID3D11DeviceContext* pContext, 
 	hr = m_pd3dDevice->CreateBlendState(&blenddesc, &m_AlphaBlend);
 	return true;
 }
-void ADxObject::Convert(AVector2 center, float fWidth, float fHeight, vector<ASimplevertex>& retList)
-{
-	//화면좌표 위치를 중심으로 NDC 변환
-	vector<ASimplevertex> list(6);
-	float halfWidth = fWidth / 2.0f;
-	float halfHeight = fHeight / 2.0f;
-
-	//(0,0)부터 시계방향으로 0,1,2
-	//2번부터 3,4,5
-	list[0].v = { center.x - halfWidth, center.y - halfHeight };
-	list[1].v = { center.x + halfWidth, center.y - halfHeight };
-	list[2].v = { center.x - halfWidth, center.y + halfHeight };
-
-	list[3].v = list[2].v;
-	list[4].v = list[1].v;
-	//(0,0)을 기준으로
-	list[5].v = { center.x + halfWidth, center.y + halfHeight };
-	Convert(list, retList);
-}
-void ADxObject::Convert(vector<ASimplevertex>& list, vector<ASimplevertex>& retList)
-{
-	//화면좌표계를 NDC로 변환
-	retList.resize(list.size());
-	for(int i=0; i < list.size(); i++)
-	{
-		// 0~ 800 -> 0~1 -> -1 ~ +1
-		retList[i].v.x = list[i].v.x / g_rtClient.right;
-		retList[i].v.y = list[i].v.y / g_rtClient.bottom;
-
-		// 0 ~ 1 -> -1 ~ +1 .... -1 ~ +1 -> 0 ~ 1
-		// x = x * 2 + -1  .... x = x * 0.5f + 0.5f
-		retList[i].v.x = retList[i].v.x * 2.0f - 1.0f;
-		retList[i].v.y = -1.0f * (retList[i].v.y * 2.0f - 1.0f);
-	}
-
-}
-
 bool ADxObject::Init() { return true; }
 bool ADxObject::Frame() { return true; }
 bool ADxObject::Render() 
@@ -210,6 +167,5 @@ bool ADxObject::Release()
 	return true;
 
 }
-
 ADxObject::ADxObject() { m_fSpeed = 0.0001f; }
 ADxObject::~ADxObject() {}

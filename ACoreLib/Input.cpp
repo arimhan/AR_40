@@ -28,11 +28,11 @@ bool AInput::Frame()
         {
             if (m_dwKeyState[iKey] == KEY_PUSH || m_dwKeyState[iKey] == KEY_HOLD)
             {
-                m_dwKeyState[iKey] == KEY_UP;
+                m_dwKeyState[iKey] = KEY_UP;
             }
             else
             {
-                m_dwKeyState[iKey] == KEY_FREE;
+                m_dwKeyState[iKey] = KEY_FREE;
             }
         }
     }

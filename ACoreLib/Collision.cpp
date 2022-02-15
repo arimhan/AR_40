@@ -58,7 +58,7 @@ bool ACollision::IntersectRect(ARect rt1, ARect rt2, ARect* pRect)
 	}
 	return false;
 }
-ACollisionType ACollision::RectToRect(ARect rt1, ARect rt2) 
+ACollisionResult ACollision::RectToRect(ARect rt1, ARect rt2)
 //Rect충돌값 반환값 0, 1, 2로 처리 => enum 
 //IntersectRect에서 교집합을 만든 뒤, 충돌체크를 한다.
 {
@@ -66,11 +66,25 @@ ACollisionType ACollision::RectToRect(ARect rt1, ARect rt2)
 	int iRet = IntersectRect(rt1, rt2, &rtInterection);
 	if (iRet <= 0) //충돌X
 	{
-		return ACollisionType::RECT_OUT;
+		return RECT_OUT;
 	}
-	if (rtInterection == rt2) return ACollisionType::RECT_OVERLAP;
+	if (rtInterection == rt2) return ACollisionResult::RECT_OVERLAP;
 	//rt2와 rtInterection가 같으면 겹쳐짐. (확인 필요)
-	return ACollisionType::RECT_IN;
+	return RECT_IN;
+}
+ACollisionResult ACollision::ToRect(ARect rt1, ARect rt2)
+{
+	//거리판정
+	float fDistanceX, fDistanceY;
+	fDistanceX = fabs(rt1.vMiddle.x - rt2.vMiddle.x);
+	fDistanceY = fabs(rt1.vMiddle.y - rt2.vMiddle.y);
+	float fToX = rt1.size.x / 2.0f + rt1.size.x / 2.0f;
+	float fToY = rt1.size.y / 2.0f + rt1.size.y / 2.0f;
+	if (fDistanceX < fToX && fDistanceY < fToY)
+	{
+		return RECT_OVERLAP;
+	}
+	return RECT_OUT;
 }
 bool ACollision::BoxToPoint(ABox rt, int x, int y, int z) 
 {
@@ -132,15 +146,15 @@ bool ACollision::IntersectBox(ABox rt1, ABox rt2, ABox* pRect)
 	}
 	return false;
 }
-ACollisionType ACollision::BoxToBox(ABox rt1, ABox rt2) 
+ACollisionResult ACollision::BoxToBox(ABox rt1, ABox rt2)
 {
 	ABox rtInterction;
 	int iRet = IntersectBox(rt1, rt2, &rtInterction);
 	if (iRet <= 0)
 	{
-		return ACollisionType::RECT_OUT;
+		return RECT_OUT;
 	}
-	if (rtInterction == rt2) return ACollisionType::RECT_OVERLAP;
-	return ACollisionType::RECT_IN;
+	if (rtInterction == rt2) return ACollisionResult::RECT_OVERLAP;
+	return RECT_IN;
 }
 

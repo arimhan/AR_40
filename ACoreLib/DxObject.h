@@ -3,13 +3,37 @@
 #include <d3dcompiler.h>
 #include "DDSTextureLoader.h"
 #include "WICTextureLoader.h"
-#pragma comment (lib, "d3dcompiler.lib")
+#pragma comment	(lib, "d3dcompiler.lib")
 struct ASimplevertex
 {
 	AVector2 v;
 	AVector2 t;
 };
-class ADxObject
+enum ACollisionType { Block = 0, Overlap, Ignore, };
+class ABaseObject
+{
+public:
+	int			m_iCollisionID;
+	float		m_fSpeed;
+	AVector2	m_vPos;
+	AVector2	m_vDirection;
+	float		m_fWidth;
+	float		m_fHeight;
+	ARect		m_rtCollision;
+	DWORD		m_dwCollisionType;
+	bool		m_bAlphaBlend = true;
+
+public:
+	virtual void HitOverlap();
+	ABaseObject()
+	{
+		m_iCollisionID = -1;
+		m_vDirection.x = 0.0f;
+		m_vDirection.y = 0.0f;
+		m_dwCollisionType = Overlap;
+	}
+};
+class ADxObject : public ABaseObject
 {
 public:
 	ID3D11ShaderResourceView*	m_pSRV0; //숫자 SRV 0번
@@ -17,13 +41,8 @@ public:
 	ID3D11Texture2D*			m_pTexture0;
 	ID3D11Texture2D*			m_pTexture1;
 	ID3D11BlendState*			m_AlphaBlend;
+	ID3D11BlendState*			m_AlphaBlendDisable;
 	D3D11_TEXTURE2D_DESC		m_TextureDesc;
-
-public:
-	float		m_fSpeed;
-	AVector2	m_vPos;
-	float		m_fWidth;
-	float		m_fHeight;
 
 public:
 	vector<ASimplevertex>	m_InitScreenList;
@@ -46,11 +65,6 @@ public:
 	virtual bool SetVertexData();
 	virtual bool Create(ID3D11Device* m_pd3dDevice, ID3D11DeviceContext* m_pContext, 
 		const TCHAR* szColorFileName =nullptr, const TCHAR* szMaskFileNmae= nullptr);
-
-	void Convert(AVector2 center, float fWidth, float fHeight, vector<ASimplevertex>& retList);
-	//화면좌표 위치를 중점으로 NDC 변환
-	void Convert(vector<ASimplevertex>& list, vector<ASimplevertex>& retList);
-	//화면좌표계를 NDC로 변환
 
 	virtual bool Init();
 	virtual bool Frame();
