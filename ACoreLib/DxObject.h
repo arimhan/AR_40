@@ -62,7 +62,7 @@ public:
 	ID3DBlob*	m_pPSCodeResult = nullptr;
 
 public:
-	void SetDevice(ID3D11Device* pd3dDevice, ID3D11DeviceContext* pContext);
+	void SetDevice(ID3D11Device* m_pd3dDevice, ID3D11DeviceContext* m_pContext);
 	virtual bool LoadTexture(const TCHAR* szColorFileName, const TCHAR* szMaskFileName);
 	virtual bool SetVertexData();
 	virtual bool Create(ID3D11Device* m_pd3dDevice, ID3D11DeviceContext* m_pContext, 

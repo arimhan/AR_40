@@ -26,6 +26,10 @@ LRESULT AAsyncSelect::MsgProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
 		{
 		case FD_CONNECT:
 		{
+			ALoginReq login;
+			strcpy_s(login.szID, "arhan");
+			strcpy_s(login.szPS, "1234");
+			SendMsg(m_Sock, (char*)&login, sizeof(ALoginReq), PACKET_LOGIN_REQ);
 			m_bConnect = true;
 		}break;
 		case FD_CLOSE:

@@ -70,5 +70,5 @@ void AObject2D::Convert(vector<ASimplevertex>& list, vector<ASimplevertex>& retL
 bool AObject2D::SetVertexData()
 {
 	Convert(m_vPos, m_fWidth, m_fHeight, m_VertexList);
-	return false;
+	return true;
 }

@@ -42,8 +42,8 @@ struct ALoginAck
 #pragma pack(pop)
 
 #define PACKET_HEADER_SIZE		4
-//#define PACKET_ALoginReq_Size	40
-//#define PACKET_ALoginAck_Size	4
+#define PACKET_ALoginReq_Size	40
+#define PACKET_ALoginAck_Size	4
 //#define PACKET_CHAT_MSG		1000
 //
 enum PACKET_TYPE

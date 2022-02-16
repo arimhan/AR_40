@@ -4,10 +4,10 @@ void ABaseObject::HitOverlap(ABaseObject* pObj, DWORD dwState)
 {
 	int test = 0;
 }
-void ADxObject::SetDevice(ID3D11Device* m_pd3dDevice, ID3D11DeviceContext* m_pContext)
+void ADxObject::SetDevice(ID3D11Device* pd3dDevice, ID3D11DeviceContext* pContext)
 {
-	m_pd3dDevice = m_pd3dDevice;
-	m_pContext = m_pContext;
+	m_pd3dDevice = pd3dDevice;
+	m_pContext = pContext;
 }
 bool ADxObject::LoadTexture(const TCHAR* szColorFileName, const TCHAR* szMaskFileName)
 {
@@ -35,7 +35,10 @@ bool ADxObject::LoadTexture(const TCHAR* szColorFileName, const TCHAR* szMaskFil
 	}
 	return true;
 }
-bool ADxObject::SetVertexData() { return true; }
+bool ADxObject::SetVertexData() 
+{ 
+	return true; 
+}
 bool ADxObject::Create(ID3D11Device* pd3dDevice, ID3D11DeviceContext* pContext, const TCHAR* szColorFileName , const TCHAR* szMaskFileName )
 {
 	HRESULT hr;
@@ -43,12 +46,17 @@ bool ADxObject::Create(ID3D11Device* pd3dDevice, ID3D11DeviceContext* pContext, 
 	I_ObjectMgr.AddCollisionExecute(this, bind(&ABaseObject::HitOverlap, this, placeholders::_1, placeholders::_2));
 
 	SetDevice(pd3dDevice, pContext);
-	if (!LoadTexture(szColorFileName, szMaskFileName)) { return false; }
-	if (!SetVertexData()) { return false; }
+	if (!LoadTexture(szColorFileName, szMaskFileName)) 
+	{ 
+		return false; 
+	}
+	if (!SetVertexData()) 
+	{ 
+		return false; 
+	}
 
 	//m_vPos = vPos;
 	//Convert(m_vPos, fWidth, fHeight, m_VertexList);
-
 	//GPU메모리에 버퍼 할당 (원하는 크기로)
 	D3D11_BUFFER_DESC bd;
 	ZeroMemory(&bd, sizeof(D3D11_BUFFER_DESC));
@@ -95,7 +103,7 @@ bool ADxObject::Create(ID3D11Device* pd3dDevice, ID3D11DeviceContext* pContext, 
 	D3D11_INPUT_ELEMENT_DESC layout[] =
 	{
 		{"POSITION", 0, DXGI_FORMAT_R32G32_FLOAT, 0, 0, D3D11_INPUT_PER_VERTEX_DATA, 0},
-		{"TEXCOORD", 0, DXGI_FORMAT_R32G32_FLOAT, 0, 0, D3D11_INPUT_PER_VERTEX_DATA, 0},
+		{"TEXCOORD", 0, DXGI_FORMAT_R32G32_FLOAT, 0, 8, D3D11_INPUT_PER_VERTEX_DATA, 0},
 	};
 	UINT NumElements = sizeof(layout) / sizeof(layout[0]);
 	hr = m_pd3dDevice->CreateInputLayout(layout, NumElements,
@@ -108,7 +116,7 @@ bool ADxObject::Create(ID3D11Device* pd3dDevice, ID3D11DeviceContext* pContext, 
 	//blenddesc.IndependentBlendEnable;
 	blenddesc.RenderTarget[0].BlendEnable = TRUE;
 	blenddesc.RenderTarget[0].SrcBlend = D3D11_BLEND_SRC_ALPHA;
-	blenddesc.RenderTarget[0].DestBlend = D3D11_BLEND_INV_SRC1_ALPHA;
+	blenddesc.RenderTarget[0].DestBlend = D3D11_BLEND_INV_SRC_ALPHA;
 	blenddesc.RenderTarget[0].BlendOp = D3D11_BLEND_OP_ADD;
 
 	// 알파 연산 저장
@@ -118,6 +126,8 @@ bool ADxObject::Create(ID3D11Device* pd3dDevice, ID3D11DeviceContext* pContext, 
 	blenddesc.RenderTarget[0].RenderTargetWriteMask = D3D11_COLOR_WRITE_ENABLE_ALL;
 
 	hr = m_pd3dDevice->CreateBlendState(&blenddesc, &m_AlphaBlend);
+	blenddesc.RenderTarget[0].BlendEnable = FALSE;
+	hr = m_pd3dDevice->CreateBlendState(&blenddesc, &m_AlphaBlendDisable);
 	return true;
 }
 bool ADxObject::Init() { return true; }
