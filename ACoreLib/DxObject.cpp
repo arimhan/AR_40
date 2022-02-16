@@ -94,8 +94,8 @@ bool ADxObject::Create(ID3D11Device* pd3dDevice, ID3D11DeviceContext* pContext, 
 		if (m_pErrorMsgs) m_pErrorMsgs->Release();
 		return false;
 	}
-	hr = m_pd3dDevice->CreateVertexShader(m_pVSCodeResult->GetBufferPointer(),m_pVSCodeResult->GetBufferSize(),
-		NULL,&m_pVertexShader);
+	hr = m_pd3dDevice->CreatePixelShader(m_pPSCodeResult->GetBufferPointer(),m_pPSCodeResult->GetBufferSize(),
+		NULL,&m_pPixelShader);
 	if (FAILED(hr)) { return false; }
 
 	//정점쉐이더의 결과를 통해서 정점레이아웃을 생성한다.
@@ -163,18 +163,18 @@ bool ADxObject::Render()
 }
 bool ADxObject::Release() 
 {
-	if (m_AlphaBlend) m_AlphaBlend->Release();
-	if (m_AlphaBlendDisable) m_pSRV1->Release();
-	if (m_pTexture0)  m_pTexture0 ->Release();
-	if (m_pSRV0)      m_pSRV0->Release();
-	if (m_pTexture1)  m_pTexture1 ->Release();
-	if (m_pSRV1)      m_pSRV1     ->Release();
-	m_AlphaBlend   = nullptr;
+	if (m_AlphaBlend) m_AlphaBlend		->Release();
+	if (m_AlphaBlendDisable) m_pSRV1	->Release();
+	if (m_pTexture0)  m_pTexture0		->Release();
+	if (m_pSRV0)      m_pSRV0			->Release();
+	if (m_pTexture1)  m_pTexture1		->Release();
+	if (m_pSRV1)      m_pSRV1			->Release();
+	m_AlphaBlend		= nullptr;
 	m_AlphaBlendDisable = nullptr;
-	m_pTexture0	   = nullptr;
-	m_pTexture1	   = nullptr;
-	m_pSRV0		   = nullptr;
-	m_pSRV1		   = nullptr;
+	m_pTexture0			= nullptr;
+	m_pTexture1			= nullptr;
+	m_pSRV0				= nullptr;
+	m_pSRV1				= nullptr;
 
 	if (m_pVSCodeResult) m_pVSCodeResult->Release();
 	if (m_pPSCodeResult) m_pPSCodeResult->Release();
@@ -183,12 +183,12 @@ bool ADxObject::Release()
 	if (m_pVertexShader) m_pVertexShader->Release();
 	if (m_pPixelShader)  m_pPixelShader ->Release();
 
-	m_pVSCodeResult	   = nullptr;
-	m_pPSCodeResult	   = nullptr;
-	m_pVertexBuffer	   = nullptr;
-	m_pVertexLayout	   = nullptr;
-	m_pVertexShader	   = nullptr;
-	m_pPixelShader	   = nullptr;
+	m_pVertexBuffer		= nullptr;
+	m_pVertexLayout		= nullptr;
+	m_pVertexShader		= nullptr;
+	m_pPixelShader		= nullptr;
+	m_pVSCodeResult		= nullptr;
+	m_pPSCodeResult		= nullptr;
 
 	return true;
 

@@ -10,6 +10,7 @@ void AObject2D::SetRectDraw(RECT rt)
 void AObject2D::AddPosition(AVector2 vPos)
 {
 	m_vPos += vPos;
+	m_rtCollision = ARect(m_vPos, m_fWidth, m_fHeight);
 	Convert(m_vPos, m_fWidth, m_fHeight, m_VertexList);
 	m_pContext->UpdateSubresource(m_pVertexBuffer, 0, NULL, &m_VertexList.at(0), 0, 0);
 }
@@ -62,7 +63,7 @@ void AObject2D::Convert(vector<ASimplevertex>& list, vector<ASimplevertex>& retL
 	float h = m_rtSource.bottom / (float)m_TextureDesc.Height;
 	retList[0].t.x = u;				retList[0].t.y = v;		//v0
 	retList[1].t.x = u+w;			retList[1].t.y = v;		//v1
-	retList[2].t.x = u;				retList[2].t.y = v;
+	retList[2].t.x = u;				retList[2].t.y = v + h;
 	retList[3].t = retList[2].t;	
 	retList[4].t = retList[1].t;	
 	retList[5].t.x = u + w;			retList[5].t.y = v + h;

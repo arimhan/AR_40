@@ -30,7 +30,7 @@ bool APlayerObj2D::Frame()
         pos.x += m_fSpeed * g_fSecPerFrame;
         AddPosition(pos);
     }
-    return false;
+    return true;
 }
 void APlayerObj2D::HitOverlap(ABaseObject* pObj, DWORD dwState)
 {

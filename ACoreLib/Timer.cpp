@@ -7,7 +7,7 @@ bool ATimer::Init()
     m_fSecondPerFrame = 0.0f;
     m_fTimer = 0.0f;
     m_dwBeforeTime = timeGetTime();
-    return true;//false;
+    return false;
 }
 bool ATimer::Frame()
 {
@@ -22,13 +22,13 @@ bool ATimer::Frame()
     //m_fGameTimer = m_fTimer;
 
     m_dwBeforeTime = dwCurrentTime;
-    return true;//false;
+    return false;
 }
 bool ATimer::Render()
 {
-    return true;//false;
+    return false;
 }
 bool ATimer::Release()
 {
-    return true;//false;
+    return false;
 }

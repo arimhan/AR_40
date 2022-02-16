@@ -15,8 +15,8 @@ bool AObjectNpc2D::Frame()
     }
     if (m_vPos.y > g_rtClient.bottom - 50.0f)
     {
-        m_vDirection.x *= -1.0f;
-        m_vPos.x = g_rtClient.bottom - 50.0f;
+        m_vDirection.y *= -1.0f;
+        m_vPos.y = g_rtClient.bottom - 50.0f;
     }
     if (m_vPos.y < g_rtClient.top + 50.0f)
     {
