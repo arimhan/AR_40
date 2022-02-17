@@ -3,10 +3,13 @@
 #include "DxObject.h"
 #include "Input.h"
 #include "Timer.h"
+#include "WriteFont.h"
 class ACore :public ADevice
 {
 public:
 	ATimer		m_GameTimer;
+	AWriteFont	m_dxWrite;
+	ID3D11SamplerState*		m_pSamplerState = nullptr;
 private:
 	bool CoreInit();
 	//----------------------------------------------------

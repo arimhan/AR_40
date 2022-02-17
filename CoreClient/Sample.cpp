@@ -2,7 +2,6 @@
 #define PORT_NUM 9110 //9110
 #define ADRESS_NUM "127.0.0.1" //"127.0.0.1"
 
-
 LRESULT ASample::MsgProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
 {
     switch (msg)
@@ -74,6 +73,7 @@ bool ASample::Frame()
         m_NpcList[iObj].UpDateRectDraw(rt);*/
         m_NpcList[iObj]->Frame();
     }
+#pragma region
     int iChatCnt = m_Net.m_PlayerUser.m_PacketPool.size();
     if (iChatCnt > 0 && m_iChatCnt != iChatCnt)
     {
@@ -123,15 +123,32 @@ bool ASample::Frame()
         }
         m_Net.m_PlayerUser.m_PacketPool.clear();
     }
+#pragma endregion NetProcess
+    //Network ver 필요없으므로 블럭처리
     return true;
 }
 bool ASample::Render()
 {
     for (int iObj = 0; iObj < m_NpcList.size(); iObj++)
     {
-        m_NpcList[iObj]->Render();
+        if (m_NpcList[iObj]->m_bDead == false)
+        {
+            m_NpcList[iObj]->Render();
+        }
     }
     m_PlayerObj.Render();
+    return true;
+
+    wstring msg = L"FPS: ";
+    msg += to_wstring(m_GameTimer.m_iFPS);
+    msg += L"   GT: ";
+    msg += to_wstring(m_GameTimer.m_fTimer);
+    m_dxWrite.Draw(msg, g_rtClient, D2D1::ColorF(0,0,1,1));
+
+    RECT rt = g_rtClient;
+    rt.top = 300;
+    rt.left = 0;
+    m_dxWrite.Draw(L"KGCA ArimHan", rt, D2D1::ColorF(0, 0, 1, 1), m_dxWrite.m_pd2dMTShadowTF);
     return true;
 }
 bool ASample::Release()
