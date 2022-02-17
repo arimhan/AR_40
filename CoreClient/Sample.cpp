@@ -137,7 +137,6 @@ bool ASample::Render()
         }
     }
     m_PlayerObj.Render();
-    return true;
 
     wstring msg = L"FPS: ";
     msg += to_wstring(m_GameTimer.m_iFPS);

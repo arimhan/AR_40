@@ -58,6 +58,7 @@ bool ACore::CoreRender()
     //float color[4] = { 0.5f, 0.5f, 1.0f, 1.0f }; // RGB 컬러명 적용 안됨
     float color[4] = { 1.0f, 1.0f, 0.8f, 1.0f };
     m_pImmediateContext->ClearRenderTargetView(m_pRenderTargetView, color);
+    m_pImmediateContext->PSSetSamplers(0, 1, &m_pSamplerState);
 
     Render(); //백버퍼에 랜더링
     m_GameTimer.Render();
