@@ -31,8 +31,15 @@ void AObjectNpc2D::HitOverlap(ABaseObject* pObj, DWORD dwState)
 {
     if (dwState == ACollisionType::Overlap)
     {
-        pObj->m_bAlphaBlend = !pObj->m_bAlphaBlend;
+        //pObj->m_bAlphaBlend = !pObj->m_bAlphaBlend;
     }
+}
+void AObjectNpc2D::HitSelect(ABaseObject* pObj, DWORD dwState)
+{
+    if (m_dwSelectState & ASelectState::M_HOVER)    { INT C = 0; }
+    if (m_dwSelectState & ASelectState::M_FOCUS)    { INT C = 0; }
+    if (m_dwSelectState & ASelectState::M_ACTIVE)   { INT C = 0; }
+    if (m_dwSelectState & ASelectState::M_SELECTED) { m_bSelect = true; m_bDead = true; }
 }
 AObjectNpc2D::AObjectNpc2D()
 {

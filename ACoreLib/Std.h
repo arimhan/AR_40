@@ -17,11 +17,13 @@
 #pragma comment (lib, "ws2_32.lib")
 using namespace std;
 
-extern RECT g_rtClient;
-extern HWND g_hWnd;
+extern RECT		g_rtClient;
+extern HWND		g_hWnd;
 //모든곳에서 접근하기 위해 extern 처리한다.
-extern float g_fSecPerFrame;
-extern float g_fGameTimer;
+extern float	g_fSecPerFrame;
+extern float	g_fGameTimer;
+
+extern POINT	g_ptMouse;
 
 template<class T>
 class ASingleton

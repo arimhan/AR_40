@@ -7,6 +7,8 @@ class AInput
 {
 public:
 	DWORD m_dwKeyState[256];
+	POINT m_ptMouse;
+	DWORD m_dwMouseState[3];
 	static AInput& Get()
 	{
 		static AInput theSingle;

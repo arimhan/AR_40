@@ -1,5 +1,6 @@
 #pragma once
 #include "Object2D.h"
+#include "Input.h"
 
 using CollisionFunction = function<void(ABaseObject*, DWORD)>;
 using SelectFunction = function<void(ABaseObject*, DWORD)>;
@@ -8,6 +9,7 @@ class AObjectMgr : public ASingleton<AObjectMgr>
 {
 private:
 	int		m_iExcueteCollisionID;
+	int		m_iExcuteSelectID;
 	map<int, ABaseObject*>				m_ObjectList;
 	map<int, ABaseObject*>				m_SelectList;
 public:
@@ -20,12 +22,18 @@ public:
 	map<int, SelectFunction>			m_fnSelectExecute;
 public:
 	void	AddCollisionExecute(ABaseObject* owner, CollisionFunction func);
-	void	DeleteExecute(ABaseObject* owner);
+	void	DeleteCollisionExecute(ABaseObject* owner);
+	void	AddSelectExecute(ABaseObject* owner, CollisionFunction func);
+	void	DeleteSelectExecute(ABaseObject* owner);
 	bool	Init();
 	bool	Frame();
 	bool	Release();
 
-	AObjectMgr() { m_iExcueteCollisionID = 0; };
+	AObjectMgr() 
+	{ 
+		m_iExcueteCollisionID = 0;
+		m_iExcuteSelectID = 0;
+	};
 	virtual ~AObjectMgr() {};
 };
 #define I_ObjectMgr AObjectMgr::Get()

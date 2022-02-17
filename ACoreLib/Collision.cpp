@@ -68,7 +68,7 @@ ACollisionResult ACollision::RectToRect(ARect rt1, ARect rt2)
 	{
 		return RECT_OUT;
 	}
-	if (rtInterection == rt2) return ACollisionResult::RECT_OVERLAP;
+	if (rtInterection == rt2) return RECT_OVERLAP;
 	//rt2와 rtInterection가 같으면 겹쳐짐. (확인 필요)
 	return RECT_IN;
 }
@@ -148,13 +148,13 @@ bool ACollision::IntersectBox(ABox rt1, ABox rt2, ABox* pRect)
 }
 ACollisionResult ACollision::BoxToBox(ABox rt1, ABox rt2)
 {
+	//0: 떨어짐		1: 안에 있음		2: 걸쳐있음
 	ABox rtInterction;
 	int iRet = IntersectBox(rt1, rt2, &rtInterction);
 	if (iRet <= 0)
 	{
 		return RECT_OUT;
 	}
-	if (rtInterction == rt2) return ACollisionResult::RECT_OVERLAP;
+	if (rtInterction == rt2) return RECT_OVERLAP;
 	return RECT_IN;
 }
-

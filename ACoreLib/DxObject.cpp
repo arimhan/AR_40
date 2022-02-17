@@ -1,9 +1,7 @@
 #include "DxObject.h"
 #include "ObjectMgr.h" //I_ObjectMgr. »ç¿ë
-void ABaseObject::HitOverlap(ABaseObject* pObj, DWORD dwState)
-{
-	int test = 0;
-}
+void ABaseObject::HitOverlap(ABaseObject* pObj, DWORD dwState) {}
+void ABaseObject::HitSelect(ABaseObject* pObj, DWORD dwState){}
 void ADxObject::SetDevice(ID3D11Device* pd3dDevice, ID3D11DeviceContext* pContext)
 {
 	m_pd3dDevice = pd3dDevice;
@@ -44,6 +42,7 @@ bool ADxObject::Create(ID3D11Device* pd3dDevice, ID3D11DeviceContext* pContext, 
 	HRESULT hr;
 	m_rtCollision = ARect(m_vPos, m_fWidth, m_fHeight);
 	I_ObjectMgr.AddCollisionExecute(this, bind(&ABaseObject::HitOverlap, this, placeholders::_1, placeholders::_2));
+	I_ObjectMgr.AddSelectExecute(this, bind(&ABaseObject::HitSelect, this, placeholders::_1, placeholders::_2));
 
 	SetDevice(pd3dDevice, pContext);
 	if (!LoadTexture(szColorFileName, szMaskFileName)) 
