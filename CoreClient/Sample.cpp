@@ -18,7 +18,7 @@ LRESULT ASample::MsgProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
             aPacket << 77 << "<ArimHan>" << (short)10 << buffer;
             m_Net.SendMsg(m_Net.m_Sock, aPacket.m_uPacket);
 
-            SendMessageA(m_hEdit, WM_SETTEXT, 0, (LPARAM)"<ArimHan>: ");//
+            SendMessageA(m_hEdit, WM_SETTEXT, 0, (LPARAM)"<ArimHan>: ");
         }break;
         }
     }break;
@@ -27,52 +27,31 @@ LRESULT ASample::MsgProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
 }
 bool ASample::Init()
 {
-    m_PlayerObj.Init();
-    m_PlayerObj.SetPosition(AVector2(400, 500));
-    m_PlayerObj.SetRectSource({ 91,1,42,56 });
-    m_PlayerObj.SetRectDraw({ 0,0,42,56 });
+    I_Sound.Init();
 
-    if (!m_PlayerObj.Create(m_pd3dDevice, m_pImmediateContext, L"../../data/bitmap1.bmp", L"../../data/bitmap2.bmp"))
-    {
-        return false;
-    }
-    for (int iNpc = 0; iNpc < 5; iNpc++)
-    {
-        AObjectNpc2D* npc = new AObjectNpc2D;
-        npc->Init();
-        if (iNpc % 2 == 0)
-        {
-            npc->SetRectSource({ 46,63,69,79 });
-            npc->SetRectDraw({ 0,0,69,79 });
-        }
-        else
-        {
-            npc->SetRectSource({ 1,63,42,76 });
-            npc->SetRectDraw({ 0,0,42,76 });
-        }
-        npc->SetPosition(AVector2(50 + iNpc * 50, 50));
-        if (!npc->Create(m_pd3dDevice, m_pImmediateContext, L"../../data/bitmap1.bmp", L"../../data/bitmap2.bmp"))
-        {
-            return false;
-        }
-        m_NpcList.push_back(npc);
-    }
+    m_IntroWorld.Init();
+    m_IntroWorld.m_pd3dDevice = m_pd3dDevice;
+    m_IntroWorld.m_pContext = m_pImmediateContext;
+    m_IntroWorld.Load(L"intro.txt");
+
+    m_ZoneWorld.m_pd3dDevice = m_pd3dDevice;
+    m_ZoneWorld.m_pContext = m_pImmediateContext;
+    m_ZoneWorld.Load(L"zone.txt");
+    
+    AWorld::m_pCurWorld = &m_IntroWorld;
+
     m_Net.InitNetwork();
     m_Net.Connect(g_hWnd, SOCK_STREAM, PORT_NUM, ADRESS_NUM);// "127.0.0.1"); //IP
     return true;
 }
 bool ASample::Frame()
 {
-    m_PlayerObj.Frame();
-
-    for (int iObj = 0; iObj < m_NpcList.size(); iObj++)
+    if (AInput::Get().GetKey(VK_F1) == KEY_PUSH)
     {
-        /*RECT rt = m_NpcList[iObj].m_rtDraw;
-        rt.right = rt.right + (cos(g_fGameTimer) * 0.5f + 0.5f) * 50.0f;
-        rt.bottom = rt.bottom + (cos(g_fGameTimer) * 0.5f + 0.5f) * 50.0f;
-        m_NpcList[iObj].UpDateRectDraw(rt);*/
-        m_NpcList[iObj]->Frame();
+        AWorld::m_pCurWorld = &m_ZoneWorld;
     }
+    AWorld::m_pCurWorld->Frame();
+
 #pragma region
     int iChatCnt = m_Net.m_PlayerUser.m_PacketPool.size();
     if (iChatCnt > 0 && m_iChatCnt != iChatCnt)
@@ -129,14 +108,7 @@ bool ASample::Frame()
 }
 bool ASample::Render()
 {
-    for (int iObj = 0; iObj < m_NpcList.size(); iObj++)
-    {
-        if (m_NpcList[iObj]->m_bDead == false)
-        {
-            m_NpcList[iObj]->Render();
-        }
-    }
-    m_PlayerObj.Render();
+    AWorld::m_pCurWorld->Render();
 
     wstring msg = L"FPS: ";
     msg += to_wstring(m_GameTimer.m_iFPS);
@@ -144,22 +116,18 @@ bool ASample::Render()
     msg += to_wstring(m_GameTimer.m_fTimer);
     m_dxWrite.Draw(msg, g_rtClient, D2D1::ColorF(0,0,1,1));
 
-    RECT rt = g_rtClient;
-    rt.top = 300;
-    rt.left = 0;
-    m_dxWrite.Draw(L"KGCA ArimHan", rt, D2D1::ColorF(0, 0, 1, 1), m_dxWrite.m_pd2dMTShadowTF);
+    //RECT rt = g_rtClient;
+    //rt.top = 300;
+    //rt.left = 0;
+    //m_dxWrite.Draw(L"KGCA ArimHan", rt, D2D1::ColorF(0, 0, 1, 1), m_dxWrite.m_pd2dMTShadowTF);
     return true;
 }
 bool ASample::Release()
 {
     //각 클래스별로 Release재정의한것 불러오기
-    for (int iObj = 0; iObj < m_NpcList.size(); iObj++)
-    {
-        m_NpcList[iObj]->Release();
-        delete m_NpcList[iObj];
-    }
-    m_PlayerObj.Release();
-    m_NpcList.clear();
+    I_Sound.Release();
+    m_IntroWorld.Release();
+    m_ZoneWorld.Release();
     m_Net.CloseNetWork();
     return true;
 }

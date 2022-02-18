@@ -31,7 +31,7 @@ public:
 	DWORD		m_dwCollisionType;
 	bool		m_bAlphaBlend = true;
 public:
-	int			m_bDead;
+	bool		m_bDead;
 	int			m_iSelectID;
 	bool		m_bSelect;
 	DWORD		m_dwSelectType;

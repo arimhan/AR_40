@@ -1,5 +1,5 @@
 #include "World.h"
-AWorld* AWorld::m_CurWorld = nullptr;
+AWorld* AWorld::m_pCurWorld = nullptr;
 bool AWorld::Load(wstring saveFile)
 {
 	return true;

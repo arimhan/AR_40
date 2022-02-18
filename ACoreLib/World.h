@@ -5,7 +5,7 @@ class AWorld
 {
 public:
 	enum AWorldID { A_LOADING, A_LOGIN, A_LOBBY, A_ZONE, A_RESULT, };
-	static AWorld*					m_CurWorld; //현재 map
+	static AWorld*					m_pCurWorld; //현재 map
 
 	ID3D11Device*					m_pd3dDevice;	//디바이스 객체
 	ID3D11DeviceContext*			m_pContext;		//디바이스 컨텍스트 객체

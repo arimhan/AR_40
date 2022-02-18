@@ -37,6 +37,7 @@ class ASoundMgr : public ASingleton<ASoundMgr>
 {
 	int			m_iIndex;
 public:
+	friend class ASingleton<ASoundMgr>;
 	FMOD::System* m_pSystem = nullptr;
 	map<wstring, ASound*> m_list;
 public:

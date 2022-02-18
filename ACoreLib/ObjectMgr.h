@@ -1,6 +1,5 @@
 #pragma once
 #include "Object2D.h"
-#include "Input.h"
 
 using CollisionFunction = function<void(ABaseObject*, DWORD)>;
 using SelectFunction = function<void(ABaseObject*, DWORD)>;

@@ -2,6 +2,7 @@
 bool AWriteFont::SetRenderTarget(IDXGISurface1* pSurface)
 {
 	UINT dpi = GetDpiForWindow(g_hWnd);
+
     D2D1_RENDER_TARGET_PROPERTIES rtp;
 	ZeroMemory(&rtp, sizeof(D2D1_RENDER_TARGET_PROPERTIES));
     rtp.type = D2D1_RENDER_TARGET_TYPE_DEFAULT;
@@ -11,7 +12,8 @@ bool AWriteFont::SetRenderTarget(IDXGISurface1* pSurface)
     rtp.usage = D2D1_RENDER_TARGET_USAGE_NONE;
     rtp.minLevel = D2D1_FEATURE_LEVEL_DEFAULT;
     HRESULT hr = m_pd2dFactory->CreateDxgiSurfaceRenderTarget(pSurface, &rtp, &m_pd2dRT);
-    if (FAILED(hr)) { return false; }
+    // IDXGISurface *dxgiSurface,CONST D2D1_RENDER_TARGET_PROPERTIES* renderTargetProperties,ID2D1RenderTarget** renderTarget
+
     if (FAILED(m_pd2dRT->CreateSolidColorBrush(D2D1::ColorF(D2D1::ColorF::Black), &m_pd2dColorBrush))) { return false; }
     return true;
 }
@@ -45,7 +47,7 @@ bool AWriteFont::Init()
         if (SUCCEEDED(hr))
         {
             hr = m_pWriteFactory->CreateTextFormat(
-                L"±Ã¼­",
+                L"µ¸¿ò",
                 NULL,
                 DWRITE_FONT_WEIGHT_NORMAL,
                 DWRITE_FONT_STYLE_NORMAL,
@@ -60,7 +62,7 @@ bool AWriteFont::Init()
                 DWRITE_FONT_WEIGHT_NORMAL,
                 DWRITE_FONT_STYLE_NORMAL,
                 DWRITE_FONT_STRETCH_NORMAL,
-                50,
+                20,
                 L"en-us",
                 &m_pd2dMTShadowTF);
         }

@@ -162,18 +162,18 @@ bool ADxObject::Render()
 }
 bool ADxObject::Release() 
 {
-	if (m_AlphaBlend) m_AlphaBlend		->Release();
-	if (m_AlphaBlendDisable) m_pSRV1	->Release();
-	if (m_pTexture0)  m_pTexture0		->Release();
-	if (m_pSRV0)      m_pSRV0			->Release();
-	if (m_pTexture1)  m_pTexture1		->Release();
-	if (m_pSRV1)      m_pSRV1			->Release();
-	m_AlphaBlend		= nullptr;
-	m_AlphaBlendDisable = nullptr;
-	m_pTexture0			= nullptr;
-	m_pTexture1			= nullptr;
-	m_pSRV0				= nullptr;
-	m_pSRV1				= nullptr;
+	if (m_AlphaBlend) m_AlphaBlend				->Release();
+	if (m_AlphaBlendDisable) m_AlphaBlendDisable->Release();
+	if (m_pTexture0)  m_pTexture0				->Release();
+	if (m_pSRV0)      m_pSRV0					->Release();
+	if (m_pTexture1)  m_pTexture1				->Release();
+	if (m_pSRV1)      m_pSRV1					->Release();
+	m_AlphaBlend			= nullptr;
+	m_AlphaBlendDisable		= nullptr;
+	m_pTexture0				= nullptr;
+	m_pTexture1				= nullptr;
+	m_pSRV0					= nullptr;
+	m_pSRV1					= nullptr;
 
 	if (m_pVSCodeResult) m_pVSCodeResult->Release();
 	if (m_pPSCodeResult) m_pPSCodeResult->Release();

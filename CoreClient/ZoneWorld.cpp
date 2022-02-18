@@ -1,17 +1,12 @@
 #include "ZoneWorld.h"
 #include "Input.h"
-//#include "World.h"
-//ID3D11Device* m_pd3dDevice;
-//ID3D11DeviceContext* m_pContext;
 
 bool AZoneWorld::Init() { return true; }
 bool AZoneWorld::Load(wstring file)
 {
-
-
 	ASound* pSound = I_Sound.Load("../../data/Sound/Munn.MP3");
 	pSound = I_Sound.Load("../../data/Sound/JoelAdams.MP3");
-	m_pBackGroundMusic = I_Sound.Load("../../data/Sound/JoelAdams.MP3");
+	m_pBackGroundMusic = I_Sound.Load("../../data/Sound/NewHopeClub.mp3");//JoelAdams.MP3");
 	pSound = I_Sound.Load("../../data/Sound/Gun1.wav");
 	m_pBackGroundMusic->Play(true);
 

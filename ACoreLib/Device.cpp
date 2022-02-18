@@ -10,7 +10,10 @@ HRESULT ADevice::InitDevice()
 }
 bool ADevice::CreateDevice()
 {
-	UINT Flags = 0;
+	UINT Flags = D3D11_CREATE_DEVICE_BGRA_SUPPORT;
+#ifdef _DEBUG
+	Flags |= D3D11_CREATE_DEVICE_DEBUG;
+#endif
 	D3D_FEATURE_LEVEL fl[]
 	{
 		D3D_FEATURE_LEVEL_11_0,

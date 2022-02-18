@@ -1,9 +1,6 @@
 #include "PlayerObj2D.h"
 #include "Input.h"
 
-//CoreLib - timer 내 연결이 되어야 하는데 안돼서 임시 처리.
-//float g_fSecPerFrame = 0.0f;
-
 bool APlayerObj2D::Frame()
 {
     if (AInput::Get().GetKey('W') == KEY_HOLD) //상

@@ -55,8 +55,7 @@ bool ACore::CoreFrame()
 bool ACore::CoreRender()
 {
     //float color[4] = { 102.0f, 204.0f, 255.0f, 1.0f }; // 102 204 255
-    //float color[4] = { 0.5f, 0.5f, 1.0f, 1.0f }; // RGB 컬러명 적용 안됨
-    float color[4] = { 1.0f, 1.0f, 0.8f, 1.0f };
+    float color[4] = { 0.1f, 0.25f, 0.1f, 0.0f };
     m_pImmediateContext->ClearRenderTargetView(m_pRenderTargetView, color);
     m_pImmediateContext->PSSetSamplers(0, 1, &m_pSamplerState);
 
