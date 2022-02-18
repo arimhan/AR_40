@@ -7,6 +7,8 @@
 #include <map>
 #include <functional>
 #include <iostream>
+#include <atlconv.h> //a2w
+#include <tchar.h>
 #include "Collision.h"
 #pragma comment (lib, "d3d11.lib")
 #ifdef _DEBUG
@@ -35,6 +37,18 @@ public:
 		return theSingle;
 	}
 };
+
+//string <-> wstirng 변환 함수
+static wstring to_mw(const string& _src)
+{
+	USES_CONVERSION;
+	return wstring(A2W(_src.c_str()));
+}
+static string to_mw(const wstring& _src)
+{
+	USES_CONVERSION;
+	return string(W2A(_src.c_str()));
+}
 
 
 #define GAME_START int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCmdLine, int nCmdShow){ASample core;

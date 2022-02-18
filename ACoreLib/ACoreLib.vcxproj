@@ -120,7 +120,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>_DEBUG;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>../../include/dxtk;</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>../../include/dxtk; ../../include/fmod;</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>
@@ -158,11 +158,13 @@ copy "..\\..\\output\\Debug\\ACoreLib.lib" "..\\..\\Lib\\ACoreLib_d.lib"</Comman
     <ClInclude Include="Object2D.h" />
     <ClInclude Include="Object3D.h" />
     <ClInclude Include="ObjectMgr.h" />
+    <ClInclude Include="Sound.h" />
     <ClInclude Include="Std.h" />
     <ClInclude Include="Timer.h" />
     <ClInclude Include="Vector2.h" />
     <ClInclude Include="Vector3.h" />
     <ClInclude Include="Window.h" />
+    <ClInclude Include="World.h" />
     <ClInclude Include="WriteFont.h" />
   </ItemGroup>
   <ItemGroup>
@@ -174,10 +176,12 @@ copy "..\\..\\output\\Debug\\ACoreLib.lib" "..\\..\\Lib\\ACoreLib_d.lib"</Comman
     <ClCompile Include="Object2D.cpp" />
     <ClCompile Include="Object3D.cpp" />
     <ClCompile Include="ObjectMgr.cpp" />
+    <ClCompile Include="Sound.cpp" />
     <ClCompile Include="Timer.cpp" />
     <ClCompile Include="Vector2.cpp" />
     <ClCompile Include="Vector3.cpp" />
     <ClCompile Include="Window.cpp" />
+    <ClCompile Include="World.cpp" />
     <ClCompile Include="WriteFont.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

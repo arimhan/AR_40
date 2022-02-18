@@ -148,8 +148,8 @@ bool ADxObject::Render()
 	m_pContext->VSSetShader(m_pVertexShader, NULL, 0);
 	m_pContext->PSSetShader(m_pPixelShader, NULL, 0);
 
-	UINT StartSlot;
-	UINT NumBuffers;
+	//UINT StartSlot;
+	//UINT NumBuffers;
 	UINT strides = sizeof(ASimplevertex);
 	UINT Offsets = 0;
 

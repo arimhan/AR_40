@@ -3,11 +3,13 @@
 #include "AsyncSelect.h"
 #include "PlayerObj2D.h"
 #include "ObjectNpc2D.h"
+#include "Sound.h"
 
 class ASample : public ACore
 {
 public:
 	APlayerObj2D			m_PlayerObj;
+	ASoundMgr				m_SoundMgr;
 public:
 	vector<AObjectNpc2D*>	m_NpcList;
 	AAsyncSelect			m_Net;
