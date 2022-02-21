@@ -78,5 +78,25 @@ bool ACore::CoreRelease()
     CleanUpDevice();
     return true;
 }
+void ACore::CreateResizeDevice(UINT iWidth, UINT iHeight){}
+void ACore::DeleteResizeDevice(UINT iWidth, UINT iHeight){}
+void ACore::ResizeDevice(UINT iWidth, UINT iHeight)
+{
+    if (m_pd3dDevice == nullptr) return;
+    //자식에서 부모를 다시 호출하도록 처리 (core의 부모가 Device이기 때문에 전달이 되어야 한다)
+    DeleteResizeDevice(iWidth, iHeight);
+
+    m_dxWrite.DeleteDeviceResize();
+    ADevice::ResizeDevice(iWidth, iHeight);
+
+    IDXGISurface1* pSurface = nullptr;
+    HRESULT hr = m_pSwapChain->GetBuffer(0, __uuidof(IDXGISurface1), (void**)&pSurface);
+    if (SUCCEEDED(hr))
+    {
+        m_dxWrite.SetRenderTarget(pSurface);
+    }
+    if (pSurface) pSurface->Release();
+    CreateResizeDevice(iWidth, iHeight);
+}
 ACore::ACore() {}
 ACore::~ACore() {}

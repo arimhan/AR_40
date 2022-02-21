@@ -74,7 +74,25 @@ bool ADevice::SetViewPort()
 
 	return true;
 }
+void ADevice::ResizeDevice(UINT iWidth, UINT iHeight)
+{
 
+	//그냥 Release하기 전, omset함수를 활용해 1(풀어주기), null로 삭제 후 release로 지운 뒤 갱신을 한다!
+	m_pImmediateContext->OMSetRenderTargets(1, NULL, NULL);
+	//RenderTargetView함수에서 Create를 하고 있기 때문에 릴리즈를 먼저 시켜준 뒤 사이즈 갱신을 할 수 있도록 한다.
+	if (m_pRenderTargetView)m_pRenderTargetView->Release();
+	HRESULT hr = m_pSwapChain->ResizeBuffers(m_SwapChainDesc.BufferCount, iWidth, iHeight, //크기만 갱신한다
+												m_SwapChainDesc.BufferDesc.Format,
+												m_SwapChainDesc.Flags);
+	if (SUCCEEDED(hr))
+	{
+		m_pSwapChain->GetDesc(&m_SwapChainDesc);
+	}
+	//iWidth, iHeight값을 갱신했기 때문에 아래 함수에서 크기들을 갱신해줘야 한다. 
+	//그래서 함수들을 재 호출한다!
+	CreateRenderTargetView();
+	SetViewPort();
+}
 bool ADevice::CleanUpDevice()
 {
 	if (m_pd3dDevice) m_pd3dDevice->Release();

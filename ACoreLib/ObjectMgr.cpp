@@ -1,4 +1,5 @@
 #include "ObjectMgr.h"
+#include "Input.h"
 
 void AObjectMgr::AddCollisionExecute(ABaseObject* owner, CollisionFunction func)
 {

@@ -16,6 +16,7 @@ public:
 	virtual bool	CleanUpDevice();
 	virtual bool	CreateRenderTargetView();
 	virtual bool	SetViewPort();
+	void			ResizeDevice(UINT iWidth, UINT iHeight);
 public:
 	ADevice();
 	virtual ~ADevice();

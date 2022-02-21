@@ -8,6 +8,12 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
     g_pWindow->MsgProc(hWnd, msg, wParam, lParam);
     switch (msg) //메시지마다 WndProc 처리
     {
+        case WM_SIZE:
+        {
+            UINT iWidth = LOWORD(lParam);
+            UINT iHeight = HIWORD(wParam);
+            g_pWindow->ResizeDevice(iWidth, iHeight);
+        }break;
         case WM_DESTROY:
         {
             PostQuitMessage(0);
@@ -17,6 +23,11 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
     }
     return 0;
 }
+void AWindow::ResizeDevice(UINT iWidth, UINT iHeight)
+{
+    //Device, Core 에서 재정의
+}
+
 BOOL AWindow::SetWinClass(HINSTANCE hInstance)
 {
     m_hInstance = hInstance;

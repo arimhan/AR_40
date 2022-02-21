@@ -1,4 +1,10 @@
 #include "WriteFont.h"
+void AWriteFont::DeleteDeviceResize()
+{
+    //아래 2가지는 먼저 삭제처리 되어야 한다.
+    if (m_pd2dColorBrush)   m_pd2dColorBrush->Release();
+    if (m_pd2dRT)           m_pd2dRT->Release();
+}
 bool AWriteFont::SetRenderTarget(IDXGISurface1* pSurface)
 {
 	UINT dpi = GetDpiForWindow(g_hWnd);
@@ -13,7 +19,7 @@ bool AWriteFont::SetRenderTarget(IDXGISurface1* pSurface)
     rtp.minLevel = D2D1_FEATURE_LEVEL_DEFAULT;
     HRESULT hr = m_pd2dFactory->CreateDxgiSurfaceRenderTarget(pSurface, &rtp, &m_pd2dRT);
     // IDXGISurface *dxgiSurface,CONST D2D1_RENDER_TARGET_PROPERTIES* renderTargetProperties,ID2D1RenderTarget** renderTarget
-
+    if (FAILED(hr))  return false; 
     if (FAILED(m_pd2dRT->CreateSolidColorBrush(D2D1::ColorF(D2D1::ColorF::Black), &m_pd2dColorBrush))) { return false; }
     return true;
 }

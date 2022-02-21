@@ -35,7 +35,118 @@ bool ADxObject::LoadTexture(const TCHAR* szColorFileName, const TCHAR* szMaskFil
 }
 bool ADxObject::SetVertexData() 
 { 
-	return true; 
+	return true;
+}
+bool ADxObject::SetIndexData()
+{
+	return true;
+}
+
+//VertexBuffer, IndexBuffer, ConstantBuffer 생성 방법 동일------------
+bool ADxObject::CreateVertexBuffer()
+{
+	if (m_VertexList.size() <= 0) return false;
+	HRESULT hr;
+	//m_vPos = vPos;
+	//Convert(m_vPos, fWidth, fHeight, m_VertexList);
+	//GPU메모리에 버퍼 할당 (원하는 크기로)
+	D3D11_BUFFER_DESC bd;
+	ZeroMemory(&bd, sizeof(D3D11_BUFFER_DESC));
+	bd.ByteWidth = sizeof(ASimplevertex) * m_VertexList.size();
+	bd.Usage = D3D11_USAGE_DEFAULT;
+	bd.BindFlags = D3D11_BIND_VERTEX_BUFFER;
+
+	D3D11_SUBRESOURCE_DATA sd;
+	ZeroMemory(&sd, sizeof(D3D11_SUBRESOURCE_DATA));
+	sd.pSysMem = &m_VertexList.at(0);
+
+	if (FAILED(hr = m_pd3dDevice->CreateBuffer(&bd, &sd, &m_pVertexBuffer))) { return false; }
+	return true;
+}
+bool ADxObject::CreateIndexBuffer()
+{
+	if (m_IndexList.size() <= 0) return true;
+	HRESULT hr;
+	//GPU메모리에 버퍼 할당 (원하는 크기로)
+	D3D11_BUFFER_DESC bd;
+	ZeroMemory(&bd, sizeof(D3D11_BUFFER_DESC));
+	bd.ByteWidth = sizeof(ASimplevertex) * m_IndexList.size();
+	bd.Usage = D3D11_USAGE_DEFAULT;
+	bd.BindFlags = D3D11_BIND_INDEX_BUFFER;
+
+	D3D11_SUBRESOURCE_DATA sd;
+	ZeroMemory(&sd, sizeof(D3D11_SUBRESOURCE_DATA));
+	sd.pSysMem = &m_IndexList.at(0);
+
+	if (FAILED(hr = m_pd3dDevice->CreateBuffer(&bd, &sd, &m_pIndexBuffer))) { return false; }
+	return true;
+}
+bool ADxObject::CreateConstantBuffer()
+{
+	HRESULT hr;
+	//GPU메모리에 버퍼 할당 (원하는 크기로)
+	D3D11_BUFFER_DESC bd;
+	ZeroMemory(&bd, sizeof(D3D11_BUFFER_DESC));
+	bd.ByteWidth = sizeof(AConstanceData);
+	bd.Usage = D3D11_USAGE_DEFAULT;
+	bd.BindFlags = D3D11_BIND_CONSTANT_BUFFER;
+
+	D3D11_SUBRESOURCE_DATA sd;
+	ZeroMemory(&sd, sizeof(D3D11_SUBRESOURCE_DATA));
+	sd.pSysMem = &m_ConstantList;
+
+	if (FAILED(hr = m_pd3dDevice->CreateBuffer(&bd, &sd, &m_pConstantBuffer))) { return false; }
+	return true;
+}
+//Vertex, IndexBuffer 생성 ----------- 끝
+
+bool ADxObject::CreateVertexShader(const TCHAR* szFile)
+{
+	//txt파일 생성 및 작성
+	//쉐이더 컴파일 -> 오브젝트 파일을 통해서 쉐이더 객체 생성
+	HRESULT hr = D3DCompileFromFile(szFile, NULL, NULL, "VS", "vs_5_0", 0, 0, &m_pVSCodeResult, &m_pErrorMsgs);
+	if (FAILED(hr))
+	{
+		MessageBoxA(NULL, (char*)m_pErrorMsgs->GetBufferPointer(), "ERROR", MB_OK);
+		if (m_pErrorMsgs) m_pErrorMsgs->Release();
+		return false;
+	}
+	hr = m_pd3dDevice->CreateVertexShader(
+		m_pVSCodeResult->GetBufferPointer(),
+		m_pVSCodeResult->GetBufferSize(),
+		NULL,
+		&m_pVertexShader);
+	if (FAILED(hr)) { return false; }
+	return true;
+}
+bool ADxObject::CreatePixelShader(const TCHAR* szFile)
+{
+	HRESULT hr = D3DCompileFromFile(szFile, NULL, NULL, "PS", "ps_5_0", 0, 0, &m_pPSCodeResult, &m_pErrorMsgs);
+	if (FAILED(hr))
+	{
+		MessageBoxA(NULL, (char*)m_pErrorMsgs->GetBufferPointer(), "ERROR", MB_OK);
+		if (m_pErrorMsgs) m_pErrorMsgs->Release();
+		return false;
+	}
+	hr = m_pd3dDevice->CreatePixelShader(m_pPSCodeResult->GetBufferPointer(), m_pPSCodeResult->GetBufferSize(),
+		NULL, &m_pPixelShader);
+	if (FAILED(hr)) { return false; }
+	return true;
+}
+bool ADxObject::CreateInputLayout() 
+{
+	//정점쉐이더의 결과를 통해서 정점레이아웃을 생성한다.
+		//정점버퍼의 각 정점의 어떤 성분을 정점쉐이더에 전달할건지 
+	D3D11_INPUT_ELEMENT_DESC layout[] =
+	{
+		{"POSITION", 0, DXGI_FORMAT_R32G32_FLOAT, 0, 0, D3D11_INPUT_PER_VERTEX_DATA, 0},
+		{"TEXCOORD", 0, DXGI_FORMAT_R32G32_FLOAT, 0, 8, D3D11_INPUT_PER_VERTEX_DATA, 0},
+	};
+	UINT NumElements = sizeof(layout) / sizeof(layout[0]);
+	HRESULT hr = m_pd3dDevice->CreateInputLayout(layout, NumElements,
+		m_pVSCodeResult->GetBufferPointer(), m_pVSCodeResult->GetBufferSize(), &m_pVertexLayout);
+	if (FAILED(hr)) { return false; }
+	return true;
 }
 bool ADxObject::Create(ID3D11Device* pd3dDevice, ID3D11DeviceContext* pContext, const TCHAR* szColorFileName , const TCHAR* szMaskFileName )
 {
@@ -53,61 +164,30 @@ bool ADxObject::Create(ID3D11Device* pd3dDevice, ID3D11DeviceContext* pContext, 
 	{ 
 		return false; 
 	}
-
-	//m_vPos = vPos;
-	//Convert(m_vPos, fWidth, fHeight, m_VertexList);
-	//GPU메모리에 버퍼 할당 (원하는 크기로)
-	D3D11_BUFFER_DESC bd;
-	ZeroMemory(&bd, sizeof(D3D11_BUFFER_DESC));
-	bd.ByteWidth = sizeof(ASimplevertex) * m_VertexList.size();
-	bd.Usage=D3D11_USAGE_DEFAULT;
-	bd.BindFlags = D3D11_BIND_VERTEX_BUFFER;
-
-	D3D11_SUBRESOURCE_DATA sd;
-	ZeroMemory(&sd, sizeof(D3D11_SUBRESOURCE_DATA));
-	sd.pSysMem = &m_VertexList.at(0);
-
-	if (FAILED(hr = m_pd3dDevice->CreateBuffer(&bd, &sd, &m_pVertexBuffer))) { return false; }
-
-	//txt파일 생성 및 작성
-	//쉐이더 컴파일 -> 오브젝트 파일을 통해서 쉐이더 객체 생성
-
-	hr = D3DCompileFromFile(L"VertexShader.txt", NULL, NULL, "VS", "vs_5_0", 0, 0, &m_pVSCodeResult, &m_pErrorMsgs);
-	if (FAILED(hr))
+	if (!SetIndexData())
 	{
-		MessageBoxA(NULL, (char*)m_pErrorMsgs->GetBufferPointer(), "ERROR", MB_OK);
-		if (m_pErrorMsgs) m_pErrorMsgs->Release();
 		return false;
 	}
-	hr = m_pd3dDevice->CreateVertexShader(    
-		m_pVSCodeResult->GetBufferPointer(),
-		m_pVSCodeResult->GetBufferSize(),
-		NULL,
-		&m_pVertexShader);
-	if (FAILED(hr)) { return false; }
-
-	hr = D3DCompileFromFile(L"PixelShader.txt", NULL, NULL, "PS", "ps_5_0", 0, 0, &m_pPSCodeResult, &m_pErrorMsgs);
-	if (FAILED(hr))
+	if (!CreateVertexBuffer())
 	{
-		MessageBoxA(NULL, (char*)m_pErrorMsgs->GetBufferPointer(), "ERROR", MB_OK);
-		if (m_pErrorMsgs) m_pErrorMsgs->Release();
 		return false;
 	}
-	hr = m_pd3dDevice->CreatePixelShader(m_pPSCodeResult->GetBufferPointer(),m_pPSCodeResult->GetBufferSize(),
-		NULL,&m_pPixelShader);
-	if (FAILED(hr)) { return false; }
-
-	//정점쉐이더의 결과를 통해서 정점레이아웃을 생성한다.
-	//정점버퍼의 각 정점의 어떤 성분을 정점쉐이더에 전달할건지 
-	D3D11_INPUT_ELEMENT_DESC layout[] =
+	if (!CreateIndexBuffer())
 	{
-		{"POSITION", 0, DXGI_FORMAT_R32G32_FLOAT, 0, 0, D3D11_INPUT_PER_VERTEX_DATA, 0},
-		{"TEXCOORD", 0, DXGI_FORMAT_R32G32_FLOAT, 0, 8, D3D11_INPUT_PER_VERTEX_DATA, 0},
-	};
-	UINT NumElements = sizeof(layout) / sizeof(layout[0]);
-	hr = m_pd3dDevice->CreateInputLayout(layout, NumElements,
-		m_pVSCodeResult->GetBufferPointer(), m_pVSCodeResult->GetBufferSize(), &m_pVertexLayout);
-	if (FAILED(hr)) { return false; }
+		return false;
+	}
+	if (!CreateVertexShader(L"VertexShader.txt")) //szFile을 여기서 넘긴다
+	{
+		return false;
+	}
+	if (!CreatePixelShader(L"PixelShader.txt"))
+	{
+		return false;
+	}
+	if (!CreateInputLayout())
+	{
+		return false;
+	}
 
 	D3D11_BLEND_DESC blenddesc;
 	ZeroMemory(&blenddesc, sizeof(D3D11_BLEND_DESC));
@@ -148,16 +228,22 @@ bool ADxObject::Render()
 	m_pContext->VSSetShader(m_pVertexShader, NULL, 0);
 	m_pContext->PSSetShader(m_pPixelShader, NULL, 0);
 
-	//UINT StartSlot;
-	//UINT NumBuffers;
+	UINT startslot;
+	UINT numbuffers;
 	UINT strides = sizeof(ASimplevertex);
 	UINT Offsets = 0;
 
 	m_pContext->IASetVertexBuffers(0, 1, &m_pVertexBuffer, &strides, &Offsets);
+	m_pContext->VSSetConstantBuffers(0, 1, &m_pConstantBuffer);
+
 	m_pContext->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
 	/*D3D11_PRIMITIVE_TOPOLOGY_POINTLIST
 	D3D11_PRIMITIVE_TOPOLOGY_LINELIST*/
-	m_pContext->Draw(m_VertexList.size(), 0);
+
+	if (m_IndexList.size() <= 0)
+		m_pContext->Draw(m_VertexList.size(), 0);
+	else
+		m_pContext->DrawIndexed(m_IndexList.size(), 0, 0);
 	return true;
 }
 bool ADxObject::Release() 
@@ -178,6 +264,7 @@ bool ADxObject::Release()
 	if (m_pVSCodeResult) m_pVSCodeResult->Release();
 	if (m_pPSCodeResult) m_pPSCodeResult->Release();
 	if (m_pVertexBuffer) m_pVertexBuffer->Release();
+	if (m_pIndexBuffer) m_pIndexBuffer->Release();
 	if (m_pVertexLayout) m_pVertexLayout->Release();
 	if (m_pVertexShader) m_pVertexShader->Release();
 	if (m_pPixelShader)  m_pPixelShader ->Release();
@@ -185,6 +272,7 @@ bool ADxObject::Release()
 	m_pVertexBuffer		= nullptr;
 	m_pVertexLayout		= nullptr;
 	m_pVertexShader		= nullptr;
+	m_pIndexBuffer		= nullptr;
 	m_pPixelShader		= nullptr;
 	m_pVSCodeResult		= nullptr;
 	m_pPSCodeResult		= nullptr;

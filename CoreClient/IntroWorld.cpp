@@ -16,5 +16,7 @@ bool AIntroWorld::Load(wstring file)
 {
 	//시작화면에서는 이 음악이 나오도록 ~
 	m_pBackGroundMusic = I_Sound.Load("../../data/Sound/NewHopeClub.MP3");
+	AObject2D* pObj = new AObject2D;
+	pObj->Init();
 	return true;
 }

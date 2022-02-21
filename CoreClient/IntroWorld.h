@@ -6,7 +6,7 @@
 class AIntroWorld :public AWorld
 {
 public:
-	APlayerObj2D	m_PlayerObj;
+	AObject2D		m_PlayerObj; //APlayerObj2D -> AObject2D로 변경 (플레이어가 아니므로)
 	ASound*			m_pBackGroundMusic;
 public:
 	bool			Load(wstring file) override;

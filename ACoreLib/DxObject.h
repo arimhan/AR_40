@@ -21,15 +21,17 @@ enum ASelectState {
 class ABaseObject
 {
 public:
-	int			m_iCollisionID;
 	float		m_fSpeed;
 	AVector2	m_vPos;
 	AVector2	m_vDirection;
 	float		m_fWidth;
 	float		m_fHeight;
+
+	int			m_iCollisionID;
 	ARect		m_rtCollision;
 	DWORD		m_dwCollisionType;
 	bool		m_bAlphaBlend = true;
+
 public:
 	bool		m_bDead;
 	int			m_iSelectID;
@@ -54,6 +56,18 @@ public:
 		m_dwSelectType = Overlap; //둘 다 ACollisionType열거형 내 Overlap임. enum Class사용 시 위와 같이 표기.
 	}
 };
+// Index, Constance Buffer (인덱스, 상수버퍼 추가)
+struct AIndex
+{
+	DWORD _0;
+	DWORD _1;
+	DWORD _2;
+};
+struct AConstanceData
+{
+	AVector4 Color;
+	AVector4 Timer;
+};
 class ADxObject : public ABaseObject
 {
 public:
@@ -69,6 +83,13 @@ public:
 	vector<ASimplevertex>	m_InitScreenList;
 	vector<ASimplevertex>	m_VertexList;
 	ID3D11Buffer*			m_pVertexBuffer;
+
+	vector<DWORD>			m_IndexList;
+	ID3D11Buffer*			m_pIndexBuffer;
+
+	AConstanceData			m_ConstantList;
+	ID3D11Buffer*			m_pConstantBuffer;
+
 	ID3D11InputLayout*		m_pVertexLayout;
 	ID3D11VertexShader*		m_pVertexShader;
 	ID3D11PixelShader*		m_pPixelShader;
@@ -76,21 +97,31 @@ public:
 	ID3D11Device*			m_pd3dDevice;
 	ID3D11DeviceContext*	m_pContext;
 
-	ID3DBlob*	m_pVSCodeResult = nullptr;
-	ID3DBlob*	m_pErrorMsgs = nullptr;
-	ID3DBlob*	m_pPSCodeResult = nullptr;
+	ID3DBlob*				m_pVSCodeResult = nullptr;
+	ID3DBlob*				m_pErrorMsgs = nullptr;
+	ID3DBlob*				m_pPSCodeResult = nullptr;
 
 public:
-	void SetDevice(ID3D11Device* m_pd3dDevice, ID3D11DeviceContext* m_pContext);
-	virtual bool LoadTexture(const TCHAR* szColorFileName, const TCHAR* szMaskFileName);
-	virtual bool SetVertexData();
-	virtual bool Create(ID3D11Device* m_pd3dDevice, ID3D11DeviceContext* m_pContext, 
-		const TCHAR* szTectureFileName =nullptr, const TCHAR* szMaskFileNmae= nullptr);
+	void			SetDevice(ID3D11Device* m_pd3dDevice, ID3D11DeviceContext* m_pContext);
+	virtual bool	LoadTexture(const TCHAR* szColorFileName, const TCHAR* szMaskFileName);
+	virtual bool	SetVertexData();
+	virtual bool	SetIndexData();
 
-	virtual bool Init();
-	virtual bool Frame();
-	virtual bool Render();
-	virtual bool Release();
+	virtual bool		Create(ID3D11Device* m_pd3dDevice, ID3D11DeviceContext* m_pContext, 
+		const TCHAR* szTectureFileName =nullptr, const TCHAR* szMaskFileNmae= nullptr);
+		//Create를 기능별로 분리하여 함수화
+		virtual bool	CreateVertexBuffer();
+		virtual bool	CreateIndexBuffer();
+		virtual bool	CreateConstantBuffer();
+		virtual bool	CreateVertexShader(const TCHAR* szFile);
+		virtual bool	CreatePixelShader(const TCHAR* szFile);
+		virtual bool	CreateInputLayout();
+
+public:
+	virtual bool	Init();
+	virtual bool	Frame();
+	virtual bool	Render();
+	virtual bool	Release();
 
 	ADxObject();
 	~ADxObject();

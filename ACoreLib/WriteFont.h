@@ -8,17 +8,21 @@
 class AWriteFont
 {
 public:
+	//독립적
 	ID2D1Factory*			m_pd2dFactory = nullptr;
 	IDWriteFactory*			m_pWriteFactory = nullptr;
 
+	//종속적 => 새로 만들어야 함
 	ID2D1RenderTarget*		m_pd2dRT = nullptr;
 	IDWriteTextFormat*		m_pd2dTextFormat = nullptr;
 	IDWriteTextFormat*		m_pd2dMTShadowTF = nullptr;
 	ID2D1SolidColorBrush*	m_pd2dColorBrush = nullptr;
 
 public:
+	void	DeleteDeviceResize();
 	bool	SetRenderTarget(IDXGISurface1* pSurface);
 	void	Draw(wstring msg, RECT rt, D2D1::ColorF color, IDWriteTextFormat* tf = nullptr);
+public:
 	bool	Init();
 	bool	Frame();
 	bool	Render();
