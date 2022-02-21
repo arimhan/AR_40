@@ -106,6 +106,7 @@ public:
 	virtual bool	LoadTexture(const TCHAR* szColorFileName, const TCHAR* szMaskFileName);
 	virtual bool	SetVertexData();
 	virtual bool	SetIndexData();
+	virtual bool	SetConstantData();
 
 	virtual bool		Create(ID3D11Device* m_pd3dDevice, ID3D11DeviceContext* m_pContext, 
 		const TCHAR* szTectureFileName =nullptr, const TCHAR* szMaskFileNmae= nullptr);

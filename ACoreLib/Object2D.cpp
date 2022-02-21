@@ -70,16 +70,31 @@ void AObject2D::Convert(vector<ASimplevertex>& list, vector<ASimplevertex>& retL
 		retList[i].v.x = retList[i].v.x * 2.0f - 1.0f;
 		retList[i].v.y = -1.0f * (retList[i].v.y * 2.0f - 1.0f);
 	}
-	float u = m_rtSource.left	/ (float)m_TextureDesc.Width;
-	float v = m_rtSource.top	/ (float)m_TextureDesc.Height;
-	float w = m_rtSource.right	/ (float)m_TextureDesc.Width;
-	float h = m_rtSource.bottom / (float)m_TextureDesc.Height;
-	retList[0].t.x = u;				retList[0].t.y = v;		//v0
-	retList[1].t.x = u+w;			retList[1].t.y = v;		//v1
-	retList[2].t.x = u;				retList[2].t.y = v + h;
-	retList[3].t = retList[2].t;	
-	retList[4].t = retList[1].t;	
-	retList[5].t.x = u + w;			retList[5].t.y = v + h;
+	m_rtSource.left = 0;		m_rtSource.right = 0;
+	m_rtSource.top = 0;			m_rtSource.bottom = 0;
+	if (m_rtSource.left == 0 && m_rtSource.right == 0 && m_rtSource.top == 0 && m_rtSource.bottom == 0)
+		//m_rtSource의 상하좌우 값이 0일때
+	{
+		retList[0].t.x = 0.0f;			retList[0].t.y = 0.0f;	//v0
+		retList[1].t.x = 1.0f;			retList[1].t.y = 0.0f;	//v1
+		retList[2].t.x = 0.0f;			retList[2].t.y = 1.0f;
+		retList[3].t = retList[2].t;	
+		retList[4].t = retList[1].t;	
+		retList[5].t.x = 1.0f;			retList[5].t.y = 1.0f;
+	}
+	else
+	{
+		float u = m_rtSource.left / (float)m_TextureDesc.Width;
+		float v = m_rtSource.top / (float)m_TextureDesc.Height;
+		float w = m_rtSource.right / (float)m_TextureDesc.Width;
+		float h = m_rtSource.bottom / (float)m_TextureDesc.Height;
+		retList[0].t.x = u;				retList[0].t.y = v;		//v0
+		retList[1].t.x = u + w;			retList[1].t.y = v;		//v1
+		retList[2].t.x = u;				retList[2].t.y = v + h;
+		retList[3].t = retList[2].t;
+		retList[4].t = retList[1].t;
+		retList[5].t.x = u + w;			retList[5].t.y = v + h;
+	}
 }
 void AObject2D::ConvertIndex(vector<ASimplevertex>& list, vector<ASimplevertex>& retList)
 {

@@ -25,6 +25,14 @@ LRESULT ASample::MsgProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
     }
     return m_Net.MsgProc(hWnd, msg, wParam, lParam);
 }
+void ASample::CreateResizeDevice(UINT iWidth, UINT iHeight)
+{
+    int k = 0;
+}
+void ASample::DeleteResizeDevice(UINT iWidth, UINT iHeight)
+{
+    int k = 0;
+}
 bool ASample::Init()
 {
     I_Sound.Init();
@@ -114,7 +122,7 @@ bool ASample::Render()
     msg += to_wstring(m_GameTimer.m_iFPS);
     msg += L"   GT: ";
     msg += to_wstring(m_GameTimer.m_fTimer);
-    m_dxWrite.Draw(msg, g_rtClient, D2D1::ColorF(0,0,1,1));
+    m_dxWrite.Draw(msg, g_rtClient, D2D1::ColorF(0,1,1,1));
 
     //RECT rt = g_rtClient;
     //rt.top = 300;

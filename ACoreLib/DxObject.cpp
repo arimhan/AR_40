@@ -22,26 +22,35 @@ bool ADxObject::LoadTexture(const TCHAR* szColorFileName, const TCHAR* szMaskFil
 		if (FAILED(hr)) { return false; }
 	}
 	m_pTexture0->GetDesc(&m_TextureDesc);
-	hr = DirectX::CreateWICTextureFromFile(m_pd3dDevice, szMaskFileName, (ID3D11Resource**)&m_pTexture1, &m_pSRV1);
-	if (FAILED(hr))
+	if (szMaskFileName != nullptr)
 	{
-		hr = DirectX::CreateDDSTextureFromFile(m_pd3dDevice,
-			szMaskFileName,
-			(ID3D11Resource**)&m_pTexture0,
-			&m_pSRV0);
-		if (FAILED(hr)) { return false; }
+		hr = DirectX::CreateWICTextureFromFile(m_pd3dDevice, szMaskFileName, (ID3D11Resource**)&m_pTexture1, &m_pSRV1);
+		if (FAILED(hr))
+		{
+			hr = DirectX::CreateDDSTextureFromFile(m_pd3dDevice,
+				szMaskFileName,
+				(ID3D11Resource**)&m_pTexture0,
+				&m_pSRV0);
+			if (FAILED(hr)) { return false; }
+		}
 	}
 	return true;
 }
-bool ADxObject::SetVertexData() 
-{ 
-	return true;
-}
-bool ADxObject::SetIndexData()
+bool ADxObject::SetVertexData() { return true; }
+bool ADxObject::SetIndexData() { return true; }
+bool ADxObject::SetConstantData()
 {
+	ZeroMemory(&m_ConstantList, sizeof(AConstanceData));
+	m_ConstantList.Color.x = 0.0f;
+	m_ConstantList.Color.y = 1.0f;
+	m_ConstantList.Color.z = 0.0f;
+	m_ConstantList.Color.w = 1.0f;
+	m_ConstantList.Timer.x = 0.0f;
+	m_ConstantList.Timer.y = 1.0f;
+	m_ConstantList.Timer.z = 0.0f;
+	m_ConstantList.Timer.w = 0.0f;
 	return true;
 }
-
 //VertexBuffer, IndexBuffer, ConstantBuffer 생성 방법 동일------------
 bool ADxObject::CreateVertexBuffer()
 {
@@ -70,7 +79,7 @@ bool ADxObject::CreateIndexBuffer()
 	//GPU메모리에 버퍼 할당 (원하는 크기로)
 	D3D11_BUFFER_DESC bd;
 	ZeroMemory(&bd, sizeof(D3D11_BUFFER_DESC));
-	bd.ByteWidth = sizeof(ASimplevertex) * m_IndexList.size();
+	bd.ByteWidth = sizeof(DWORD) * m_IndexList.size();
 	bd.Usage = D3D11_USAGE_DEFAULT;
 	bd.BindFlags = D3D11_BIND_INDEX_BUFFER;
 
@@ -133,7 +142,7 @@ bool ADxObject::CreatePixelShader(const TCHAR* szFile)
 	if (FAILED(hr)) { return false; }
 	return true;
 }
-bool ADxObject::CreateInputLayout() 
+bool ADxObject::CreateInputLayout()
 {
 	//정점쉐이더의 결과를 통해서 정점레이아웃을 생성한다.
 		//정점버퍼의 각 정점의 어떤 성분을 정점쉐이더에 전달할건지 
@@ -168,11 +177,19 @@ bool ADxObject::Create(ID3D11Device* pd3dDevice, ID3D11DeviceContext* pContext, 
 	{
 		return false;
 	}
+	if (!SetConstantData())
+	{
+		return false;
+	}
 	if (!CreateVertexBuffer())
 	{
 		return false;
 	}
 	if (!CreateIndexBuffer())
+	{
+		return false;
+	}
+	if (!CreateConstantBuffer())
 	{
 		return false;
 	}
@@ -234,6 +251,7 @@ bool ADxObject::Render()
 	UINT Offsets = 0;
 
 	m_pContext->IASetVertexBuffers(0, 1, &m_pVertexBuffer, &strides, &Offsets);
+	m_pContext->IASetIndexBuffer(m_pIndexBuffer, DXGI_FORMAT_R32_UINT, 0);
 	m_pContext->VSSetConstantBuffers(0, 1, &m_pConstantBuffer);
 
 	m_pContext->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
@@ -248,12 +266,12 @@ bool ADxObject::Render()
 }
 bool ADxObject::Release() 
 {
-	if (m_AlphaBlend) m_AlphaBlend				->Release();
-	if (m_AlphaBlendDisable) m_AlphaBlendDisable->Release();
-	if (m_pTexture0)  m_pTexture0				->Release();
-	if (m_pSRV0)      m_pSRV0					->Release();
-	if (m_pTexture1)  m_pTexture1				->Release();
-	if (m_pSRV1)      m_pSRV1					->Release();
+	if (m_AlphaBlend)			m_AlphaBlend		->Release();
+	if (m_AlphaBlendDisable)	m_AlphaBlendDisable	->Release();
+	if (m_pTexture0)			m_pTexture0			->Release();
+	if (m_pSRV0)				m_pSRV0				->Release();
+	if (m_pTexture1)			m_pTexture1			->Release();
+	if (m_pSRV1)				m_pSRV1				->Release();
 	m_AlphaBlend			= nullptr;
 	m_AlphaBlendDisable		= nullptr;
 	m_pTexture0				= nullptr;
@@ -261,24 +279,24 @@ bool ADxObject::Release()
 	m_pSRV0					= nullptr;
 	m_pSRV1					= nullptr;
 
-	if (m_pVSCodeResult) m_pVSCodeResult->Release();
-	if (m_pPSCodeResult) m_pPSCodeResult->Release();
-	if (m_pVertexBuffer) m_pVertexBuffer->Release();
-	if (m_pIndexBuffer) m_pIndexBuffer->Release();
-	if (m_pVertexLayout) m_pVertexLayout->Release();
-	if (m_pVertexShader) m_pVertexShader->Release();
-	if (m_pPixelShader)  m_pPixelShader ->Release();
+	if (m_pVSCodeResult)	m_pVSCodeResult		->Release();
+	if (m_pPSCodeResult)	m_pPSCodeResult		->Release();
+	if (m_pVertexBuffer)	m_pVertexBuffer		->Release();
+	if (m_pIndexBuffer)		m_pIndexBuffer		->Release();
+	if (m_pConstantBuffer)	m_pConstantBuffer	->Release();
+	if (m_pVertexLayout)	m_pVertexLayout		->Release();
+	if (m_pVertexShader)	m_pVertexShader		->Release();
+	if (m_pPixelShader)		m_pPixelShader		->Release();
 
-	m_pVertexBuffer		= nullptr;
-	m_pVertexLayout		= nullptr;
-	m_pVertexShader		= nullptr;
-	m_pIndexBuffer		= nullptr;
-	m_pPixelShader		= nullptr;
-	m_pVSCodeResult		= nullptr;
-	m_pPSCodeResult		= nullptr;
+	m_pVertexBuffer			= nullptr;
+	m_pVertexLayout			= nullptr;
+	m_pVertexShader			= nullptr;
+	m_pIndexBuffer			= nullptr;
+	m_pPixelShader			= nullptr;
+	m_pVSCodeResult			= nullptr;
+	m_pPSCodeResult			= nullptr;
 
 	return true;
-
 }
 ADxObject::ADxObject() { m_fSpeed = 0.0001f; }
 ADxObject::~ADxObject() {}
