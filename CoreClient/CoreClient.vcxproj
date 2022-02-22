@@ -149,6 +149,7 @@
     <ClCompile Include="ObjectNpc2D.cpp" />
     <ClCompile Include="PlayerObj2D.cpp" />
     <ClCompile Include="Sample.cpp" />
+    <ClCompile Include="UIObject.cpp" />
     <ClCompile Include="ZoneWorld.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -157,6 +158,7 @@
     <ClInclude Include="ObjectNpc2D.h" />
     <ClInclude Include="PlayerObj2D.h" />
     <ClInclude Include="Sample.h" />
+    <ClInclude Include="UIObject.h" />
     <ClInclude Include="ZoneWorld.h" />
   </ItemGroup>
   <ItemGroup>

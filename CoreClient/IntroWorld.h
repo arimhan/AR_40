@@ -2,6 +2,7 @@
 #include "World.h"
 #include "PlayerObj2D.h"
 #include "ObjectNPC2D.h"
+#include "UIObject2D.h"
 #include "Sound.h"
 class AIntroWorld :public AWorld
 {

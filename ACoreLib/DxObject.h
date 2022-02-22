@@ -1,9 +1,6 @@
 #pragma once
-#include "Std.h"
-#include <d3dcompiler.h>
-#include "DDSTextureLoader.h"
-#include "WICTextureLoader.h"
-#pragma comment	(lib, "d3dcompiler.lib")
+#include "ShaderMgr.h"
+#include "TextureMgr.h"
 
 struct ASimplevertex
 {
@@ -71,14 +68,15 @@ struct AConstanceData
 class ADxObject : public ABaseObject
 {
 public:
-	ID3D11ShaderResourceView*	m_pSRV0; //숫자 SRV 0번
-	ID3D11ShaderResourceView*	m_pSRV1;
-	ID3D11Texture2D*			m_pTexture0;
-	ID3D11Texture2D*			m_pTexture1;
+	ATexture*	m_pColorTex = nullptr;
+	ATexture*	m_pMaskTex	= nullptr;
+	AShader*	m_pVSShader = nullptr;
+	AShader*	m_pPSShader = nullptr;
+public:
+
 	ID3D11BlendState*			m_AlphaBlend;
 	ID3D11BlendState*			m_AlphaBlendDisable;
 	D3D11_TEXTURE2D_DESC		m_TextureDesc;
-
 public:
 	vector<ASimplevertex>	m_InitScreenList;
 	vector<ASimplevertex>	m_VertexList;
@@ -91,25 +89,18 @@ public:
 	ID3D11Buffer*			m_pConstantBuffer;
 
 	ID3D11InputLayout*		m_pVertexLayout;
-	ID3D11VertexShader*		m_pVertexShader;
-	ID3D11PixelShader*		m_pPixelShader;
-
 	ID3D11Device*			m_pd3dDevice;
 	ID3D11DeviceContext*	m_pContext;
-
-	ID3DBlob*				m_pVSCodeResult = nullptr;
-	ID3DBlob*				m_pErrorMsgs = nullptr;
-	ID3DBlob*				m_pPSCodeResult = nullptr;
-
 public:
 	void			SetDevice(ID3D11Device* m_pd3dDevice, ID3D11DeviceContext* m_pContext);
 	virtual bool	LoadTexture(const TCHAR* szColorFileName, const TCHAR* szMaskFileName);
 	virtual bool	SetVertexData();
 	virtual bool	SetIndexData();
 	virtual bool	SetConstantData();
-
-	virtual bool		Create(ID3D11Device* m_pd3dDevice, ID3D11DeviceContext* m_pContext, 
-		const TCHAR* szTectureFileName =nullptr, const TCHAR* szMaskFileNmae= nullptr);
+	virtual bool	Create(ID3D11Device* m_pd3dDevice, ID3D11DeviceContext* m_pContext, 
+					const TCHAR* szShaderFileName =nullptr, 
+					const TCHAR* szTectureFileName = nullptr,
+					const TCHAR* szMaskFileNmae = nullptr);
 		//Create를 기능별로 분리하여 함수화
 		virtual bool	CreateVertexBuffer();
 		virtual bool	CreateIndexBuffer();
@@ -117,14 +108,13 @@ public:
 		virtual bool	CreateVertexShader(const TCHAR* szFile);
 		virtual bool	CreatePixelShader(const TCHAR* szFile);
 		virtual bool	CreateInputLayout();
-
 public:
 	virtual bool	Init();
 	virtual bool	Frame();
 	virtual bool	Render();
 	virtual bool	Release();
-
-	ADxObject();
-	~ADxObject();
+public:
+	ADxObject() { m_fSpeed = 0.0001f; }
+	~ADxObject() {}
 };
 

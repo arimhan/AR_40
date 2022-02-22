@@ -1,4 +1,5 @@
-#include "Sound.h"
+#include "SoundMgr.h"
+
 void ASound::Set(FMOD::System* pSystem, wstring name, int iIndex)
 {
 	m_pSystem = pSystem;
@@ -31,7 +32,7 @@ void ASound::PlayEffect()
 {
 	FMOD::Channel* pChannel = nullptr;
 	FMOD_RESULT ret = m_pSystem->playSound(m_pSound, nullptr, false, &pChannel);
-	if(ret == FMOD_OK)
+	if (ret == FMOD_OK)
 	{
 		//이펙트 사운드 작업
 	}
@@ -48,7 +49,7 @@ void ASound::Paused()
 	bool bPlay = false;
 	m_pChannel->isPlaying(&bPlay);
 	if (bPlay)
-	{	
+	{
 		bool paused;
 		m_pChannel->getPaused(&paused);
 		m_pChannel->setPaused(!paused);
@@ -79,7 +80,7 @@ void ASound::VolumeDown(float fVolume)
 	}
 }
 bool ASound::Init()
-{ 
+{
 	//FMOD::System* m_pSystem = nullptr;
 	//FMOD::Sound* m_pSound = nullptr;
 	//FMOD::Channel* m_pChannel = nullptr;
@@ -87,9 +88,9 @@ bool ASound::Init()
 	//ret = FMOD::System_Create(&m_pSystem);
 	//ret = m_pSystem->init(32,FMOD_INIT_NORMAL, 0);
 	////int maxchannels = 32 , FMOD_INITFLAGS flags =FMOD_INIT_NORMAL , void* extradriverdata
-	return true; 
+	return true;
 }
-bool ASound::Frame() 
+bool ASound::Frame()
 {
 	if (m_pSound == nullptr || m_pChannel == nullptr) return true;
 
@@ -103,18 +104,18 @@ bool ASound::Frame()
 		ms / 1000 / 60, ms / 1000 % 60, ms / 10 % 60);
 	//사운드 파일을 한 번에 로딩 or 스트리밍 -> update 반드시 호출!
 	//m_pSystem->update(); ->soundmgr frame에서 진행함
-	return true; 
+	return true;
 }
 bool ASound::Render() { return true; }
-bool ASound::Release() 
-{ 
+bool ASound::Release()
+{
 	if (m_pSound)
 	{
 		//m_pSystem->close(); soundmgr release에서 진행
 		m_pSystem->release();
 		m_pSound = nullptr;
 	}
-	return true; 
+	return true;
 }
 ASound::ASound() {}
 ASound::~ASound() {}
@@ -186,8 +187,12 @@ bool ASoundMgr::Release()
 	}
 	m_list.clear();
 
-	m_pSystem->close();
-	m_pSystem->release();
+	if (m_pSystem)
+	{
+		m_pSystem->close();
+		m_pSystem->release();
+	}
+	m_pSystem = nullptr;
 	return true;
 }
 ASoundMgr::ASoundMgr() { m_iIndex = 0; }
