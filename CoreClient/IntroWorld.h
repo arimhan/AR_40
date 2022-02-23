@@ -2,13 +2,19 @@
 #include "World.h"
 #include "PlayerObj2D.h"
 #include "ObjectNPC2D.h"
-#include "UIObject2D.h"
-#include "Sound.h"
+#include "UIObject.h"
+#include "SoundMgr.h"
+#include "ShaderMgr.h"
+#include "TextureMgr.h"
+#include <string>
+
 class AIntroWorld :public AWorld
 {
 public:
-	AObject2D		m_PlayerObj; //APlayerObj2D -> AObject2D로 변경 (플레이어가 아니므로)
+	AObject2D		m_PlayerObj;
 	ASound*			m_pBackGroundMusic;
+	ATexture*		m_pChangeColorTex[10];
+	ATexture*		m_pColorTex;
 public:
 	bool			Load(wstring file) override;
 	virtual bool	Init();

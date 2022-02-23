@@ -2,7 +2,7 @@
 #include "World.h"
 #include "PlayerObj2D.h"
 #include "ObjectNPC2D.h"
-#include "Sound.h"
+#include "SoundMgr.h"
 class AZoneWorld : public AWorld
 {
 public:

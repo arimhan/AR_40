@@ -41,7 +41,7 @@ wstring ABaseMgr<T, S>::Splitpath(wstring path, wstring entry)
 	_tsplitpath_s(fullpathname.c_str(), Dirve, Dir, FileName, FileExt);
 	wstring name = FileName;
 	name += FileExt;
-	it(entry.empty() == false)
+	if(entry.empty() == false)
 	{
 		name += entry;
 	}
@@ -60,13 +60,13 @@ T* ABaseMgr<T, S>::GetPtr(wstring key)
 template<class T, class S>
 T* ABaseMgr<T, S>::Load(wstring Filename)
 {
-	wstring name = Splitpath(filename, L"");
+	wstring name = Splitpath(Filename, L"");
 	T* pData = GetPtr(name);
 	if (pData != nullptr)
 	{
 		return pData;
 	}
-	if (pData->Load(m_pd3dDevice, filename) == false)
+	if (pData->Load(m_pd3dDevice, Filename) == false)
 	{
 		delete pData;
 		return nullptr;
@@ -94,6 +94,6 @@ bool ABaseMgr<T, S>::Release()
 	return true; 
 }
 template<class T, class S>
-ABaseMgr<T, S>::ABaseMgr() { return true; }
+ABaseMgr<T, S>::ABaseMgr() {}
 template<class T, class S>
-ABaseMgr<T, S>::~ABaseMgr() { return true; }
+ABaseMgr<T, S>::~ABaseMgr() {}

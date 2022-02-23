@@ -13,6 +13,9 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
+    <Filter Include="소스 파일\shader">
+      <UniqueIdentifier>{f7a0cc20-a3c0-4437-927c-87d225c50974}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Sample.cpp">
@@ -61,8 +64,20 @@
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <Text Include="PixelShader.txt" />
-    <Text Include="VertexShader.txt" />
-    <Text Include="Player.txt" />
+    <Text Include="..\..\data\shader\DefaultUI.txt">
+      <Filter>소스 파일\shader</Filter>
+    </Text>
+    <Text Include="PixelShader.txt">
+      <Filter>소스 파일\shader</Filter>
+    </Text>
+    <Text Include="Player.txt">
+      <Filter>소스 파일\shader</Filter>
+    </Text>
+    <Text Include="Shader.txt">
+      <Filter>소스 파일\shader</Filter>
+    </Text>
+    <Text Include="VertexShader.txt">
+      <Filter>소스 파일\shader</Filter>
+    </Text>
   </ItemGroup>
 </Project>
