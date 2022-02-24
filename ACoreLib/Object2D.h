@@ -3,8 +3,15 @@
 class AObject2D :public ADxObject
 {
 public:
-	RECT	m_rtSource;
-	RECT	m_rtDraw;
+	RECT		m_rtSource;
+	RECT		m_rtDraw;
+	AVector4	m_vColor;	
+public:
+	float		m_fAlpha = 0.0f;
+	bool		m_bFadeIn = false;
+	bool		m_bFadeOut = false;
+	//virtual void FadeIn();
+	//virtual void FadeOut();
 public:
 	virtual void	SetRectSource(RECT rt);
 	virtual void	SetRectDraw(RECT rt);

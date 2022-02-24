@@ -40,7 +40,7 @@ bool AIntroWorld::Load(wstring file)
 	m_pBackGroundMusic = I_Sound.Load("../../data/Sound/NewHopeClub.MP3");
 	m_pColorTex = I_Texture.Load(L"../../data/KGCABK.bmp");
 
-	for (int i = 0; i < 7; i++)
+	for (int i = 0; i < 10; i++) //카운트다운
 	{
 		wstring name = L"../../data/";
 		name += to_wstring(i);

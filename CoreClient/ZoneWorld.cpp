@@ -14,7 +14,7 @@ bool AZoneWorld::Load(wstring file)
 	m_PlayerObj.SetPosition(AVector2(400, 500));
 	m_PlayerObj.SetRectSource({ 91,1,42,56 });
 	m_PlayerObj.SetRectDraw({ 0,0,42,56 });
-	if (!m_PlayerObj.Create(m_pd3dDevice, m_pContext, L"../../data/bitmap1.bmp", 
+	if (!m_PlayerObj.Create(m_pd3dDevice, m_pContext, L"Shader.txt", L"../../data/bitmap1.bmp",
 														L"../../data/bitmap2.bmp"))
 	{	return false;	}
 
@@ -22,6 +22,7 @@ bool AZoneWorld::Load(wstring file)
 	{
 		AObjectNpc2D* npc = new AObjectNpc2D;
 		npc->Init();
+		npc->SetPosition(AVector2(50 + iNpc * 150, 50));
 		if (iNpc % 2 == 0)
 		{
 			npc->SetRectSource({46,63,69,79});
@@ -32,8 +33,8 @@ bool AZoneWorld::Load(wstring file)
 			npc->SetRectSource({ 1,63,42,76 });
 			npc->SetRectDraw({ 0,0,42,76 });
 		}
-		npc->SetPosition(AVector2(50 + iNpc * 150, 50));
-		if (!npc->Create(m_pd3dDevice, m_pContext, L"../../data/bitmap1.bmp", 
+
+		if (!npc->Create(m_pd3dDevice, m_pContext, L"Shader.txt", L"../../data/bitmap1.bmp",
 													L"../../data/bitmap2.bmp"))
 		{ return false; }
 		 

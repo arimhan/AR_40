@@ -66,6 +66,7 @@ T* ABaseMgr<T, S>::Load(wstring Filename)
 	{
 		return pData;
 	}
+	pData = new T;
 	if (pData->Load(m_pd3dDevice, Filename) == false)
 	{
 		delete pData;
@@ -96,4 +97,4 @@ bool ABaseMgr<T, S>::Release()
 template<class T, class S>
 ABaseMgr<T, S>::ABaseMgr() {}
 template<class T, class S>
-ABaseMgr<T, S>::~ABaseMgr() {}
+ABaseMgr<T, S>::~ABaseMgr() { Release(); }
