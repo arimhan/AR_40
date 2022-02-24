@@ -3,39 +3,30 @@
 
 bool AIntroWorld::Init() 
 {
+	AWorld::Init();
 	//m_pBackGroundMusic->Play(true);
 	return true; 
 }
 bool AIntroWorld::Frame() 
 {
 	m_pBackGroundMusic->Frame();
-	for (auto obj : m_UIObj)
+	static int iIndex = 0;
+	if (AInput::Get().GetKey(VK_F2) == KEY_PUSH)
 	{
-		AObject2D* pObj = obj.second;
-		if (pObj != nullptr)
+		iIndex++;
+		auto data = m_UIObj.find(L"bk");
+		if (data != m_UIObj.end())
 		{
-			pObj->m_ConstantList.Color = AVector4(
-				cosf(g_fGameTimer) * 0.5f + 0.5f,
-				cosf(g_fGameTimer) * 0.5f + 0.5f,
-				cosf(g_fGameTimer) * 0.5f + 0.5f, 1.0f);
-			pObj->m_ConstantList.Timer = AVector4(
-				g_fGameTimer, 0, 0, 1.0f);
-			m_pContext->UpdateSubresource(
-				pObj->m_pConstantBuffer, 0, NULL, &pObj->m_ConstantList, 0, 0);
+			data->second->m_pColorTex = m_pChangeColorTex[iIndex];
 		}
+		if (iIndex >= 10) { iIndex = 0; }
 	}
+	AWorld::Frame();
 	return true; 
 }
 bool AIntroWorld::Render() 
 {
-	for (auto obj : m_UIObj)
-	{
-		AObject2D* pObj = obj.second;
-		if (pObj != nullptr)
-		{
-			pObj->Render();
-		}
-	}
+	AWorld::Render();
 	return true; 
 }
 bool AIntroWorld::Release() 
@@ -49,7 +40,7 @@ bool AIntroWorld::Load(wstring file)
 	m_pBackGroundMusic = I_Sound.Load("../../data/Sound/NewHopeClub.MP3");
 	m_pColorTex = I_Texture.Load(L"../../data/KGCABK.bmp");
 
-	for (int i = 0; i < 10; i++)
+	for (int i = 0; i < 7; i++)
 	{
 		wstring name = L"../../data/";
 		name += to_wstring(i);
@@ -59,7 +50,7 @@ bool AIntroWorld::Load(wstring file)
 	ATexture* pTex = I_Texture.Load(L"../../data/ui/main_start_nor.png");
 	AShader* pVSShader = I_Shader.CreateVertexShader(m_pd3dDevice, L"Shader.txt", "VS");
 	AShader* pPSShader = I_Shader.CreatePixelShader(m_pd3dDevice, L"Shader.txt", "PSAlphaBlend");
-	AObject2D* Obj = new AImageIObject;
+	AImageIObject* Obj = new AImageIObject;
 	Obj->Init();
 	Obj->SetRectDraw({ 0,0 ,g_rtClient.right, g_rtClient.bottom });
 	Obj->SetPosition(AVector2(g_rtClient.right / 2.0f, g_rtClient.bottom / 2.0f));
