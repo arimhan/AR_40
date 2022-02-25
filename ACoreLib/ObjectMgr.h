@@ -27,13 +27,14 @@ public:
 	bool	Init();
 	bool	Frame();
 	bool	Release();
-
+private:
 	AObjectMgr() 
 	{ 
 		m_iExcueteCollisionID = 0;
 		m_iExcuteSelectID = 0;
 	};
-	virtual ~AObjectMgr() {};
+public:
+	virtual ~AObjectMgr() { Release(); };
 };
 #define I_ObjectMgr AObjectMgr::Get()
 //인터페이스

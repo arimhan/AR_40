@@ -29,7 +29,6 @@ public:
 	void	VolumeUP(float fVolume = 0.1f);	//º¼·ýÁ¶Àý
 	void	VolumeDown(float fVolume = 0.1f);	//º¼·ýÁ¶Àý
 
-
 public:
 	ASound();
 	virtual ~ASound();
@@ -43,8 +42,8 @@ public:
 	FMOD::System* m_pSystem = nullptr;
 	map<wstring, ASound*> m_list;
 public:
-	ASound* Load(string filename);
-	ASound* GetPtr(wstring key);
+	ASound*		Load(string filename);
+	ASound*		GetPtr(wstring key);
 	bool		Init();
 	bool		Frame();
 	bool		Render();

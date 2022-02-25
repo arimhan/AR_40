@@ -17,8 +17,8 @@ public:
 		m_pd3dDevice = pd3dDevice;
 	}
 
-	T*		GetPtr(wstring key);
-	T*		Load(wstring filename);
+	T*				GetPtr(wstring key);
+	virtual T*		Load(wstring filename);
 
 	bool Init();
 	bool Frame();
@@ -95,6 +95,6 @@ bool ABaseMgr<T, S>::Release()
 	return true; 
 }
 template<class T, class S>
-ABaseMgr<T, S>::ABaseMgr() {}
+ABaseMgr<T, S>::ABaseMgr() { m_iIndex = 0; }
 template<class T, class S>
 ABaseMgr<T, S>::~ABaseMgr() { Release(); }

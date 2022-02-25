@@ -18,6 +18,8 @@ enum ASelectState {
 class ABaseObject
 {
 public:
+	wstring		m_csName;
+
 	float		m_fSpeed;
 	AVector2	m_vPos;
 	AVector2	m_vDirection;
@@ -27,7 +29,7 @@ public:
 	int			m_iCollisionID;
 	ARect		m_rtCollision;
 	DWORD		m_dwCollisionType;
-	bool		m_bAlphaBlend = true;
+	bool		m_bAlphaBlend;
 
 public:
 	bool		m_bDead;
@@ -35,22 +37,29 @@ public:
 	bool		m_bSelect;
 	DWORD		m_dwSelectType;
 	DWORD		m_dwSelectState;
+	DWORD		m_dwPreSelectState;
 
 public:
 	virtual void HitOverlap(ABaseObject* pObj, DWORD dwState);
 	virtual void HitSelect(ABaseObject* pObj, DWORD dwState);
+	virtual void SetCollisionType(DWORD dwCollisionType, DWORD dwSelectType)
+	{
+		m_dwCollisionType = dwCollisionType;
+		m_dwSelectType = dwSelectType;
+	}
 
 	ABaseObject()
 	{
 		m_bDead = false;
 		m_bSelect = false;
+		m_bAlphaBlend = true;
 		m_dwSelectState = M_DEFAULT;
 		m_iCollisionID = -1;
 		m_iSelectID = -1;
 		m_vDirection.x = 0.0f;
 		m_vDirection.y = 0.0f;
-		m_dwCollisionType = ACollisionType::Overlap;
-		m_dwSelectType = Overlap; //둘 다 ACollisionType열거형 내 Overlap임. enum Class사용 시 위와 같이 표기.
+		m_dwCollisionType = ACollisionType::Ignore;
+		m_dwSelectType = Select_Ignore; //둘 다 ACollisionType열거형 내 Overlap임. enum Class사용 시 위와 같이 표기.
 	}
 };
 // Index, Constance Buffer (인덱스, 상수버퍼 추가)

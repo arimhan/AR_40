@@ -18,11 +18,11 @@ public:
 	//Shader생성 시 entry를 지정하면 편리하다.
 	virtual bool	CreateVertexShader(ID3D11Device* pd3dDevice, wstring filename, string entry="VS");
 	virtual bool	CreatePixelShader(ID3D11Device* pd3dDevice, wstring filename, string entry = "PS");
-	virtual bool	Load(ID3D11Device* pd3dDevice, wstring filename);
-	virtual bool	Init();
-	virtual bool	Frame();
-	virtual bool	Render();
-	virtual bool	Release();
+	bool	Load(ID3D11Device* pd3dDevice, wstring filename);
+	bool	Init();
+	bool	Frame();
+	bool	Render();
+	bool	Release();
 public:
 	AShader() {};
 	virtual ~AShader() {};
