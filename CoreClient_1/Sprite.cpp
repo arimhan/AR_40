@@ -40,7 +40,8 @@ ASprite* ASpriteMgr::Load(wstring filename)
 		for (int iFrame = 0; iFrame < iNumFrame; iFrame++)
 		{
 			_fgetts(pBuffer, _countof(pBuffer), fp_src);
-			_stscanf_s(pBuffer, _T("%s %d %d %d %d"), pTemp, (unsigned int)_countof(pTemp), &rt.left, &rt.top, &rt.right, &rt.bottom);
+			_stscanf_s(pBuffer, _T("%s %d %d %d %d"), pTemp, 
+				(unsigned int)_countof(pTemp), &rt.left, &rt.top, &rt.right, &rt.bottom);
 			pSprite->m_rtArray.push_back(rt);
 		}
 		pSprite->m_csName = name;

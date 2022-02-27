@@ -97,10 +97,10 @@ void AObject2D::Convert(vector<ASimplevertex>& list, vector<ASimplevertex>& retL
 	}
 	else
 	{
-		float u = m_rtSource.left / (float)m_TextureDesc.Width;
-		float v = m_rtSource.top / (float)m_TextureDesc.Height;
-		float w = m_rtSource.right / (float)m_TextureDesc.Width;
-		float h = m_rtSource.bottom / (float)m_TextureDesc.Height;
+		float u = m_rtSource.left	/ (float)m_TextureDesc.Width;
+		float v = m_rtSource.top	/ (float)m_TextureDesc.Height;
+		float w = m_rtSource.right	/ (float)m_TextureDesc.Width;
+		float h = m_rtSource.bottom	/ (float)m_TextureDesc.Height;
 		retList[0].t.x = u;				retList[0].t.y = v;		//v0
 		retList[1].t.x = u + w;			retList[1].t.y = v;		//v1
 		retList[2].t.x = u;				retList[2].t.y = v + h;

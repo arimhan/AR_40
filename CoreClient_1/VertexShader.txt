@@ -18,7 +18,7 @@ cbuffer cb0 : register(b0)
 cbuffer cb1 : register(b1)
 {
 	float4 Color1 : packoffset(c0);
-	float  Timer1 : packoffset(c1);
+	float4  Timer1 : packoffset(c1);
 };
 VS_OUTPUT VS(float2 p: POSITION, float2 t: TEXCOORD)
 {
