@@ -1,5 +1,6 @@
 #include "Core.h"
 #include "ObjectMgr.h" //I_ObjectMgr 
+#include "SoundMgr.h"
 
 bool ACore::CoreInit()
 {
@@ -50,8 +51,9 @@ bool ACore::CoreFrame()
     m_GameTimer.Frame();
     AInput::Get().Frame();
     I_ObjectMgr.Frame();
-    m_dxWrite.Frame();
+    I_Sound.Frame();
     Frame();
+    m_dxWrite.Frame();
     return true;
 }
 bool ACore::CoreRender()

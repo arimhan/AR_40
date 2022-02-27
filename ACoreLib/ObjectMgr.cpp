@@ -69,7 +69,8 @@ bool AObjectMgr::Frame()
 	{
 		ABaseObject* pObjsrc = (ABaseObject*)src.second;
 		if (pObjsrc->m_dwSelectType == Ignore) continue;
-		DWORD dwState = Overlap;
+		DWORD dwState = M_DEFAULT;
+		pObjsrc->m_dwSelectState = M_DEFAULT;
 		if (ACollision::RectToPoint(pObjsrc->m_rtCollision, (float)g_ptMouse.x, (float)g_ptMouse.y))
 		{
 			DWORD dwKeyState = AInput::Get().m_dwMouseState[0];

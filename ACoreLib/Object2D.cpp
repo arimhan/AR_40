@@ -1,5 +1,18 @@
 #include "Object2D.h"
 
+void AObject2D::FadeIn()
+{
+	m_fAlpha += g_fSecPerFrame * 0.5f;
+	m_fAlpha = min(m_fAlpha, 1.0f);
+	if (m_fAlpha >= 1.0f) { m_bFadeIn = false; }
+}
+void AObject2D::FadeOut()
+{
+	m_fAlpha = g_fSecPerFrame - 0.5f;
+	m_fAlpha = max(m_fAlpha, 0.0f);
+	if (m_fAlpha <= 0.0f) { m_bFadeOut = false; }
+}
+
 void AObject2D::SetRectSource(RECT rt) { m_rtSource = rt; }
 void AObject2D::SetRectDraw(RECT rt)
 {
@@ -137,10 +150,19 @@ bool AObject2D::SetVertexData()
 	ConvertIndex(m_vPos, m_fWidth, m_fHeight, m_VertexList);
 	return true;
 }
-
 bool AObject2D::SetIndexData()
 {
 	m_IndexList.push_back(0);	m_IndexList.push_back(1);	 m_IndexList.push_back(2);
 	m_IndexList.push_back(2);	m_IndexList.push_back(1);	 m_IndexList.push_back(3);
 	return true;
 }
+bool AObject2D::Frame()
+{
+	if (m_bFadeIn) FadeIn();
+	if (m_bFadeOut) FadeOut();
+	m_ConstantList.Color = m_vColor;
+	m_ConstantList.Timer = AVector4(g_fGameTimer, 0, 0, 1.0f);
+	m_pContext->UpdateSubresource(m_pConstantBuffer, 0, NULL, &m_ConstantList, 0, 0);
+	return true;
+}
+

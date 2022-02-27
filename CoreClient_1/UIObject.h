@@ -4,8 +4,8 @@
 
 struct AStatePlayData
 {
-	ATexture* pTex;
-	ASound* pSound;
+	ATexture*	pTex;
+	ASound*		pSound;
 	AStatePlayData(const AStatePlayData& data)
 	{
 		pTex = data.pTex;
@@ -28,11 +28,20 @@ class AUIObject : public AObject2D
 {
 public:
 	vector<AStatePlayData> m_pStatePlayList;
+	RECT					m_rtOffset;
+	RECT					m_rtOffsetTex;
 public:
 	bool	Frame()			override;
 	bool	Render()		override;
 	bool	SetVertexData() override;
 	bool	SetIndexData()	override;
+	AUIObject()
+	{
+		m_rtOffsetTex.left = 0;
+		m_rtOffsetTex.top = 0;
+		m_rtOffsetTex.right = 1;
+		m_rtOffsetTex.bottom = 1;
+	}
 };
 class AImageIObject : public AUIObject
 {
