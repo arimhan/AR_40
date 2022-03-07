@@ -13,6 +13,7 @@ bool ATexture::Load(ID3D11Device* pd3dDevice, wstring filename)
 		if (FAILED(hr)) { return false; }
 	}
 	m_pTexture->GetDesc(&m_TextureDesc);
+	return true;
 }
 bool ATexture::Init() { return true; }
 bool ATexture::Frame() { return true; }

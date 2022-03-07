@@ -68,7 +68,7 @@ bool AObjectMgr::Frame()
 	for (auto src : m_SelectList)
 	{
 		ABaseObject* pObjsrc = (ABaseObject*)src.second;
-		if (pObjsrc->m_dwSelectType == Ignore) continue;
+		if (pObjsrc->m_dwSelectType == Select_Ignore) continue;
 		DWORD dwState = M_DEFAULT;
 		pObjsrc->m_dwSelectState = M_DEFAULT;
 		if (ACollision::RectToPoint(pObjsrc->m_rtCollision, (float)g_ptMouse.x, (float)g_ptMouse.y))
@@ -98,4 +98,9 @@ bool AObjectMgr::Frame()
 	}
 	return true;
 }
-bool AObjectMgr::Release() { return true; }
+bool AObjectMgr::Release() 
+{ 
+	m_ObjectList.clear();
+	m_SelectList.clear();
+	return true; 
+}

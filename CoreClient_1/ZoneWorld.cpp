@@ -14,6 +14,7 @@ bool AZoneWorld::Load(wstring file)
 	m_PlayerObj.SetPosition(AVector2(400, 500));
 	m_PlayerObj.SetRectSource({ 91,1,42,56 });
 	m_PlayerObj.SetRectDraw({ 0,0,42,56 });
+	m_PlayerObj.m_csName = L"PlayerUser";
 	if (!m_PlayerObj.Create(m_pd3dDevice, m_pContext, L"Shader.txt", L"../../data/bitmap1.bmp",
 														L"../../data/bitmap2.bmp"))
 	{	return false;	}

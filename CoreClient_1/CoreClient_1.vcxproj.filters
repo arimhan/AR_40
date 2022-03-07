@@ -48,6 +48,9 @@
     <ClCompile Include="EffectObj.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
+    <ClCompile Include="UIModelMgr.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Sample.h">
@@ -75,6 +78,9 @@
       <Filter>Sprite</Filter>
     </ClInclude>
     <ClInclude Include="EffectObj.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="UIModelMgr.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
   </ItemGroup>

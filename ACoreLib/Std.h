@@ -11,6 +11,8 @@
 #include <tchar.h>
 #include <string>
 #include "Collision.h"
+#include <wrl.h>					//ComPtr
+using namespace Microsoft::WRL;		//ComPtr
 #pragma comment (lib, "d3d11.lib")
 #ifdef _DEBUG
 #pragma comment (lib, "ACoreLib_d.lib")
@@ -20,12 +22,12 @@
 #pragma comment (lib, "ws2_32.lib")
 using namespace std;
 
+
 extern RECT		g_rtClient;
 extern HWND		g_hWnd;
 //모든곳에서 접근하기 위해 extern 처리한다.
 extern float	g_fSecPerFrame;
 extern float	g_fGameTimer;
-
 extern POINT	g_ptMouse;
 
 template<class T>
@@ -60,6 +62,23 @@ static void DisplayText(const char* fmt, ...)
 	OutputDebugStringA((char*)buf);
 	va_end(arg);
 }
+
+//static void MemoryReporting()
+//{
+//#if defined(DEBUG) | defined(_DEBUG)
+//	HMODULE dxgidebugdll = GetModuleHandleW(L"dxgidebug.dll");
+//	decltype(&DXGIGetDebugInterface) GetDebugInterface = reinterpret_cast
+// <decltype(&DXGIGetDebugInterface)>(GetProcAddress(dxgidebugdll, "DXGIGetDebugInterface"));
+//	IDXGIDebug* debug;
+//	GetDebugInterface(IID_PPV_ARGS(&debug));
+//	OutputDebugStringW(L"Starting Live Direct3D Object Dump:\r\n");
+//	debug->ReportLiveObjects(DXGI_DEBUG_D3D11, DXGI_DEBUG_RLO_ALL);
+//	OutputDebugStringW(L"Completed Live Direct3D Object Dump.\r\n");
+//	debug->Release();
+//#endif
+//}
+
+
 #define GAME_START int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCmdLine, int nCmdShow){ASample core;
 #define GAME_WIN(s,x,y) if (core.SetWinClass(hInstance) == FALSE) return 1; if (core.SetWindow(L#s, x, y) == FALSE) return 1;core.GameRun();return 1;}
 #define GAME_RUN(s,x,y) GAME_START; GAME_WIN(s,x,y);

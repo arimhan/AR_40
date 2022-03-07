@@ -9,7 +9,7 @@ public:
 public:
 	int					m_iIndex;
 	ID3D11Device*		m_pd3dDevice;
-	map<wstring, T*>	m_list;
+	map<wstring, shared_ptr<T>>	m_list;
 public:
 	wstring Splitpath(wstring path, wstring entry);
 	virtual void Set(ID3D11Device* pd3dDevice)
@@ -66,16 +66,17 @@ T* ABaseMgr<T, S>::Load(wstring Filename)
 	{
 		return pData;
 	}
-	pData = new T;
-	if (pData->Load(m_pd3dDevice, Filename) == false)
+	//pData = new T;
+	shared_ptr<T> pNewData = make_shared<T>();
+	if (pNewData->Load(m_pd3dDevice, Filename) == false)
 	{
-		delete pData;
+		//delete pNewData;
 		return nullptr;
 	}
-	pData->m_csName = name;
-	m_list.insert(make_pair(pData->m_csName, pData));
+	pNewData->m_csName = name;
+	m_list.insert(make_pair(pNewData->m_csName, pNewData));
 	m_iIndex++;
-	return pData;
+	return pNewData.get();
 }
 template<class T, class S>
 bool ABaseMgr<T, S>::Init() { return true; }

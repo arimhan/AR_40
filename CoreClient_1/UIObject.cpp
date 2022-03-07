@@ -24,15 +24,23 @@ bool AUIObject::SetVertexData()
     //  12    13      14      15
 
     //사각형을 이등분한다.
-    AVector2 vLT = { 50.0f, 50.0f };
-    AVector2 vRT = { 50.0f, 50.0f };
-    AVector2 vLB = { 50.0f, 50.0f };
-    AVector2 vRB = { 50.0f, 50.0f };
+    AVector2 vLT = { (float)m_rtOffset.left, (float)m_rtOffset.top };
+    AVector2 vRT = { (float)m_rtOffset.right, (float)m_rtOffset.top };
+    AVector2 vLB = { (float)m_rtOffset.left, (float)m_rtOffset.bottom };
+    AVector2 vRB = { (float)m_rtOffset.right, (float)m_rtOffset.bottom };
 
-    AVector2 tLT = { vLT.x / 196.0f, vLT.y / 124.0f };
-    AVector2 tRT = { vRT.x / 196.0f, vRT.y / 124.0f };
-    AVector2 tLB = { vLB.x / 196.0f, vLB.y / 124.0f };
-    AVector2 tRB = { vRT.x / 196.0f, vRT.y / 124.0f };
+    float fWidth = m_fWidth;
+    float fHeight = m_fHeight;
+    if (m_pColorTex != nullptr)
+    {
+        fWidth = m_pColorTex->m_TextureDesc.Width;
+        fHeight = m_pColorTex->m_TextureDesc.Height;
+    }
+
+    AVector2 tLT = { vLT.x / fWidth, vLT.y / fHeight };
+    AVector2 tRT = { vRT.x / fWidth, vRT.y / fHeight };
+    AVector2 tLB = { vLB.x / fWidth, vLB.y / fHeight };
+    AVector2 tRB = { vRT.x / fWidth, vRT.y / fHeight };
 
     vector<ASimplevertex> list(16);
     float halfWidth = m_fWidth / 2.0f;
@@ -40,14 +48,14 @@ bool AUIObject::SetVertexData()
     //0번부터 차례대로 위치계산공식 구현. t는 0~1값이므로 좌측 x좌표쪽은 0, 우측 x좌표쪽은 1으로 설정된다.
     //기준점이 되는 정점 4가지를 먼저 세팅한다.
     list[0].v = { m_vPos.x - halfWidth, m_vPos.y - halfHeight };
-    list[0].t = { 0,0 };
+    list[0].t = { (float)m_rtOffsetTex.left, (float)m_rtOffsetTex.top };
     //3번은 m_vPos.x좌표를 기준으로 증가이며, t값은 1.0이다.
     list[3].v = { m_vPos.x + halfWidth, m_vPos.y - halfHeight };
-    list[3].t = { 1,0 };
+    list[3].t = { (float)m_rtOffsetTex.right, (float)m_rtOffsetTex.top };
     list[12].v = { m_vPos.x - halfWidth, m_vPos.y + halfHeight };
-    list[12].t = { 0,1 };
+    list[12].t = { (float)m_rtOffsetTex.left, (float)m_rtOffsetTex.bottom };
     list[15].v = { m_vPos.x + halfWidth, m_vPos.y + halfHeight };
-    list[15].t = { 1,1 };
+    list[15].t = { (float)m_rtOffsetTex.right, (float)m_rtOffsetTex.bottom };
     //5번은 list0번을 기준으로 x,y값이 모두 증가된다.
 
     //그다음 내부 5, 6, 9, 10 정점을 세팅한다. (UI상 픽셀이 늘어나도 되는 부분)
@@ -115,12 +123,12 @@ bool AUIObject::SetIndexData()
 
     return true;
 }
-bool AImageIObject::Init()
+bool AImageObject::Init()
 {
     m_bFadeIn = true;
     return true;
 }
-bool AImageIObject::Frame()
+bool AImageObject::Frame()
 {
     m_vColor.x = m_fAlpha;
     m_vColor.y = m_fAlpha;
@@ -129,7 +137,7 @@ bool AImageIObject::Frame()
     AObject2D::Frame();
     return true;
 }
-bool AImageIObject::Render()
+bool AImageObject::Render()
 {
     AObject2D::Render();
     return true;
@@ -194,4 +202,16 @@ bool AButtonObject::Render()
 {
     AObject2D::Render();
     return true;
+}
+
+void AListCtrlObject::HitSelect(ABaseObject* pObj, DWORD dwState)
+{
+    string state = "\n";
+    if (m_dwPreSelectState == m_dwSelectState)
+    {
+        return;
+    }
+    m_dwPreSelectState = m_dwSelectState;
+    state = std::to_string(m_dwSelectState);
+    DisplayText(state.c_str());
 }

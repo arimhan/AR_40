@@ -43,7 +43,7 @@ bool AIntroWorld::Frame()
 	//rtExplosion Effect
 	if (AInput::Get().GetKey(VK_F4) == KEY_PUSH)
 	{
-		m_ExplosionObj.Release();
+		m_ExplosionObj.Reset();
 		m_ExplosionObj.m_pSprite = I_Sprite.GetPtr(L"rtExplosion");
 		m_ExplosionObj.SetRectSource(m_ExplosionObj.m_pSprite->m_rtArray[0]);
 		m_ExplosionObj.SetRectDraw({ 0,0, m_ExplosionObj.m_pSprite->m_rtArray[0].right,
@@ -52,7 +52,7 @@ bool AIntroWorld::Frame()
 	//rtBomb Effect
 	if (AInput::Get().GetKey(VK_F6) == KEY_PUSH)
 	{
-		m_ExplosionObj.Release();
+		m_ExplosionObj.Reset();
 		m_ExplosionObj.m_pSprite = I_Sprite.GetPtr(L"rtBomb");
 		m_ExplosionObj.SetRectSource(m_ExplosionObj.m_pSprite->m_rtArray[0]);
 		m_ExplosionObj.SetRectDraw({ 0,0, m_ExplosionObj.m_pSprite->m_rtArray[0].right,
@@ -61,7 +61,7 @@ bool AIntroWorld::Frame()
 	//rtClash Effect
 	if (AInput::Get().GetKey(VK_F7) == KEY_PUSH)
 	{
-		m_ExplosionObj.Release();
+		m_ExplosionObj.Reset();
 		m_ExplosionObj.m_pSprite = I_Sprite.GetPtr(L"rtClash");
 		m_ExplosionObj.SetRectSource(m_ExplosionObj.m_pSprite->m_rtArray[0]);
 		m_ExplosionObj.SetRectDraw({ 0,0, m_ExplosionObj.m_pSprite->m_rtArray[0].right,
@@ -87,7 +87,7 @@ bool AIntroWorld::Load(wstring file)
 {
 	//시작화면에서는 이 음악이 나오도록 ~
 	m_pBackGroundMusic = I_Sound.Load("../../data/Sound/NewHopeClub.MP3");
-	m_pColorTex = I_Texture.Load(L"../../data/KGCABK.bmp");
+	m_pColorTex = I_Texture.Load(L"../../data/Img/KGCABK.bmp");
 
 	for (int i = 0; i < 10; i++) //카운트다운
 	{
@@ -97,9 +97,10 @@ bool AIntroWorld::Load(wstring file)
 		m_pChangeColorTex[i] = I_Texture.Load(name);
 	}
 
+	//배경 (kgcabk)
 	AShader* pVSShader = I_Shader.CreateVertexShader(m_pd3dDevice, L"Shader.txt", "VS");
 	AShader* pPSShader = I_Shader.CreatePixelShader(m_pd3dDevice, L"Shader.txt", "PSAlphaBlend");
-	AImageIObject* Obj = new AImageIObject;
+	AImageObject* Obj = new AImageObject;
 	Obj->Init();
 	Obj->SetRectDraw({ 0,0 ,g_rtClient.right, g_rtClient.bottom });
 	Obj->SetPosition(AVector2(g_rtClient.right / 2.0f, g_rtClient.bottom / 2.0f));
@@ -113,6 +114,7 @@ bool AIntroWorld::Load(wstring file)
 	Obj->SetCollisionType(Ignore, Select_Ignore);
 	m_UIObj.insert(make_pair(L"bk", Obj));
 
+	//UI창1(버튼 뒤)
 	AButtonObject* btnDlg = new AButtonObject;
 	btnDlg->Init();
 	btnDlg->m_rtOffset = { 50, 50, 50, 50 };

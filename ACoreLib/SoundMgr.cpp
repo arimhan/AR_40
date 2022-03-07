@@ -30,6 +30,7 @@ void ASound::Play(bool bLoop)
 }
 void ASound::PlayEffect()
 {
+	//채널은 플레이 되는 사운드의 제어를 담당
 	FMOD::Channel* pChannel = nullptr;
 	FMOD_RESULT ret = m_pSystem->playSound(m_pSound, nullptr, false, &pChannel);
 	if (ret == FMOD_OK)

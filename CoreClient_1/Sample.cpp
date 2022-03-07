@@ -124,10 +124,6 @@ bool ASample::Render()
     msg += to_wstring(m_GameTimer.m_fTimer);
     m_dxWrite.Draw(msg, g_rtClient, D2D1::ColorF(1,1,1,1));
 
-    //RECT rt = g_rtClient;
-    //rt.top = 300;
-    //rt.left = 0;
-    //m_dxWrite.Draw(L"KGCA ArimHan", rt, D2D1::ColorF(0, 0, 1, 1), m_dxWrite.m_pd2dMTShadowTF);
     return true;
 }
 bool ASample::Release()
@@ -141,15 +137,15 @@ bool ASample::Release()
 }
 ASample::ASample() {}
 ASample::~ASample() {}
-SIMPLE_ARUN();
+//SIMPLE_ARUN();
 
-//int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCmdLine, int nCmdShow)
-//{
-//	ASample core;
-//
-//	if (core.SetWinClass(hInstance) == FALSE) return 1;
-//	if (core.SetWindow(L"SelectClient Chat") == FALSE) return 1;
-//	core.GameRun();
-//	return 1;
-//}
+int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCmdLine, int nCmdShow)
+{
+	ASample core;
+
+	if (core.SetWinClass(hInstance) == FALSE) return 1;
+	if (core.SetWindow(L"SelectClient Chat") == FALSE) return 1;
+	core.GameRun();
+	return 1;
+}
 

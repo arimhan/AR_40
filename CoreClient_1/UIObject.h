@@ -1,40 +1,43 @@
 #pragma once
-#include "Object2D.h"
-#include "SoundMgr.h"
+#include "ObjectMgr.h"
+#include "UIModelMgr.h"
 
-struct AStatePlayData
-{
-	ATexture*	pTex;
-	ASound*		pSound;
-	AStatePlayData(const AStatePlayData& data)
-	{
-		pTex = data.pTex;
-		pSound = data.pSound;
-		DisplayText("AStatePlayDataCopy\n");
-	}
-	AStatePlayData(ATexture* a, ASound* b)
-	{
-		pTex = a;
-		pSound = b;
-		DisplayText("AStatePlayDataCopy\n");
-	}
-	AStatePlayData()
-	{
-		DisplayText("AStatePlayDataCopy\n");
-	}
-};
-
-class AUIObject : public AObject2D
+class AUIObject : public AUIModel
 {
 public:
-	vector<AStatePlayData> m_pStatePlayList;
-	RECT					m_rtOffset;
-	RECT					m_rtOffsetTex;
+	AUIModel* Clone()
+	{
+		AUIModel* pCopy = new AUIObject(*this);
+		pCopy->CreateVertexBuffer();
+		pCopy->CreateIndexBuffer();
+		pCopy->CreateConstantBuffer();
+		pCopy->CreateInputLayout();
+		return pCopy;
+	};
+	void  UpdateData() override
+	{
+		m_rtCollision = ARect(m_vPos, m_fWidth, m_fHeight);
+		SetCollisionType(ACollisionType::Ignore,
+			ASelectType::Select_Overlap);
+		I_ObjectMgr.AddCollisionExecute(this,
+			std::bind(&ABaseObject::HitOverlap, this,
+				std::placeholders::_1,
+				std::placeholders::_2));
+		I_ObjectMgr.AddSelectExecute(this,
+			std::bind(&ABaseObject::HitSelect, this,
+				std::placeholders::_1,
+				std::placeholders::_2));
+	}
+
 public:
 	bool	Frame()			override;
 	bool	Render()		override;
 	bool	SetVertexData() override;
 	bool	SetIndexData()	override;
+	void    HitSelect(ABaseObject* pObj, DWORD dwState) override
+	{
+		int K = 0;
+	}
 	AUIObject()
 	{
 		m_rtOffsetTex.left = 0;
@@ -43,8 +46,17 @@ public:
 		m_rtOffsetTex.bottom = 1;
 	}
 };
-class AImageIObject : public AUIObject
+class AImageObject : public AUIObject
 {
+	AUIModel* Clone()
+	{
+		AUIModel* pCopy = new AImageObject(*this);
+		pCopy->CreateVertexBuffer();
+		pCopy->CreateIndexBuffer();
+		pCopy->CreateConstantBuffer();
+		pCopy->CreateInputLayout();
+		return pCopy;
+	};
 public:
 	bool	Init()		override;
 	bool	Frame()		override;
@@ -59,3 +71,38 @@ public:
 	bool Render()		override;
 };
 
+class AListCtrlObject : public AUIModelComposed
+{
+public:
+	AUIModel* Clone()
+	{
+		AUIModelComposed* pModel = new AListCtrlObject;
+		std::list<AUIModel*>::iterator iter;
+		for (iter = m_Components.begin(); iter != m_Components.end();
+			iter++)
+		{
+			pModel->Add((*iter)->Clone());
+		}
+		return pModel;
+	};
+	bool   Create(int xCount, int yCount);
+	void  UpdateData() override
+	{
+		m_rtCollision = ARect(m_vPos, m_fWidth, m_fHeight);
+		SetCollisionType(ACollisionType::Ignore,
+			ASelectType::Select_Overlap);
+
+		I_ObjectMgr.AddCollisionExecute(this,
+			std::bind(&ABaseObject::HitOverlap, this,
+				std::placeholders::_1,
+				std::placeholders::_2));
+		I_ObjectMgr.AddSelectExecute(this,
+			std::bind(&ABaseObject::HitSelect, this,
+				std::placeholders::_1,
+				std::placeholders::_2));
+	}
+	virtual void	HitSelect(ABaseObject* pObj, DWORD dwState) override;
+public:
+	AListCtrlObject() {}
+	virtual ~AListCtrlObject() {}
+};

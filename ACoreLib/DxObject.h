@@ -19,6 +19,7 @@ class ABaseObject
 {
 public:
 	wstring		m_csName;
+	ABaseObject* m_pParent = nullptr;
 
 	float		m_fSpeed;
 	AVector2	m_vPos;

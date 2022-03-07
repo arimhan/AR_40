@@ -46,8 +46,8 @@ bool AInput::Frame()
 
     //마우스 버튼 VK_LBUTTON, VK_RBUTTON, VK_MBUTTON (LEFT, RIGHT, MIDDLE)
     m_dwMouseState[0] = m_dwKeyState[VK_LBUTTON];
-    m_dwMouseState[1] = m_dwKeyState[VK_MBUTTON];
-    m_dwMouseState[2] = m_dwKeyState[VK_RBUTTON];
+    m_dwMouseState[1] = m_dwKeyState[VK_RBUTTON];
+    m_dwMouseState[2] = m_dwKeyState[VK_MBUTTON];
     return true;
 }
 bool AInput::Render() { return true; }

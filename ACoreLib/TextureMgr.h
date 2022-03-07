@@ -11,9 +11,9 @@ public:
 	wstring				m_csName;
 	wstring				m_szMsg;
 	TCHAR				m_szBuffer[256];
-	ID3D11Texture2D*	m_pTexture;
-	ID3D11ShaderResourceView*	m_pSRV;
-	D3D11_TEXTURE2D_DESC		m_TextureDesc;
+	ComPtr<ID3D11Texture2D>				m_pTexture;
+	ComPtr < ID3D11ShaderResourceView>	m_pSRV;
+	D3D11_TEXTURE2D_DESC				m_TextureDesc;
 public:
 	bool	Load(ID3D11Device* pd3dDevice, wstring filename);
 	bool	Init();
