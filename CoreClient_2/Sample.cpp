@@ -1,7 +1,14 @@
 #include "Sample.h"
 #define PORT_NUM 9110 //9110
 #define ADRESS_NUM "127.0.0.1" //"127.0.0.1"
-
+void ASample::CreateResizeDevice(UINT iWidth, UINT iHeight)
+{
+    int k = 0;
+}
+void ASample::DeleteResizeDevice(UINT iWidth, UINT iHeight)
+{
+    int k = 0;
+}
 LRESULT ASample::MsgProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
 {
     switch (msg)

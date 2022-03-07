@@ -91,7 +91,7 @@ bool AIntroWorld::Load(wstring file)
 
 	for (int i = 0; i < 10; i++) //카운트다운
 	{
-		wstring name = L"../../data/";
+		wstring name = L"../../data/Img/";
 		name += to_wstring(i);
 		name += L".bmp";
 		m_pChangeColorTex[i] = I_Texture.Load(name);

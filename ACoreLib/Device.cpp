@@ -55,7 +55,6 @@ bool ADevice::CreateRenderTargetView()
 	ComPtr<ID3D11Texture2D> backBuffer = nullptr;
 	m_pSwapChain->GetBuffer(0, __uuidof(ID3D11Texture2D), (LPVOID*)&backBuffer);
 	m_pd3dDevice->CreateRenderTargetView(backBuffer.Get(), NULL, m_pRenderTargetView.GetAddressOf());
-	if (backBuffer)backBuffer->Release();
 	m_pImmediateContext->OMSetRenderTargets(1, m_pRenderTargetView.GetAddressOf(), NULL);
 	return true;
 }

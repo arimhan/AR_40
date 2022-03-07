@@ -18,10 +18,5 @@ bool ATexture::Load(ID3D11Device* pd3dDevice, wstring filename)
 bool ATexture::Init() { return true; }
 bool ATexture::Frame() { return true; }
 bool ATexture::Render() { return true; }
-bool ATexture::Release()
-{
-	if (m_pTexture) m_pTexture->Release();
-	if (m_pSRV)		m_pSRV->Release();
+bool ATexture::Release() { return true; }
 
-    return true;
-}

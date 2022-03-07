@@ -63,7 +63,7 @@ bool ACore::CoreRender()
     //float color[4] = { 102.0f, 204.0f, 255.0f, 1.0f }; // 102 204 255
     float color[4] = { 0.1f, 0.25f, 0.1f, 0.0f };
     m_pImmediateContext->ClearRenderTargetView(m_pRenderTargetView.Get(), color);
-    m_pImmediateContext->PSSetSamplers(0, 1, &m_pSamplerState);
+    m_pImmediateContext->PSSetSamplers(0, 1, &ADxState::m_pSamplerState);
 
     Render(); //백버퍼에 랜더링
     m_GameTimer.Render();
