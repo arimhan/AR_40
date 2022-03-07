@@ -1,6 +1,7 @@
 #pragma once
 #include "ShaderMgr.h"
 #include "TextureMgr.h"
+#include "DxState.h"
 
 struct ASimplevertex
 {

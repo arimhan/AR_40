@@ -40,7 +40,7 @@ class ASoundMgr : public ASingleton<ASoundMgr>
 public:
 	friend class ASingleton<ASoundMgr>;
 	FMOD::System* m_pSystem = nullptr;
-	map<wstring, ASound*> m_list;
+	map<wstring, shared_ptr<ASound>> m_list;
 public:
 	ASound*		Load(string filename);
 	ASound*		GetPtr(wstring key);

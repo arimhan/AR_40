@@ -139,11 +139,11 @@ ASound* ASoundMgr::Load(string filename)
 	{
 		if (data.second->m_csName == name)
 		{
-			return data.second;
+			return data.second.get();
 		}
 	}
-
-	ASound* pSound = new ASound;
+	std::shared_ptr<ASound> pSound = std::make_shared<ASound>();
+	//ASound* pSound = new ASound;
 	FMOD_RESULT ret = m_pSystem->createSound(
 		filename.c_str(), FMOD_DEFAULT, 0, &pSound->m_pSound);
 	//(const char* name_or_data, FMOD_MODE mode, FMOD_CREATESOUNDEXINFO* exinfo, Sound** sound)
@@ -155,14 +155,14 @@ ASound* ASoundMgr::Load(string filename)
 	m_list.insert(make_pair(name, pSound));
 	pSound->Set(m_pSystem, name, m_iIndex);
 	m_iIndex++;
-	return pSound;
+	return pSound.get();
 }
 ASound* ASoundMgr::GetPtr(wstring key)
 {
 	auto iter = m_list.find(key);
 	if (iter != m_list.end())
 	{
-		return (*iter).second;
+		return (*iter).second.get();
 	}
 	return nullptr;
 }
@@ -184,7 +184,7 @@ bool ASoundMgr::Release()
 	for (auto data : m_list)
 	{
 		data.second->Release();
-		delete data.second;
+		delete data.second.get();
 	}
 	m_list.clear();
 

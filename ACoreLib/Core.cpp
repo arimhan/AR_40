@@ -10,6 +10,7 @@ bool ACore::CoreInit()
     {
         I_Shader.Set(m_pd3dDevice.Get());
         I_Texture.Set(m_pd3dDevice.Get());
+        ADxState::SetState(m_pd3dDevice.Get());
         
         if (m_dxWrite.Init())
         {
@@ -75,8 +76,7 @@ bool ACore::CoreRender()
 bool ACore::CoreRelease()
 {
     Release();
-    if (m_pSamplerState) m_pSamplerState->Release();
-
+    ADxState::Release();
     m_dxWrite.Release();
     m_GameTimer.Release();
     AInput::Get().Release();

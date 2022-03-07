@@ -12,12 +12,12 @@ bool AWorld::Frame()
 {
 	for (auto obj : m_UIObj)
 	{
-		AObject2D* pObj = obj.second;
+		AObject2D* pObj = obj.second.get();
 		if (pObj != nullptr) { pObj->Frame(); }
 	}
 	for (auto obj : m_NpcObj)
 	{
-		AObject2D* pObj = obj.second;
+		AObject2D* pObj = obj.second.get();
 		if (pObj != nullptr) { pObj->Frame(); }
 	}
 	return true;
@@ -26,12 +26,12 @@ bool AWorld::Render()
 {
 	for (auto obj : m_UIObj)
 	{
-		AObject2D* pObj = obj.second;
+		AObject2D* pObj = obj.second.get();
 		if (pObj != nullptr) { pObj->Render(); }
 	}
 	for (auto obj : m_NpcObj)
 	{
-		AObject2D* pObj = obj.second;
+		AObject2D* pObj = obj.second.get();
 		if (pObj != nullptr) { pObj->Render(); }
 	}
 	return true;
@@ -41,22 +41,22 @@ bool AWorld::Release()
 	for (auto obj : m_UIObj)
 	{
 		obj.second->Release();
-		delete obj.second;
+		delete obj.second.get();
 	}
 	for (auto obj : m_ItemObj)
 	{
 		obj.second->Release();
-		delete obj.second;
+		delete obj.second.get();
 	}
 	for (auto obj : m_NpcObj)
 	{
 		obj.second->Release();
-		delete obj.second;
+		delete obj.second.get();
 	}
 	for (auto obj : m_MapObj)
 	{
 		obj.second->Release();
-		delete obj.second;
+		delete obj.second.get();
 	}
 	m_UIObj.clear();
 	m_ItemObj.clear();

@@ -29,6 +29,9 @@ public:
 	virtual bool	SetVertexData() override;
 	virtual bool	SetIndexData() override;
 	virtual bool	Frame() override;
+	bool			Load(ID3D11Device* pd3dDevice, wstring filename) {
+		return true;
+	};
 
 	AObject2D() 
 	{

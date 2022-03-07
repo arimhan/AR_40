@@ -155,6 +155,7 @@ copy "..\\..\\output\\Debug\\ACoreLib.lib" "..\\..\\Lib\\ACoreLib_d.lib"</Comman
     <ClInclude Include="Core.h" />
     <ClInclude Include="Device.h" />
     <ClInclude Include="DxObject.h" />
+    <ClInclude Include="DxState.h" />
     <ClInclude Include="Input.h" />
     <ClInclude Include="Object2D.h" />
     <ClInclude Include="Object3D.h" />
@@ -176,6 +177,7 @@ copy "..\\..\\output\\Debug\\ACoreLib.lib" "..\\..\\Lib\\ACoreLib_d.lib"</Comman
     <ClCompile Include="Core.cpp" />
     <ClCompile Include="Device.cpp" />
     <ClCompile Include="DxObject.cpp" />
+    <ClCompile Include="DxState.cpp" />
     <ClCompile Include="Input.cpp" />
     <ClCompile Include="Object2D.cpp" />
     <ClCompile Include="Object3D.cpp" />

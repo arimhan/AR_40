@@ -41,7 +41,7 @@ bool ADevice::CreateDevice()
 		1,
 		D3D11_SDK_VERSION,
 		&m_SwapChainDesc,
-		m_pSwapChain.GetAddressOf() ,
+		m_pSwapChain.GetAddressOf(),
 		m_pd3dDevice.GetAddressOf(),		
 		&m_FeatureLevel,
 		m_pImmediateContext.GetAddressOf());

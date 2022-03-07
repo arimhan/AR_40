@@ -78,6 +78,9 @@
     <ClInclude Include="Vector3.h">
       <Filter>Math</Filter>
     </ClInclude>
+    <ClInclude Include="DxState.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Core.cpp">
@@ -133,6 +136,9 @@
     </ClCompile>
     <ClCompile Include="Vector3.cpp">
       <Filter>Math</Filter>
+    </ClCompile>
+    <ClCompile Include="DxState.cpp">
+      <Filter>소스 파일</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>
