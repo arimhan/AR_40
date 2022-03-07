@@ -2,6 +2,8 @@
 #include <winsock2.h>
 #include <windows.h>
 #include <d3d11.h>
+#include <dxgidebug.h> //debug
+#include <queue>
 #include <vector>
 #include <list>
 #include <map>
@@ -13,6 +15,7 @@
 #include "Collision.h"
 #include <wrl.h>					//ComPtr
 using namespace Microsoft::WRL;		//ComPtr
+
 #pragma comment (lib, "d3d11.lib")
 #ifdef _DEBUG
 #pragma comment (lib, "ACoreLib_d.lib")
@@ -62,6 +65,7 @@ static void DisplayText(const char* fmt, ...)
 	OutputDebugStringA((char*)buf);
 	va_end(arg);
 }
+
 
 //static void MemoryReporting()
 //{

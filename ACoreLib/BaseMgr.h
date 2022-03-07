@@ -53,7 +53,7 @@ T* ABaseMgr<T, S>::GetPtr(wstring key)
 	auto iter = m_list.find(key);
 	if (iter != m_list.end())
 	{
-		return (*iter).second;
+		return (*iter).second.get();
 	}
 	return nullptr;
 }
@@ -90,7 +90,7 @@ bool ABaseMgr<T, S>::Release()
 	for (auto data : m_list)
 	{
 		data.second->Release();
-		delete data.second;
+		//delete data.second;
 	}
 	m_list.clear();
 	return true; 

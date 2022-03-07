@@ -8,8 +8,9 @@ bool ACore::CoreInit()
     AInput::Get().Init();
     if (SUCCEEDED(InitDevice()))
     {
-        I_Shader.Set(m_pd3dDevice);
-        I_Texture.Set(m_pd3dDevice);
+        I_Shader.Set(m_pd3dDevice.Get());
+        I_Texture.Set(m_pd3dDevice.Get());
+        
         if (m_dxWrite.Init())
         {
             IDXGISurface1* pSurface = nullptr;
@@ -60,7 +61,7 @@ bool ACore::CoreRender()
 {
     //float color[4] = { 102.0f, 204.0f, 255.0f, 1.0f }; // 102 204 255
     float color[4] = { 0.1f, 0.25f, 0.1f, 0.0f };
-    m_pImmediateContext->ClearRenderTargetView(m_pRenderTargetView, color);
+    m_pImmediateContext->ClearRenderTargetView(m_pRenderTargetView.Get(), color);
     m_pImmediateContext->PSSetSamplers(0, 1, &m_pSamplerState);
 
     Render(); //백버퍼에 랜더링
