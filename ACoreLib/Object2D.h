@@ -34,15 +34,7 @@ public:
 	};
 	virtual void UpdateData() {}
 
-	AObject2D() 
-	{
-		m_fAlpha = 1.0f;
-		m_vColor = AVector4(1, 1, 1, 1);
-		m_rtSource.left = 0;			m_rtSource.right = 0;
-		m_rtSource.top = 0;				m_rtSource.bottom = 0;
-		m_rtDraw.left = 0;		m_rtDraw.right = g_rtClient.right;
-		m_rtDraw.top = 0;		m_rtDraw.bottom = g_rtClient.bottom;
-	};
+	AObject2D();
 	virtual ~AObject2D() {};
 };
 

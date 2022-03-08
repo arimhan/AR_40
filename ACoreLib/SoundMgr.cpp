@@ -168,7 +168,8 @@ ASound* ASoundMgr::GetPtr(wstring key)
 }
 bool ASoundMgr::Init()
 {
-	FMOD_RESULT ret = FMOD::System_Create(&m_pSystem);
+	FMOD_RESULT ret;
+	ret = FMOD::System_Create(&m_pSystem);
 	ret = m_pSystem->init(32, FMOD_INIT_NORMAL, 0);
 	//int maxchannels, FMOD_INITFLAGS flags, void* extradriverdata
 	return true;
@@ -184,7 +185,7 @@ bool ASoundMgr::Release()
 	for (auto data : m_list)
 	{
 		data.second->Release();
-		delete data.second.get();
+		//delete data.second.get();
 	}
 	m_list.clear();
 
@@ -197,6 +198,4 @@ bool ASoundMgr::Release()
 	return true;
 }
 ASoundMgr::ASoundMgr() { m_iIndex = 0; }
-ASoundMgr::~ASoundMgr()
-{
-}
+ASoundMgr::~ASoundMgr() { Release(); }

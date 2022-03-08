@@ -22,11 +22,11 @@ public:
 	bool	Render();
 	bool	Release();
 public:
-	void	Play(bool bLoop = false);	//실행, true받으면 실행!
+	void	Play(bool bLoop = false);			//실행, true받으면 실행!
 	void	PlayEffect();
-	void	Stop();	//정지
-	void	Paused();	//일시정지
-	void	VolumeUP(float fVolume = 0.1f);	//볼륨조절
+	void	Stop();								//정지
+	void	Paused();							//일시정지
+	void	VolumeUP(float fVolume = 0.1f);		//볼륨조절
 	void	VolumeDown(float fVolume = 0.1f);	//볼륨조절
 
 public:

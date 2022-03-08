@@ -188,9 +188,9 @@ bool ADxObject::Frame() { return true; }
 bool ADxObject::Render() 
 {
 	if( m_pColorTex != nullptr)
-		m_pContext->PSSetShaderResources(0, 1, &m_pColorTex->m_pSRV);
+		m_pContext->PSSetShaderResources(0, 1, m_pColorTex->m_pSRV.GetAddressOf());
 	if(m_pMaskTex != nullptr)
-		m_pContext->PSSetShaderResources(1, 1, &m_pMaskTex->m_pSRV);
+		m_pContext->PSSetShaderResources(1, 1, m_pMaskTex->m_pSRV.GetAddressOf());
 	if (m_pVSShader != nullptr)
 		m_pContext->VSSetShader(m_pVSShader->m_pVertexShader, NULL, 0);
 	if (m_pPSShader != nullptr)
@@ -198,11 +198,11 @@ bool ADxObject::Render()
 
 	if (m_bAlphaBlend)
 	{
-		m_pContext->OMSetBlendState(m_AlphaBlend, 0, -1);
+		m_pContext->OMSetBlendState(ADxState::m_AlphaBlend, 0, -1);
 	}
 	else
 	{
-		m_pContext->OMSetBlendState(m_AlphaBlendDisable, 0, -1);
+		m_pContext->OMSetBlendState(ADxState::m_AlphaBlendDisable, 0, -1);
 	}
 	m_pContext->IASetInputLayout(m_pVertexLayout);
 
@@ -227,12 +227,6 @@ bool ADxObject::Render()
 }
 bool ADxObject::Release() 
 {
-	if (m_AlphaBlend)			m_AlphaBlend		->Release();
-	if (m_AlphaBlendDisable)	m_AlphaBlendDisable	->Release();
-
-	m_AlphaBlend			= nullptr;
-	m_AlphaBlendDisable		= nullptr;
-
 	if (m_pVertexBuffer)	m_pVertexBuffer		->Release();
 	if (m_pIndexBuffer)		m_pIndexBuffer		->Release();
 	if (m_pConstantBuffer)	m_pConstantBuffer	->Release();

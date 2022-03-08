@@ -17,19 +17,38 @@ void AObject2D::SetRectSource(RECT rt) { m_rtSource = rt; }
 void AObject2D::SetRectDraw(RECT rt)
 {
 	m_rtDraw = rt;
+	m_vPos.x = rt.left + (rt.right / 2.0f);
+	m_vPos.y = rt.top + (rt.bottom / 2.0f);
 	m_fWidth = rt.right;
 	m_fHeight = rt.bottom;
+
+	m_rtCollision = ARect(m_vPos, m_fWidth, m_fHeight);
 }
 void AObject2D::AddPosition(AVector2 vPos)
 {
 	m_vPos += vPos;
+
 	m_rtCollision = ARect(m_vPos, m_fWidth, m_fHeight);
-	ConvertIndex(m_vPos, m_fWidth, m_fHeight, m_VertexList);
-	m_pContext->UpdateSubresource(m_pVertexBuffer, 0, NULL, &m_VertexList.at(0), 0, 0);
+	SetVertexData();
+	SetIndexData();
+	if (m_pContext != nullptr)
+	{
+		m_pContext->UpdateSubresource(
+			m_pVertexBuffer, 0, NULL, &m_VertexList.at(0), 0, 0);
+	}
 }
 void AObject2D::SetPosition(AVector2 vPos)
 {
 	m_vPos = vPos;
+
+	m_rtCollision = ARect(m_vPos, m_fWidth, m_fHeight);
+	SetVertexData();
+	SetIndexData();
+	if (m_pContext != nullptr)
+	{
+		m_pContext->UpdateSubresource(
+			m_pVertexBuffer, 0, NULL, &m_VertexList.at(0), 0, 0);
+	}
 }
 void AObject2D::UpDateRectDraw(RECT rt)
 {
@@ -152,6 +171,7 @@ bool AObject2D::SetVertexData()
 }
 bool AObject2D::SetIndexData()
 {
+	m_IndexList.clear();
 	m_IndexList.push_back(0);	m_IndexList.push_back(1);	 m_IndexList.push_back(2);
 	m_IndexList.push_back(2);	m_IndexList.push_back(1);	 m_IndexList.push_back(3);
 	return true;
@@ -164,5 +184,15 @@ bool AObject2D::Frame()
 	m_ConstantList.Timer = AVector4(g_fGameTimer, 0, 0, 1.0f);
 	m_pContext->UpdateSubresource(m_pConstantBuffer, 0, NULL, &m_ConstantList, 0, 0);
 	return true;
+}
+
+AObject2D::AObject2D()
+{
+	m_fAlpha = 1.0f;
+	m_vColor = AVector4(1, 1, 1, 1);
+	m_rtSource.left = 0;			m_rtSource.right = 0;
+	m_rtSource.top = 0;				m_rtSource.bottom = 0;
+	m_rtDraw.left = 0;		m_rtDraw.right = g_rtClient.right;
+	m_rtDraw.top = 0;		m_rtDraw.bottom = g_rtClient.bottom;
 }
 

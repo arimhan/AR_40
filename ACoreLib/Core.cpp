@@ -23,7 +23,6 @@ bool ACore::CoreInit()
             if (pSurface) pSurface->Release();
         }
     }
-    //InitDevice();
     Init();
 
     D3D11_SAMPLER_DESC sd;

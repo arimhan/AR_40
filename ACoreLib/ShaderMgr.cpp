@@ -53,13 +53,14 @@ AShader* AShaderMgr::CreateVertexShader(ID3D11Device* pd3dDevice, wstring filena
 	wstring name = Splitpath(filename, to_mw(entry));
 	AShader* pData = GetPtr(name);
 	if (pData != nullptr) { return pData; }
-	pData = new AShader;
-	if (!pData->CreateVertexShader(pd3dDevice, filename, entry))
+
+	shared_ptr<AShader> pNewData = make_shared<AShader>();
+	//pData = new AShader;
+	if (!pNewData->CreateVertexShader(pd3dDevice, filename, entry))
 	{
-		delete pData;
-		//return nullptr;
+		//delete pData;
+		return nullptr;
 	}
-	shared_ptr<AShader> pNewData = std::make_shared<AShader>();
 	pNewData->m_csName = name;
 	m_list.insert(make_pair(pNewData->m_csName, pNewData));
 	m_iIndex++;
@@ -73,13 +74,13 @@ AShader* AShaderMgr::CreatePixelShader(ID3D11Device* pd3dDevice, wstring filenam
 
 	auto pNewData = make_shared<AShader>();
 	//pData = new AShader;
-	if (!pData->CreatePixelShader(pd3dDevice, filename, entry))
+	if (!pNewData->CreatePixelShader(pd3dDevice, filename, entry))
 	{
 		//delete pData;
 		return nullptr;
 	}
-	pData->m_csName = name;
-	m_list.insert(make_pair(pData->m_csName, pData));
+	pNewData->m_csName = name;
+	m_list.insert(make_pair(pNewData->m_csName, pNewData));
 	m_iIndex++;
-	return pData;
+	return pNewData.get();
 }

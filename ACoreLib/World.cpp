@@ -41,22 +41,22 @@ bool AWorld::Release()
 	for (auto obj : m_UIObj)
 	{
 		obj->Release();
-		delete obj.get();
+		obj = nullptr;
 	}
 	for (auto obj : m_ItemObj)
 	{
 		obj->Release();
-		delete obj.get();
+		obj = nullptr;
 	}
 	for (auto obj : m_NpcObj)
 	{
 		obj->Release();
-		delete obj.get();
+		obj = nullptr;
 	}
 	for (auto obj : m_MapObj)
 	{
 		obj->Release();
-		delete obj.get();
+		obj = nullptr;
 	}
 	m_UIObj.clear();
 	m_ItemObj.clear();

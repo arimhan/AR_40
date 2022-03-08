@@ -32,6 +32,16 @@ void AWriteFont::Draw(wstring msg, RECT rt, D2D1::ColorF color, IDWriteTextForma
     fRT.right   = rt.right;
     fRT.bottom  = rt.bottom;
 
+    /*D2D_RECT_F rt;
+    rt.top = 0;
+    rt.left = 0;
+    rt.right = g_rtClient.right;
+    rt.bottom = g_rtClient.bottom;
+    std::wstring msg = L"FPS arhan 2Dgame";
+    m_pd2dRT->DrawText(msg.c_str(), msg.size(),m_pd2dTextFormat,
+                        &rt,m_pd2dColorBrush);*/
+
+
     m_pd2dColorBrush->SetColor(color);
     if (tf == nullptr)
     {
@@ -55,20 +65,20 @@ bool AWriteFont::Init()
             hr = m_pWriteFactory->CreateTextFormat(
                 L"µ¸¿ò",
                 NULL,
-                DWRITE_FONT_WEIGHT_NORMAL,
+                DWRITE_FONT_WEIGHT_MEDIUM,     //³ë¸Ö->·¹±Ö·¯
                 DWRITE_FONT_STYLE_NORMAL,
                 DWRITE_FONT_STRETCH_NORMAL,
-                20,
+                15,
                 L"ko-kr",
                 &m_pd2dTextFormat);
 
             hr = m_pWriteFactory->CreateTextFormat(
                 L"Imprint MT Shadow",
                 NULL,
-                DWRITE_FONT_WEIGHT_NORMAL,
+                DWRITE_FONT_WEIGHT_MEDIUM,
                 DWRITE_FONT_STYLE_NORMAL,
                 DWRITE_FONT_STRETCH_NORMAL,
-                20,
+                15,
                 L"en-us",
                 &m_pd2dMTShadowTF);
         }
