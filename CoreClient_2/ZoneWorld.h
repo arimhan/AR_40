@@ -10,6 +10,7 @@ public:
 	APlayerObj2D	m_PlayerObj;
 	ASound*			m_pBackGroundMusic;
 
+
 public:
 	bool			Load(wstring file) override;
 	virtual bool	Init();

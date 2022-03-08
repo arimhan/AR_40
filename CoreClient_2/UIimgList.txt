@@ -1,0 +1,7 @@
+#UI_IMG 4
+Start_Default
+58,49,110,49
+97,74,110,50
+110,151,110,50
+
+../../data/ui/btnStart.bmp

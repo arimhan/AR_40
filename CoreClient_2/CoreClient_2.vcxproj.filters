@@ -136,5 +136,8 @@
     <Text Include="SpriteData.txt">
       <Filter>Sprite</Filter>
     </Text>
+    <Text Include="UIimgList.txt">
+      <Filter>소스 파일\shader</Filter>
+    </Text>
   </ItemGroup>
 </Project>

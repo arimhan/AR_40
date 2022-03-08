@@ -104,70 +104,25 @@ bool AIntroWorld::CreateModelType()
 	I_UI.m_list.insert(make_pair(L"bk", Obj));
 
 	
-	//패널
-	std::shared_ptr<AButtonObject> btnDlg(new AButtonObject);
-	btnDlg->m_csName = L"AButtonObject:btnDlg";
-	btnDlg->Init();
-	btnDlg->m_rtOffset = { 50, 50, 50, 50 };
-	btnDlg->SetRectDraw({ 0,0, g_rtClient.right / 3,g_rtClient.bottom / 3 });
-	btnDlg->SetPosition(AVector2(0, 0));
-	if (!btnDlg->Create(m_pd3dDevice, m_pContext,
-		L"../../data/shader/DefaultUI.txt",
-		L"../../data/ui/popup_normal.png"))
-	{
-		return false;
-	}
-	btnDlg->SetCollisionType(ACollisionType::Ignore, ASelectType::Select_Overlap);
-	I_UI.m_list.insert(std::make_pair(L"btnDlg", btnDlg));
-
-
-	//Start  버튼
+	//버튼
 	shared_ptr<AButtonObject> btnObj(new AButtonObject);
 	btnObj->m_csName = L"AButtonObject:btnStart";
 	btnObj->Init();
-	btnObj->m_rtOffset = { 0, 0, 0, 0 };
-	btnObj->SetRectDraw({ 0,0, 334,82 });
+	btnObj->m_rtOffset = { 110, 50 ,0, 0 };		//(,0,) ~ 출력끝점 (x,y) 
+	//btnObj->SetRectDraw({ 0,0, 0,0 });			//여러개 출력할경우에만
 	btnObj->SetPosition(AVector2(0, 0));
-	ATexture* pTex = I_Texture.Load(L"../../data/ui/main_start_nor.png");
+	ATexture* pTex = I_Texture.Load(L"../../data/ui/btnStart.bmp");
 	ASound* pSound = I_Sound.Load("../../data/Sound/00_Menu.MP3");
-
-	btnObj->m_pStatePlayList.emplace_back(pTex, pSound);
-	pTex = I_Texture.Load(L"../../data/ui/main_start_pus.png");
-	pSound = I_Sound.Load("../../data/Sound/FootStepSound.wav");
-
-	btnObj->m_pStatePlayList.emplace_back(pTex, pSound);
-	pTex = I_Texture.Load(L"../../data/ui/main_start_sel.png");
-	pSound = I_Sound.Load("../../data/Sound/FootStepSound_2.wav");
-
-	btnObj->m_pStatePlayList.emplace_back(pTex, pSound);
-	pTex = I_Texture.Load(L"../../data/ui/main_start_dis.png");
-	pSound = I_Sound.Load("../../data/Sound/PianoSound_00.mp3");
-
 	btnObj->m_pStatePlayList.emplace_back(pTex, pSound);
 
 	if (!btnObj->Create(m_pd3dDevice, m_pContext,
-		L"../../data/shader/DefaultUI.txt",
-		L"../../data/main_start_nor.png"))
+		L"../../data/shader/DefaultUI.txt",	L"../../data/ui/btnStart.bmp"))
 	{
 		return false;
 	}
 	btnObj->SetCollisionType(ACollisionType::Ignore, ASelectType::Select_Overlap);
 	I_UI.m_list.insert(std::make_pair(L"btnStart", btnObj));
 
-	// 새로운 모델을 생성해서 등록한다.
-	shared_ptr<AUIModelComposed> pComposedObj(new AUIModelComposed);
-	pComposedObj->m_csName = L"AUIModelComposed";
-	AButtonObject* pDlgWindow = (AButtonObject*)I_UI.GetPtr(L"btnDlg")->Clone();
-	pDlgWindow->m_rtOffset = { 50, 50, 50, 50 };
-	pDlgWindow->SetRectDraw({ 0,0, g_rtClient.right / 3,g_rtClient.bottom / 3 });
-	pDlgWindow->SetPosition(AVector2(400, 300));
-	pComposedObj->Add(pDlgWindow);
-	AUIModel* pNewDlgBtn = I_UI.GetPtr(L"btnStart")->Clone();
-	pNewDlgBtn->m_csName = L"btnStartClone_ComposedList";
-	pNewDlgBtn->SetRectDraw({ 0,0, 100,50 });
-	pNewDlgBtn->SetPosition(pDlgWindow->m_vPos + AVector2(0, 0));
-	pComposedObj->Add(pNewDlgBtn);
-	I_UI.m_list.insert(std::make_pair(L"dlgWindow", pComposedObj));
 	return true;
 }
 
@@ -175,63 +130,49 @@ bool AIntroWorld::Load(wstring file)
 {
 	//시작화면에서는 이 음악이 나오도록 ~
 	m_pBackGroundMusic = I_Sound.Load("../../data/Sound/Munn.mp3");
-	m_pColorTex = I_Texture.Load(L"../../data/Img/KGCABK.bmp");
+	m_pColorTex = I_Texture.Load(L"../../data/Img/stage1_1.png");
 
-	for (int i = 0; i < 10; i++) //카운트다운
-	{
-		wstring name = L"../../data/Img/";
-		name += to_wstring(i);
-		name += L".bmp";
-		m_pChangeColorTex[i] = I_Texture.Load(name);
-	}
+	//for (int i = 0; i < 10; i++) //카운트다운
+	//{
+	//	wstring name = L"../../data/Img/";
+	//	name += to_wstring(i);
+	//	name += L".bmp";
+	//	m_pChangeColorTex[i] = I_Texture.Load(name);
+	//}
 	CreateModelType();
 	
-	AObject2D* pNewBK =
-		I_UI.GetPtr(L"bk")->Clone();
+	//intro 배경
+	AObject2D* pNewBK = I_UI.GetPtr(L"bk")->Clone();
 	pNewBK->m_csName = L"AImageObject:bk";
-	pNewBK->SetPosition(AVector2(400, 300));
+	pNewBK->SetPosition(AVector2((g_rtClient.right/2), (g_rtClient.bottom / 2)));
 	pNewBK->UpdateData();
 	m_UIObj.push_back(shared_ptr<AObject2D>(pNewBK));
 	// 프로토타입 디자인 패턴-> 복제를 통해서 객체 생성/ + 컴포짓(Composite패턴)
 
-	//Start 버튼
+	//Start버튼2
 	AObject2D* pNewBtn1 =
 		I_UI.GetPtr(L"btnStart")->Clone();
 	pNewBtn1->m_csName = L"btnStartClone1";
-	pNewBtn1->SetRectDraw({ 0,0, 100,50 });
-	pNewBtn1->SetPosition(AVector2(300, 25));
+	pNewBtn1->SetRectDraw({ 0,0, 110,50 });			//UI 출력 사이즈 w,h
+	pNewBtn1->SetPosition(AVector2((g_rtClient.right / 2), (g_rtClient.bottom / 1.35)));
 	pNewBtn1->UpdateData();
 	m_UIObj.push_back(shared_ptr<AObject2D>(pNewBtn1));
-	AUIModel* pNewBtn2 = I_UI.GetPtr(L"btnStart")->Clone();
-	pNewBtn2->m_csName = L"btnStartClone2";
-	pNewBtn2->SetRectDraw({ 0,0, 100,100 });
-	pNewBtn2->SetPosition(AVector2(400, 150));
-	pNewBtn2->UpdateData();
-	m_UIObj.push_back(shared_ptr<AObject2D>(pNewBtn2));
-
-	AUIModel* pNewBtn3 = I_UI.GetPtr(L"btnStart")->Clone();
-	pNewBtn3->m_csName = L"btnStartClone3";
-	pNewBtn3->SetRectDraw({ 0,0, 100,50 });
-	pNewBtn3->SetPosition(AVector2(500, 200));
-	pNewBtn3->UpdateData();
-	m_UIObj.push_back(shared_ptr<AObject2D>(pNewBtn3));
-
-	AUIModel* pNewDlgBtnClone = I_UI.GetPtr(L"dlgWindow")->Clone();
-	pNewDlgBtnClone->m_csName = L"AUIModelComposedClone";
-	pNewDlgBtnClone->m_pParent = nullptr;
-	pNewDlgBtnClone->SetPosition(AVector2(0, 0));
-	pNewDlgBtnClone->UpdateData();
-	m_UIObj.push_back(shared_ptr<AObject2D>(pNewDlgBtnClone));
 
 
-	shared_ptr<AListCtrlObject> pListCtrl =
-		std::make_shared<AListCtrlObject>();
-	pListCtrl->m_csName = L"AListCtrlObject";
-	pListCtrl->m_pParent = pNewBK;
-	pListCtrl->SetRectDraw({ 100,100, 100,300 });
-	
-	pListCtrl->Create(1, 5);
-	m_UIObj.push_back(pListCtrl);
+	//Start 버튼 2
+
+	//AUIModel* pStartBtn1 = I_UI.GetPtr(L"btnStart")->Clone();
+	//pStartBtn1->m_csName = L"btnStartClone1";
+	//pStartBtn1->SetRectDraw({ 0,0, 100,50 });
+	//pStartBtn1->SetPosition(AVector2((g_rtClient.right / 2), (g_rtClient.bottom / 2)));
+	//pStartBtn1->UpdateData();
+	//m_UIObj.push_back(shared_ptr<AObject2D>(pStartBtn1));
+	//m_UIStartBtnD
+
+
+
+
+
 
 	//이펙트
 	I_Sprite.Load(L"SpriteData.txt");
@@ -250,5 +191,7 @@ bool AIntroWorld::Load(wstring file)
 	{
 		return false;
 	}
+
+
 	return true;
 }

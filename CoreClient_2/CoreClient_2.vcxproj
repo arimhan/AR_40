@@ -191,6 +191,7 @@
     <Text Include="Player.txt" />
     <Text Include="Shader.txt" />
     <Text Include="SpriteData.txt" />
+    <Text Include="UIimgList.txt" />
     <Text Include="VertexShader.txt" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

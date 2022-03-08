@@ -117,9 +117,9 @@ bool ADxObject::Create(ID3D11Device* pd3dDevice, ID3D11DeviceContext* pContext,
 	const TCHAR* szShaderFileName,const TCHAR* szColorFileName , const TCHAR* szMaskFileName )
 {
 	HRESULT hr;
-	m_rtCollision = ARect(m_vPos, m_fWidth, m_fHeight);
-	I_ObjectMgr.AddCollisionExecute(this, bind(&ABaseObject::HitOverlap, this, placeholders::_1, placeholders::_2));
-	I_ObjectMgr.AddSelectExecute(this, bind(&ABaseObject::HitSelect, this, placeholders::_1, placeholders::_2));
+	//m_rtCollision = ARect(m_vPos, m_fWidth, m_fHeight);
+	//I_ObjectMgr.AddCollisionExecute(this, bind(&ABaseObject::HitOverlap, this, placeholders::_1, placeholders::_2));
+	//I_ObjectMgr.AddSelectExecute(this, bind(&ABaseObject::HitSelect, this, placeholders::_1, placeholders::_2));
 
 	SetDevice(pd3dDevice, pContext);
 	if (szColorFileName != nullptr && !LoadTexture(szColorFileName, szMaskFileName)) 
@@ -163,24 +163,6 @@ bool ADxObject::Create(ID3D11Device* pd3dDevice, ID3D11DeviceContext* pContext,
 		return false;
 	}
 
-	D3D11_BLEND_DESC blenddesc;
-	ZeroMemory(&blenddesc, sizeof(D3D11_BLEND_DESC));
-	//blenddesc.AlphaToCoverageEnable;
-	//blenddesc.IndependentBlendEnable;
-	blenddesc.RenderTarget[0].BlendEnable = TRUE;
-	blenddesc.RenderTarget[0].SrcBlend = D3D11_BLEND_SRC_ALPHA;
-	blenddesc.RenderTarget[0].DestBlend = D3D11_BLEND_INV_SRC_ALPHA;
-	blenddesc.RenderTarget[0].BlendOp = D3D11_BLEND_OP_ADD;
-
-	// 알파 연산 저장
-	blenddesc.RenderTarget[0].SrcBlendAlpha = D3D11_BLEND_ONE;
-	blenddesc.RenderTarget[0].DestBlendAlpha = D3D11_BLEND_ZERO;
-	blenddesc.RenderTarget[0].BlendOpAlpha = D3D11_BLEND_OP_ADD;
-	blenddesc.RenderTarget[0].RenderTargetWriteMask = D3D11_COLOR_WRITE_ENABLE_ALL;
-
-	hr = m_pd3dDevice->CreateBlendState(&blenddesc, &m_AlphaBlend);
-	blenddesc.RenderTarget[0].BlendEnable = FALSE;
-	hr = m_pd3dDevice->CreateBlendState(&blenddesc, &m_AlphaBlendDisable);
 	return true;
 }
 bool ADxObject::Init() { return true; }

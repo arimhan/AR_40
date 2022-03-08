@@ -14,6 +14,7 @@ public:
 	ASprite			m_SpriteObj;
 	AEffectObj		m_ExplosionObj;
 	AWorld*			m_pNextWorld;
+	AButtonObject	m_UIStartBtnD;
 public:
 	ASound*			m_pBackGroundMusic;
 	ATexture*		m_pChangeColorTex[10];
