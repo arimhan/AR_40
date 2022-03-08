@@ -19,6 +19,7 @@ public:
 	ATexture*		m_pChangeColorTex[10];
 	ATexture*		m_pColorTex;
 public:
+	bool			CreateModelType();
 	bool			Load(wstring file) override;
 	virtual bool	Init();
 	virtual bool	Frame();

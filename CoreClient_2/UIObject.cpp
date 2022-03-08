@@ -71,18 +71,25 @@ bool AUIObject::SetVertexData()
     //나머지 정점들을 세팅한다. 해당하는 x,y위치의 구현된 정점을 활용한다.
     list[1].v = { list[5].v.x , list[0].v.y };
     list[1].t = { list[5].t.x , list[0].t.y };
+
     list[2].v = { list[6].v.x , list[3].v.y };
     list[2].t = { list[6].t.x , list[3].t.y };
+
     list[4].v = { list[0].v.x , list[5].v.y };
     list[4].t = { list[0].t.x , list[5].t.y };
+
     list[7].v = { list[3].v.x , list[6].v.y };
     list[7].t = { list[3].t.x , list[6].t.y };
+
     list[8].v = { list[12].v.x , list[9].v.y };
     list[8].t = { list[12].t.x , list[9].t.y };
+
     list[11].v = { list[15].v.x , list[10].v.y };
     list[11].t = { list[15].t.x , list[10].t.y };
+
     list[13].v = { list[9].v.x , list[12].v.y };
     list[13].t = { list[9].t.x , list[12].t.y };
+
     list[14].v = { list[10].v.x , list[15].v.y };
     list[14].t = { list[10].t.x , list[15].t.y };
 
@@ -99,9 +106,11 @@ bool AUIObject::SetVertexData()
 }
 bool AUIObject::SetIndexData()
 {
+    m_IndexList.clear();
+
     //정점을 시계방향 순서대로 1: 0,1,4   2: 4,1,5...로 push_back 한다.
     m_IndexList.push_back(0);   m_IndexList.push_back(1);   m_IndexList.push_back(4);
-    m_IndexList.push_back(4);   m_IndexList.push_back(5);   m_IndexList.push_back(1);
+    m_IndexList.push_back(4);   m_IndexList.push_back(1);   m_IndexList.push_back(5);
     m_IndexList.push_back(1);   m_IndexList.push_back(2);   m_IndexList.push_back(5);
     m_IndexList.push_back(5);   m_IndexList.push_back(2);   m_IndexList.push_back(6);
     m_IndexList.push_back(2);   m_IndexList.push_back(3);   m_IndexList.push_back(6);
@@ -148,59 +157,97 @@ void AButtonObject::HitSelect(ABaseObject* pObj, DWORD dwState)
 
     if (m_dwPreSelectState == m_dwSelectState) { return; }
     if (m_pStatePlayList.size() <= 0) return;
+
     switch (m_dwSelectState)
     {
-        case M_SELECTED:
+
+        case ASelectState::M_DEFAULT:
         {
+            if (m_pStatePlayList[0].pTex == nullptr) break;
+            m_pColorTex = m_pStatePlayList[0].pTex;
+            state += "M_DEFAULT\n";
+        }break;
+        case ASelectState::M_SELECTED:
+        {
+            //버튼 M_SELECTED상태일 경우 존 이동처리
             if (m_pStatePlayList[3].pTex == nullptr) break;
             m_pColorTex = m_pStatePlayList[3].pTex;
             m_pStatePlayList[3].pSound->PlayEffect();
             AWorld::m_pCurWorld->m_bLoadWorld = true;
             state += "M_SELECTED\n";
         }break;
-        case M_HOVER:
-        {
+        case ASelectState::M_HOVER:
+        { 
+            //버튼 M_HOVER상태일 경우 존 이동처리
             if (m_pStatePlayList[1].pTex == nullptr) break;
             m_pColorTex = m_pStatePlayList[1].pTex;
             m_pStatePlayList[1].pSound->PlayEffect();
             AWorld::m_pCurWorld->m_bLoadWorld = true;
             //state += "M_HOVER\n";
         }break;
-        case M_ACTIVE:
+        case ASelectState::M_ACTIVE:
         {
             if (m_pStatePlayList[2].pTex == nullptr) break;
             m_pColorTex = m_pStatePlayList[2].pTex;
             m_pStatePlayList[2].pSound->PlayEffect();
-            AWorld::m_pCurWorld->m_bLoadWorld = true;
             state += "M_ACTIVE\n";
         }break;
-        case M_FOCUS:
+        case ASelectState::M_FOCUS:
         {
             if (m_pStatePlayList[2].pTex == nullptr) break;
             m_pColorTex = m_pStatePlayList[2].pTex;
             m_pStatePlayList[2].pSound->PlayEffect();
-            AWorld::m_pCurWorld->m_bLoadWorld = true;
             //state += "M_FOCUS\n";
         }break;
         default: { state += to_string(m_dwSelectState); }
     }
     m_dwPreSelectState = m_dwSelectState;
-    DisplayText(state.c_str());
+    //DisplayText(state.c_str());
 }
 bool AButtonObject::Init() { return true; }
 bool AButtonObject::Frame()
 {
-    if (m_dwSelectState == M_DEFAULT)
-    {
-        //m_pColorTex = m_pStatePlayList[0].pTex;
-        //m_dwPreSelectState = m_dwSelectState;
-    }
     AObject2D::Frame();
+    //if (m_dwSelectState == M_DEFAULT)
+    //{
+    //    //m_pColorTex = m_pStatePlayList[0].pTex;
+    //    //m_dwPreSelectState = m_dwSelectState;
+    //}
+
     return true;
 }
 bool AButtonObject::Render()
 {
     AObject2D::Render();
+    return true;
+}
+
+bool AListCtrlObject::Create(int xCount, int yCount)
+{
+
+    UpdateData();
+
+    int iHalfWidth = m_fWidth / xCount;
+    int iHalfHeight = m_fHeight / yCount;
+    AVector2 pStart = { (float)m_rtDraw.left, (float)m_rtDraw.top };
+    pStart.x += m_fWidth / xCount / 2.0f;
+    pStart.y += m_fHeight / yCount / 2.0f;
+    for (int iCol = 0; iCol < xCount; iCol++)
+    {
+        for (int iRow = 0; iRow < yCount; iRow++)
+        {
+            AUIModel* pNewBtn = I_UI.GetPtr(L"btnStart")->Clone();
+            pNewBtn->m_pParent = this;
+            pNewBtn->m_csName = L"Btn";
+            pNewBtn->m_csName += std::to_wstring(iRow * yCount + iCol);
+            pNewBtn->SetRectDraw({ 0,0, iHalfWidth,iHalfHeight });
+            pNewBtn->SetPosition(AVector2(
+                pStart.x + iHalfWidth * iCol,
+                pStart.y + iHalfHeight * iRow));
+            pNewBtn->UpdateData();
+            Add(pNewBtn);
+        }
+    }
     return true;
 }
 

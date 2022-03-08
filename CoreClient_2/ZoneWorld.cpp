@@ -15,13 +15,14 @@ bool AZoneWorld::Load(wstring file)
 	m_PlayerObj.SetRectSource({ 91,1,42,56 });
 	m_PlayerObj.SetRectDraw({ 0,0,42,56 });
 	m_PlayerObj.m_csName = L"PlayerUser";
-	if (!m_PlayerObj.Create(m_pd3dDevice, m_pContext, L"Shader.txt", L"../../data/bitmap1.bmp",
-														L"../../data/bitmap2.bmp"))
+	if (!m_PlayerObj.Create(m_pd3dDevice, m_pContext, 
+		L"Shader.txt", L"../../data/Img/bitmap1.bmp", L"../../data/Img/bitmap2.bmp"))
 	{	return false;	}
 
-	for (int iNpc = 0; iNpc < 7; iNpc++)
+	for (int iNpc = 0; iNpc < 3; iNpc++)
 	{
-		AObjectNpc2D* npc = new AObjectNpc2D;
+		//AObjectNpc2D* npc = new AObjectNpc2D;
+		shared_ptr<AObjectNpc2D> npc = make_shared<AObjectNpc2D>();
 		npc->m_csName = L"NPC_";
 		npc->m_csName += to_wstring(iNpc);
 		npc->Init();
@@ -37,11 +38,11 @@ bool AZoneWorld::Load(wstring file)
 			npc->SetRectDraw({ 0,0,42,76 });
 		}
 
-		if (!npc->Create(m_pd3dDevice, m_pContext, L"Shader.txt", L"../../data/bitmap1.bmp",
-													L"../../data/bitmap2.bmp"))
+		if (!npc->Create(m_pd3dDevice, m_pContext, 
+			L"Shader.txt", L"../../data/Img/bitmap1.bmp",L"../../data/Img/bitmap2.bmp"))
 		{ return false; }
 		 
-		m_NpcObj.insert(make_pair(npc->m_csName, npc));
+		m_NpcObj.push_back(npc);
 	}
 	return true;
 }

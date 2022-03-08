@@ -4,7 +4,7 @@ class ASprite : public AObject2D
 {
 public:
 	float			m_fAnimTime;
-	vector<RECT>	m_rtArray;		//win에 있는 RECT를 사용. sprice를 array로 저장한다.
+	vector<RECT>	m_rtArray;		//win에 있는 RECT를 사용. sprite를 array로 저장한다.
 public:
 	void			SetRectSouceArray(RECT rt);
 	virtual bool	Init() override;

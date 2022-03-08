@@ -34,10 +34,7 @@ public:
 	bool	Render()		override;
 	bool	SetVertexData() override;
 	bool	SetIndexData()	override;
-	void    HitSelect(ABaseObject* pObj, DWORD dwState) override
-	{
-		int K = 0;
-	}
+	void HitSelect(ABaseObject* pObj, DWORD dwState) override { int C = 0; }
 	AUIObject()
 	{
 		m_rtOffsetTex.left = 0;
@@ -61,14 +58,28 @@ public:
 	bool	Init()		override;
 	bool	Frame()		override;
 	bool	Render()	override;
+	virtual void HitSelect(ABaseObject* pObj, DWORD dwState) override { int C = 0; }
+
 };
 class AButtonObject : public AUIObject
 {
+public:
+	AUIModel* Clone()
+	{
+		AUIModel* pCopy = new AButtonObject(*this);
+		pCopy->CreateVertexBuffer();
+		pCopy->CreateIndexBuffer();
+		pCopy->CreateConstantBuffer();
+		pCopy->CreateInputLayout();
+		return pCopy;
+	};
 public:
 	virtual void HitSelect(ABaseObject* pObj, DWORD dwState) override;
 	bool Init()			override;
 	bool Frame()		override;
 	bool Render()		override;
+	AButtonObject() {}
+	virtual ~AButtonObject() {}
 };
 
 class AListCtrlObject : public AUIModelComposed
@@ -101,7 +112,7 @@ public:
 				std::placeholders::_1,
 				std::placeholders::_2));
 	}
-	virtual void	HitSelect(ABaseObject* pObj, DWORD dwState) override;
+	virtual void HitSelect(ABaseObject* pObj, DWORD dwState) override;
 public:
 	AListCtrlObject() {}
 	virtual ~AListCtrlObject() {}

@@ -35,15 +35,16 @@ LRESULT ASample::MsgProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
 
 bool ASample::Init()
 {
-    I_Fsm.AddTransition(STATE_STOP, STATE_STOP_TIMER, STATE_MOVE);
-    I_Fsm.AddTransition(STATE_STOP, STATE_FIND_TARGET, STATE_ATTACK);
+    //I_Fsm.AddTransition(STATE_STOP, STATE_STOP_TIMER, STATE_MOVE);
+    //I_Fsm.AddTransition(STATE_STOP, STATE_FIND_TARGET, STATE_ATTACK);
 
-    I_Fsm.AddTransition(STATE_MOVE, STATE_STOP_TIMER, STATE_STOP);
-    I_Fsm.AddTransition(STATE_MOVE, STATE_FIND_TARGET, STATE_ATTACK);
-    I_Fsm.AddTransition(STATE_MOVE, STATE_LOST_TARGET, STATE_STOP);
+    //I_Fsm.AddTransition(STATE_MOVE, STATE_STOP_TIMER, STATE_STOP);
+    //I_Fsm.AddTransition(STATE_MOVE, STATE_FIND_TARGET, STATE_ATTACK);
+    //I_Fsm.AddTransition(STATE_MOVE, STATE_LOST_TARGET, STATE_STOP);
 
-    I_Fsm.AddTransition(STATE_ATTACK, STATE_LOST_TARGET, STATE_STOP);
+    //I_Fsm.AddTransition(STATE_ATTACK, STATE_LOST_TARGET, STATE_STOP);
 
+    I_Sound.Init();
 
     m_IntroWorld.Init();
     m_IntroWorld.m_pd3dDevice = m_pd3dDevice.Get();
@@ -124,13 +125,14 @@ bool ASample::Frame()
 }
 bool ASample::Render()
 {
-    AWorld::m_pCurWorld->Render();
-
-    wstring msg = L"FPS: ";
-    msg += to_wstring(m_GameTimer.m_iFPS);
-    msg += L"   GT: ";
-    msg += to_wstring(m_GameTimer.m_fTimer);
-    m_dxWrite.Draw(msg, g_rtClient, D2D1::ColorF(1,1,1,1));
+	//화면 상단 FPS, GameTimer 출력
+	AWorld::m_pCurWorld->Render();
+	wstring msg = L"[ FPS: ";
+	msg += to_wstring(m_GameTimer.m_iFPS);
+	msg += L",  GT: ";
+	msg += to_wstring(m_GameTimer.m_fTimer);
+	msg += L" ]";
+	m_dxWrite.Draw(msg, g_rtClient, D2D1::ColorF(1, 1, 1, 1.0f));
 
     return true;
 }
@@ -152,7 +154,7 @@ int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCmdLi
 	ASample core;
 
 	if (core.SetWinClass(hInstance) == FALSE) return 1;
-	if (core.SetWindow(L"SelectClient Chat") == FALSE) return 1;
+	if (core.SetWindow(L"KGCA_2DGAME_ARHAN") == FALSE) return 1;
 	core.GameRun();
 	return 1;
 }
