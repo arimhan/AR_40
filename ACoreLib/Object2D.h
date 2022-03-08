@@ -32,6 +32,7 @@ public:
 	bool			Load(ID3D11Device* pd3dDevice, wstring filename) {
 		return true;
 	};
+	virtual void UpdateData() {}
 
 	AObject2D() 
 	{

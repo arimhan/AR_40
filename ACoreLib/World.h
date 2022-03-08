@@ -10,11 +10,11 @@ public:
 	bool					m_bLoadWorld = false;
 
 public:
-	map <wstring, shared_ptr<AObject2D>>		m_UIObj;
-	map <wstring, shared_ptr<AObject2D>>		m_ItemObj;
-	map <wstring, shared_ptr<AObject2D>>		m_NpcObj; // npc, player
-	map <wstring, shared_ptr<AObject2D>>		m_MapObj;
-	using m_woridIter = map<wstring, shared_ptr<AObject2D>>::iterator;
+	vector <shared_ptr<AObject2D>>	m_UIObj;
+	vector <shared_ptr<AObject2D>>	m_ItemObj;
+	vector <shared_ptr<AObject2D>>	m_NpcObj; // npc, player
+	vector <shared_ptr<AObject2D>>	m_MapObj;
+	using m_woridIter = vector <shared_ptr<AObject2D>>::iterator;
 
 public:
 	//객체화 될 수 없음, true(0)
