@@ -1,5 +1,24 @@
 #include "Collision.h"
 
+bool ACollision::SphereToPoint(ASphere sp, int x, int y)
+{
+	float fDistance = (sp.vCenter - AVector2(x, y)).Length();
+	if (fDistance <= sp.fRadius)
+	{
+		return true;
+	}
+	return false;
+}
+bool ACollision::SphereToPoint(ASphere sp, AVector2 v)
+{
+	float fDistance = (sp.vCenter - v).Length();
+	if (fDistance <= sp.fRadius)
+	{
+		return true;
+	}
+	return false;
+}
+
 bool ACollision::RectToPoint(ARect rt, int x, int y)
 {
 	if (rt.vMin.x <= x && rt.vMax.x >= x && rt.vMin.y <= y && rt.vMax.y >= y)

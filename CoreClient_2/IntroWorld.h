@@ -11,10 +11,12 @@
 class AIntroWorld :public AWorld
 {
 public:
-	ASprite			m_SpriteObj;
+
+	//int				rt_x = 50, rt_y = 50;
+	//ASprite			m_SpriteObj;
 	AEffectObj		m_ExplosionObj;
 	AWorld*			m_pNextWorld;
-	AButtonObject	m_UIStartBtnD;
+	//AButtonObject	m_UIStartBtnD;
 public:
 	ASound*			m_pBackGroundMusic;
 	ATexture*		m_pChangeColorTex[10];

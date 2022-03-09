@@ -1,6 +1,8 @@
 #pragma once
 #include "Object2D.h"
 #include "Sprite.h"
+//#include "IntroWorld.h"
+
 class AEffectObj : public AObject2D
 {
 public:

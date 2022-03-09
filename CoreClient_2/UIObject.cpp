@@ -182,7 +182,6 @@ void AButtonObject::HitSelect(ABaseObject* pObj, DWORD dwState)
             if (m_pStatePlayList[1].pTex == nullptr) break;
             m_pColorTex = m_pStatePlayList[1].pTex;
             m_pStatePlayList[1].pSound->PlayEffect();
-            AWorld::m_pCurWorld->m_bLoadWorld = true;
             //state += "M_HOVER\n";
         }break;
         case ASelectState::M_ACTIVE:

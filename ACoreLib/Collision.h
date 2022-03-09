@@ -113,9 +113,24 @@ struct ABox //3D
 		this->size.y = h;
 	};
 };
+struct ASphere
+{
+	AVector2 vCenter;
+	float    fRadius;
+	ASphere()
+	{
+		fRadius = 3.0f;
+	}
+};
+
+
 class ACollision
 {
 public:
+	//원과 점의 충돌판정 추가
+	static bool   SphereToPoint(ASphere rt, int x, int y);
+	static bool   SphereToPoint(ASphere rt, AVector2 v);
+
 	//2D (ARect)
 	static bool RectToPoint(ARect rt, int x, int y); //IsRect -> RectToRect
 	static bool RectToPoint(ARect rt, AVector2 v);

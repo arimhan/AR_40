@@ -1,7 +1,7 @@
 #include "DxObject.h"
 #include "ObjectMgr.h" //I_ObjectMgr. »ç¿ë
 void ABaseObject::HitOverlap(ABaseObject* pObj, DWORD dwState) {}
-void ABaseObject::HitSelect(ABaseObject* pObj, DWORD dwState){}
+void ABaseObject::HitSelect(ABaseObject* pObj, DWORD dwState) { int C = 0; }
 void ADxObject::SetDevice(ID3D11Device* pd3dDevice, ID3D11DeviceContext* pContext)
 {
 	m_pd3dDevice = pd3dDevice;

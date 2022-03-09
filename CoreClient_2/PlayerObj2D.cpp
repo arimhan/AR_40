@@ -33,7 +33,7 @@ void APlayerObj2D::HitOverlap(ABaseObject* pObj, DWORD dwState)
 {
     if (dwState == ACollisionType::Overlap)
     {
-        pObj->m_bAlphaBlend = false;
+        //pObj->m_bAlphaBlend = false;
     }
 }
 APlayerObj2D::APlayerObj2D()

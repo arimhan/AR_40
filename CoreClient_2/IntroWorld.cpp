@@ -43,10 +43,11 @@ bool AIntroWorld::Frame()
 	//rtExplosion Effect
 	if (AInput::Get().GetKey(VK_F4) == KEY_PUSH)
 	{
+
 		m_ExplosionObj.Reset();
 		m_ExplosionObj.m_pSprite = I_Sprite.GetPtr(L"rtExplosion");
 		m_ExplosionObj.SetRectSource(m_ExplosionObj.m_pSprite->m_rtArray[0]);
-		m_ExplosionObj.SetRectDraw({ 0,0, m_ExplosionObj.m_pSprite->m_rtArray[0].right,
+		m_ExplosionObj.SetRectDraw({ 50,50, m_ExplosionObj.m_pSprite->m_rtArray[0].right,
 										  m_ExplosionObj.m_pSprite->m_rtArray[0].bottom });
 	}
 	//rtBomb Effect
@@ -104,24 +105,87 @@ bool AIntroWorld::CreateModelType()
 	I_UI.m_list.insert(make_pair(L"bk", Obj));
 
 	
-	//버튼
-	shared_ptr<AButtonObject> btnObj(new AButtonObject);
+	////버튼
+	//shared_ptr<AButtonObject> btnObj(new AButtonObject);
+	//btnObj->m_csName = L"AButtonObject:btnStart";
+	//btnObj->Init();
+	//btnObj->m_rtOffset = { 110, 50 ,0, 0 };		//(,0,) ~ 출력끝점 (x,y) 
+	////btnObj->SetRectDraw({ 0,0, 0,0 });			//여러개 출력할경우에만
+	//btnObj->SetPosition(AVector2(0, 0));
+	//ATexture* pTex = I_Texture.Load(L"../../data/ui/btnStart.bmp");
+	//ASound* pSound = I_Sound.Load("../../data/Sound/00_Menu.MP3");
+	//btnObj->m_pStatePlayList.emplace_back(pTex, pSound);
+
+	//if (!btnObj->Create(m_pd3dDevice, m_pContext,
+	//	L"../../data/shader/DefaultUI.txt",	L"../../data/ui/btnStart.bmp"))
+	//{
+	//	return false;
+	//}
+	//btnObj->SetCollisionType(ACollisionType::Ignore, ASelectType::Select_Overlap);
+	//I_UI.m_list.insert(std::make_pair(L"btnStart", btnObj));
+
+
+	std::shared_ptr<AButtonObject> btnDlg(new AButtonObject);
+	btnDlg->m_csName = L"AButtonObject:btnDlg";
+	btnDlg->Init();
+	btnDlg->m_rtOffset = { 50, 50, 50, 50 };
+	btnDlg->SetRectDraw({ 0,0, g_rtClient.right / 3,g_rtClient.bottom / 3 });
+	btnDlg->SetPosition(AVector2(0, 0));
+	if (!btnDlg->Create(m_pd3dDevice, m_pContext,
+		L"../../data/shader/DefaultUI.txt",
+		L"../../data/ui/popup_normal.png"))
+	{
+		return false;
+	}
+	btnDlg->SetCollisionType(ACollisionType::Ignore, ASelectType::Select_Overlap);
+	I_UI.m_list.insert(std::make_pair(L"btnDlg", btnDlg));
+
+	std::shared_ptr<AButtonObject> btnObj(new AButtonObject);
 	btnObj->m_csName = L"AButtonObject:btnStart";
 	btnObj->Init();
-	btnObj->m_rtOffset = { 110, 50 ,0, 0 };		//(,0,) ~ 출력끝점 (x,y) 
-	//btnObj->SetRectDraw({ 0,0, 0,0 });			//여러개 출력할경우에만
+	btnObj->m_rtOffset = { 0, 0, 0, 0 };
+	btnObj->SetRectDraw({ 0,0, 334,82 });
 	btnObj->SetPosition(AVector2(0, 0));
-	ATexture* pTex = I_Texture.Load(L"../../data/ui/btnStart.bmp");
+	ATexture* pTex = I_Texture.Load(L"../../data/ui/main_start_nor.png");
 	ASound* pSound = I_Sound.Load("../../data/Sound/00_Menu.MP3");
+	// 가변인자를 통해서 생성자 직접 호출
+	btnObj->m_pStatePlayList.emplace_back(pTex, pSound);
+	pTex = I_Texture.Load(L"../../data/ui/main_start_pus.png");
+	pSound = I_Sound.Load("../../data/Sound/FootStepSound.wav");
+	// 가변인자를 통해서 생성자 직접 호출
+	btnObj->m_pStatePlayList.emplace_back(pTex, pSound);
+	pTex = I_Texture.Load(L"../../data/ui/main_start_sel.png");
+	pSound = I_Sound.Load("../../data/Sound/FootStepSound_2.wav");
+	// 가변인자를 통해서 생성자 직접 호출
+	btnObj->m_pStatePlayList.emplace_back(pTex, pSound);
+	pTex = I_Texture.Load(L"../../data/ui/main_start_dis.png");
+	pSound = I_Sound.Load("../../data/Sound/PianoSound_00.mp3");
+	// 가변인자를 통해서 생성자 직접 호출
 	btnObj->m_pStatePlayList.emplace_back(pTex, pSound);
 
 	if (!btnObj->Create(m_pd3dDevice, m_pContext,
-		L"../../data/shader/DefaultUI.txt",	L"../../data/ui/btnStart.bmp"))
+		L"../../data/shader/DefaultUI.txt",
+		L"../../data/ui/main_start_nor.png"))
 	{
 		return false;
 	}
 	btnObj->SetCollisionType(ACollisionType::Ignore, ASelectType::Select_Overlap);
 	I_UI.m_list.insert(std::make_pair(L"btnStart", btnObj));
+
+	// 새로운 모델을 생성해서 등록한다.
+	std::shared_ptr<AUIModelComposed> pComposedObj(new AUIModelComposed);
+	pComposedObj->m_csName = L"AUIModelComposed";
+	AButtonObject* pDlgWindow = (AButtonObject*)I_UI.GetPtr(L"btnDlg")->Clone();
+	pDlgWindow->m_rtOffset = { 50, 50, 50, 50 };
+	pDlgWindow->SetRectDraw({ 0,0, g_rtClient.right / 3,g_rtClient.bottom / 3 });
+	pDlgWindow->SetPosition(AVector2(400, 300));
+	pComposedObj->Add(pDlgWindow);
+	AUIModel* pNewDlgBtn = I_UI.GetPtr(L"btnStart")->Clone();// new TButtonObject(*I_UI.GetPtr(L"btnStart"));
+	pNewDlgBtn->m_csName = L"btnStartClone_ComposedList";
+	pNewDlgBtn->SetRectDraw({ 0,0, 100,50 });
+	pNewDlgBtn->SetPosition(pDlgWindow->m_vPos + AVector2(0, 0));
+	pComposedObj->Add(pNewDlgBtn);
+	I_UI.m_list.insert(std::make_pair(L"dlgWindow", pComposedObj));
 
 	return true;
 }
@@ -149,25 +213,55 @@ bool AIntroWorld::Load(wstring file)
 	m_UIObj.push_back(shared_ptr<AObject2D>(pNewBK));
 	// 프로토타입 디자인 패턴-> 복제를 통해서 객체 생성/ + 컴포짓(Composite패턴)
 
-	//Start버튼2
+	////Start버튼2
+	//AObject2D* pNewBtn1 =
+	//	I_UI.GetPtr(L"btnStart")->Clone();
+	//pNewBtn1->m_csName = L"btnStartClone1";
+	//pNewBtn1->SetRectDraw({ 0,0, 110,50 });			//UI 출력 사이즈 w,h
+	//pNewBtn1->SetPosition(AVector2((g_rtClient.right / 2), (g_rtClient.bottom / 1.35)));
+	//pNewBtn1->UpdateData();
+	//m_UIObj.push_back(shared_ptr<AObject2D>(pNewBtn1));
+
+
+	// 프로토타입 디자인 패턴-> 복제를 통해서 객체 생성/ + 컴포짓(Composite패턴)
 	AObject2D* pNewBtn1 =
 		I_UI.GetPtr(L"btnStart")->Clone();
 	pNewBtn1->m_csName = L"btnStartClone1";
-	pNewBtn1->SetRectDraw({ 0,0, 110,50 });			//UI 출력 사이즈 w,h
-	pNewBtn1->SetPosition(AVector2((g_rtClient.right / 2), (g_rtClient.bottom / 1.35)));
+	pNewBtn1->SetRectDraw({ 0,0, 100,50 });
+	pNewBtn1->SetPosition(AVector2(300, 25));
 	pNewBtn1->UpdateData();
-	m_UIObj.push_back(shared_ptr<AObject2D>(pNewBtn1));
+	m_UIObj.push_back(std::shared_ptr<AObject2D>(pNewBtn1));
+	AUIModel* pNewBtn2 = I_UI.GetPtr(L"btnStart")->Clone();
+	pNewBtn2->m_csName = L"btnStartClone2";
+	pNewBtn2->SetRectDraw({ 0,0, 100,100 });
+	pNewBtn2->SetPosition(AVector2(400, 150));
+	pNewBtn2->UpdateData();
+	m_UIObj.push_back(std::shared_ptr<AObject2D>(pNewBtn2));
+
+	AUIModel* pNewBtn3 = I_UI.GetPtr(L"btnStart")->Clone();
+	pNewBtn3->m_csName = L"btnStartClone3";
+	pNewBtn3->SetRectDraw({ 0,0, 100,50 });
+	pNewBtn3->SetPosition(AVector2(500, 200));
+	pNewBtn3->UpdateData();
+	m_UIObj.push_back(std::shared_ptr<AObject2D>(pNewBtn3));
+
+	AUIModel* pNewDlgBtnClone = I_UI.GetPtr(L"dlgWindow")->Clone();
+	pNewDlgBtnClone->m_csName = L"AUIModelComposedClone";
+	pNewDlgBtnClone->m_pParent = nullptr;
+	pNewDlgBtnClone->SetPosition(AVector2(0, 0));
+	pNewDlgBtnClone->UpdateData();
+	m_UIObj.push_back(std::shared_ptr<AObject2D>(pNewDlgBtnClone));
 
 
-	//Start 버튼 2
+	std::shared_ptr<AListCtrlObject> pListCtrl =
+		std::make_shared<AListCtrlObject>();
+	pListCtrl->m_csName = L"AListCtrlObject";
+	pListCtrl->m_pParent = pNewBK;
+	pListCtrl->SetRectDraw({ 3,100, 100,50 });	//334,82
+	//pListCtrl->SetPosition(TVector2(400, 300));
+	pListCtrl->Create(1, 4);
+	m_UIObj.push_back(pListCtrl);
 
-	//AUIModel* pStartBtn1 = I_UI.GetPtr(L"btnStart")->Clone();
-	//pStartBtn1->m_csName = L"btnStartClone1";
-	//pStartBtn1->SetRectDraw({ 0,0, 100,50 });
-	//pStartBtn1->SetPosition(AVector2((g_rtClient.right / 2), (g_rtClient.bottom / 2)));
-	//pStartBtn1->UpdateData();
-	//m_UIObj.push_back(shared_ptr<AObject2D>(pStartBtn1));
-	//m_UIStartBtnD
 
 
 
@@ -179,7 +273,7 @@ bool AIntroWorld::Load(wstring file)
 	m_ExplosionObj.m_pSprite = I_Sprite.GetPtr(L"rtExplosion");
 
 	m_ExplosionObj.Init();
-	m_ExplosionObj.SetPosition(AVector2(400, 500));
+	m_ExplosionObj.SetPosition(AVector2(0, 0));
 	ASprite* pSprite = I_Sprite.GetPtr(L"rtExplosion");
 	m_ExplosionObj.SetRectSource(m_ExplosionObj.m_pSprite->m_rtArray[0]);
 	m_ExplosionObj.SetRectDraw({ 0,0, 34, 46 });

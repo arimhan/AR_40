@@ -68,31 +68,45 @@ bool AObjectMgr::Frame()
 	for (auto src : m_SelectList)
 	{
 		ABaseObject* pObjsrc = (ABaseObject*)src.second;
-		if (pObjsrc->m_dwSelectType == Select_Ignore) continue;
-		DWORD dwState = M_DEFAULT;
-		pObjsrc->m_dwSelectState = M_DEFAULT;
-		if (ACollision::RectToPoint(pObjsrc->m_rtCollision, (float)g_ptMouse.x, (float)g_ptMouse.y))
+		//if (pObjsrc->m_dwSelectType == Select_Ignore) continue;
+		DWORD dwState = ASelectState::M_DEFAULT;
+		
+		if (pObjsrc->m_dwSelectType != ASelectType::Select_Ignore && 
+			ACollision::RectToPoint(pObjsrc->m_rtCollision, (float)g_ptMouse.x, (float)g_ptMouse.y))
 		{
 			DWORD dwKeyState = AInput::Get().m_dwMouseState[0];
-			pObjsrc->m_dwSelectState = M_HOVER;
+			pObjsrc->m_dwSelectState = ASelectState::M_HOVER;
 			if (dwKeyState == KEY_PUSH)
 			{
-				pObjsrc->m_dwSelectState = M_ACTIVE;
+				pObjsrc->m_dwSelectState = ASelectState::M_ACTIVE;
 			}
 			if (dwKeyState == KEY_HOLD)
 			{
-				pObjsrc->m_dwSelectState = M_FOCUS;
+				pObjsrc->m_dwSelectState = ASelectState::M_FOCUS;
 			}
 			if (dwKeyState == KEY_UP)
 			{
-				pObjsrc->m_dwSelectState = M_SELECTED;
+				pObjsrc->m_dwSelectState = ASelectState::M_SELECTED;
 			}
-
+			CallRecursive(pObjsrc, dwState);
 			FunctionIterator colliter = m_fnSelectExecute.find(pObjsrc->m_iSelectID);
 			if (colliter != m_fnSelectExecute.end())
 			{
 				CollisionFunction call = colliter->second;
 				call(pObjsrc, dwState);
+			}
+		}
+		else
+		{
+			if (pObjsrc->m_dwSelectState != ASelectState::M_DEFAULT)
+			{
+				pObjsrc->m_dwSelectState = ASelectState::M_DEFAULT;
+				FunctionIterator colliter = m_fnSelectExecute.find(pObjsrc->m_iSelectID);
+				if (colliter != m_fnSelectExecute.end())
+				{
+					CollisionFunction call = colliter->second;
+					call(pObjsrc, dwState);
+				}
 			}
 		}
 	}
@@ -104,3 +118,16 @@ bool AObjectMgr::Release()
 	m_SelectList.clear();
 	return true; 
 }
+
+void AObjectMgr::CallRecursive(ABaseObject* pSrcObj, DWORD dwState)
+{
+	if (pSrcObj->m_pParent == nullptr) { return; }
+	CallRecursive(pSrcObj->m_pParent, dwState);
+	pSrcObj->HitSelect(pSrcObj, dwState);
+}
+AObjectMgr::AObjectMgr() 
+{
+	m_iExcueteCollisionID = 0;
+	m_iExcuteSelectID = 0;
+}
+AObjectMgr::~AObjectMgr() { Release(); }

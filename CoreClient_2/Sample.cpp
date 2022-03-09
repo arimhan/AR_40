@@ -53,8 +53,7 @@ bool ASample::Init()
     m_IntroWorld.m_pNextWorld = &m_ZoneWorld;
     m_ZoneWorld.m_pd3dDevice = m_pd3dDevice.Get();
     m_ZoneWorld.m_pContext = m_pImmediateContext.Get();
-    //m_ZoneWorld.Load(L"zone.txt");
-    
+
     AWorld::m_pCurWorld = &m_IntroWorld;
 
     m_Net.InitNetwork();

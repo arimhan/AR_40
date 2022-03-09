@@ -24,16 +24,6 @@ bool ACore::CoreInit()
         }
     }
     Init();
-
-    D3D11_SAMPLER_DESC sd;
-    ZeroMemory(&sd, sizeof(D3D11_SAMPLER_DESC));
-    sd.Filter = D3D11_FILTER_MIN_MAG_MIP_LINEAR;
-    sd.AddressU = D3D11_TEXTURE_ADDRESS_WRAP;
-    sd.AddressV = D3D11_TEXTURE_ADDRESS_WRAP;
-    sd.AddressW = D3D11_TEXTURE_ADDRESS_WRAP;
-    sd.MinLOD = FLT_MAX;
-    sd.MaxLOD = FLT_MIN;
-    HRESULT hr = m_pd3dDevice->CreateSamplerState(&sd, &m_pSamplerState);
     return true;
 }
 bool ACore::GameRun()

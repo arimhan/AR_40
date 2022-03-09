@@ -27,14 +27,12 @@ public:
 	bool	Init();
 	bool	Frame();
 	bool	Release();
+	void	CallRecursive(ABaseObject* pSrcObj, DWORD dwState); //재귀함수
+
 private:
-	AObjectMgr() 
-	{ 
-		m_iExcueteCollisionID = 0;
-		m_iExcuteSelectID = 0;
-	};
+	AObjectMgr();
 public:
-	virtual ~AObjectMgr() { Release(); };
+	virtual ~AObjectMgr();
 };
 #define I_ObjectMgr AObjectMgr::Get()
 //인터페이스

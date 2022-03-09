@@ -1,4 +1,5 @@
 #include "EffectObj.h"
+//AIntroWorld* IWrt;
 
 void AEffectObj::HitSelect(ABaseObject* pObj, DWORD dwState)
 {
@@ -30,14 +31,16 @@ bool AEffectObj::Frame()
 		}
 		m_fTimer -= m_fChangeTime;
 		SetRectSource(m_pSprite->m_rtArray[m_iCurrentIndex]);
-		SetRectDraw({ 0,0,	m_pSprite->m_rtArray[m_iCurrentIndex].right,
-							m_pSprite->m_rtArray[m_iCurrentIndex].bottom });
+		SetRectDraw({ 50,50 ,m_pSprite->m_rtArray[m_iCurrentIndex].right,
+					m_pSprite->m_rtArray[m_iCurrentIndex].bottom });
+		//SetRectDraw({ IWrt->rt_x,IWrt->rt_y ,m_pSprite->m_rtArray[m_iCurrentIndex].right,
+		//					m_pSprite->m_rtArray[m_iCurrentIndex].bottom }); 
 	}
 	m_ConstantList.Color = m_vColor;
 	m_ConstantList.Timer = AVector4(g_fGameTimer, 0, 0, 1.0f);
 	m_pContext->UpdateSubresource(m_pConstantBuffer, 0, NULL, &m_ConstantList, 0, 0);
 
-	AddPosition({ 0,0 });
+	AddPosition({ 0,0 });	//이펙트 위치 조정이 필요할 경우..
 	return true;
 }
 bool AEffectObj::Render()
