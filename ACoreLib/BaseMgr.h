@@ -66,11 +66,9 @@ T* ABaseMgr<T, S>::Load(wstring Filename)
 	{
 		return pData;
 	}
-	//pData = new T;
 	shared_ptr<T> pNewData = make_shared<T>();
 	if (pNewData->Load(m_pd3dDevice, Filename) == false)
 	{
-		//delete pNewData;
 		return nullptr;
 	}
 	pNewData->m_csName = name;
@@ -90,7 +88,6 @@ bool ABaseMgr<T, S>::Release()
 	for (auto data : m_list)
 	{
 		data.second->Release();
-		//delete data.second;
 	}
 	m_list.clear();
 	return true; 

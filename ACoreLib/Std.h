@@ -72,8 +72,7 @@ static void MemoryReporting()
 {
 #if defined(DEBUG) | defined(_DEBUG)
 	HMODULE dxgidebugdll = GetModuleHandleW(L"dxgidebug.dll");
-	decltype(&DXGIGetDebugInterface) GetDebugInterface = reinterpret_cast
- <decltype(&DXGIGetDebugInterface)>(GetProcAddress(dxgidebugdll, "DXGIGetDebugInterface"));
+	decltype(&DXGIGetDebugInterface) GetDebugInterface = reinterpret_cast<decltype(&DXGIGetDebugInterface)>(GetProcAddress(dxgidebugdll, "DXGIGetDebugInterface"));
 	IDXGIDebug* debug;
 	GetDebugInterface(IID_PPV_ARGS(&debug));
 	OutputDebugStringW(L"Starting Live Direct3D Object Dump:\r\n");

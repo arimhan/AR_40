@@ -13,9 +13,6 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
-    <Filter Include="소스 파일\Shader">
-      <UniqueIdentifier>{3baf67aa-55de-43fb-b7df-e49c703d5b83}</UniqueIdentifier>
-    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Main.cpp">
@@ -56,25 +53,5 @@
     <ClInclude Include="UIMgr.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
-  </ItemGroup>
-  <ItemGroup>
-    <Text Include="PixelShader.txt">
-      <Filter>소스 파일\Shader</Filter>
-    </Text>
-    <Text Include="player.txt">
-      <Filter>소스 파일\Shader</Filter>
-    </Text>
-    <Text Include="Shader.txt">
-      <Filter>소스 파일\Shader</Filter>
-    </Text>
-    <Text Include="SpriteData.txt">
-      <Filter>소스 파일\Shader</Filter>
-    </Text>
-    <Text Include="VertexShader.txt">
-      <Filter>소스 파일\Shader</Filter>
-    </Text>
-    <Text Include="DefaultUI.txt">
-      <Filter>소스 파일\Shader</Filter>
-    </Text>
   </ItemGroup>
 </Project>

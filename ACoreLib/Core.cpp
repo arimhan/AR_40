@@ -35,6 +35,7 @@ bool ACore::GameRun()
         CoreRender();
     }
     CoreRelease();
+    MemoryReporting();
     return true;
 }
 bool ACore::CoreFrame()

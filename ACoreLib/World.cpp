@@ -1,4 +1,6 @@
 #include "World.h"
+//#include "ObjectMgr.h"
+
 AWorld* AWorld::m_pCurWorld = nullptr;
 bool AWorld::Load(wstring saveFile)
 {
@@ -32,7 +34,7 @@ bool AWorld::Render()
 	for (auto obj : m_NpcObj)
 	{
 		AObject2D* pObj = obj.get();
-		if (pObj != nullptr) { pObj->Render(); }
+		if (pObj->m_bDead == false) { pObj->Render(); }
 	}
 	return true;
 }
@@ -65,4 +67,4 @@ bool AWorld::Release()
 	return true;
 }
 AWorld::AWorld() {}
-AWorld::~AWorld() {}
+AWorld::~AWorld() { Release(); }

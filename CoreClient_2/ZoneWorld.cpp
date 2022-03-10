@@ -11,7 +11,7 @@ bool AZoneWorld::Load(wstring file)
 	m_pBackGroundMusic->Play(true);
 
 	m_PlayerObj.Init();
-	m_PlayerObj.SetPosition(AVector2(400, 500));
+	m_PlayerObj.SetPosition(AVector2(300, 400));
 	m_PlayerObj.SetRectSource({ 91,1,42,56 });
 	m_PlayerObj.SetRectDraw({ 0,0,42,56 });
 	m_PlayerObj.m_csName = L"PlayerUser";

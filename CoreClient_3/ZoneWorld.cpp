@@ -74,7 +74,7 @@ bool	AZoneWorld::Frame()
 
 	if (AInput::Get().GetKey(VK_UP) == KEY_HOLD)
 	{
-		m_pBackGroundMusic->VolumeUP(g_fSecPerFrame);
+		m_pBackGroundMusic->VolumeUp(g_fSecPerFrame);
 	}
 	if (AInput::Get().GetKey(VK_DOWN) == KEY_HOLD)
 	{

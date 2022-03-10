@@ -58,7 +58,7 @@ public:
 	bool	Init()		override;
 	bool	Frame()		override;
 	bool	Render()	override;
-	virtual void HitSelect(ABaseObject* pObj, DWORD dwState) override { int C = 0; }
+	virtual void HitSelect(ABaseObject* pObj, DWORD dwState) override { int H = 0; }
 
 };
 class AButtonObject : public AUIObject

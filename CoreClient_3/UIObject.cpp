@@ -29,7 +29,7 @@ bool    AUIObject::SetVertexData()
 	AVector2 tRB = { vRT.x / fWidth, vRT.y / fHeight };	
 
 
-	vector<ASimplevertex> list(16);
+	vector<ASimpleVertex> list(16);
 	float halfWidth = m_fWidth / 2.0f;
 	float halfHeight = m_fHeight / 2.0f;
 	list[0].v = { m_vPos.x - halfWidth, m_vPos.y - halfHeight };

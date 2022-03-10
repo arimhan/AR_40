@@ -167,14 +167,6 @@
     <ClInclude Include="UIMgr.h" />
     <ClInclude Include="Zone.h" />
   </ItemGroup>
-  <ItemGroup>
-    <Text Include="DefaultUI.txt" />
-    <Text Include="PixelShader.txt" />
-    <Text Include="player.txt" />
-    <Text Include="Shader.txt" />
-    <Text Include="SpriteData.txt" />
-    <Text Include="VertexShader.txt" />
-  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>

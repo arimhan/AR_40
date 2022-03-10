@@ -121,7 +121,10 @@ bool AObjectMgr::Release()
 
 void AObjectMgr::CallRecursive(ABaseObject* pSrcObj, DWORD dwState)
 {
-	if (pSrcObj->m_pParent == nullptr) { return; }
+	if (pSrcObj->m_pParent == nullptr) 
+	{ 
+		return; 
+	}
 	CallRecursive(pSrcObj->m_pParent, dwState);
 	pSrcObj->HitSelect(pSrcObj, dwState);
 }

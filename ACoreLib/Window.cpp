@@ -85,7 +85,7 @@ bool AWindow::WinRun()
 }
 LRESULT AWindow::MsgProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
 {
-    return LRESULT();
+    return 0;
 }
 AWindow::AWindow() { g_pWindow = this; }
 AWindow::~AWindow(){}

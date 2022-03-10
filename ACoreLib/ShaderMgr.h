@@ -33,8 +33,8 @@ class AShaderMgr :public ABaseMgr<AShader, AShaderMgr>
 	friend class ASingleton<AShaderMgr>;
 public:
 	//Shader생성 시 entry를 지정하면 편리하다.
-	AShader*	CreateVertexShader(ID3D11Device* pd3dDevice, wstring filename, string entry = "VS");
-	AShader*	CreatePixelShader(ID3D11Device* pd3dDevice, wstring filename, string entry = "PS");
+	AShader*	CreateVertexShader(ID3D11Device* pd3dDevice, wstring filename, string entry);
+	AShader*	CreatePixelShader(ID3D11Device* pd3dDevice, wstring filename, string entry);
 public:
 	AShaderMgr() { m_iIndex = 0; };
 	~AShaderMgr() { Release(); };

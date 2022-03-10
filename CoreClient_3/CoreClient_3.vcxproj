@@ -118,7 +118,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>_DEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>../../include/Core3D;../../include/dxtk;../../include/CoreNet;../../include/fmod</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>../../include/ACore3D_1;../../include/dxtk;../../include/CoreNet;../../include/fmod</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -176,8 +176,8 @@
     <Text Include="VertexShader.txt" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\ACoreLib\ACoreLib.vcxproj">
-      <Project>{e57618f9-f8c7-4eb5-a909-0e1072112ae0}</Project>
+    <ProjectReference Include="..\ACoreLib1\ACoreLib1.vcxproj">
+      <Project>{bf78e5b1-b555-48c1-ad7c-bf3316406791}</Project>
     </ProjectReference>
     <ProjectReference Include="..\CoreNet\CoreNet.vcxproj">
       <Project>{1d84b747-d141-475c-a4f5-fec5fc6217dc}</Project>

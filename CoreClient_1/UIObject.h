@@ -36,7 +36,7 @@ public:
 	bool	SetIndexData()	override;
 	void    HitSelect(ABaseObject* pObj, DWORD dwState) override
 	{
-		int K = 0;
+		int H = 0;
 	}
 	AUIObject()
 	{

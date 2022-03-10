@@ -135,19 +135,19 @@ bool	AIntroWorld::Load(std::wstring file)
 		pNewBtn1->SetPosition(AVector2(300, 25));
 		pNewBtn1->UpdateData();
 	m_UIObj.push_back(shared_ptr<AObject2D>(pNewBtn1));
-	//AUIModel* pNewBtn2 =I_UI.GetPtr(L"btnStart")->Clone();
-	//	pNewBtn2->m_csName = L"btnStartClone2";
-	//	pNewBtn2->SetRectDraw({ 0,0, 100,100 });
-	//	pNewBtn2->SetPosition(AVector2(400, 150));
-	//	pNewBtn2->UpdateData();
-	//m_UIObj.push_back(shared_ptr<AObject2D>(pNewBtn2));
-	//
-	//AUIModel*  pNewBtn3 =I_UI.GetPtr(L"btnStart")->Clone();
-	//	pNewBtn3->m_csName = L"btnStartClone3";
-	//	pNewBtn3->SetRectDraw({ 0,0, 100,50 });
-	//	pNewBtn3->SetPosition(AVector2(500, 200));
-	//	pNewBtn3->UpdateData();
-	//m_UIObj.push_back(shared_ptr<AObject2D>(pNewBtn3));
+	AUIModel* pNewBtn2 =I_UI.GetPtr(L"btnStart")->Clone();
+		pNewBtn2->m_csName = L"btnStartClone2";
+		pNewBtn2->SetRectDraw({ 0,0, 100,100 });
+		pNewBtn2->SetPosition(AVector2(400, 150));
+		pNewBtn2->UpdateData();
+	m_UIObj.push_back(shared_ptr<AObject2D>(pNewBtn2));
+	
+	AUIModel*  pNewBtn3 =I_UI.GetPtr(L"btnStart")->Clone();
+		pNewBtn3->m_csName = L"btnStartClone3";
+		pNewBtn3->SetRectDraw({ 0,0, 100,50 });
+		pNewBtn3->SetPosition(AVector2(500, 200));
+		pNewBtn3->UpdateData();
+	m_UIObj.push_back(shared_ptr<AObject2D>(pNewBtn3));
 	
 	AUIModel* pNewDlgBtnClone = I_UI.GetPtr(L"dlgWindow")->Clone();
 		pNewDlgBtnClone->m_csName = L"AUIModelComposedClone";

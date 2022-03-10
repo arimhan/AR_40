@@ -11,6 +11,7 @@ void ASample::DeleteResizeDevice(UINT iWidth, UINT iHeight)
 }
 LRESULT ASample::MsgProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
 {
+
     switch (msg)
     {
     case WM_COMMAND:

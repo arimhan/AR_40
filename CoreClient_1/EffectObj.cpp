@@ -2,7 +2,7 @@
 
 void AEffectObj::HitSelect(ABaseObject* pObj, DWORD dwState)
 {
-	int C = 0;
+	int H = 0;
 }
 void AEffectObj::Reset()
 {

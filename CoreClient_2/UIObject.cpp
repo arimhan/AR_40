@@ -223,7 +223,6 @@ bool AButtonObject::Render()
 
 bool AListCtrlObject::Create(int xCount, int yCount)
 {
-
     UpdateData();
 
     int iHalfWidth = m_fWidth / xCount;

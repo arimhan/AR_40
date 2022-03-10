@@ -110,7 +110,7 @@ public:
 	virtual bool	SetIndexData();
 	virtual bool	SetConstantData();
 	virtual bool	Create(ID3D11Device* m_pd3dDevice, ID3D11DeviceContext* m_pContext, 
-					const TCHAR* szShaderFileName =nullptr, 
+					const TCHAR* szShaderFileName = nullptr, 
 					const TCHAR* szTectureFileName = nullptr,
 					const TCHAR* szMaskFileNmae = nullptr);
 		//Create를 기능별로 분리하여 함수화

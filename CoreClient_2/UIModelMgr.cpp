@@ -49,7 +49,6 @@ AUIModel* AUIModelComposed::Clone()
 		iter++)
 	{
 		pModel->Add((*iter)->Clone());
-
 	}
 	return pModel;
 }

@@ -9,7 +9,7 @@ class ACore :public ADevice
 public:
 	ATimer					m_GameTimer;
 	AWriteFont				m_dxWrite; //Resize 기능 추가
-	ID3D11SamplerState*		m_pSamplerState = nullptr;
+	//ID3D11SamplerState*		m_pSamplerState = nullptr;
 private:
 	bool	CoreInit();
 	//----------------------------------------------------
