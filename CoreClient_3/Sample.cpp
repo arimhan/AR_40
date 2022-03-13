@@ -1,5 +1,7 @@
 #include "Sample.h"
 #include "ObjectMgr.h"
+#define PORT_NUM 9110 //9110
+#define ADRESS_NUM "127.0.0.1" //"127.0.0.1"
 void ASample::CreateResizeDevice(UINT iWidth, UINT iHeight)
 {
 	int k = 0;
@@ -48,7 +50,7 @@ bool ASample::Init()
 	AWorld::m_pCurWorld = &m_IntroWorld;
 
 	m_Net.InitNetwork();
-	m_Net.Connect(g_hWnd, SOCK_STREAM, 10000, "192.168.0.12");
+	m_Net.Connect(g_hWnd, SOCK_STREAM, PORT_NUM, ADRESS_NUM);
 	return true;
 }
 bool ASample::Frame()
@@ -114,6 +116,7 @@ bool ASample::Frame()
 bool ASample::Render()
 {	
 	//화면 상단 FPS, GameTimer 출력
+
 	AWorld::m_pCurWorld->Render();
 	wstring msg = L"[ FPS: ";
 	msg += to_wstring(m_GameTimer.m_iFPS);
@@ -142,5 +145,17 @@ int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCmdLi
 	if (core.SetWinClass(hInstance) == FALSE) return 1;
 	if (core.SetWindow(L"KGCA_2DGAME_ARHAN") == FALSE) return 1;
 	core.GameRun();
+	//while(1)
+	//{
+	//	int iTickCount;
+	//	static int iTickTrigger = 0;
+	//	iTickCount = GetTickCount();
+	//	if(iTickCount > iTickTrigger)
+	//	{ 
+	//		iTickTrigger = iTickCount + 10;
+
+	//	}
+	//}
+
 	return 1;
 }

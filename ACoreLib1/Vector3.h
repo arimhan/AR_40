@@ -21,10 +21,13 @@ public:
 	AVector3 operator / (float fValue);
 	bool operator == (const AVector3& v);
 	bool operator != (const AVector3& v);
+
+
 	// 정규화
 	AVector3 Normalize();
 	AVector3 Normal();
 	friend AVector3 Normalize(AVector3& v);
+
 	// 크기
 	float Length();
 };

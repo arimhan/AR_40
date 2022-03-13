@@ -42,7 +42,7 @@ bool AUIObject::SetVertexData()
     AVector2 tLB = { vLB.x / fWidth, vLB.y / fHeight };
     AVector2 tRB = { vRT.x / fWidth, vRT.y / fHeight };
 
-    vector<ASimplevertex> list(16);
+    vector<ASimpleVertex> list(16);
     float halfWidth = m_fWidth / 2.0f;
     float halfHeight = m_fHeight / 2.0f;
     //0번부터 차례대로 위치계산공식 구현. t는 0~1값이므로 좌측 x좌표쪽은 0, 우측 x좌표쪽은 1으로 설정된다.

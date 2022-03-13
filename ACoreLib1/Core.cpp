@@ -1,6 +1,8 @@
 #include "Core.h"
 #include "ObjectMgr.h"
 #include "SoundMgr.h"
+
+
 bool ACore::CoreInit()
 {
 	m_GameTimer.Init();	
@@ -13,9 +15,7 @@ bool ACore::CoreInit()
 		if (m_dxWrite.Init())
 		{
 			IDXGISurface1* pSurface = nullptr;
-			HRESULT hr = m_pSwapChain->GetBuffer(0, 
-				__uuidof(IDXGISurface1),
-				(void**)&pSurface);
+			HRESULT hr = m_pSwapChain->GetBuffer(0, __uuidof(IDXGISurface1), (void**)&pSurface);
 			if (SUCCEEDED(hr))
 			{
 				m_dxWrite.SetRenderTarget(pSurface);
@@ -52,11 +52,9 @@ bool ACore::CoreFrame()
 }
 bool ACore::CoreRender()
 {	
-	//float color[4] = { 0.1543f, 0.23421f, 0.4323f,1.0f };
-	float color[4] = { 1, 0, 0,1.0f };
-	m_pImmediateContext->ClearRenderTargetView(
-		m_pRenderTargetView.Get(),
-		color);
+
+	float color[4] = { 1,0,0,1.0f };//{ 0.9, 0.9, 0.7, 1.0f };
+	m_pImmediateContext->ClearRenderTargetView(m_pRenderTargetView.Get(), color);
 	m_pImmediateContext->PSSetSamplers(0, 1, &ADxState::m_pSamplerState);
 
 	// 백버퍼에 랜더링 한다.
@@ -90,9 +88,7 @@ void ACore::ResizeDevice(UINT iWidth, UINT iHeight)
 	ADevice::ResizeDevice(iWidth, iHeight);
 	
 	IDXGISurface1* pSurface = nullptr;
-	HRESULT hr = m_pSwapChain->GetBuffer(0,
-		__uuidof(IDXGISurface1),
-		(void**)&pSurface);
+	HRESULT hr = m_pSwapChain->GetBuffer(0, __uuidof(IDXGISurface1), (void**)&pSurface);
 	if (SUCCEEDED(hr))
 	{
 		m_dxWrite.SetRenderTarget(pSurface);

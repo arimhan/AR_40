@@ -16,8 +16,7 @@ void ASound::Play(bool bLoop)
 	if (bPlay == false)
 	{
 		// 채널은 플레이 되는 사운드의 제어를 담당.
-		FMOD_RESULT	ret = m_pSystem->playSound(
-			m_pSound, nullptr, false, &m_pChannel);
+		FMOD_RESULT	ret = m_pSystem->playSound(m_pSound, nullptr, false, &m_pChannel);
 		if (ret == FMOD_OK) 
 		{
 			//m_pChannel->setVolume(0.5f);
@@ -31,17 +30,16 @@ void ASound::Play(bool bLoop)
 void ASound::PlayEffect()
 {
 	FMOD::Channel* pChannel=nullptr;
-	// 채널은 플레이 되는 사운드의 제어를 담당.
-	FMOD_RESULT	ret = m_pSystem->playSound(
-		m_pSound, nullptr, false, &pChannel);
+	FMOD_RESULT	ret = m_pSystem->playSound(m_pSound, nullptr, false, &pChannel);
 	if (ret == FMOD_OK)	{	}
 }
 void ASound::Stop()
 {
-	if (m_pChannel != nullptr)
-	{
-		m_pChannel->stop();
-	}
+	m_pChannel->stop();
+	//if (m_pChannel != nullptr)
+	//{
+	//	m_pChannel->stop();
+	//}
 }
 void ASound::Paused()
 {
@@ -94,12 +92,8 @@ bool ASound::Frame()
 
 	_stprintf_s(m_szBuffer,
 		_T("전체시간[%02d:%02d:%02d]:경과시간[%02d:%02d:%02d]"),
-		size / 1000 / 60,
-		size / 1000 % 60,
-		size / 10 % 60,
-		ms / 1000 / 60,
-		ms / 1000 % 60,
-		ms / 10 % 60);
+		size / 1000 / 60, size / 1000 % 60, size / 10 % 60,
+		ms / 1000 / 60, ms / 1000 % 60, ms / 10 % 60);
 	
 	return true;
 }
@@ -149,7 +143,7 @@ ASound* ASoundMgr::Load(string filename)
 		}
 	}
 
-	shared_ptr<ASound> pSound = std::make_shared<ASound>();
+	shared_ptr<ASound> pSound = make_shared<ASound>();
 	FMOD_RESULT ret = m_pSystem->createSound(filename.c_str(),
 		FMOD_DEFAULT, 0, &pSound->m_pSound);
 

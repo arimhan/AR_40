@@ -1,4 +1,6 @@
 #include "Sprite.h"
+
+
 bool ASprite::Load(ID3D11Device* pd3dDevice, std::wstring filename)
 {
 	return true;
@@ -8,25 +10,16 @@ void ASprite::SetRectSouceArray(RECT rt)
 	m_rtArray.push_back(rt);
 }
 
-bool ASprite::Init()
-{	
-	return true;
-}
-bool ASprite::Frame()
-{	
-	return true;
-}
+bool ASprite::Init() { return true; }
+bool ASprite::Frame() { return true; }
 bool ASprite::Render()
 {
 	ADxObject::Render();
 	return true;
 }
-bool ASprite::Release()
-{
-	return true;
-}
+bool ASprite::Release() { return true; }
 
-ASprite* ASpriteMgr::Load(std::wstring filename)
+ASprite* ASpriteMgr::Load(wstring filename)
 {
 	TCHAR pBuffer[256] = { 0 };
 	TCHAR pTemp[256] = { 0 };
@@ -38,8 +31,7 @@ ASprite* ASpriteMgr::Load(std::wstring filename)
 	if (fp_src == NULL) return nullptr;
 
 	_fgetts(pBuffer, _countof(pBuffer), fp_src);
-	_stscanf_s(pBuffer, _T("%s%d%f"), pTemp, (unsigned int)_countof(pTemp), 
-		&iNumSprite	);
+	_stscanf_s(pBuffer, _T("%s%d%f"), pTemp, (unsigned int)_countof(pTemp), &iNumSprite	);
 
 	for (int iCnt = 0; iCnt < iNumSprite; iCnt++)
 	{

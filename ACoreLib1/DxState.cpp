@@ -1,4 +1,6 @@
 #include "DxState.h"
+
+
 ID3D11BlendState*	ADxState::m_AlphaBlend			= nullptr;
 ID3D11BlendState*	ADxState::m_AlphaBlendDisable	= nullptr;
 ID3D11SamplerState* ADxState::m_pSamplerState		= nullptr;

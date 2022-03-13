@@ -1,5 +1,7 @@
 #include "DxObject.h"
 #include "ObjectMgr.h"
+
+
 void ABaseObject::HitOverlap(ABaseObject* pObj, DWORD dwState){}
 void ABaseObject::HitSelect(ABaseObject* pObj, DWORD dwState) { int k = 0; }
 void ADxObject::SetDevice(ID3D11Device* pd3dDevice,
@@ -48,7 +50,7 @@ bool ADxObject::CreateVertexBuffer()
 {
 	if (m_VertexList.size() <= 0) return false;
 	HRESULT hr;
-	//gpu메모리에 버퍼 할당(원하는 할당 크기)
+	//GPU메모리에 버퍼 할당(원하는 할당 크기)
 	D3D11_BUFFER_DESC bd;
 	ZeroMemory(&bd, sizeof(D3D11_BUFFER_DESC));
 	bd.ByteWidth = sizeof(ASimpleVertex) * m_VertexList.size();
@@ -69,7 +71,7 @@ bool ADxObject::CreateIndexBuffer()
 {
 	HRESULT hr;
 	if (m_IndexList.size() <= 0) return true;
-	//gpu메모리에 버퍼 할당(원하는 할당 크기)
+
 	D3D11_BUFFER_DESC bd;
 	ZeroMemory(&bd, sizeof(D3D11_BUFFER_DESC));
 	bd.ByteWidth = sizeof(DWORD) * m_IndexList.size();
@@ -89,7 +91,7 @@ bool ADxObject::CreateIndexBuffer()
 bool ADxObject::CreateConstantBuffer()
 {
 	HRESULT hr;
-	//gpu메모리에 버퍼 할당(원하는 할당 크기)
+
 	D3D11_BUFFER_DESC bd;
 	ZeroMemory(&bd, sizeof(D3D11_BUFFER_DESC));
 	bd.ByteWidth = sizeof(AConstantData);
@@ -110,7 +112,7 @@ bool ADxObject::CreateInputLayout()
 {
 
 	// 정점쉐이더의 결과를 통해서 정점레이아웃을 생성한다.	
-	// 정점버퍼의 각 정점의 어떤 성분을 정점쉐이더에 전달할 거냐
+	// 정점버퍼의 각 정점의 어떤 성분을 정점쉐이더에 전달할건지
 	D3D11_INPUT_ELEMENT_DESC layout[] =
 	{
 		{"POSITION",0, DXGI_FORMAT_R32G32_FLOAT, 0,0,  D3D11_INPUT_PER_VERTEX_DATA, 0 },
@@ -118,11 +120,9 @@ bool ADxObject::CreateInputLayout()
 	};
 	UINT NumElements = sizeof(layout) / sizeof(layout[0]);
 	HRESULT hr = m_pd3dDevice->CreateInputLayout(
-		layout,
-		NumElements,
+		layout,NumElements,
 		m_pVSShader->m_pVSCodeResult->GetBufferPointer(),
-		m_pVSShader->m_pVSCodeResult->GetBufferSize(),
-		&m_pVertexLayout);
+		m_pVSShader->m_pVSCodeResult->GetBufferSize(),&m_pVertexLayout);
 	if (FAILED(hr))
 	{
 		return false;
@@ -163,13 +163,11 @@ bool ADxObject::Create(ID3D11Device* pd3dDevice, ID3D11DeviceContext* pContext,
 	{
 		return false;
 	}
-	if (szShaderFileName!= nullptr && 
-		!CreateVertexShader(szShaderFileName))
+	if (szShaderFileName!= nullptr && 	!CreateVertexShader(szShaderFileName))
 	{
 		return false;
 	}
-	if (szShaderFileName != nullptr &&
-		!CreatePixelShader(szShaderFileName))
+	if (szShaderFileName != nullptr &&	!CreatePixelShader(szShaderFileName))
 	{
 		return false;
 	}
@@ -179,23 +177,15 @@ bool ADxObject::Create(ID3D11Device* pd3dDevice, ID3D11DeviceContext* pContext,
 	}
 	return true;
 }
-bool ADxObject::Init()
-{
-	
-	return true;
-}
-bool ADxObject::Frame()
-{
-	return true;
-}
+bool ADxObject::Init() { return true; }
+bool ADxObject::Frame() { return true; }
+
 bool ADxObject::Render()
 {	
 	if(m_pColorTex!=nullptr)
-		m_pContext->PSSetShaderResources(0, 1, 
-			m_pColorTex->m_pSRV.GetAddressOf());
+		m_pContext->PSSetShaderResources(0, 1, m_pColorTex->m_pSRV.GetAddressOf());
 	if (m_pMaskTex != nullptr)
-		m_pContext->PSSetShaderResources(1, 1, 
-			m_pMaskTex->m_pSRV.GetAddressOf());
+		m_pContext->PSSetShaderResources(1, 1, m_pMaskTex->m_pSRV.GetAddressOf());
 	if (m_pVSShader != nullptr)
 	{
 		m_pContext->VSSetShader(m_pVSShader->m_pVertexShader, NULL, 0);
@@ -213,26 +203,20 @@ bool ADxObject::Render()
 	{
 		m_pContext->OMSetBlendState(ADxState::m_AlphaBlendDisable, 0, -1);
 	}
-
 	m_pContext->IASetInputLayout(m_pVertexLayout);
 	
-
 	UINT StartSlot;
 	UINT NumBuffers;
 	UINT Strides = sizeof(ASimpleVertex);
 	UINT Offsets = 0;
 
-	m_pContext->IASetVertexBuffers(
-		0, 1, &m_pVertexBuffer,
-		&Strides, &Offsets);
+	m_pContext->IASetVertexBuffers(0, 1, &m_pVertexBuffer, &Strides, &Offsets);
 	m_pContext->IASetIndexBuffer(m_pIndexBuffer, DXGI_FORMAT_R32_UINT, 0);
 	m_pContext->VSSetConstantBuffers(0, 1, &m_pConstantBuffer);
 
 	m_pContext->IASetPrimitiveTopology(
-		D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST
-		//D3D_PRIMITIVE_TOPOLOGY_POINTLIST
-		//D3D_PRIMITIVE_TOPOLOGY_LINELIST
-	);
+		D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
+		//D3D_PRIMITIVE_TOPOLOGY_POINTLIST ,D3D_PRIMITIVE_TOPOLOGY_LINELIST
 
 	if( m_IndexList.size() <= 0)
 		m_pContext->Draw(m_VertexList.size(), 0);

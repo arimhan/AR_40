@@ -1,17 +1,26 @@
 #include "PlayerObj2D.h"
 #include "Input.h"
+
 void APlayerObj2D::HitOverlap(ABaseObject* pObj, DWORD dwState)
 {
-	if (dwState == ACollisionType::Overlap)	{	}	
+	if (dwState == ACollisionType::Overlap)	
+	{	
+		//pObj->m_bAlphaBlend = !pObj->m_bAlphaBlend;
+		////pObj->m_bAlphaBlend = true;
+		//m_bSelect = true;
+		//m_bDead = true;
+	}	
 }
 bool APlayerObj2D::Frame()
 {	
 	if (AInput::Get().GetKey('W') == KEY_HOLD)
 	{
-		AVector2 pos;
 		// 시간의 동기화
+		AVector2 pos;
+
 		pos.y -= m_fSpeed * g_fSecPerFrame;
 		AddPosition(pos);
+
 	}
 	if (AInput::Get().GetKey('A') == KEY_HOLD)
 	{
@@ -36,7 +45,7 @@ bool APlayerObj2D::Frame()
 
 APlayerObj2D::APlayerObj2D()
 {
-	m_fSpeed = 300.0f; // 속력
+	m_fSpeed = 200.0f;//300.0f; // 속력
 	m_dwCollisionType = ACollisionType::Overlap;
 	m_dwSelectType = ASelectType::Select_Overlap;
 }

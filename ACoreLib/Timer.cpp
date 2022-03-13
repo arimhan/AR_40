@@ -1,6 +1,6 @@
 #include "Timer.h"
 float g_fSecPerFrame = 0.0f;
-float g_fGameTimer = 0.0f;
+float g_fGameTimer = 60.0f;
 
 bool ATimer::Init()
 {

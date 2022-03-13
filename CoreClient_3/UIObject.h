@@ -20,13 +20,11 @@ public:
 		SetCollisionType(ACollisionType::Ignore,
 			ASelectType::Select_Overlap);
 		I_ObjectMgr.AddCollisionExecute(this,
-			std::bind(&ABaseObject::HitOverlap, this,
-				std::placeholders::_1,
-				std::placeholders::_2));
+			bind(&ABaseObject::HitOverlap, this,
+				placeholders::_1, placeholders::_2));
 		I_ObjectMgr.AddSelectExecute(this,
-			std::bind(&ABaseObject::HitSelect, this,
-				std::placeholders::_1,
-				std::placeholders::_2));
+			bind(&ABaseObject::HitSelect, this,
+				placeholders::_1, placeholders::_2));
 	}
 
 public:	
@@ -93,7 +91,7 @@ public:
 	AUIModel* Clone()
 	{
 		AUIModelComposed* pModel = new AListCtrlObject;
-		std::list<AUIModel*>::iterator iter;
+		list<AUIModel*>::iterator iter;
 		for (iter = m_Components.begin(); iter != m_Components.end();
 			iter++)
 		{
@@ -109,15 +107,12 @@ public:
 			ASelectType::Select_Overlap);
 
 		I_ObjectMgr.AddCollisionExecute(this,
-			std::bind(&ABaseObject::HitOverlap, this,
-				std::placeholders::_1,
-				std::placeholders::_2));
+			bind(&ABaseObject::HitOverlap, this, placeholders::_1, placeholders::_2));
 		I_ObjectMgr.AddSelectExecute(this,
-			std::bind(&ABaseObject::HitSelect, this,
-				std::placeholders::_1,
-				std::placeholders::_2));
+			bind(&ABaseObject::HitSelect, this, placeholders::_1, placeholders::_2));
 	}
 	virtual void	HitSelect(ABaseObject* pObj, DWORD dwState) override;
+
 public:
 	AListCtrlObject() {}
 	virtual ~AListCtrlObject() {}

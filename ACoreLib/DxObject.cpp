@@ -22,7 +22,7 @@ bool ADxObject::SetVertexData() { return true; }
 bool ADxObject::SetIndexData() { return true; }
 bool ADxObject::SetConstantData()
 {
-	ZeroMemory(&m_ConstantList, sizeof(AConstanceData));
+	ZeroMemory(&m_ConstantList, sizeof(AConstantData));
 	m_ConstantList.Color.x = 0.0f;
 	m_ConstantList.Color.y = 1.0f;
 	m_ConstantList.Color.z = 0.0f;
@@ -53,7 +53,7 @@ bool ADxObject::CreateVertexBuffer()
 	//GPU메모리에 버퍼 할당 (원하는 크기로)
 	D3D11_BUFFER_DESC bd;
 	ZeroMemory(&bd, sizeof(D3D11_BUFFER_DESC));
-	bd.ByteWidth = sizeof(ASimplevertex) * m_VertexList.size();
+	bd.ByteWidth = sizeof(ASimpleVertex) * m_VertexList.size();
 	bd.Usage = D3D11_USAGE_DEFAULT;
 	bd.BindFlags = D3D11_BIND_VERTEX_BUFFER;
 
@@ -86,7 +86,7 @@ bool ADxObject::CreateConstantBuffer()
 	HRESULT hr;
 	D3D11_BUFFER_DESC bd;
 	ZeroMemory(&bd, sizeof(D3D11_BUFFER_DESC));
-	bd.ByteWidth = sizeof(AConstanceData);
+	bd.ByteWidth = sizeof(AConstantData);
 	bd.Usage = D3D11_USAGE_DEFAULT;
 	bd.BindFlags = D3D11_BIND_CONSTANT_BUFFER;
 
@@ -191,7 +191,7 @@ bool ADxObject::Render()
 
 	UINT startslot;
 	UINT numbuffers;
-	UINT strides = sizeof(ASimplevertex);
+	UINT strides = sizeof(ASimpleVertex);
 	UINT Offsets = 0;
 
 	m_pContext->IASetVertexBuffers(0, 1, &m_pVertexBuffer, &strides, &Offsets);

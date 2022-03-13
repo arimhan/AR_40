@@ -55,12 +55,12 @@ void AObject2D::UpDateRectDraw(RECT rt)
 	m_fWidth = rt.right;
 	m_fHeight = rt.bottom;
 }
-void AObject2D::Convert(AVector2 center, float fWidth, float fHeight, vector<ASimplevertex>& retList)
+void AObject2D::Convert(AVector2 center, float fWidth, float fHeight, vector<ASimpleVertex>& retList)
 {
 	//화면좌표 위치를 중심으로 NDC 변환
 	//(0,0)부터 시계방향으로 0,1,2
 	//2번부터 3,4,5
-	vector<ASimplevertex> list(6);
+	vector<ASimpleVertex> list(6);
 	float halfWidth = fWidth / 2.0f;
 	float halfHeight = fHeight / 2.0f;
 
@@ -74,10 +74,10 @@ void AObject2D::Convert(AVector2 center, float fWidth, float fHeight, vector<ASi
 	list[5].v = { center.x + halfWidth, center.y + halfHeight };
 	Convert(list, retList);
 }
-void AObject2D::ConvertIndex(AVector2 center, float fWidth, float fHeight, vector<ASimplevertex>& retList)
+void AObject2D::ConvertIndex(AVector2 center, float fWidth, float fHeight, vector<ASimpleVertex>& retList)
 {
 	//사각형, 정점버퍼4개
-	vector<ASimplevertex> list(4);
+	vector<ASimpleVertex> list(4);
 	float halfWidth = fWidth / 2.0f;
 	float halfHeight = fHeight / 2.0f;
 
@@ -87,7 +87,7 @@ void AObject2D::ConvertIndex(AVector2 center, float fWidth, float fHeight, vecto
 	list[3].v = { center.x + halfWidth, center.y + halfHeight };
 	ConvertIndex(list, retList);
 }
-void AObject2D::Convert(vector<ASimplevertex>& list, vector<ASimplevertex>& retList)
+void AObject2D::Convert(vector<ASimpleVertex>& list, vector<ASimpleVertex>& retList)
 {
 	//화면좌표계를 NDC로 변환
 	retList.resize(list.size());
@@ -128,7 +128,7 @@ void AObject2D::Convert(vector<ASimplevertex>& list, vector<ASimplevertex>& retL
 		retList[5].t.x = u + w;			retList[5].t.y = v + h;
 	}
 }
-void AObject2D::ConvertIndex(vector<ASimplevertex>& list, vector<ASimplevertex>& retList)
+void AObject2D::ConvertIndex(vector<ASimpleVertex>& list, vector<ASimpleVertex>& retList)
 {
 	retList.resize(list.size());
 	for (int i = 0; i < list.size(); i++)

@@ -1,16 +1,18 @@
 #pragma once
 #include "Std.h"
+
+
 template <class T, class S>
 class ABaseMgr : public ASingleton<S>
 {
 public:
 	friend class ASingleton<ABaseMgr>;
 public:
-	int		m_iIndex;
-	ID3D11Device* m_pd3dDevice;
-	map<wstring, std::shared_ptr<T> >  m_list;
+	int								m_iIndex;
+	ID3D11Device*					m_pd3dDevice;
+	map<wstring, shared_ptr<T>>		m_list;
 public:
-	wstring Splitpath(std::wstring path, std::wstring entry);
+	wstring Splitpath(wstring path, wstring entry);
 	virtual void	Set(ID3D11Device* pd3dDevice)
 	{
 		m_pd3dDevice = pd3dDevice;
@@ -26,8 +28,9 @@ public:
 public:
 	~ABaseMgr();
 };
+
 template<class T, class S>
-wstring ABaseMgr<T, S>::Splitpath(std::wstring path, std::wstring entry)
+wstring ABaseMgr<T, S>::Splitpath(wstring path, wstring entry)
 {
 	TCHAR szFileName[MAX_PATH] = { 0, };
 	TCHAR Dirve[MAX_PATH] = { 0, };
@@ -45,6 +48,7 @@ wstring ABaseMgr<T, S>::Splitpath(std::wstring path, std::wstring entry)
 	}
 	return name;
 }
+
 template<class T, class S>
 T* ABaseMgr<T, S>::GetPtr(wstring key)
 {
@@ -75,20 +79,12 @@ T* ABaseMgr<T, S>::Load(wstring filename)
 	return pNewData.get();
 }
 template<class T, class S>
-bool	ABaseMgr<T, S>::Init()
-{
-	return true;
-}
+bool	ABaseMgr<T, S>::Init() { return true; }
 template<class T, class S>
-bool	ABaseMgr<T, S>::Frame()
-{
-	return true;
-}
+bool	ABaseMgr<T, S>::Frame() { return true; }
 template<class T, class S>
-bool	ABaseMgr<T, S>::Render()
-{
-	return true;
-}
+bool	ABaseMgr<T, S>::Render() { return true; }
+
 template<class T, class S>
 bool	ABaseMgr<T, S>::Release()
 {
@@ -99,13 +95,11 @@ bool	ABaseMgr<T, S>::Release()
 	m_list.clear();
 	return true;
 }
+
 template<class T, class S>
 ABaseMgr<T, S>::ABaseMgr()
 {
 	m_iIndex = 0;
 }
 template<class T, class S>
-ABaseMgr<T,S>::~ABaseMgr()
-{
-	Release();
-}
+ABaseMgr<T, S>::~ABaseMgr() { Release(); }

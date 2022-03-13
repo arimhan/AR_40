@@ -1,7 +1,9 @@
 #include "ObjectNpc2D.h"
 void AObjectNpc2D::HitOverlap(ABaseObject* pObj, DWORD dwState)
 {
-	if (dwState == ACollisionType::Overlap)	{	}
+	if (dwState == ACollisionType::Overlap)	
+	{	
+	}
 }
 
 void AObjectNpc2D::HitSelect(ABaseObject* pObj, DWORD dwState)
@@ -20,6 +22,7 @@ void AObjectNpc2D::HitSelect(ABaseObject* pObj, DWORD dwState)
 	}
 	if (m_dwSelectState & M_SELECTED)
 	{
+		//INT K = 0;
 		m_bSelect = true;
 		m_bDead = true;
 	}
@@ -54,8 +57,8 @@ bool AObjectNpc2D::Frame()
 AObjectNpc2D::AObjectNpc2D()
 {
 	m_fSpeed = 20.0f + (rand() % 300); // ¼Ó·Â
-	m_vDirection.x = (rand()%2 == 0) ? 1.0f : -1.0f;
-	m_vDirection.y = (rand() % 2 == 0) ? 1.0f : -1.0f;
+	m_vDirection.x = (rand()%2 == 0) ? 0.8f : -0.8f;
+	m_vDirection.y = (rand() % 2 == 0) ? 0.8f : -0.8f;
 	m_dwCollisionType = ACollisionType::Overlap;
 	m_dwSelectType = ASelectType::Select_Overlap;
 }

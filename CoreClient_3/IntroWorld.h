@@ -7,6 +7,7 @@
 #include "ShaderMgr.h"
 #include "TextureMgr.h"
 #include "EffectObj.h"
+
 class AIntroWorld : public AWorld
 {
 public:
@@ -17,8 +18,8 @@ public:
 	ATexture*			m_pColorTex;
 	AWorld*				m_pNextWorld;
 public:
-	bool	CreateModelType();
-	bool	Load(std::wstring file) override;
+	bool			CreateModelType();
+	bool			Load(wstring file) override;
 	virtual bool	Init();
 	virtual bool	Frame();
 	virtual bool	Render();

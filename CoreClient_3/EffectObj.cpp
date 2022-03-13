@@ -34,11 +34,11 @@ bool AEffectObj::Frame()
 			m_pSprite->m_rtArray[m_iCurrentIndex].bottom });
 	}
 	m_ConstantList.Color = m_vColor;
-	m_ConstantList.Timer = AVector4(g_fGameTimer,0,0,1.0f);
+	m_ConstantList.Timer = AVector4(g_fGameTimer, 0, 0, 1.0f);
 	m_pContext->UpdateSubresource(
 		m_pConstantBuffer, 0, NULL, &m_ConstantList, 0, 0);
 
-	AddPosition({ 0,0 });
+	AddPosition({ 300,250 });
 	return true;
 }
 bool AEffectObj::Render()

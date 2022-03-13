@@ -34,7 +34,7 @@ BOOL AWindow::SetWinClass(HINSTANCE hInstance)
     wc.style = CS_HREDRAW | CS_VREDRAW;
     wc.lpfnWndProc = WndProc;
     wc.hInstance = hInstance;
-    wc.lpszClassName = L"KGCA_Window";
+    wc.lpszClassName = L"KGCA_ARIMHAN";
     wc.hbrBackground = (HBRUSH)GetStockObject(GRAY_BRUSH);
     if (RegisterClass(&wc) == false)
     {
@@ -51,17 +51,8 @@ BOOL AWindow::SetWindow(const WCHAR* szTitle,
     RECT rt = { 0,0, iClientWidth , iClientHeight };
     AdjustWindowRect(&rt, WS_OVERLAPPEDWINDOW, FALSE);
     // 2, 윈도우 생성
-    m_hWnd = CreateWindow(
-        L"KGCA_Window",
-        szTitle,
-        WS_OVERLAPPEDWINDOW,
-        0, 0,
-        rt.right-rt.left, 
-        rt.bottom-rt.top, 
-        NULL,
-        NULL,
-        m_hInstance,
-        NULL);
+    m_hWnd = CreateWindow(L"KGCA_ARIMHAN", szTitle, WS_OVERLAPPEDWINDOW, 0, 0,
+        rt.right - rt.left, rt.bottom - rt.top, NULL, NULL, m_hInstance, NULL);
     if (m_hWnd == NULL)
     {
         return FALSE;

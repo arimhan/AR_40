@@ -1,10 +1,11 @@
 #pragma once
 #include "Object2D.h"
+
 class ASprite : public AObject2D
 {
 public:
-	float			   m_fAnimTime;
-	std::vector<RECT>  m_rtArray;
+	float				m_fAnimTime;
+	vector<RECT>		m_rtArray;
 public:
 	void			SetRectSouceArray(RECT rt);
 	virtual bool	Init() override;
@@ -12,14 +13,14 @@ public:
 	virtual bool	Render()override;
 	virtual bool	Release()override;
 public:
-	bool	Load(ID3D11Device* pd3dDevice, std::wstring filename);
+	bool	Load(ID3D11Device* pd3dDevice, wstring filename);
 };
 
 class ASpriteMgr : public ABaseMgr<ASprite, ASpriteMgr>
 {
 	friend class ASingleton<ASpriteMgr>;
 public:
-	ASprite*	Load(std::wstring filename) override;
+	ASprite*	Load(wstring filename) override;
 private:
 	ASpriteMgr() {};
 public:

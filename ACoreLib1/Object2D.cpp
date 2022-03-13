@@ -202,11 +202,7 @@ bool AObject2D::Frame()
 	if (m_bFadeIn)	FadeIn();
 	if (m_bFadeOut)	FadeOut();
 	m_ConstantList.Color = m_vColor;
-	m_ConstantList.Timer = AVector4(
-		g_fGameTimer,
-		0,
-		0,
-		1.0f);
+	m_ConstantList.Timer = AVector4(g_fGameTimer, 0, 0, 1.0f);
 	m_pContext->UpdateSubresource(
 		m_pConstantBuffer, 0, NULL, &m_ConstantList, 0, 0);
 	return true;

@@ -7,9 +7,9 @@ public:
 	RECT				m_rtDraw;	
 	AVector4			m_vColor;
 public:
-	float  m_fAlpha = 0.0f;
-	bool   m_bFadeIn = false;
-	bool   m_bFadeOut = false;
+	float			m_fAlpha = 0.0f;
+	bool			m_bFadeIn = false;
+	bool			m_bFadeOut = false;
 	virtual void    FadeIn();
 	virtual void    FadeOut();
 public:	
@@ -18,17 +18,22 @@ public:
 	virtual void		AddPosition(AVector2 vPos);
 	virtual void		SetPosition(AVector2 vPos);		
 	virtual void		UpdateRectDraw(RECT rt);
+
+
 	// 화면좌표 위치를 중점으로 NDC 변환
 	virtual void	Convert(AVector2 center, float fWidth, float fHeight,
 		vector<ASimpleVertex>& retList);
+
 	// 화면좌표계를 NDC 변환
 	virtual void	Convert(vector<ASimpleVertex>& list,
 		vector<ASimpleVertex>& retList);
 	virtual void	ConvertIndex(AVector2 center, float fWidth, float fHeight,
 		vector<ASimpleVertex>& retList);
+
 	// 화면좌표계를 NDC 변환
 	virtual void	ConvertIndex(vector<ASimpleVertex>& list,
 		vector<ASimpleVertex>& retList);
+
 public:
 	virtual bool		SetVertexData() override;
 	virtual bool		SetIndexData() override;

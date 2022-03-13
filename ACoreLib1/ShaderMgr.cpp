@@ -1,70 +1,44 @@
 #include "ShaderMgr.h"
 
-bool    AShader::CreateVertexShader(ID3D11Device* pd3dDevice, std::wstring filename, std::string entry)
+bool    AShader::CreateVertexShader(ID3D11Device* pd3dDevice, wstring filename, string entry)
 {
-	HRESULT hr = D3DCompileFromFile(
-		filename.c_str(),
-		NULL,
-		NULL,
-		entry.c_str(),
-		"vs_5_0",
-		0,
-		0,
-		&m_pVSCodeResult,
-		&m_pErrorMsgs
-	);
+	HRESULT hr = D3DCompileFromFile(filename.c_str(), NULL, NULL,
+		entry.c_str(), "vs_5_0", 0, 0, &m_pVSCodeResult, &m_pErrorMsgs);
 	if (FAILED(hr))
 	{
 		MessageBoxA(NULL,
-			(char*)m_pErrorMsgs->GetBufferPointer(),
-			"ERROR", MB_OK);
+			(char*)m_pErrorMsgs->GetBufferPointer(), "ERROR", MB_OK);
 		if (m_pErrorMsgs) m_pErrorMsgs->Release();
 		return false;
 	}
-	hr = pd3dDevice->CreateVertexShader(
-		m_pVSCodeResult->GetBufferPointer(),
-		m_pVSCodeResult->GetBufferSize(),
-		NULL,
-		&m_pVertexShader);
+	hr = pd3dDevice->CreateVertexShader(m_pVSCodeResult->GetBufferPointer(),
+		m_pVSCodeResult->GetBufferSize(), NULL, &m_pVertexShader);
 	if (FAILED(hr))
 	{
 		return false;
 	}
 	return true;
 }
-bool AShader::CreatePixelShader(ID3D11Device* pd3dDevice, std::wstring filename, std::string entry)
+bool AShader::CreatePixelShader(ID3D11Device* pd3dDevice, wstring filename, string entry)
 {
-	HRESULT hr = D3DCompileFromFile(
-		filename.c_str(),
-		NULL,
-		NULL,
-		entry.c_str(),
-		"ps_5_0",
-		0,
-		0,
-		&m_pPSCodeResult,
-		&m_pErrorMsgs
-	);
+	HRESULT hr = D3DCompileFromFile(filename.c_str(), NULL, NULL,
+		entry.c_str(), "ps_5_0", 0, 0, &m_pPSCodeResult, &m_pErrorMsgs);
 	if (FAILED(hr))
 	{
 		MessageBoxA(NULL,
-			(char*)m_pErrorMsgs->GetBufferPointer(),
-			"ERROR", MB_OK);
+			(char*)m_pErrorMsgs->GetBufferPointer(), "ERROR", MB_OK);
 		if (m_pErrorMsgs) m_pErrorMsgs->Release();
 		return false;
 	}
-	hr = pd3dDevice->CreatePixelShader(
-		m_pPSCodeResult->GetBufferPointer(),
-		m_pPSCodeResult->GetBufferSize(),
-		NULL,
-		&m_pPixelShader);
+	hr = pd3dDevice->CreatePixelShader(m_pPSCodeResult->GetBufferPointer(),
+		m_pPSCodeResult->GetBufferSize(), NULL, &m_pPixelShader);
 	if (FAILED(hr))
 	{
 		return false;
 	}
 	return true;
 }
-bool AShader::Load(ID3D11Device* pd3dDevice, std::wstring filename)
+bool AShader::Load(ID3D11Device* pd3dDevice, wstring filename)
 {
 	if (!CreateVertexShader(pd3dDevice,filename))
 	{
@@ -101,7 +75,7 @@ AShader::AShader(){}
 AShader::~AShader(){}
 
 
-AShader* AShaderMgr::CreateVertexShader(ID3D11Device* pd3dDevice, std::wstring filename, std::string entry)
+AShader* AShaderMgr::CreateVertexShader(ID3D11Device* pd3dDevice, wstring filename, string entry)
 {
 	std::wstring name = Splitpath(filename, to_mw(entry));
 	AShader* pData = GetPtr(name);
@@ -109,7 +83,7 @@ AShader* AShaderMgr::CreateVertexShader(ID3D11Device* pd3dDevice, std::wstring f
 	{
 		return pData;
 	}
-	std::shared_ptr<AShader> pNewData = std::make_shared<AShader>();
+	std::shared_ptr<AShader> pNewData = make_shared<AShader>();
 	if (!pNewData->CreateVertexShader(pd3dDevice, filename, entry))
 	{
 		return nullptr;
@@ -122,7 +96,7 @@ AShader* AShaderMgr::CreateVertexShader(ID3D11Device* pd3dDevice, std::wstring f
 
 
 AShader* AShaderMgr::CreatePixelShader(ID3D11Device* pd3dDevice,
-	std::wstring filename, std::string entry)
+	wstring filename, string entry)
 {
 	wstring name = Splitpath(filename, to_mw(entry));
 	AShader* pData = GetPtr(name);

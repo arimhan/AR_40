@@ -1,6 +1,5 @@
 #include "IntroWorld.h"
 #include "Input.h"
-#include <string>
 #include "ObjectMgr.h"
 #include "UIModelMgr.h"
 
@@ -10,7 +9,7 @@ bool	AIntroWorld::CreateModelType()
 	// INTRO 배경
 	AShader* pVShader = I_Shader.CreateVertexShader(m_pd3dDevice, L"Shader.txt", "VS");
 	AShader* pPShader = I_Shader.CreatePixelShader(m_pd3dDevice, L"Shader.txt", "PSAlphaBlend");
-	std::shared_ptr<AImageObject> obj(new AImageObject);
+	shared_ptr<AImageObject> obj(new AImageObject);
 	obj->m_csName = L"AImageObject:bk";
 	obj->Init();
 	obj->SetRectDraw({ 0,0, g_rtClient.right,g_rtClient.bottom });
@@ -24,26 +23,11 @@ bool	AIntroWorld::CreateModelType()
 		return false;
 	}
 	obj->SetCollisionType(ACollisionType::Ignore, ASelectType::Select_Ignore);
-	I_UI.m_list.insert(std::make_pair(L"bk", obj));
+	I_UI.m_list.insert(make_pair(L"bk", obj));
 
-	//패널 (START 버튼 아래 창)
-	std::shared_ptr<AButtonObject> btnDlg(new AButtonObject);
-	btnDlg->m_csName = L"AButtonObject:btnDlg";
-	btnDlg->Init();
-	btnDlg->m_rtOffset = { 50, 50, 50, 50 };
-	btnDlg->SetRectDraw({ 0,0, g_rtClient.right / 3,g_rtClient.bottom / 3 });
-	btnDlg->SetPosition(AVector2(0, 0));
-	if (!btnDlg->Create(m_pd3dDevice, m_pContext,
-		L"../../data/shader/DefaultUI.txt",
-		L"../../data/ui/popup_normal.png"))
-	{
-		return false;
-	}
-	btnDlg->SetCollisionType(ACollisionType::Ignore, ASelectType::Select_Overlap);
-	I_UI.m_list.insert(std::make_pair(L"btnDlg", btnDlg));
 
 	//START 버튼 (기본/눌린/선택/비활성화)
-	std::shared_ptr<AButtonObject> btnObj(new AButtonObject);
+	shared_ptr<AButtonObject> btnObj(new AButtonObject);
 	btnObj->m_csName = L"TButtonObject:btnStart";
 	btnObj->Init();
 	btnObj->m_rtOffset = { 0, 0, 0, 0 };
@@ -78,26 +62,21 @@ bool	AIntroWorld::CreateModelType()
 		return false;
 	}
 	btnObj->SetCollisionType(ACollisionType::Ignore, ASelectType::Select_Overlap);
-	I_UI.m_list.insert(std::make_pair(L"btnStart", btnObj));
+	I_UI.m_list.insert(make_pair(L"btnStart", btnObj));
 
 	// 새로운 모델을 생성해서 등록한다.
-	std::shared_ptr<AUIModelComposed> pComposedObj(new AUIModelComposed);
+	shared_ptr<AUIModelComposed> pComposedObj(new AUIModelComposed);
 	pComposedObj->m_csName = L"AUIModelComposed";
 
-	//패널 복사해서 등록하고 출력 위치 세팅
-	AButtonObject* pDlgWindow = (AButtonObject*)I_UI.GetPtr(L"btnDlg")->Clone();
-	pDlgWindow->m_rtOffset = { 50, 50, 50, 50 };
-	pDlgWindow->SetRectDraw({ 0,0, g_rtClient.right / 3,g_rtClient.bottom / 3 });
-	pDlgWindow->SetPosition(AVector2(400, 300));
-	pComposedObj->Add(pDlgWindow);
 
 	//START 버튼 복사해서 등록하고 패널 중앙에 배치하도록 세팅
 	AUIModel* pNewDlgBtn = I_UI.GetPtr(L"btnStart")->Clone();
 	pNewDlgBtn->m_csName = L"btnStartClone_ComposedList";
 	pNewDlgBtn->SetRectDraw({ 0,0, 100,50 });
-	pNewDlgBtn->SetPosition(pDlgWindow->m_vPos+ AVector2(0, 0));
+	pNewDlgBtn->SetPosition(AVector2(0, 0));
 	pComposedObj->Add(pNewDlgBtn);
-	I_UI.m_list.insert(std::make_pair(L"dlgWindow", pComposedObj)); 
+	I_UI.m_list.insert(make_pair(L"dlgWindow", pComposedObj)); 
+
 	return true;
 }
 bool	AIntroWorld::Init()
@@ -107,22 +86,13 @@ bool	AIntroWorld::Init()
 }
 bool	AIntroWorld::Load(std::wstring file)
 {	
-	m_pBackGroundMusic = I_Sound.Load("../../data/Sound/OnlyLove.MP3");	
-	m_pColorTex = I_Texture.Load(L"../../data/Img/KGCABK.bmp");
-
-	//for (int i = 0; i < 10; i++)
-	//{
-	//	std::wstring name = L"../../data/";
-	//	name += std::to_wstring(i);
-	//	name +=L".bmp";
-	//	m_pChangeColorTex[i] = I_Texture.Load(name);
-	//}	
+	m_pColorTex = I_Texture.Load(L"../../data/Img/stage1_1.png");
 	CreateModelType();
 	
 	//배경 출력
 	AObject2D* pNewBK =	I_UI.GetPtr(L"bk")->Clone();
 		pNewBK->m_csName = L"AImageObjectClock:bk";
-		pNewBK->SetPosition(AVector2(400, 300));
+		pNewBK->SetPosition(AVector2(g_rtClient.right/2, g_rtClient.bottom/2));	//클라이언트 정중앙
 		pNewBK->UpdateData();
 	m_UIObj.push_back(shared_ptr<AObject2D>(pNewBK));
 
@@ -132,41 +102,14 @@ bool	AIntroWorld::Load(std::wstring file)
 		I_UI.GetPtr(L"btnStart")->Clone();
 		pNewBtn1->m_csName = L"btnStartClone1";
 		pNewBtn1->SetRectDraw({ 0,0, 100,50 });
-		pNewBtn1->SetPosition(AVector2(300, 25));
+		pNewBtn1->SetPosition(AVector2(g_rtClient.right / 2, g_rtClient.bottom / 1.5));
 		pNewBtn1->UpdateData();
 	m_UIObj.push_back(shared_ptr<AObject2D>(pNewBtn1));
-	AUIModel* pNewBtn2 =I_UI.GetPtr(L"btnStart")->Clone();
-		pNewBtn2->m_csName = L"btnStartClone2";
-		pNewBtn2->SetRectDraw({ 0,0, 100,100 });
-		pNewBtn2->SetPosition(AVector2(400, 150));
-		pNewBtn2->UpdateData();
-	m_UIObj.push_back(shared_ptr<AObject2D>(pNewBtn2));
-	
-	AUIModel*  pNewBtn3 =I_UI.GetPtr(L"btnStart")->Clone();
-		pNewBtn3->m_csName = L"btnStartClone3";
-		pNewBtn3->SetRectDraw({ 0,0, 100,50 });
-		pNewBtn3->SetPosition(AVector2(500, 200));
-		pNewBtn3->UpdateData();
-	m_UIObj.push_back(shared_ptr<AObject2D>(pNewBtn3));
-	
-	AUIModel* pNewDlgBtnClone = I_UI.GetPtr(L"dlgWindow")->Clone();
-		pNewDlgBtnClone->m_csName = L"AUIModelComposedClone";
-		pNewDlgBtnClone->m_pParent = nullptr;
-		pNewDlgBtnClone->SetPosition(AVector2(0, 0));
-		pNewDlgBtnClone->UpdateData();
-	m_UIObj.push_back(shared_ptr<AObject2D>(pNewDlgBtnClone));
 
 
-	shared_ptr<AListCtrlObject> pListCtrl = make_shared<AListCtrlObject>();
-	pListCtrl->m_csName = L"AListCtrlObject";
-	pListCtrl->m_pParent = pNewBK;
-	pListCtrl->SetRectDraw({ 100,100, 100,300 });
-	pListCtrl->Create(1,5);	
-	m_UIObj.push_back(pListCtrl);
-
+	//이펙트 로드
 	I_Sprite.Load(L"SpriteData.txt");
 	m_ExplosionObj.m_pSprite = I_Sprite.GetPtr(L"rtExplosion");
-
 	m_ExplosionObj.Init();
 	m_ExplosionObj.SetPosition(AVector2(400, 500));
 	ASprite* pSprite = I_Sprite.GetPtr(L"rtExplosion");
@@ -187,10 +130,13 @@ bool	AIntroWorld::Frame()
 	if (m_bLoadWorld && m_pNextWorld!=nullptr)
 	{
 		I_ObjectMgr.Release();
-		m_pNextWorld->Load(L"zone.txt");
+		m_pNextWorld->Load(L"ZONE.txt");
 		AWorld::m_pCurWorld = m_pNextWorld;
 	}
-	m_pBackGroundMusic->Frame();
+	//m_pBackGroundMusic->Frame();
+
+
+	//이펙터는 몬스터 충돌 시 출력되도록 처리필요
 	static int iIndex = 0;
 
 	if (AInput::Get().GetKey(VK_F3) == KEY_PUSH)

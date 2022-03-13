@@ -25,9 +25,6 @@ struct AStatePlayData
 	}
 };
 
-// 0번 - 배경이미지 타입 -> Red
-// 1번 - 대화상자(패널)  -> Green
-// 2번 - 버튼타입        -> Blue
 class AUIModel : public AObject2D
 {
 
@@ -49,8 +46,8 @@ public:
 	virtual bool	Render();
 	virtual bool	Release();
 	virtual void	Add(AUIModel* pObj);
-	virtual AUIModel* Clone();
-	virtual void  UpdateData();
+	virtual			AUIModel* Clone();
+	virtual void	UpdateData();
 };
 class AUIModelMgr : public ABaseMgr<AUIModel, AUIModelMgr>
 {

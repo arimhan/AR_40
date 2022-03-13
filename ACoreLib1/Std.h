@@ -25,6 +25,7 @@ using namespace Microsoft::WRL;
 #pragma comment	(lib, "ws2_32.lib")
 using namespace std;
 
+//랜덤
 #define randf(x) (x*rand()/(float)RAND_MAX)
 #define randf2(x,off) (off+x*rand()/(float)RAND_MAX)
 #define randstep(fMin,fMax) (fMin+((float)fMax-(float)fMin)*rand()/(float)RAND_MAX)
@@ -81,9 +82,12 @@ static void MemoryReporting()
 	debug->Release();
 #endif
 }
-#define GAME_START int WINAPI wWinMain(HINSTANCE hInstance,HINSTANCE hPrevInstance, LPWSTR    lpCmdLine, int       nCmdShow){   Sample core;   
-#define GAME_WIN(s,x,y) if (core.SetWinClass(hInstance) == FALSE) return 1;   if (core.SetWindow(L#s, x, y) == FALSE) return 1;   core.GameRun();    return 1;}
-#define SIMPLE_WIN() if (core.SetWinClass(hInstance) == FALSE) return 1;   if (core.SetWindow() == FALSE) return 1;   core.GameRun();    return 1;}
+#define GAME_START int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCmdLine, int nCmdShow){ASample core;
+#define GAME_WIN(s,x,y) if (core.SetWinClass(hInstance) == FALSE) return 1; if (core.SetWindow(L#s, x, y) == FALSE) return 1;core.GameRun();return 1;}
 #define GAME_RUN(s,x,y) GAME_START; GAME_WIN(s,x,y);
-#define RUN() GAME_START; SIMPLE_WIN();
-#define BEGIN_START(S) friend class TSingleton<S>
+#define SIMPLE_WIN() if (core.SetWinClass(hInstance) == FALSE) return 1; if (core.SetWindow() == FALSE) return 1; core.GameRun(); return 1;}
+#define SIMPLE_ARUN() GAME_START; SIMPLE_WIN();
+#define BEGIN_START(S) friend class ASingleton<S>
+
+////GAMERUN은 TITLE, 사이즈 지정
+////SIMPLERUN은 디폴트값으로 실행

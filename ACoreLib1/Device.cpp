@@ -1,4 +1,6 @@
 #include "Device.h"
+
+
 HRESULT ADevice::InitDeivice()
 {
 	HRESULT hr = S_OK; 
@@ -32,19 +34,9 @@ bool ADevice::CreateDevice()
 	m_SwapChainDesc.OutputWindow = m_hWnd;
 	m_SwapChainDesc.Windowed = true;
 
-	HRESULT hr = D3D11CreateDeviceAndSwapChain(
-		NULL,
-		D3D_DRIVER_TYPE_HARDWARE,
-		NULL,
-		Flags,
-		fl,
-		1,
-		D3D11_SDK_VERSION,
-		&m_SwapChainDesc,
-		m_pSwapChain.GetAddressOf(),
-		m_pd3dDevice.GetAddressOf(),
-		&m_FeatureLevel,
-		m_pImmediateContext.GetAddressOf());
+	HRESULT hr = D3D11CreateDeviceAndSwapChain(NULL, D3D_DRIVER_TYPE_HARDWARE,
+		NULL, Flags, fl, 1, D3D11_SDK_VERSION, &m_SwapChainDesc, m_pSwapChain.GetAddressOf(),
+		m_pd3dDevice.GetAddressOf(), &m_FeatureLevel, m_pImmediateContext.GetAddressOf());
 	if (FAILED(hr))
 	{
 		return false;
@@ -54,17 +46,10 @@ bool ADevice::CreateDevice()
 bool ADevice::CreateRenderTargetView()
 {
 	ComPtr<ID3D11Texture2D> backBuffer = nullptr;
-	m_pSwapChain->GetBuffer(0,
-		__uuidof(ID3D11Texture2D),
-		(LPVOID*)&backBuffer);
-	m_pd3dDevice->CreateRenderTargetView(
-		backBuffer.Get(),
-		NULL,
-		m_pRenderTargetView.GetAddressOf());
+	m_pSwapChain->GetBuffer(0,__uuidof(ID3D11Texture2D),(LPVOID*)&backBuffer);
+	m_pd3dDevice->CreateRenderTargetView(backBuffer.Get(),NULL,m_pRenderTargetView.GetAddressOf());
 
-	m_pImmediateContext->OMSetRenderTargets(
-		1,
-		m_pRenderTargetView.GetAddressOf(), NULL);
+	m_pImmediateContext->OMSetRenderTargets(1,m_pRenderTargetView.GetAddressOf(), NULL);
 	return true;
 }
 bool ADevice::SetViewport()
@@ -94,7 +79,6 @@ void ADevice::ResizeDevice(UINT iWidth, UINT iHeight)
 	if( SUCCEEDED(hr))
 	{
 		m_pSwapChain->GetDesc(&m_SwapChainDesc);
-
 	}
 	CreateRenderTargetView();
 	SetViewport();
@@ -113,9 +97,9 @@ bool ADevice::CleapupDevice()
 }
 ADevice::ADevice()
 {
-	m_pd3dDevice = nullptr;	// 디바이스 객체
-	m_pImmediateContext = nullptr;// 다비이스 컨텍스트 객체
-	m_pSwapChain = nullptr;	// 스왑체인 객체
-	m_pRenderTargetView = nullptr;
+	m_pd3dDevice			= nullptr;	// 디바이스 객체
+	m_pImmediateContext		= nullptr;	// 다비이스 컨텍스트 객체
+	m_pSwapChain			= nullptr;	// 스왑체인 객체
+	m_pRenderTargetView		= nullptr;
 }
 ADevice::~ADevice(){}

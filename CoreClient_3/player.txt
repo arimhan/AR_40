@@ -1,4 +1,4 @@
 GAMEUSER
-91,1,42,56,400,300,42,56 
-../../data/Img/bitmap1.bmp
-../../data/Img/bitmap2.bmp
+
+../../data/Img/enemy.png
+../../data/Img/enemy2.png

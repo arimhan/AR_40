@@ -4,7 +4,7 @@
 #include "DxState.h"
 #include "Collision.h"
 
-struct ASimplevertex
+struct ASimpleVertex
 {
 	AVector2 v;
 	AVector2 t;
@@ -23,24 +23,21 @@ public:
 	wstring		m_csName;
 	ABaseObject* m_pParent = nullptr;
 
+	bool		m_bDead;
+	int			m_iCollisionID;
+	int			m_iSelectID;
 	float		m_fSpeed;
 	AVector2	m_vPos;
 	AVector2	m_vDirection;
 	float		m_fWidth;
 	float		m_fHeight;
-
-	int			m_iCollisionID;
 	ARect		m_rtCollision;
 	DWORD		m_dwCollisionType;
-	bool		m_bAlphaBlend;
-
-public:
-	bool		m_bDead;
-	int			m_iSelectID;
-	bool		m_bSelect;
 	DWORD		m_dwSelectType;
 	DWORD		m_dwSelectState;
 	DWORD		m_dwPreSelectState;
+	bool		m_bSelect;
+	bool		m_bAlphaBlend;
 
 public:
 	virtual void HitOverlap(ABaseObject* pObj, DWORD dwState);
@@ -72,7 +69,7 @@ struct AIndex
 	DWORD _1;
 	DWORD _2;
 };
-struct AConstanceData
+struct AConstantData
 {
 	AVector4 Color;
 	AVector4 Timer;
@@ -90,14 +87,14 @@ public:
 	ID3D11BlendState*			m_AlphaBlendDisable;
 	D3D11_TEXTURE2D_DESC		m_TextureDesc;
 public:
-	vector<ASimplevertex>	m_InitScreenList;
-	vector<ASimplevertex>	m_VertexList;
+	vector<ASimpleVertex>	m_InitScreenList;
+	vector<ASimpleVertex>	m_VertexList;
 	ID3D11Buffer*			m_pVertexBuffer = nullptr;
 
 	vector<DWORD>			m_IndexList;
 	ID3D11Buffer*			m_pIndexBuffer = nullptr;
 
-	AConstanceData			m_ConstantList;
+	AConstantData			m_ConstantList;
 	ID3D11Buffer*			m_pConstantBuffer = nullptr;
 
 	ID3D11InputLayout*		m_pVertexLayout = nullptr;

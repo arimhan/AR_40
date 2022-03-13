@@ -2,6 +2,7 @@
 //#include "ObjectMgr.h"
 
 AWorld* AWorld::m_pCurWorld = nullptr;
+
 bool AWorld::Load(wstring saveFile)
 {
 	return true;

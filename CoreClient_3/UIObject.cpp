@@ -1,6 +1,7 @@
 #include "UIObject.h"
 #include "World.h"
 #include "SoundMgr.h"
+
 bool    AUIObject::SetVertexData()
 {
 	//ConvertIndex(m_vPos, m_fWidth, m_fHeight, m_VertexList);
@@ -203,7 +204,7 @@ void AButtonObject::HitSelect(ABaseObject* pObj, DWORD dwState)
 		}break;
 		default:
 		{
-			state += std::to_string(m_dwSelectState);
+			state += to_string(m_dwSelectState);
 		}
 	}	
 	m_dwPreSelectState = m_dwSelectState;
@@ -226,7 +227,7 @@ bool AListCtrlObject::Create(int xCount, int yCount)
 			AUIModel* pNewBtn = I_UI.GetPtr(L"btnStart")->Clone();
 			pNewBtn->m_pParent = this;
 			pNewBtn->m_csName = L"Btn";
-			pNewBtn->m_csName += std::to_wstring(iRow* yCount+ iCol);
+			pNewBtn->m_csName += to_wstring(iRow* yCount+ iCol);
 			pNewBtn->SetRectDraw({ 0,0, iHalfWidth,iHalfHeight });
 			pNewBtn->SetPosition(AVector2(
 				pStart.x + iHalfWidth * iCol,
