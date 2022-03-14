@@ -2,10 +2,7 @@
 #include "UIObject.h"
 #include "DxObject.h"
 
-bool	AZoneWorld::Init()
-{
-	return true;
-}
+bool	AZoneWorld::Init() { return true; }
 bool	AZoneWorld::Load(std::wstring file)
 {
 	I_Texture.Load(L"../../data/Img/stage1_1.png");
@@ -19,13 +16,19 @@ bool	AZoneWorld::Load(std::wstring file)
 	m_UIObj.push_back(shared_ptr<AObject2D>(pNewBK));
 
 	ASound* pSound = I_Sound.Load("../../data/Sound/LovingUGirl.mp3");
-	//pSound = I_Sound.Load("../../data/Sound/MyLove.MP3");
-	m_pBackGroundMusic = I_Sound.Load("../../data/Sound/LovingUGirl.mp3");
-	pSound = I_Sound.Load("../../data/Sound/00_Menu.MP3");
-	pSound = I_Sound.Load("../../data/Sound/Gun1.wav");
-	pSound = I_Sound.Load("../../data/Sound/abel_leaf.asf");
-	pSound = I_Sound.Load("../../data/Sound/GunShot.mp3");
+	pSound = I_Sound.Load("../../data/Sound/NewHopeClub.mp3");
+	pSound = I_Sound.Load("../../data/Sound/LovingCaliber.mp3");
+	//pSound = I_Sound.Load("../../data/Sound/00_Menu.MP3");
+	//pSound = I_Sound.Load("../../data/Sound/Gun1.wav");
+	//pSound = I_Sound.Load("../../data/Sound/abel_leaf.asf");
+	//pSound = I_Sound.Load("../../data/Sound/GunShot.mp3");
+
+	m_pBackGroundMusic = I_Sound.Load("../../data/Sound/NewHopeClub.mp3");
 	m_pBackGroundMusic->Play(true);
+	//m_pBackGroundMusic = I_Sound.Load("../../data/Sound/LovingCaliber.mp3");
+	//m_pBackGroundMusic->Play(true);
+	//m_pBackGroundMusic = I_Sound.Load("../../data/Sound/LovingUGirl.mp3");
+	//m_pBackGroundMusic->Play(true);
 
 	//for (int i = 0; i < 10; i++) //카운트다운
 	//{
@@ -37,9 +40,9 @@ bool	AZoneWorld::Load(std::wstring file)
 
 	//플레이어, NPC 이미지 로드 및 배치
 	m_PlayerObj.Init();
-	m_PlayerObj.SetPosition(AVector2(400, 500));
-	m_PlayerObj.SetRectSource({ 0,0,32,32 });//({ 91,1,42,56 });
-	m_PlayerObj.SetRectDraw({ 0,0, 32,32 });//({ 0,0, 42,56 }); // 30,32
+	m_PlayerObj.SetPosition(AVector2(g_rtClient.right/2, g_rtClient.bottom / 1.5));
+	m_PlayerObj.SetRectSource({ 0,0,32,32 });//32*32
+	m_PlayerObj.SetRectDraw({ 0,0, 25,25 });
 	m_PlayerObj.m_csName = L"PlayerUser";	
 	if (!m_PlayerObj.Create(m_pd3dDevice, m_pContext,
 		L"Shader.txt",
@@ -53,18 +56,18 @@ bool	AZoneWorld::Load(std::wstring file)
 	{
 		shared_ptr<AObjectNpc2D> npc = make_shared<AObjectNpc2D>();
 		npc->m_csName = L"NPC_";
-		npc->m_csName += std::to_wstring(iNpc);
+		npc->m_csName += to_wstring(iNpc);
 		npc->Init();
 		npc->SetPosition(AVector2(50 + iNpc * 150, 50));
 		if (iNpc % 2 == 0)
 		{
 			npc->SetRectSource({ 0,0,0,0 });
-			npc->SetRectDraw({ 0,0,48,48 });
+			npc->SetRectDraw({ 0,0,32,32 }); //48 * 48
 		}
 		else
 		{
 			npc->SetRectSource({ 0,0,0,0 });
-			npc->SetRectDraw({ 0,0,48,48 });
+			npc->SetRectDraw({ 0,0,38,38 });
 		}
 		if (!npc->Create(m_pd3dDevice, m_pContext,
 			L"Shader.txt",

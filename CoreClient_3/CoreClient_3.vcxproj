@@ -179,9 +179,6 @@
     <ProjectReference Include="..\ACoreLib1\ACoreLib1.vcxproj">
       <Project>{bf78e5b1-b555-48c1-ad7c-bf3316406791}</Project>
     </ProjectReference>
-    <ProjectReference Include="..\CoreNet\CoreNet.vcxproj">
-      <Project>{1d84b747-d141-475c-a4f5-fec5fc6217dc}</Project>
-    </ProjectReference>
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

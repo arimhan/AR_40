@@ -38,7 +38,7 @@ bool AEffectObj::Frame()
 	m_pContext->UpdateSubresource(
 		m_pConstantBuffer, 0, NULL, &m_ConstantList, 0, 0);
 
-	AddPosition({ 300,250 });
+	AddPosition({ -1,-1 });
 	return true;
 }
 bool AEffectObj::Render()
