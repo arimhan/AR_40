@@ -77,10 +77,7 @@ void ASound::VolumeDown(float fVolume)
 	}
 }
 
-bool ASound::Init()
-{
-	return true;
-}
+bool ASound::Init() { return true; }
 bool ASound::Frame()
 {
 	if (m_pSound ==nullptr || m_pChannel==nullptr) return true;
@@ -97,10 +94,7 @@ bool ASound::Frame()
 	
 	return true;
 }
-bool ASound::Render()
-{
-	return true;
-}
+bool ASound::Render() { return true; }
 bool ASound::Release()
 {
 	if (m_pSound)
@@ -169,10 +163,7 @@ bool ASoundMgr::Frame()
 	m_pSystem->update();
 	return true;
 }
-bool ASoundMgr::Render()
-{
-	return true;
-}
+bool ASoundMgr::Render() { return true; }
 bool ASoundMgr::Release()
 {
 	for (auto data : m_list)

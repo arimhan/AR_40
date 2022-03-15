@@ -1,15 +1,9 @@
 #include "Sample.h"
 #include "ObjectMgr.h"
-#define PORT_NUM 9110 //9110
-#define ADRESS_NUM "127.0.0.1" //"127.0.0.1"
-void ASample::CreateResizeDevice(UINT iWidth, UINT iHeight)
-{
-	int k = 0;
-}
-void ASample::DeleteResizeDevice(UINT iWidth, UINT iHeight)
-{
-	int k = 0;
-}
+
+void ASample::CreateResizeDevice(UINT iWidth, UINT iHeight) { int k = 0; }
+void ASample::DeleteResizeDevice(UINT iWidth, UINT iHeight) { int k = 0; }
+
 LRESULT ASample::MsgProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
 {
 	switch (msg)
@@ -49,68 +43,11 @@ bool ASample::Init()
 
 	AWorld::m_pCurWorld = &m_IntroWorld;
 
-	m_Net.InitNetwork();
-	m_Net.Connect(g_hWnd, SOCK_STREAM, PORT_NUM, ADRESS_NUM);
 	return true;
 }
 bool ASample::Frame()
 {	
 	AWorld::m_pCurWorld->Frame();
-
-#pragma region
-	int iChatCnt = m_Net.m_PlayerUser.m_PacketPool.size();
-	if (iChatCnt > 0 && m_iChatCnt != iChatCnt)
-	{
-		m_iChatCnt = iChatCnt;
-		SendMessage(m_hListBox, LB_RESETCONTENT, 0, 0);
-
-		std::list<APacket>::iterator iter;
-		if (m_Net.m_PlayerUser.m_PacketPool.size() > 20)
-		{
-			m_Net.m_PlayerUser.m_PacketPool.pop_front();
-		}
-		for (iter = m_Net.m_PlayerUser.m_PacketPool.begin();
-			iter != m_Net.m_PlayerUser.m_PacketPool.end();
-			iter++)
-		{
-			UPACKET& uPacket = (*iter).m_uPacket;
-			switch ((*iter).m_uPacket.ph.type)
-			{
-				case PACKET_LOGIN_ACK:
-				{
-					DWORD dwCurrent = timeGetTime();
-					DWORD dwEnd = 0;
-					dwEnd = dwCurrent - uPacket.ph.time;
-					ALoginAck ack;
-					memcpy(&ack, (*iter).m_uPacket.msg, sizeof(ALoginAck));
-					if (ack.iRet == 1)
-					{
-						int k = 0;
-					}
-				}break;
-				case PACKET_CHAT_MSG:
-				{
-					DWORD dwCurrent = timeGetTime();
-					DWORD dwEnd = 0;
-					dwEnd = dwCurrent - uPacket.ph.time;
-					if (dwEnd >= 1)
-					{
-						std::string data = std::to_string(dwEnd);
-						data += "\n";
-						OutputDebugStringA(data.c_str());
-					}
-					AChatMsg recvdata;
-					ZeroMemory(&recvdata, sizeof(recvdata));
-					(*iter) >> recvdata.index >> recvdata.name
-						>> recvdata.message;
-					SendMessageA(m_hListBox, LB_ADDSTRING, 0,
-						(LPARAM)recvdata.message);
-				}break;
-			}			
-		}
-		m_Net.m_PlayerUser.m_PacketPool.clear();
-	}
-#pragma endregion  NetProcess
 	return true;
 }
 bool ASample::Render()
@@ -145,17 +82,5 @@ int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCmdLi
 	if (core.SetWinClass(hInstance) == FALSE) return 1;
 	if (core.SetWindow(L"KGCA_2DGAME_ARHAN") == FALSE) return 1;
 	core.GameRun();
-	//while(1)
-	//{
-	//	int iTickCount;
-	//	static int iTickTrigger = 0;
-	//	iTickCount = GetTickCount();
-	//	if(iTickCount > iTickTrigger)
-	//	{ 
-	//		iTickTrigger = iTickCount + 10;
-
-	//	}
-	//}
-
 	return 1;
 }

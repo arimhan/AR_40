@@ -30,34 +30,54 @@ bool	AIntroWorld::CreateModelType()
 	shared_ptr<AButtonObject> btnObj(new AButtonObject);
 	btnObj->m_csName = L"TButtonObject:btnStart";
 	btnObj->Init();
-	btnObj->m_rtOffset = { 0, 0, 0, 0 };
-	btnObj->SetRectDraw({ 0,0, 334,82 });
+	btnObj->m_rtOffset = { 50, 50, 50, 50 };
+	btnObj->SetRectDraw({ 0,0, 0, 0 });//334,82 });
 	btnObj->SetPosition(AVector2(0, 0));
 
+	////기본
+	//ATexture* pTex = I_Texture.Load(L"../../data/ui/main_start_nor.png");
+	//ASound* pSound = I_Sound.Load("../../data/Sound/00_Menu.MP3");
+
 	//기본
-	ATexture* pTex = I_Texture.Load(L"../../data/ui/main_start_nor.png");
-	ASound* pSound = I_Sound.Load("../../data/Sound/00_Menu.MP3");
+	ATexture* pTex = I_Texture.Load(L"../../data/ui/btnStart.bmp");
+	ASound* pSound = I_Sound.Load("../../data/Sound/FootStepSound.wav");
+	btnObj->m_pStatePlayList.emplace_back(pTex, pSound);
 
 	//마우스 올려놓음
-	btnObj->m_pStatePlayList.emplace_back(pTex, pSound);
-	pTex = I_Texture.Load(L"../../data/ui/main_start_pus.png");
+	pTex = I_Texture.Load(L"../../data/ui/btnStart.bmp");
 	pSound = I_Sound.Load("../../data/Sound/FootStepSound.wav");
+	btnObj->m_pStatePlayList.emplace_back(pTex, pSound);
 
 	//누름
+	pTex = I_Texture.Load(L"../../data/ui/btnStart.bmp");
+	pSound = I_Sound.Load("../../data/Sound/FootStepSound.wav");
 	btnObj->m_pStatePlayList.emplace_back(pTex, pSound);
-	pTex = I_Texture.Load(L"../../data/ui/main_start_sel.png");
-	pSound = I_Sound.Load("../../data/Sound/FootStepSound_2.wav");
-
+	
 	//선택완료(비활성화)
+	pTex = I_Texture.Load(L"../../data/ui/btnStart.bmp");
+	pSound = I_Sound.Load("../../data/Sound/FootStepSound.wav");
 	btnObj->m_pStatePlayList.emplace_back(pTex, pSound);
-	pTex = I_Texture.Load(L"../../data/ui/main_start_dis.png");
-	pSound = I_Sound.Load("../../data/Sound/PianoSound_00.mp3");
 
-	btnObj->m_pStatePlayList.emplace_back(pTex, pSound);
+
+	////마우스 올려놓음
+	//btnObj->m_pStatePlayList.emplace_back(pTex, pSound);
+	//pTex = I_Texture.Load(L"../../data/ui/main_start_pus.png");
+	//pSound = I_Sound.Load("../../data/Sound/FootStepSound.wav");
+
+	////누름
+	//btnObj->m_pStatePlayList.emplace_back(pTex, pSound);
+	//pTex = I_Texture.Load(L"../../data/ui/main_start_sel.png");
+	//pSound = I_Sound.Load("../../data/Sound/FootStepSound_2.wav");
+
+	////선택완료(비활성화)
+	//btnObj->m_pStatePlayList.emplace_back(pTex, pSound);
+	//pTex = I_Texture.Load(L"../../data/ui/main_start_dis.png");
+	//pSound = I_Sound.Load("../../data/Sound/PianoSound_00.mp3");
+	//btnObj->m_pStatePlayList.emplace_back(pTex, pSound);
 
 	if (!btnObj->Create(m_pd3dDevice, m_pContext,
 		L"../../data/shader/DefaultUI.txt",
-		L"../../data/main_start_nor.png"))
+		L"../../data/btnStart.bmp"))
 	{
 		return false;
 	}
@@ -72,7 +92,7 @@ bool	AIntroWorld::CreateModelType()
 	//START 버튼 복사해서 등록하고 패널 중앙에 배치하도록 세팅
 	AUIModel* pNewDlgBtn = I_UI.GetPtr(L"btnStart")->Clone();
 	pNewDlgBtn->m_csName = L"btnStartClone_ComposedList";
-	pNewDlgBtn->SetRectDraw({ 0,0, 100,50 });
+	pNewDlgBtn->SetRectDraw({ 0,0, 0,0 });
 	pNewDlgBtn->SetPosition(AVector2(0, 0));
 	pComposedObj->Add(pNewDlgBtn);
 	I_UI.m_list.insert(make_pair(L"dlgWindow", pComposedObj)); 
@@ -101,8 +121,11 @@ bool	AIntroWorld::Load(std::wstring file)
 	AObject2D* pNewBtn1 =
 		I_UI.GetPtr(L"btnStart")->Clone();
 		pNewBtn1->m_csName = L"btnStartClone1";
-		pNewBtn1->SetRectDraw({ 0,0, 100,50 });
-		pNewBtn1->SetPosition(AVector2(g_rtClient.right / 2, g_rtClient.bottom / 1.5));
+
+		//pNewBtn1->SetRectSource({ 0,0,0,0 });
+		pNewBtn1->SetRectDraw({ 0,0,110,50 });
+		pNewBtn1->SetPosition(AVector2(g_rtClient.right / 2, g_rtClient.bottom / 1.3));
+
 		pNewBtn1->UpdateData();
 	m_UIObj.push_back(shared_ptr<AObject2D>(pNewBtn1));
 
@@ -178,19 +201,19 @@ bool	AIntroWorld::Frame()
 			m_ExplosionObj.m_pSprite->m_rtArray[0].right,
 			m_ExplosionObj.m_pSprite->m_rtArray[0].bottom });
 	}
-	m_ExplosionObj.Frame();
+	//m_ExplosionObj.Frame();
 	AWorld::Frame();
 	return true;
 }
 bool	AIntroWorld::Render()
 {	
 	AWorld::Render();
-	m_ExplosionObj.Render();
+	//m_ExplosionObj.Render();
 	return true;
 }
 bool	AIntroWorld::Release()
 {	
 	AWorld::Release();
-	m_ExplosionObj.Release();
+	//m_ExplosionObj.Release();
 	return true;
 }
