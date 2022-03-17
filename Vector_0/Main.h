@@ -2,6 +2,7 @@
 #include <iostream>
 #include <windows.h>
 #include "Vector.h"
+#include <d3d11.h>
 using namespace std;
 
 
