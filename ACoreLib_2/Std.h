@@ -25,9 +25,9 @@ using namespace Microsoft::WRL;
 
 #pragma comment	(lib, "d3d11.lib")
 #ifdef _DEBUG
-#pragma comment	(lib, "ACoreLib2_d.lib")
+#pragma comment	(lib, "ACoreLib_2_d.lib")
 #else
-#pragma comment	(lib, "ACoreLib2_r.lib")
+#pragma comment	(lib, "ACoreLib_2_r.lib")
 #endif
 #pragma comment	(lib, "ws2_32.lib")
 using namespace std;

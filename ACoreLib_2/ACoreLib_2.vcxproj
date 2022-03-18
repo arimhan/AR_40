@@ -80,7 +80,7 @@
     <LinkIncremental>true</LinkIncremental>
     <OutDir>../../output/Debug/</OutDir>
     <IntDir>../../output/Debug/ACoreLib_2</IntDir>
-    <PostBuildEventUseInBuild>false</PostBuildEventUseInBuild>
+    <PostBuildEventUseInBuild>true</PostBuildEventUseInBuild>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <LinkIncremental>false</LinkIncremental>
@@ -130,7 +130,7 @@
     </Link>
     <PostBuildEvent>
       <Command>copy "*.h" "../../include/ACore3D_2"
-copy "..\\..\\output\\Debug\\ACoreLib2.lib" "..\\..\\Lib\\ACoreLib2_d.lib"
+copy "..\\..\\output\\Debug\\ACoreLib_2.lib" "..\\..\\Lib\\ACoreLib_2_d.lib"
 </Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>

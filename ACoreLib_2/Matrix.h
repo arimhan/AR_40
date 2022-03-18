@@ -36,20 +36,19 @@ public:
 	void Scale(const AVector3& v);
 	void Scale(float x, float y, float z);
 	
-	//단일행렬
-	void Identity()
-	{
-		//단일행렬 세팅
-		_11 = _12 = _13 = _14 = 0.0f;
-		_21 = _22 = _23 = _24 = 0.0f;
-		_31 = _32 = _33 = _34 = 0.0f;
-		_41 = _42 = _43 = _44 = 0.0f;
-		//4x4 0으로 세팅 후, 대각선 라인 성분 1.0f으로 변경
-		_11 = _22 = _33 = _44 = 1.0f;
-	}
+	//단위행렬
+	void Identity();
 
 	//전치행렬
 	AMatrix Transpose();
+
+//카메라 행렬 만들기
+	//외적을 통한 뷰 행렬 계산
+	AMatrix ViewLookAt(AVector3& vPosition, AVector3& vTarget, AVector3& vUp);
+	////내적을 통한 뷰 행렬 계산
+	AMatrix	CreateViewLook(AVector3& vPosition, AVector3& vTarget, AVector3& vUp);
+	//원근 투영 행렬 계산
+	AMatrix	PerspectiveFovLH(float fNearPlane, float fFarPlane, float fovy, float Aspect);
 
 
 public:

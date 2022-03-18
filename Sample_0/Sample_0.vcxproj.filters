@@ -24,4 +24,9 @@
       <Filter>소스 파일</Filter>
     </ClCompile>
   </ItemGroup>
+  <ItemGroup>
+    <FxCompile Include="Box.hlsl">
+      <Filter>헤더 파일</Filter>
+    </FxCompile>
+  </ItemGroup>
 </Project>
