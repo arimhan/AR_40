@@ -52,6 +52,46 @@ bool ADevice::CreateRenderTargetView()
 	m_pImmediateContext->OMSetRenderTargets(1,m_pRenderTargetView.GetAddressOf(), NULL);
 	return true;
 }
+bool ADevice::CreateDepthStencilView()
+{
+	HRESULT hr;
+	Microsoft::WRL::ComPtr<ID3D11Texture2D> pDSTexture = nullptr;
+	D3D11_TEXTURE2D_DESC DescDepth;
+	DescDepth.Width = m_SwapChainDesc.BufferDesc.Width;	//g_rtClient.Width로 해도 상관없지만 백버퍼에 맞춰서 하는게 더 죠음.
+	DescDepth.Height = m_SwapChainDesc.BufferDesc.Height;
+	DescDepth.MipLevels = 1;
+	DescDepth.ArraySize = 1;
+	DescDepth.Format = DXGI_FORMAT_R24G8_TYPELESS;
+	DescDepth.SampleDesc.Count = 1;
+	DescDepth.SampleDesc.Quality = 0;
+	DescDepth.Usage = D3D11_USAGE_DEFAULT;
+
+	// 백 버퍼 깊이 및 스텐실 버퍼 생성
+	DescDepth.BindFlags = D3D11_BIND_DEPTH_STENCIL;
+	if (DescDepth.Format == DXGI_FORMAT_R24G8_TYPELESS || DescDepth.Format == DXGI_FORMAT_D32_FLOAT)
+	{
+		//깊이맵 전용 깊이맵 생성
+		DescDepth.BindFlags = D3D11_BIND_DEPTH_STENCIL || D3D11_BIND_SHADER_RESOURCE;
+	}
+	DescDepth.CPUAccessFlags = 0;
+	DescDepth.MiscFlags = 0;
+	if (FAILED(hr = m_pd3dDevice->CreateTexture2D(&DescDepth, NULL, &pDSTexture))) { return false; }
+
+	//쉐이더 리소스 생성 : 깊이맵 쉐도우에서 사용한다
+	D3D11_DEPTH_STENCIL_VIEW_DESC dsvDesc;
+	D3D11_SHADER_RESOURCE_VIEW_DESC srvDesc;
+	ZeroMemory(&dsvDesc, sizeof(D3D11_DEPTH_STENCIL_VIEW_DESC));
+	ZeroMemory(&srvDesc, sizeof(D3D11_SHADER_RESOURCE_VIEW_DESC));
+
+	switch (DescDepth.Format)
+	{
+	case DXGI_FORMAT_R32_TYPELESS:
+		dsvDesc.Format = DXGI_FORMAT_D32_FLOAT;
+		srvDesc.Format = DXGI_FORMAT_R32_FLOAT;
+		break;
+	}
+
+}
 bool ADevice::SetViewport()
 {	
 	// 뷰포트 세팅

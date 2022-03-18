@@ -4,6 +4,10 @@
 class ADevice : public AWindow
 {
 public:
+	Microsoft::WRL::ComPtr<ID3D11DepthStencilView> m_pDepthStencilView;	//µª½º½ºÅÙ½Çºä
+	Microsoft::WRL::ComPtr<ID3D11ShaderResourceView> m_pSRV;			//¸®¼Ò½ººä
+	Microsoft::WRL::ComPtr<ID3D11ShaderResourceView> m_pDsvSRV;			//µª½º½ºÅÙ½Ç ¸®¼Ò½ººä
+public:
 	// windows runtime c++ template library(wrl)
 	ComPtr<ID3D11Device> m_pd3dDevice;
 	//ID3D11Device* m_pd3dDevice;	// µð¹ÙÀÌ½º °´Ã¼
@@ -20,6 +24,7 @@ public:
 	HRESULT		    InitDeivice();
 	virtual bool	CreateDevice();
 	virtual bool	CreateRenderTargetView();
+	virtual bool	CreateDepthStencilView();
 	virtual bool	SetViewport();
 	virtual bool	CleapupDevice();
 	void			ResizeDevice(UINT iWidth, UINT iHeight);
