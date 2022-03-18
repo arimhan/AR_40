@@ -35,7 +35,8 @@ using namespace std;
 //3D
 #define ABASIS_EPSILON ((FLOAT) 0.001f)
 #define ABASIS_PI ((FLOAT) 3.141592654f)
-
+#define DegreeToRadian(degree)((degree)*(ABASIS_PI/180.0f))
+#define RadianToDegree(Radian)((Radian)*(180.0f/ABASIS_PI))
 
 
 //·£´ý

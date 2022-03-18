@@ -1,114 +1,98 @@
 #include "Sample.h"
+//#include "Object3D.h"
+
+//#define DegreeToRadian(degree)((degree)*(ABASIS_PI/180.0f))
 
 
-bool APlaneObj::SetVertexData()
+bool ASample::Init()
 {
-    m_VertexList.resize(4);
-    // -Z plane
-    m_VertexList[0].p = AVector3(-1.0f, 1.0f, 0.5f);
-    m_VertexList[0].n = AVector3(0.0f, 0.0f, -1.0f);
-    m_VertexList[0].c = AVector4(1.0f, 1.0f, 1.0f, 1.0f);
-    m_VertexList[0].t = AVector2(0.0f, 0.0f);
-
-    m_VertexList[1].p = AVector3(1.0f, 1.0f, 0.5f);
-    m_VertexList[1].n = AVector3(0.0f, 0.0f, -1.0f);
-    m_VertexList[1].c = AVector4(1.0f, 1.0f, 1.0f, 1.0f);
-    m_VertexList[1].t = AVector2(1.0f, 0.0f);
+    //카메라 기능
+    m_Camera.Init();
 
 
-    m_VertexList[2].p = AVector3(-1.0f, -1.0f, 0.5f);
-    m_VertexList[2].n = AVector3(0.0f, 0.0f, -1.0f);
-    m_VertexList[2].c = AVector4(1.0f, 1.0f, 1.0f, 1.0f);
-    m_VertexList[2].t = AVector2(0.0f, 1.0f);
+    ATexture* pTex = I_Texture.Load(L"../../data/ui/save_0000_O-K.png");
+    AShader* pVSShader = I_Shader.CreateVertexShader(m_pd3dDevice.Get(), L"Box.hlsl", "VS");
+    AShader* pPSShader = I_Shader.CreatePixelShader(m_pd3dDevice.Get(), L"Box.hlsl", "PS");
 
+    //지형 Obj X축 회전으로 바닥에 깔기
+    m_MapObj.Init();
+    m_MapObj.m_pColorTex = pTex;
+    m_MapObj.m_pVSShader = pVSShader;
+    m_MapObj.m_pPSShader = pPSShader;
 
-    m_VertexList[3].p = AVector3(1.0f, -1.0f, 0.5f);
-    m_VertexList[3].n = AVector3(0.0f, 0.0f, -1.0f);
-    m_VertexList[3].c = AVector4(1.0f, 1.0f, 1.0f, 1.0f);
-    m_VertexList[3].t = AVector2(1.0f, 1.0f);
-    return true;
-}
-bool APlaneObj::SetIndexData()
-{
-    m_IndexList.push_back(0); m_IndexList.push_back(1); m_IndexList.push_back(2);
-    m_IndexList.push_back(2); m_IndexList.push_back(1); m_IndexList.push_back(3);
+    AMatrix matRotate, matScale; //matTrans;
+    matRotate.XRotate(DegreeToRadian(90)); //X축으로 90도 눕기
+    matScale.Scale(10, 10.0f, 10.0f);
+    m_MapObj.m_matWorld = matScale * matRotate; // SRT순으로
+    if (!m_MapObj.Create(m_pd3dDevice.Get(), m_pImmediateContext.Get())) { return false; }
+
+    //world
+   /* AMatrix matRotate, matScale, matTrans;
+    matRotate.ZRotate(g_fGameTimer);
+    matScale.Scale(cos(g_fGameTimer) * 0.5f + 0.5f, 1.0f, 1.0f);
+    matTrans.Translation(0,
+        cos(g_fGameTimer) * 0.5f + 0.5f, 0);
+    m_matWorld = matRotate;
+    matRotate.XRotate(DegreeToRadian(90));*/
+
     return true;
 }
 bool ASample::Frame()
 {
+    //키 조작
+    if (AInput::Get().GetKey('W'))
+    {
+        m_Camera.m_vCamera.z += g_fSecPerFrame * 1.0f;
+    }
+    if (AInput::Get().GetKey('S'))
+    {
+        m_Camera.m_vCamera.z -= g_fSecPerFrame * 1.0f;
+    }
+    if (AInput::Get().GetKey('A'))
+    {
+        m_Camera.m_vCamera.x -= g_fSecPerFrame * 1.0f;
+    }
+    if (AInput::Get().GetKey('D'))
+    {
+        m_Camera.m_vCamera.x += g_fSecPerFrame * 1.0f;
+    }
+    m_Camera.m_vTarget = m_MapObj.m_vPos;
+    m_Camera.m_vCamera = m_MapObj.m_vPos + AVector3(0, 5.0f, -3.0f);
 
-    return true;
-}
+    ////TVector3 vEye= m_vCamera;
+    //AVector3 vTarget(0, 0, 0);
+    //vTarget.x = m_Camera.m_vCamera.x;
+    //AVector3 vUp(0, 1, 0);
 
-bool ASample::Init()
-{
+    m_Camera.Frame();
+    m_MapObj.Frame();
     return true;
 }
 bool ASample::Render()
 {
     //m_Obj.Render();
+    m_MapObj.SetMatrix(nullptr, &m_Camera.m_matView, &m_Camera.m_matProj);
+    m_MapObj.Render();
 
-    wstring msg = L"FPS: ";
+    wstring msg = L"[FPS: ";
     msg += to_wstring(m_GameTimer.m_iFPS);
     msg += L"   GT: ";
+    msg += L" ]";
     msg += to_wstring(m_GameTimer.m_fTimer);
     m_dxWrite.Draw(msg, g_rtClient, D2D1::ColorF(1, 1, 1, 1));
 
     return true;
 }
-bool APlaneObj::Frame()
-{
-    //m_Obj.Frame();
-            // world
-    AMatrix matRotate, matScale, matTrans;
-    matRotate.ZRotate(g_fGameTimer);
-    matScale.Scale(cos(g_fGameTimer) * 0.5f + 0.5f, 1.0f, 1.0f);
-    matTrans.Translation(0,
-        cos(g_fGameTimer) * 0.5f + 0.5f, 0);
-    //m_matWorld = matRotate;
-    m_matWorld.Transpose();
-    // view
-    if (AInput::Get().GetKey(VK_LEFT))
-    {
-        m_vCamera.x -= g_fSecPerFrame * 1.0f;
-    }
-    if (AInput::Get().GetKey(VK_RIGHT))
-    {
-        m_vCamera.x += g_fSecPerFrame * 1.0f;
-    }
-    //TVector3 vEye= m_vCamera;
-    AVector3 vTarget(0, 0, 0);
-    vTarget.x = m_vCamera.x;
-    AVector3 vUp(0, 1, 0);
-    m_matView.CreateViewLook(m_vCamera, vTarget, vUp);
-    m_matView.Transpose();
-    // Projection
-    m_matProj.PerspectiveFovLH(
-        1.0f, 100.0f, ABASIS_PI * 0.5f, 800.0f / 600.0f);
-    m_matProj.Transpose();
 
-
-    m_ConstantList.matWorld = m_matWorld;// matScale* matRotate* matTrans;
-    m_ConstantList.matView = m_matView;
-    m_ConstantList.matProj = m_matProj;
-
-
-    if (m_pContext != nullptr)
-    {
-        m_pContext->UpdateSubresource(
-            m_pConstantBuffer, 0, NULL, &m_ConstantList, 0, 0);
-    }
-    return true;
-}
 
 bool ASample::Release()
 {
-    m_Obj.Release();
+    m_MapObj.Release();
     return true;
 }
 
 
-APlaneObj::APlaneObj()
-{
-    
-}
+ASample::ASample() {}
+ASample::~ASample() {}
+
+SIMPLE_ARUN();

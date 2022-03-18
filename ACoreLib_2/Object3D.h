@@ -6,6 +6,7 @@ public:
 	AVector3			m_vPos;
 	AVector3			m_vDirection;
 	AVector4			m_vColor;
+	AMatrix				m_matWorld;
 public:
 	float			m_fAlpha = 0.0f;
 	bool			m_bFadeIn = false;
@@ -21,10 +22,9 @@ public:
 	virtual bool		SetVertexData() override;
 	virtual bool		SetIndexData() override;
 	virtual bool		Frame() override;
-	bool	Load(ID3D11Device* pd3dDevice, wstring filename) {
-		return true;
-	};
-	virtual void  UpdateData() {}
+	bool				Load(ID3D11Device* pd3dDevice, wstring filename);
+	virtual void		UpdateData();
+	virtual void		SetMatrix(AMatrix* matWorld, AMatrix* matView, AMatrix* matProj);
 public:
 	AObject3D();
 	virtual ~AObject3D();

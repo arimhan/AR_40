@@ -63,6 +63,30 @@ bool AObject3D::Frame()
 		m_pConstantBuffer, 0, NULL, &m_ConstantList, 0, 0);
 	return true;
 }
+
+
+bool AObject3D::Load(ID3D11Device* pd3dDevice, wstring filename) { return true; };
+void AObject3D::UpdateData() {}
+void AObject3D::SetMatrix(AMatrix* matWorld, AMatrix* matView, AMatrix* matProj)
+{
+	//각 월드 전환 시 필요한 값 세팅
+	m_ConstantList.matWorld = m_matWorld.Transpose();
+	if(matWorld != nullptr) 
+	{ 
+		m_ConstantList.matWorld = matWorld->Transpose(); 
+	}
+	if(matView != nullptr)
+	{ 
+		m_ConstantList.matView = matView->Transpose();
+	}
+	if (matProj != nullptr)
+	{ 
+		m_ConstantList.matProj = matProj->Transpose();
+	}
+}
+
+
+
 AObject3D::AObject3D()
 {
 	m_fAlpha = 1.0f;

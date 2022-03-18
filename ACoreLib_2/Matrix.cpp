@@ -78,7 +78,7 @@ void AMatrix::Scale(float x, float y, float z)
 //단위행렬
 void AMatrix::Identity()
 {
-	//단일행렬 세팅
+	//단위행렬 세팅
 	_11 = _12 = _13 = _14 = 0.0f;
 	_21 = _22 = _23 = _24 = 0.0f;
 	_31 = _32 = _33 = _34 = 0.0f;
@@ -136,6 +136,7 @@ AMatrix	AMatrix::CreateViewLook(AVector3& vPosition, AVector3& vTarget, AVector3
 	_43 = -(vPosition.x * _13 + vPosition.y * _23 + vPosition.z * _33);
 	memcpy((void*)&mat, this, 16 * sizeof(float));
 
+	return mat;
 }
 //원근 투영 행렬 계산
 AMatrix	AMatrix::PerspectiveFovLH(float fNearPlane, float fFarPlane, float fovy, float Aspect)
@@ -155,6 +156,7 @@ AMatrix	AMatrix::PerspectiveFovLH(float fNearPlane, float fFarPlane, float fovy,
 	_34 = 1;
 
 	memcpy((void*)&mat, this, 16 * sizeof(float));
+	return mat;
 }
 
 AMatrix::AMatrix() 

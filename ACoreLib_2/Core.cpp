@@ -53,7 +53,7 @@ bool ACore::CoreFrame()
 bool ACore::CoreRender()
 {	
 
-	float color[4] = { 1,0,0,1.0f };//{ 0.9, 0.9, 0.7, 1.0f };
+	float color[4] = { 0.8,0.75,0.8,1.0f };//{ 0.9, 0.9, 0.7, 1.0f };
 	m_pImmediateContext->ClearRenderTargetView(m_pRenderTargetView.Get(), color);
 	m_pImmediateContext->PSSetSamplers(0, 1, &ADxState::m_pSamplerState);
 
