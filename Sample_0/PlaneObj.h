@@ -16,3 +16,7 @@ public:
 	APlaneObj();
 	virtual ~APlaneObj();
 };
+
+class PlaneObj
+{
+};

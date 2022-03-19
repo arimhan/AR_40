@@ -168,11 +168,11 @@ bool ADxObject::Create(ID3D11Device* pd3dDevice, ID3D11DeviceContext* pContext,
 	{
 		return false;
 	}
-	if (szShaderFileName!= nullptr && 	!CreateVertexShader(szShaderFileName))
+	if (szShaderFileName!= nullptr && !CreateVertexShader(szShaderFileName))
 	{
 		return false;
 	}
-	if (szShaderFileName != nullptr &&	!CreatePixelShader(szShaderFileName))
+	if (szShaderFileName != nullptr && !CreatePixelShader(szShaderFileName))
 	{
 		return false;
 	}
@@ -212,7 +212,7 @@ bool ADxObject::Render()
 	
 	UINT StartSlot;
 	UINT NumBuffers;
-	UINT Strides = sizeof(ASimpleVertex);
+	UINT Strides = sizeof(AVertex);
 	UINT Offsets = 0;
 
 	m_pContext->IASetVertexBuffers(0, 1, &m_pVertexBuffer, &Strides, &Offsets);

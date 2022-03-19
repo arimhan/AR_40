@@ -3,7 +3,6 @@
 
 //#define DegreeToRadian(degree)((degree)*(ABASIS_PI/180.0f))
 
-
 bool ASample::Init()
 {
     //카메라 기능
@@ -37,6 +36,7 @@ bool ASample::Init()
 
     return true;
 }
+
 bool ASample::Frame()
 {
     //키 조작
@@ -66,33 +66,37 @@ bool ASample::Frame()
 
     m_Camera.Frame();
     m_MapObj.Frame();
+
     return true;
 }
+
 bool ASample::Render()
 {
-    //m_Obj.Render();
-    m_MapObj.SetMatrix(nullptr, &m_Camera.m_matView, &m_Camera.m_matProj);
-    m_MapObj.Render();
-
-    wstring msg = L"[FPS: ";
-    msg += to_wstring(m_GameTimer.m_iFPS);
-    msg += L"   GT: ";
-    msg += L" ]";
-    msg += to_wstring(m_GameTimer.m_fTimer);
-    m_dxWrite.Draw(msg, g_rtClient, D2D1::ColorF(1, 1, 1, 1));
-
+    m_Obj.Render();
+    wstring msg = L"[ FPS: ";
+    msg += std::to_wstring(m_GameTimer.m_iFPS);
+    msg += L"  GT: ";
+    msg += std::to_wstring(m_GameTimer.m_fTimer);
+    msg += L"]";
+    m_dxWrite.Draw(msg, g_rtClient, D2D1::ColorF(0, 0, 1, 1));
     return true;
 }
-
-
+bool ASample::Frame()
+{
+    m_Obj.Frame();
+    return true;
+}
 bool ASample::Release()
 {
     m_MapObj.Release();
+    m_Obj.Release();
     return true;
 }
 
 
 ASample::ASample() {}
 ASample::~ASample() {}
+void ASample::CreateResizeDevice(UINT iWidth, UINT iHeight) { int k = 0; }
+void ASample::DeleteResizeDevice(UINT iWidth, UINT iHeight) { int k = 0; }
 
 SIMPLE_ARUN();

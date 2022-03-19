@@ -86,6 +86,7 @@ void AMatrix::Identity()
 	//4x4 0으로 세팅 후, 대각선 라인 성분 1.0f으로 변경
 	_11 = _22 = _33 = _44 = 1.0f;
 }
+
 //전치행렬
 AMatrix AMatrix::Transpose()
 {
@@ -158,6 +159,7 @@ AMatrix	AMatrix::PerspectiveFovLH(float fNearPlane, float fFarPlane, float fovy,
 	memcpy((void*)&mat, this, 16 * sizeof(float));
 	return mat;
 }
+
 
 AMatrix::AMatrix() 
 { 

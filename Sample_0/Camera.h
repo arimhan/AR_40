@@ -26,3 +26,7 @@ public:
 	virtual ~ACamera();
 };
 
+class Camera
+{
+};
+
