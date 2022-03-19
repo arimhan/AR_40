@@ -5,6 +5,9 @@ ID3D11BlendState*	ADxState::m_AlphaBlend			= nullptr;
 ID3D11BlendState*	ADxState::m_AlphaBlendDisable	= nullptr;
 ID3D11SamplerState* ADxState::m_pSamplerState		= nullptr;
 
+ID3D11RasterizerState* ADxState::	g_pRSBackCullSolid	= nullptr;
+ID3D11DepthStencilState* ADxState::	g_pDSSDepthEnable	= nullptr;
+
 bool ADxState::SetState(ID3D11Device* pd3dDevice)
 {
 	HRESULT hr;

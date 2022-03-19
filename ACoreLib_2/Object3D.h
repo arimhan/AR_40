@@ -1,5 +1,6 @@
 #pragma once
 #include "DxObject.h"
+
 class AObject3D : public ADxObject
 {
 public:
@@ -25,7 +26,6 @@ public:
 	bool				Load(ID3D11Device* pd3dDevice, wstring filename);
 	virtual void		UpdateData();
 	virtual void		SetMatrix(AMatrix* matWorld, AMatrix* matView, AMatrix* matProj);
-	virtual void		UpdateData() {}
 public:
 	AObject3D();
 	virtual ~AObject3D();

@@ -6,6 +6,7 @@ HRESULT ADevice::InitDeivice()
 	HRESULT hr = S_OK; 
 	CreateDevice();
 	CreateRenderTargetView();
+	CreateDepthStencilView();
 	SetViewport();
 	return hr;
 }
@@ -41,6 +42,8 @@ bool ADevice::CreateDevice()
 	{
 		return false;
 	}	
+	DXGI_SWAP_CHAIN_DESC scd;
+	m_pSwapChain->GetDesc(&scd);
 	return true;
 }
 bool ADevice::CreateRenderTargetView()
@@ -50,6 +53,9 @@ bool ADevice::CreateRenderTargetView()
 	m_pd3dDevice->CreateRenderTargetView(backBuffer.Get(),NULL,m_pRenderTargetView.GetAddressOf());
 
 	m_pImmediateContext->OMSetRenderTargets(1,m_pRenderTargetView.GetAddressOf(), NULL);
+
+	D3D11_RENDER_TARGET_VIEW_DESC rtvd;
+	m_pRenderTargetView->GetDesc(&rtvd);
 	return true;
 }
 bool ADevice::CreateDepthStencilView()
@@ -71,11 +77,12 @@ bool ADevice::CreateDepthStencilView()
 	if (DescDepth.Format == DXGI_FORMAT_R24G8_TYPELESS || DescDepth.Format == DXGI_FORMAT_D32_FLOAT)
 	{
 		//±íÀÌ¸Ê Àü¿ë ±íÀÌ¸Ê »ý¼º
-		DescDepth.BindFlags = D3D11_BIND_DEPTH_STENCIL || D3D11_BIND_SHADER_RESOURCE;
+		DescDepth.BindFlags = D3D11_BIND_DEPTH_STENCIL | D3D11_BIND_SHADER_RESOURCE;
 	}
 	DescDepth.CPUAccessFlags = 0;
 	DescDepth.MiscFlags = 0;
-	if (FAILED(hr = m_pd3dDevice->CreateTexture2D(&DescDepth, NULL, &pDSTexture))) { return false; }
+	if (FAILED(hr = m_pd3dDevice->CreateTexture2D(&DescDepth, NULL, &pDSTexture))) 
+	{ return false; }
 
 	//½¦ÀÌ´õ ¸®¼Ò½º »ý¼º : ±íÀÌ¸Ê ½¦µµ¿ì¿¡¼­ »ç¿ëÇÑ´Ù
 	D3D11_DEPTH_STENCIL_VIEW_DESC dsvDesc;
@@ -89,8 +96,27 @@ bool ADevice::CreateDepthStencilView()
 		dsvDesc.Format = DXGI_FORMAT_D32_FLOAT;
 		srvDesc.Format = DXGI_FORMAT_R32_FLOAT;
 		break;
+	case DXGI_FORMAT_R24G8_TYPELESS:
+		dsvDesc.Format = DXGI_FORMAT_D24_UNORM_S8_UINT;
+		srvDesc.Format = DXGI_FORMAT_R24_UNORM_X8_TYPELESS;
+		break;
 	}
-
+	if (srvDesc.Format == DXGI_FORMAT_R32_FLOAT || srvDesc.Format == DXGI_FORMAT_R24_UNORM_X8_TYPELESS)
+	{
+		srvDesc.ViewDimension = D3D11_SRV_DIMENSION_TEXTURE2D;
+		srvDesc.Texture2D.MipLevels = 1;
+		if (FAILED(hr = m_pd3dDevice->CreateShaderResourceView(pDSTexture.Get(), &srvDesc, &m_pDsvSRV)))
+		{
+			return false;
+		}
+	}
+	dsvDesc.ViewDimension = D3D11_DSV_DIMENSION_TEXTURE2D;
+	if (FAILED(hr = m_pd3dDevice->CreateDepthStencilView(pDSTexture.Get(), &dsvDesc, &m_pDepthStencilView)))
+	{
+		return false;
+	}
+	//m_pDepthStencilView->GetDesc(&m_DepthStencilDesc)
+	return true;
 }
 bool ADevice::SetViewport()
 {	

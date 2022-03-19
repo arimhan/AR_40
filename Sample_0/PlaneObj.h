@@ -4,19 +4,10 @@
 class APlaneObj : public AObject3D
 {
 public:
-	//APlaneObj			m_Obj;
-	//AMatrix			m_matWorld;
-	//AMatrix			m_matView;
-	//AMatrix			m_matProj;
-public:
-	virtual bool	SetVertexData() override;
-	virtual bool	SetIndexData() override;
+	virtual bool	SetVertexData();
+	virtual bool	SetIndexData();
 
 public:
 	APlaneObj();
 	virtual ~APlaneObj();
-};
-
-class PlaneObj
-{
 };
