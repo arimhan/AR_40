@@ -18,7 +18,8 @@ bool ACamera::Frame()
 ACamera::ACamera() 
 {
     m_vCamera.x = 0.0f;
-    m_vCamera.y = 5.0f;
-    m_vCamera.z = -5.0f;
+    m_vCamera.y = 9.0f;
+    m_vCamera.z = -15.0f;
+    m_vUp = AVector3(0, 1, 0);
 }
 ACamera:: ~ACamera() {}

@@ -1,5 +1,6 @@
 #pragma once
 #include "Matrix.h"
+
 enum ACollisionResult
 {
 	RECT_OUT = 0,

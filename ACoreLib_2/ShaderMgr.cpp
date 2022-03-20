@@ -13,10 +13,8 @@ bool    AShader::CreateVertexShader(ID3D11Device* pd3dDevice, wstring filename, 
 	}
 	hr = pd3dDevice->CreateVertexShader(m_pVSCodeResult->GetBufferPointer(),
 		m_pVSCodeResult->GetBufferSize(), NULL, &m_pVertexShader);
-	if (FAILED(hr))
-	{
-		return false;
-	}
+	if (FAILED(hr)) { return false; }
+
 	return true;
 }
 bool AShader::CreatePixelShader(ID3D11Device* pd3dDevice, wstring filename, string entry)
@@ -32,36 +30,20 @@ bool AShader::CreatePixelShader(ID3D11Device* pd3dDevice, wstring filename, stri
 	}
 	hr = pd3dDevice->CreatePixelShader(m_pPSCodeResult->GetBufferPointer(),
 		m_pPSCodeResult->GetBufferSize(), NULL, &m_pPixelShader);
-	if (FAILED(hr))
-	{
-		return false;
-	}
+	if (FAILED(hr)) { return false; }
+
 	return true;
 }
 bool AShader::Load(ID3D11Device* pd3dDevice, wstring filename)
 {
-	if (!CreateVertexShader(pd3dDevice,filename))
-	{
-		return false;
-	}
-	if (!CreatePixelShader(pd3dDevice, filename))
-	{
-		return false;
-	}	
+	if (!CreateVertexShader(pd3dDevice, filename)) { return false; }
+	if (!CreatePixelShader(pd3dDevice, filename)) { return false; }
+
 	return true;
 }
-bool AShader::Init()
-{
-	return true;
-}
-bool AShader::Frame()
-{	
-	return true;
-}
-bool AShader::Render()
-{
-	return true;
-}
+bool AShader::Init() { return true; }
+bool AShader::Frame() { return true; }
+bool AShader::Render() { return true; }
 bool AShader::Release()
 {
 	if (m_pVertexShader) m_pVertexShader->Release();
@@ -77,13 +59,11 @@ AShader::~AShader(){}
 
 AShader* AShaderMgr::CreateVertexShader(ID3D11Device* pd3dDevice, wstring filename, string entry)
 {
-	std::wstring name = Splitpath(filename, to_mw(entry));
+	wstring name = Splitpath(filename, to_mw(entry));
 	AShader* pData = GetPtr(name);
-	if (pData != nullptr)
-	{
-		return pData;
-	}
-	std::shared_ptr<AShader> pNewData = make_shared<AShader>();
+	if (pData != nullptr) { return pData; }
+
+	shared_ptr<AShader> pNewData = make_shared<AShader>();
 	if (!pNewData->CreateVertexShader(pd3dDevice, filename, entry))
 	{
 		return nullptr;
@@ -94,16 +74,13 @@ AShader* AShaderMgr::CreateVertexShader(ID3D11Device* pd3dDevice, wstring filena
 	return pNewData.get();
 }
 
-
 AShader* AShaderMgr::CreatePixelShader(ID3D11Device* pd3dDevice,
 	wstring filename, string entry)
 {
 	wstring name = Splitpath(filename, to_mw(entry));
 	AShader* pData = GetPtr(name);
-	if (pData != nullptr)
-	{
-		return pData;
-	}
+	if (pData != nullptr) { return pData; }
+
 	auto pNewData = make_shared<AShader>();
 	if (!pNewData->CreatePixelShader(pd3dDevice, filename, entry))
 	{

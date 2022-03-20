@@ -15,10 +15,8 @@ public:
 	virtual void		FadeIn();
 	virtual void		FadeOut();
 public:
-
 	virtual void		AddPosition(AVector3 vPos);
 	virtual void		SetPosition(AVector3 vPos);
-
 public:
 	virtual bool		SetVertexData() override;
 	virtual bool		SetIndexData() override;

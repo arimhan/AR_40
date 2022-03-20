@@ -1,16 +1,11 @@
 #include "World.h"
 #include "ObjectMgr.h"
+
 AWorld* AWorld::m_pCurWorld = nullptr;
 
+bool AWorld::Load(wstring saveFile) { return true; }
+bool AWorld::Init() { return true; }
 
-bool AWorld::Load(wstring saveFile)
-{
-	return true;
-}
-bool AWorld::Init()
-{
-	return true;
-}
 bool AWorld::Frame()
 {
 	for (auto obj : m_UIObj)
@@ -60,7 +55,6 @@ bool AWorld::Release()
 			obj->Release();
 			obj = nullptr;
 		}
-		
 	}
 	for (auto obj : m_ItemObj)
 	{
@@ -93,5 +87,4 @@ bool AWorld::Release()
 	return true;
 }
 AWorld::AWorld(){}
-
 AWorld::~AWorld() { Release(); }

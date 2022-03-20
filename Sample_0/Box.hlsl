@@ -23,11 +23,13 @@ cbuffer cb0 : register(b0)
 	float4	Color0		:	packoffset(c12);
 	float	TimerX : packoffset(c13.x);
 };
+
 VS_OUTPUT VS(VS_INPUT v)
 {
+	//hlsl에서 mul은 기본 내적으로 계산. 그러므로 행렬 전치처리를 해야 외적결과가 나온다.
 	VS_OUTPUT pOut = (VS_OUTPUT)0;
 	float4 vLocal = float4(v.p.xyz, 1.0f);
-	float4 vWorld = mul(vLocal, g_matWorld);	//hlsl에서 mul은 기본 내적으로 계산. 그러므로 행렬 전치처리를 해야 외적결과가 나온다.
+	float4 vWorld = mul(vLocal, g_matWorld);	
 	float4 vView = mul(vWorld, g_matView);
 	float4 vProj = mul(vView, g_matProj);
 

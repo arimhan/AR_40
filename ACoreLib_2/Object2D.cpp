@@ -1,10 +1,7 @@
 #include "Object2D.h"
 
 
-void AObject2D::SetRectSource(RECT rt)
-{
-	m_rtSource = rt;
-}
+void AObject2D::SetRectSource(RECT rt) { m_rtSource = rt; }
 void AObject2D::SetRectDraw(RECT rt)
 {
 	m_rtDraw = rt;
@@ -36,7 +33,6 @@ void AObject2D::AddPosition(AVector2 vPos)
 			m_pVertexBuffer, 0, NULL, &m_VertexList.at(0), 0, 0);
 	}
 }
-
 void AObject2D::SetPosition(AVector2 vPos)
 {
 	m_vPos = vPos;	
@@ -46,12 +42,10 @@ void AObject2D::SetPosition(AVector2 vPos)
 	SetIndexData();
 	if (m_pContext != nullptr)
 	{
-		m_pContext->UpdateSubresource(
-			m_pVertexBuffer, 0, NULL, &m_VertexList.at(0), 0, 0);
+		m_pContext->UpdateSubresource(m_pVertexBuffer, 0, NULL, &m_VertexList.at(0), 0, 0);
 	}
 }
-void AObject2D::Convert(
-	AVector2 center, float fWidth, float fHeight,
+void AObject2D::Convert(AVector2 center, float fWidth, float fHeight,
 	vector<ASimpleVertex>& retList)
 {
 	// 0       1,4
@@ -128,11 +122,8 @@ void AObject2D::ConvertIndex(AVector2 center, float fWidth, float fHeight,
 	list[2].v = { center.x - halfWidth, center.y + halfHeight };
 	list[3].v = { center.x + halfWidth, center.y + halfHeight };
 	ConvertIndex(list, retList);
-
 }
-void	AObject2D::ConvertIndex(
-	std::vector<ASimpleVertex>& list,
-	std::vector<ASimpleVertex>& retList)
+void	AObject2D::ConvertIndex(vector<ASimpleVertex>& list,vector<ASimpleVertex>& retList)
 {
 	retList.resize(list.size());
 	for (int i = 0; i < list.size(); i++)
@@ -183,19 +174,13 @@ void AObject2D::FadeIn()
 {
 	m_fAlpha += g_fSecPerFrame * 0.5f;
 	m_fAlpha = min(m_fAlpha, 1.0f);
-	if (m_fAlpha >= 1.0f)
-	{
-		m_bFadeIn = false;
-	}
+	if (m_fAlpha >= 1.0f) { m_bFadeIn = false; }
 }
 void AObject2D::FadeOut()
 {
 	m_fAlpha = m_fAlpha - g_fSecPerFrame * 0.5f;
 	m_fAlpha = max(m_fAlpha, 0.0f);
-	if (m_fAlpha <= 0.0f)
-	{
-		m_bFadeOut = false;
-	}
+	if (m_fAlpha <= 0.0f) { m_bFadeOut = false; }
 }
 bool AObject2D::Frame()
 {
@@ -203,17 +188,16 @@ bool AObject2D::Frame()
 	if (m_bFadeOut)	FadeOut();
 	m_ConstantList.Color = m_vColor;
 	m_ConstantList.Timer = AVector4(g_fGameTimer, 0, 0, 1.0f);
-	m_pContext->UpdateSubresource(
-		m_pConstantBuffer, 0, NULL, &m_ConstantList, 0, 0);
+	m_pContext->UpdateSubresource(m_pConstantBuffer, 0, NULL, &m_ConstantList, 0, 0);
 	return true;
 }
 AObject2D::AObject2D()
 {
 	m_fAlpha = 1.0f;
 	m_vColor = AVector4(1, 1, 1, 1);
-	m_rtSource.left = 0; m_rtSource.right = 0;
-	m_rtSource.top  = 0; m_rtSource.bottom = 0;
-	m_rtDraw.left = 0; m_rtDraw.right = g_rtClient.right;
-	m_rtDraw.top = 0; m_rtDraw.bottom = g_rtClient.bottom;
+	m_rtSource.left = 0;	m_rtSource.right = 0;
+	m_rtSource.top  = 0;	m_rtSource.bottom = 0;
+	m_rtDraw.left = 0;		m_rtDraw.right = g_rtClient.right;
+	m_rtDraw.top = 0;		m_rtDraw.bottom = g_rtClient.bottom;
 }
 AObject2D::~AObject2D() {}

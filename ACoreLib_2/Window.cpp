@@ -1,4 +1,5 @@
 #include "Window.h"
+
 RECT g_rtClient;
 HWND g_hWnd;
 AWindow* g_pWindow = nullptr;
@@ -36,27 +37,18 @@ BOOL AWindow::SetWinClass(HINSTANCE hInstance)
     wc.hInstance = hInstance;
     wc.lpszClassName = L"KGCA_ARIMHAN";
     wc.hbrBackground = (HBRUSH)GetStockObject(GRAY_BRUSH);
-    if (RegisterClass(&wc) == false)
-    {
-        return FALSE;
-    }
-
+    if (RegisterClass(&wc) == false) { return FALSE; }
     return TRUE;
 }
 
-BOOL AWindow::SetWindow(const WCHAR* szTitle,
-    int iClientWidth,
-    int iClientHeight)
+BOOL AWindow::SetWindow(const WCHAR* szTitle, int iClientWidth, int iClientHeight)
 {
     RECT rt = { 0,0, iClientWidth , iClientHeight };
     AdjustWindowRect(&rt, WS_OVERLAPPEDWINDOW, FALSE);
     // 2, 윈도우 생성
     m_hWnd = CreateWindow(L"KGCA_ARIMHAN", szTitle, WS_OVERLAPPEDWINDOW, 0, 0,
         rt.right - rt.left, rt.bottom - rt.top, NULL, NULL, m_hInstance, NULL);
-    if (m_hWnd == NULL)
-    {
-        return FALSE;
-    }
+    if (m_hWnd == NULL) { return FALSE; }
     g_hWnd = m_hWnd;
     GetClientRect(m_hWnd, &m_rtClient);
     GetWindowRect(m_hWnd, &m_rtWindow);
@@ -72,19 +64,12 @@ bool AWindow::WinRun()
     // 메세지큐에 메세지가 없으면 블록
     while(PeekMessage(&msg, nullptr, 0, 0, PM_REMOVE))
     {
-        if (msg.message == WM_QUIT)
-        {
-            return false;
-        }
+        if (msg.message == WM_QUIT) { return false; }
         TranslateMessage(&msg);// 메세지 번역
         DispatchMessage(&msg);// 윈도우프로시져 호출
     }
     return true;
 }
 
-AWindow::AWindow()
-{
-    g_pWindow = this;
-}
-AWindow::~AWindow()
-{}
+AWindow::AWindow() { g_pWindow = this; }
+AWindow::~AWindow() {}

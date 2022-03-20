@@ -35,11 +35,11 @@ void ASound::PlayEffect()
 }
 void ASound::Stop()
 {
-	m_pChannel->stop();
-	//if (m_pChannel != nullptr)
-	//{
-	//	m_pChannel->stop();
-	//}
+	//m_pChannel->stop();
+	if (m_pChannel != nullptr)
+	{
+		m_pChannel->stop();
+	}
 }
 void ASound::Paused()
 {
@@ -124,9 +124,9 @@ ASound* ASoundMgr::Load(string filename)
 	TCHAR FileName[MAX_PATH] = { 0, };
 	TCHAR FileExt[MAX_PATH] = { 0, };
 
-	std::wstring fullpathname = to_mw(filename);
+	wstring fullpathname = to_mw(filename);
 	_tsplitpath_s(fullpathname.c_str(), Dirve, Dir, FileName, FileExt);
-	std::wstring name = FileName;
+	wstring name = FileName;
 	name += FileExt;
 
 	for (auto data : m_list)
@@ -141,10 +141,7 @@ ASound* ASoundMgr::Load(string filename)
 	FMOD_RESULT ret = m_pSystem->createSound(filename.c_str(),
 		FMOD_DEFAULT, 0, &pSound->m_pSound);
 
-	if (ret != FMOD_OK)
-	{
-		return nullptr;
-	}
+	if (ret != FMOD_OK) { return nullptr; }
 	m_list.insert(make_pair(name, pSound));	
 	
 	pSound->Set(m_pSystem, name, m_iIndex);

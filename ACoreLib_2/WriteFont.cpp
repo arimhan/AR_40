@@ -1,4 +1,5 @@
 #include "WriteFont.h"
+
 void AWriteFont::DeleteDeviceResize()
 {
     //아래 2가지는 먼저 삭제처리 되어야 한다.
@@ -40,7 +41,6 @@ void AWriteFont::Draw(wstring msg, RECT rt, D2D1::ColorF color, IDWriteTextForma
     std::wstring msg = L"FPS arhan 2Dgame";
     m_pd2dRT->DrawText(msg.c_str(), msg.size(),m_pd2dTextFormat,
                         &rt,m_pd2dColorBrush);*/
-
 
     m_pd2dColorBrush->SetColor(color);
     if (tf == nullptr)

@@ -1,7 +1,6 @@
 #include "DxObject.h"
 #include "ObjectMgr.h"
 
-
 void ABaseObject::HitOverlap(ABaseObject* pObj, DWORD dwState){ int k = 0; }
 void ABaseObject::HitSelect(ABaseObject* pObj, DWORD dwState) { int k = 0; }
 void ADxObject::SetDevice(ID3D11Device* pd3dDevice,	ID3D11DeviceContext* pContext)
@@ -184,13 +183,23 @@ bool ADxObject::Create(ID3D11Device* pd3dDevice, ID3D11DeviceContext* pContext,
 }
 bool ADxObject::Init() { return true; }
 bool ADxObject::Frame() { return true; }
-
-bool ADxObject::Render()
-{	
-	if(m_pColorTex!=nullptr)
+bool ADxObject::PreRender()
+{
+	if (m_pColorTex != nullptr)
 		m_pContext->PSSetShaderResources(0, 1, m_pColorTex->m_pSRV.GetAddressOf());
 	if (m_pMaskTex != nullptr)
 		m_pContext->PSSetShaderResources(1, 1, m_pMaskTex->m_pSRV.GetAddressOf());
+	return true;
+}
+bool ADxObject::Render()
+{	
+	PreRender();
+	
+	m_pContext->UpdateSubresource(m_pConstantBuffer, 0, NULL, &m_ConstantList, 0, 0);
+	m_pContext->GSSetShader(nullptr, NULL, 0);
+	m_pContext->HSSetShader(nullptr, NULL, 0);
+	m_pContext->DSSetShader(nullptr, NULL, 0);
+
 	if (m_pVSShader != nullptr)
 	{
 		m_pContext->VSSetShader(m_pVSShader->m_pVertexShader, NULL, 0);
@@ -218,12 +227,16 @@ bool ADxObject::Render()
 	m_pContext->IASetVertexBuffers(0, 1, &m_pVertexBuffer, &Strides, &Offsets);
 	m_pContext->IASetIndexBuffer(m_pIndexBuffer, DXGI_FORMAT_R32_UINT, 0);
 	m_pContext->VSSetConstantBuffers(0, 1, &m_pConstantBuffer);
-
-	m_pContext->IASetPrimitiveTopology(
-		D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
+	m_pContext->PSSetConstantBuffers(0, 1, &m_pConstantBuffer);
+	m_pContext->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
 		//D3D_PRIMITIVE_TOPOLOGY_POINTLIST ,D3D_PRIMITIVE_TOPOLOGY_LINELIST
 
-	if( m_IndexList.size() <= 0)
+	PostRender();
+	return true;
+}
+bool ADxObject::PostRender()
+{
+	if (m_IndexList.size() <= 0)
 		m_pContext->Draw(m_VertexList.size(), 0);
 	else
 		m_pContext->DrawIndexed(m_IndexList.size(), 0, 0);

@@ -13,6 +13,7 @@ class ASample : public ACore
 	APlaneObj		m_MapObj;
 	APlaneObj		m_PlayerObj_1;
 	APlaneObj		m_PlayerObj_2;
+	APlaneObj		m_BackObj;
 
 	//APlaneObj		m_Obj;
 public:

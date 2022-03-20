@@ -4,19 +4,13 @@
 bool  ACollision::SphereToPoint(ASphere sp, int x, int y)
 {
 	float fDistance = (sp.vCenter - AVector2(x, y)).Length();
-	if (fDistance <= sp.fRadius)
-	{
-		return true;
-	}
+	if (fDistance <= sp.fRadius) { return true; }
 	return false;
 }
 bool   ACollision::SphereToPoint(ASphere sp, AVector2 v)
 {
 	float fDistance = (sp.vCenter - v).Length();
-	if (fDistance <= sp.fRadius)
-	{
-		return true;
-	}
+	if (fDistance <= sp.fRadius) { return true; }
 	return false;
 }
 bool   ACollision::RectToPoint(ARect rt, int x, int y)
@@ -47,12 +41,14 @@ ARect   ACollision::UnionRect(ARect rt1, ARect rt2)
 	rt.size.x = rt.vMax.x - rt.vMin.x;
 	rt.size.y = rt.vMax.y - rt.vMin.y;
 	rt.vMiddle = (rt.vMin + rt.vMax) / 2.0f;
+
 	return rt;
 }
-bool   ACollision::IntersectRect(	ARect rt1, ARect rt2, ARect* pRect)
+bool   ACollision::IntersectRect(ARect rt1, ARect rt2, ARect* pRect)
 {
 	ARect rt;
 	ARect rtUnion = UnionRect(rt1, rt2);
+
 	if (rtUnion.size.x <= (rt1.size.x + rt2.size.x) &&
 		rtUnion.size.y <= (rt1.size.y + rt2.size.y))
 	{
@@ -79,8 +75,7 @@ bool   ACollision::IntersectRect(	ARect rt1, ARect rt2, ARect* pRect)
 // 0 :  떨어져 있다.
 // 1 :  안에 있다.
 // 2 :  걸쳐 있다.
-ACollisionResult   ACollision::RectToRect(ARect rt1,
-	ARect rt2)
+ACollisionResult   ACollision::RectToRect(ARect rt1,ARect rt2)
 {	
 	ARect rtInterction;
 	int iRet = IntersectRect(rt1, rt2, &rtInterction);
@@ -140,6 +135,7 @@ ABox   ACollision::UnionBox(ABox rt1, ABox rt2)
 
 	rt.size = rt.vMax - rt.vMin;
 	rt.vMiddle = (rt.vMin + rt.vMax) / 2.0f;
+
 	return rt;
 }
 bool   ACollision::IntersectBox( ABox rt1, ABox rt2, ABox* pRect)

@@ -2,7 +2,6 @@
 #include "ObjectMgr.h"
 #include "SoundMgr.h"
 
-
 bool ACore::CoreInit()
 {
 	m_GameTimer.Init();	
@@ -58,8 +57,7 @@ bool ACore::CoreRender()
 	m_pImmediateContext->ClearDepthStencilView(m_pDepthStencilView.Get(), 
 		D3D11_CLEAR_DEPTH | D3D11_CLEAR_STENCIL, 1.0f, 0);
 	m_pImmediateContext->OMSetRenderTargets(1, m_pRenderTargetView.GetAddressOf(), m_pDepthStencilView.Get());
-	m_pImmediateContext->PSSetSamplers(0, 1, &ADxState::m_pSamplerState);
-
+	
 	m_pImmediateContext->PSSetSamplers(0, 1, &ADxState::m_pSamplerState);
 	m_pImmediateContext->OMSetDepthStencilState(ADxState::g_pDSSDepthEnable, 0x00);
 	m_pImmediateContext->RSSetState(ADxState::g_pRSBackCullSolid);
@@ -103,5 +101,11 @@ void ACore::ResizeDevice(UINT iWidth, UINT iHeight)
 
 	CreateResizeDevice(iWidth, iHeight);
 }
+
+bool ACore::Init() { return true; }
+bool ACore::Frame() { return true; }
+bool ACore::Render() { return true; }
+bool ACore::Release() { return true; }
+
 ACore::ACore(){}
 ACore::~ACore(){}

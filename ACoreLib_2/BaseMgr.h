@@ -1,7 +1,6 @@
 #pragma once
 #include "Std.h"
 
-
 template <class T, class S>
 class ABaseMgr : public ASingleton<S>
 {
@@ -12,17 +11,14 @@ public:
 	ID3D11Device*					m_pd3dDevice;
 	map<wstring, shared_ptr<T>>		m_list;
 public:
-	wstring Splitpath(wstring path, wstring entry);
-	virtual void	Set(ID3D11Device* pd3dDevice)
-	{
-		m_pd3dDevice = pd3dDevice;
-	}
-	virtual T* Load(wstring filename);
-	T* GetPtr(wstring key);
-	bool	Init();
-	bool	Frame();
-	bool	Render();
-	bool	Release();
+	wstring			Splitpath(wstring path, wstring entry);
+	virtual void	Set(ID3D11Device* pd3dDevice);
+	virtual T*		Load(wstring filename);
+	T*				GetPtr(wstring key);
+	bool			Init();
+	bool			Frame();
+	bool			Render();
+	bool			Release();
 public:
 	ABaseMgr();
 public:
@@ -49,6 +45,12 @@ wstring ABaseMgr<T, S>::Splitpath(wstring path, wstring entry)
 	return name;
 }
 
+template <class T, class S>
+void ABaseMgr<T, S>::Set(ID3D11Device* pd3dDevice)
+{
+	m_pd3dDevice = pd3dDevice;
+}
+
 template<class T, class S>
 T* ABaseMgr<T, S>::GetPtr(wstring key)
 {
@@ -59,15 +61,13 @@ T* ABaseMgr<T, S>::GetPtr(wstring key)
 	}
 	return nullptr;
 }
+
 template<class T, class S>
 T* ABaseMgr<T, S>::Load(wstring filename)
 {
-	wstring name = Splitpath(filename,L"");
+	wstring name = Splitpath(filename, L"");
 	T* pData = GetPtr(name);
-	if (pData != nullptr)
-	{
-		return pData;
-	}
+	if (pData != nullptr) { return pData; }
 	shared_ptr<T> pNewData = make_shared<T>();
 	if (pNewData->Load(m_pd3dDevice, filename) == false)
 	{
@@ -78,6 +78,7 @@ T* ABaseMgr<T, S>::Load(wstring filename)
 	m_iIndex++;
 	return pNewData.get();
 }
+
 template<class T, class S>
 bool	ABaseMgr<T, S>::Init() { return true; }
 template<class T, class S>
@@ -90,16 +91,13 @@ bool	ABaseMgr<T, S>::Release()
 {
 	for (auto data : m_list)
 	{
-		data.second->Release();		
+		data.second->Release();
 	}
 	m_list.clear();
 	return true;
 }
 
 template<class T, class S>
-ABaseMgr<T, S>::ABaseMgr()
-{
-	m_iIndex = 0;
-}
+ABaseMgr<T, S>::ABaseMgr() { m_iIndex = 0; }
 template<class T, class S>
 ABaseMgr<T, S>::~ABaseMgr() { Release(); }

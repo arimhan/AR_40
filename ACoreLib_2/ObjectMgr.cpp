@@ -4,8 +4,8 @@
 void  AObjectMgr::AddCollisionExecute(ABaseObject* owner, CollisionFunction func)
 {
 	owner->m_iCollisionID = m_iExcueteCollisionID++;
-	m_ObjectList.insert(std::make_pair(owner->m_iCollisionID, owner));
-	m_fnCollisionExecute.insert(std::make_pair(owner->m_iCollisionID, func));
+	m_ObjectList.insert(make_pair(owner->m_iCollisionID, owner));
+	m_fnCollisionExecute.insert(make_pair(owner->m_iCollisionID, func));
 }
 void  AObjectMgr::DeleteCollisionExecute(ABaseObject* owner)
 {
@@ -25,12 +25,12 @@ void  AObjectMgr::DeleteCollisionExecute(ABaseObject* owner)
 void  AObjectMgr::AddSelectExecute(ABaseObject* owner, CollisionFunction func)
 {
 	owner->m_iSelectID = m_iExcueteSelectID++;
-	m_SelectList.insert(std::make_pair(owner->m_iSelectID, owner));
-	m_fnSelectExecute.insert(std::make_pair(owner->m_iSelectID, func));
+	m_SelectList.insert(make_pair(owner->m_iSelectID, owner));
+	m_fnSelectExecute.insert(make_pair(owner->m_iSelectID, func));
 }
 void  AObjectMgr::DeleteSelectExecute(ABaseObject* owner)
 {
-	std::map<int, ABaseObject*>::iterator objiter;
+	map<int, ABaseObject*>::iterator objiter;
 	objiter = m_SelectList.find(owner->m_iCollisionID);
 	if (objiter != m_SelectList.end())
 	{
@@ -43,16 +43,10 @@ void  AObjectMgr::DeleteSelectExecute(ABaseObject* owner)
 		m_fnSelectExecute.erase(colliter);
 	}
 }
-bool  AObjectMgr::Init()
-{
-	return true;
-}
+bool  AObjectMgr::Init() { return true; }
 void  AObjectMgr::CallRecursive(ABaseObject* pSrcObj,DWORD dwState)
 {
-	if (pSrcObj->m_pParent == nullptr)
-	{		
-		return;
-	}
+	if (pSrcObj->m_pParent == nullptr) { return; }
 	CallRecursive(pSrcObj->m_pParent, dwState);
 	pSrcObj->HitSelect(pSrcObj, dwState);
 }

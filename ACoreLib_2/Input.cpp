@@ -1,10 +1,7 @@
 #include "Input.h"
 POINT g_ptMouse;
 
-DWORD AInput::GetKey(DWORD dwKey)
-{
-	return m_dwKeyState[dwKey];
-}
+DWORD AInput::GetKey(DWORD dwKey) { return m_dwKeyState[dwKey]; }
 bool AInput::Init()
 {
 	ZeroMemory(&m_dwKeyState, sizeof(DWORD) * 256 );

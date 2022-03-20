@@ -1,6 +1,7 @@
 #pragma once
 #include <windows.h>
 #pragma comment	(lib, "Winmm.lib")
+
 class ATimer
 {
 public:

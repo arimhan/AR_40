@@ -135,13 +135,12 @@ bool ADevice::SetViewport()
 }
 void ADevice::ResizeDevice(UINT iWidth, UINT iHeight)
 {
-	m_pImmediateContext->OMSetRenderTargets(0,NULL, NULL);
+	m_pImmediateContext->OMSetRenderTargets(0, NULL, NULL);
 	if (m_pRenderTargetView)m_pRenderTargetView->Release();
 
-	HRESULT hr = m_pSwapChain->ResizeBuffers(m_SwapChainDesc.BufferCount,
-								iWidth, iHeight,
-								m_SwapChainDesc.BufferDesc.Format,
-								m_SwapChainDesc.Flags);
+	HRESULT hr = m_pSwapChain->
+		ResizeBuffers(m_SwapChainDesc.BufferCount,iWidth, iHeight,
+			m_SwapChainDesc.BufferDesc.Format,m_SwapChainDesc.Flags);
 	if( SUCCEEDED(hr))
 	{
 		m_pSwapChain->GetDesc(&m_SwapChainDesc);

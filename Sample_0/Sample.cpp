@@ -1,29 +1,44 @@
 #include "Sample.h"
 //#include "Object3D.h"
 
-//#define DegreeToRadian(degree)((degree)*(ABASIS_PI/180.0f))
 
 bool ASample::Init()
 {
     //카메라 기능
     m_Camera.Init();
 
-
     ATexture* pTex = I_Texture.Load(L"../../data/ui/save_0000_O-K.png");
     AShader* pVSShader = I_Shader.CreateVertexShader(m_pd3dDevice.Get(), L"Box.hlsl", "VS");
     AShader* pPSShader = I_Shader.CreatePixelShader(m_pd3dDevice.Get(), L"Box.hlsl", "PS");
 
-    //지형 Obj X축 회전으로 바닥에 깔기
+    //Map Obj 불러오기
     m_MapObj.Init();
     m_MapObj.m_pColorTex = pTex;
     m_MapObj.m_pVSShader = pVSShader;
     m_MapObj.m_pPSShader = pPSShader;
-
+    //지형 Obj X축 회전으로 바닥에 깔기
     AMatrix matRotate, matScale; //matTrans;
     matRotate.XRotate(DegreeToRadian(90)); //X축으로 90도 눕기
     matScale.Scale(10, 10.0f, 10.0f);
     m_MapObj.m_matWorld = matScale * matRotate; // SRT순으로
     if (!m_MapObj.Create(m_pd3dDevice.Get(), m_pImmediateContext.Get())) { return false; }
+
+    //Map Obj위에서 움직이는 PlayerObj 불러오기
+    m_PlayerObj_1.Init();
+    m_PlayerObj_1.m_pColorTex = pTex;
+    m_PlayerObj_1.m_pVSShader = pVSShader;
+    m_PlayerObj_1.m_pPSShader = pPSShader;
+    m_PlayerObj_1.SetPosition(AVector3(0.0f, 1.0f, 0.0f));
+    if (!m_PlayerObj_1.Create(m_pd3dDevice.Get(), m_pImmediateContext.Get())) { return false; }
+
+    //Z버퍼링 비교할 Obj 출력
+    m_BackObj.Init();
+    m_BackObj.m_pColorTex = I_Texture.Load(L"../../data/ui/_exit_lg.bmp");
+    m_BackObj.m_pVSShader = pVSShader;
+    m_BackObj.m_pPSShader = pPSShader;
+    m_BackObj.SetPosition(AVector3(0.0f, 1.0f, 0.0f));
+    if (!m_BackObj.Create(m_pd3dDevice.Get(), m_pImmediateContext.Get())) { return false; }
+    m_BackObj.m_matWorld.Translation(1.0f, 0.0f, 0.0f);
 
     //world
    /* AMatrix matRotate, matScale, matTrans;
@@ -66,7 +81,8 @@ bool ASample::Frame()
 
     m_Camera.Frame();
     m_MapObj.Frame();
-
+    m_PlayerObj_1.Frame();
+    //m_BackObj.Frame();
     return true;
 }
 
@@ -74,18 +90,29 @@ bool ASample::Render()
 {
     m_MapObj.SetMatrix(nullptr, &m_Camera.m_matView, &m_Camera.m_matProj);
     m_MapObj.Render();
+
+    m_PlayerObj_1.SetMatrix(nullptr, &m_Camera.m_matView, &m_Camera.m_matProj);
+    m_PlayerObj_1.Render();
+
+    //m_BackObj.SetMatrix(nullptr, &m_Camera.m_matView, &m_Camera.m_matProj);
+    //m_BackObj.Render();
+
     wstring msg = L"[ FPS: ";
     msg += std::to_wstring(m_GameTimer.m_iFPS);
     msg += L"  GT: ";
     msg += std::to_wstring(m_GameTimer.m_fTimer);
     msg += L"]";
-    m_dxWrite.Draw(msg, g_rtClient, D2D1::ColorF(0, 0, 1, 1));
+    m_dxWrite.Draw(msg, g_rtClient, D2D1::ColorF(1, 1, 1, 1));
     return true;
 }
 
 bool ASample::Release()
 {
     m_MapObj.Release();
+    m_MapObj.Release();
+    m_PlayerObj_1.Release();
+    //m_BackObj.Release();
+
     return true;
 }
 

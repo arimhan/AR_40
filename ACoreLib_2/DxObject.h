@@ -4,7 +4,6 @@
 #include "DxState.h"
 #include "Collision.h"
 
-
 struct ASimpleVertex
 {
 	AVector2 v;
@@ -29,22 +28,22 @@ enum ASelectState {
 class ABaseObject
 {
 public:
-	wstring   m_csName;
+	wstring			m_csName;
 public:
-	ABaseObject*   m_pParent = nullptr;
-	bool		m_bDead;
-	int			m_iCollisionID;
-	int			m_iSelectID;
-	float		m_fSpeed;
-	float		m_fWidth;
-	float		m_fHeight;
-	ARect		m_rtCollision;
-	DWORD		m_dwCollisionType;
-	DWORD		m_dwSelectType;
-	DWORD		m_dwSelectState;
-	DWORD		m_dwPreSelectState;
-	bool		m_bSelect;
-	bool		m_bAlphaBlend;
+	ABaseObject*	m_pParent = nullptr;
+	bool			m_bDead;
+	int				m_iCollisionID;
+	int				m_iSelectID;
+	float			m_fSpeed;
+	float			m_fWidth;
+	float			m_fHeight;
+	ARect			m_rtCollision;
+	DWORD			m_dwCollisionType;
+	DWORD			m_dwSelectType;
+	DWORD			m_dwSelectState;
+	DWORD			m_dwPreSelectState;
+	bool			m_bSelect;
+	bool			m_bAlphaBlend;
 public:
 	virtual void	HitOverlap(ABaseObject* pObj, DWORD dwState);
 	virtual void	HitSelect(ABaseObject* pObj, DWORD dwState);
@@ -128,7 +127,9 @@ public:
 public:
 	virtual bool	Init();
 	virtual bool	Frame();
+	virtual bool	PreRender();
 	virtual bool	Render();
+	virtual bool	PostRender();
 	virtual bool	Release();
 public:
 	ADxObject();

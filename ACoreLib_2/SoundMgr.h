@@ -43,10 +43,10 @@ public:
 public:
 	ASound*     Load(string filename);
 	ASound*		GetPtr(wstring key);
-	bool	Init();
-	bool	Frame();
-	bool	Render();
-	bool	Release();
+	bool		Init();
+	bool		Frame();
+	bool		Render();
+	bool		Release();
 private:
 	ASoundMgr();
 public:
