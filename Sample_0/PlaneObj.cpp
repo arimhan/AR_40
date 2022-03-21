@@ -29,7 +29,7 @@ bool APlaneObj::SetVertexData()
 bool APlaneObj::SetIndexData()
 {
     m_IndexList.push_back(0); m_IndexList.push_back(1); m_IndexList.push_back(2);
-    m_IndexList.push_back(2); m_IndexList.push_back(1); m_IndexList.push_back(3);
+    m_IndexList.push_back(3); m_IndexList.push_back(2); m_IndexList.push_back(1);
     return true;
 }
 

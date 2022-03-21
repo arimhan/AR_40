@@ -1,5 +1,4 @@
 #pragma once
-//#include "Matrix.h"
 #include "Std.h"
 
 class ACamera
@@ -25,8 +24,3 @@ public:
 	ACamera();
 	virtual ~ACamera();
 };
-
-class Camera
-{
-};
-

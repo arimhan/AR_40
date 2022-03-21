@@ -36,7 +36,9 @@ VS_OUTPUT VS(VS_INPUT v)
 	pOut.p = vProj;
 	pOut.n = v.n;
 	pOut.t = v.t;
-	pOut.c = v.c;
+	//pOut.c = v.c;
+	float fDot = max(0, dot(pOut.n, -Color0.xyz));
+	pOut.c = float4(fDot, fDot, fDot, 1);
 
 	return pOut;
 }
@@ -53,7 +55,8 @@ float4 PS(VS_OUTPUT input) : SV_TARGET
 
 	//소스알파(1) 마스크 이미지의 검정색 부분 -> 불투명
 	//소스알파(0) 마스크 이미지의 흰색 부분 -> 투명
-	final.a = 1.0f;
+	final.a = 1.0f; //-1.0f;
+	final = final * input.c;
 	return final;
 }
 

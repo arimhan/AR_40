@@ -1,11 +1,17 @@
 #include "DxState.h"
 
-ID3D11BlendState*	ADxState::m_AlphaBlend			= nullptr;
-ID3D11BlendState*	ADxState::m_AlphaBlendDisable	= nullptr;
-ID3D11SamplerState* ADxState::m_pSamplerState		= nullptr;
 
-ID3D11RasterizerState* ADxState::	g_pRSBackCullSolid	= nullptr;
-ID3D11DepthStencilState* ADxState::	g_pDSSDepthEnable	= nullptr;
+ID3D11RasterizerState*		ADxState::g_pRSBackCullWireFrame	= nullptr;
+ID3D11RasterizerState*		ADxState::g_pRSNoneCullWireFrame	= nullptr;
+ID3D11RasterizerState*		ADxState::g_pRSNoneCullSolid		= nullptr;
+ID3D11DepthStencilState*	ADxState::g_pDSSDepthDisable		= nullptr;
+
+ID3D11BlendState*			ADxState::m_AlphaBlend				= nullptr;
+ID3D11BlendState*			ADxState::m_AlphaBlendDisable		= nullptr;
+ID3D11SamplerState*			ADxState::m_pSamplerState			= nullptr;
+
+ID3D11RasterizerState*		ADxState::	g_pRSBackCullSolid		= nullptr;
+ID3D11DepthStencilState*	ADxState::	g_pDSSDepthEnable		= nullptr;
 
 bool ADxState::SetState(ID3D11Device* pd3dDevice)
 {
@@ -42,10 +48,23 @@ bool ADxState::SetState(ID3D11Device* pd3dDevice)
 	D3D11_RASTERIZER_DESC rsDesc;
 	ZeroMemory(&rsDesc, sizeof(rsDesc));
 	rsDesc.FillMode = D3D11_FILL_SOLID;
+	rsDesc.CullMode = D3D11_CULL_BACK;
+	if (FAILED(hr = pd3dDevice->CreateRasterizerState(&rsDesc, &ADxState::g_pRSBackCullSolid))) return hr;
+
+	rsDesc.FillMode = D3D11_FILL_SOLID;
 	rsDesc.CullMode = D3D11_CULL_NONE;
 	rsDesc.DepthClipEnable = TRUE;
-	if (FAILED(hr = pd3dDevice->CreateRasterizerState
-	(&rsDesc, &ADxState::g_pRSBackCullSolid))) return hr;
+	if (FAILED(hr = pd3dDevice->CreateRasterizerState(&rsDesc, &ADxState::g_pRSNoneCullSolid))) return hr;
+
+	rsDesc.FillMode = D3D11_FILL_WIREFRAME;
+	rsDesc.CullMode = D3D11_CULL_BACK;
+	rsDesc.DepthClipEnable = TRUE;
+	if (FAILED(hr = pd3dDevice->CreateRasterizerState(&rsDesc, &ADxState::g_pRSBackCullWireFrame))) return hr;
+
+	rsDesc.FillMode = D3D11_FILL_WIREFRAME;
+	rsDesc.CullMode = D3D11_CULL_NONE;
+	rsDesc.DepthClipEnable = TRUE;
+	if (FAILED(hr = pd3dDevice->CreateRasterizerState(&rsDesc, &ADxState::g_pRSNoneCullWireFrame))) return hr;
 
 	D3D11_DEPTH_STENCIL_DESC dsDescDepth;
 	ZeroMemory(&dsDescDepth, sizeof(D3D11_DEPTH_STENCIL_DESC));
@@ -65,17 +84,29 @@ bool ADxState::SetState(ID3D11Device* pd3dDevice)
 	dsDescDepth.BackFace.StencilPassOp = D3D11_STENCIL_OP_KEEP;
 	dsDescDepth.BackFace.StencilFailOp = D3D11_STENCIL_OP_KEEP;
 	dsDescDepth.BackFace.StencilDepthFailOp = D3D11_STENCIL_OP_KEEP;
-	if (FAILED(hr = pd3dDevice->CreateDepthStencilState
-	(&dsDescDepth, &g_pDSSDepthEnable))) return hr;
+	if (FAILED(hr = pd3dDevice->CreateDepthStencilState(&dsDescDepth, &g_pDSSDepthEnable))) return hr;
+
+	dsDescDepth.DepthEnable = FALSE;
+	if(FAILED(hr = pd3dDevice->CreateDepthStencilState(&dsDescDepth, &g_pDSSDepthDisable)))
+	{	return hr;	}
+
 	return true;
 }
 bool ADxState::Release()
 {
-	if (m_AlphaBlend) m_AlphaBlend->Release();
-	if (m_AlphaBlendDisable) m_AlphaBlendDisable->Release();
+	if (g_pRSBackCullSolid)		g_pRSBackCullSolid->Release();
+	if (g_pRSNoneCullSolid)		g_pRSNoneCullSolid->Release();
+	if (g_pRSBackCullWireFrame) g_pRSBackCullWireFrame->Release();
+	if (g_pRSNoneCullWireFrame) g_pRSNoneCullWireFrame->Release();
+	if (g_pDSSDepthEnable)		g_pDSSDepthEnable->Release();
+	if (g_pDSSDepthDisable)		g_pDSSDepthDisable->Release();
+
+	if (m_AlphaBlend)			m_AlphaBlend->Release();
+	if (m_AlphaBlendDisable)	m_AlphaBlendDisable->Release();
+
 	m_AlphaBlend = nullptr;
 	m_AlphaBlendDisable = nullptr;
 
-	if (m_pSamplerState)m_pSamplerState->Release();
+	if (m_pSamplerState)		m_pSamplerState->Release();
 	return true;
 }

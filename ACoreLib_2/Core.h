@@ -10,7 +10,8 @@ class ACore : public ADevice
 public:
 	ATimer		m_GameTimer;
 	AWriteFont  m_dxWrite;
-	
+
+	bool		m_bWireFrame = false;
 private:
 //외부에서 접근 불가능한 Core기능. Init부터 Render/ Release기능
 	bool	CoreInit();	

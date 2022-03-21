@@ -41,6 +41,9 @@ bool ACore::GameRun()
 }
 bool ACore::CoreFrame()
 {
+	//V키 누르면 와이어프레임 나오도록
+	if (AInput::Get().GetKey('V') == KEY_PUSH) { m_bWireFrame = !m_bWireFrame; }
+
 	m_GameTimer.Frame();
 	AInput::Get().Frame();
 	I_ObjectMgr.Frame();
@@ -60,7 +63,12 @@ bool ACore::CoreRender()
 	
 	m_pImmediateContext->PSSetSamplers(0, 1, &ADxState::m_pSamplerState);
 	m_pImmediateContext->OMSetDepthStencilState(ADxState::g_pDSSDepthEnable, 0x00);
-	m_pImmediateContext->RSSetState(ADxState::g_pRSBackCullSolid);
+
+	//V키 누르면 와이어프레임 모드로 변환 기능 추가함.
+	if (m_bWireFrame) m_pImmediateContext->RSSetState(ADxState::g_pRSBackCullWireFrame);
+	else m_pImmediateContext->RSSetState(ADxState::g_pRSBackCullSolid);
+
+	//m_pImmediateContext->RSSetState(ADxState::g_pRSBackCullSolid);
 	// 백버퍼에 랜더링 한다.
 	Render();
 
