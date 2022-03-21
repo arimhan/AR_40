@@ -67,7 +67,7 @@ bool ASample::Frame()
     //≈∞ ¡∂¿€
     if (AInput::Get().GetKey('W'))
     {
-        m_PlayerObj_1.m_vPos.x += g_fSecPerFrame * 100.0f;
+        m_PlayerObj_1.m_vPos.z += g_fSecPerFrame * 100.0f;
     }
     if (AInput::Get().GetKey('S'))
     {
@@ -81,7 +81,7 @@ bool ASample::Frame()
     {
         m_PlayerObj_1.m_vPos.x += g_fSecPerFrame * 100.0f;
     }
-    //m_PlayerObj.SetPosition(m_PlayerObj.m_vPos);
+    m_PlayerObj_1.SetPosition(m_PlayerObj_1.m_vPos);
     m_Camera.m_vTarget = m_PlayerObj_1.m_vPos;
     m_Camera.m_vCamera = m_PlayerObj_1.m_vPos + AVector3(0, 1500.0f, -300.0f);
 

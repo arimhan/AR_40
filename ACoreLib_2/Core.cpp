@@ -65,8 +65,10 @@ bool ACore::CoreRender()
 	m_pImmediateContext->OMSetDepthStencilState(ADxState::g_pDSSDepthEnable, 0x00);
 
 	//V키 누르면 와이어프레임 모드로 변환 기능 추가함.
-	if (m_bWireFrame) m_pImmediateContext->RSSetState(ADxState::g_pRSBackCullWireFrame);
-	else m_pImmediateContext->RSSetState(ADxState::g_pRSBackCullSolid);
+	if (m_bWireFrame) 
+		m_pImmediateContext->RSSetState(ADxState::g_pRSBackCullWireFrame);
+	else 
+		m_pImmediateContext->RSSetState(ADxState::g_pRSBackCullSolid);
 
 	//m_pImmediateContext->RSSetState(ADxState::g_pRSBackCullSolid);
 	// 백버퍼에 랜더링 한다.

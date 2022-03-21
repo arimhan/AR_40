@@ -7,10 +7,10 @@ AMatrix AMatrix::operator * (AMatrix const& Matrix)
 	{
 		for (int iRow = 0; iRow < 4; iRow++)
 		{
-			OutMatrix.m[iRow][iCol] = m[iRow][0] * Matrix.m[iCol][0] +
-				m[iRow][1] * Matrix.m[iCol][1] +
-				m[iRow][2] * Matrix.m[iCol][2] +
-				m[iRow][3] * Matrix.m[iCol][3];
+			OutMatrix.m[iRow][iCol] = m[iRow][0] * Matrix.m[0][iCol] +
+				m[iRow][1] * Matrix.m[1][iCol] +
+				m[iRow][2] * Matrix.m[2][iCol] +
+				m[iRow][3] * Matrix.m[3][iCol];
 		}
 	}
 	return OutMatrix;
@@ -91,10 +91,10 @@ void AMatrix::Identity()
 AMatrix AMatrix::Transpose()
 {
 	AMatrix am;
-	am._11 = 11;	am._12 = 21;	am._13 = 31;	am._14 = 41;
-	am._21 = 12;	am._22 = 22;	am._23 = 32;	am._24 = 42;
-	am._31 = 13;	am._32 = 23;	am._33 = 33;	am._34 = 43;
-	am._41 = 14;	am._42 = 24;	am._43 = 34;	am._44 = 44;
+	am._11 = _11;	am._12 = _21;	am._13 = _31;	am._14 = _41;
+	am._21 = _12;	am._22 = _22;	am._23 = _32;	am._24 = _42;
+	am._31 = _13;	am._32 = _23;	am._33 = _33;	am._34 = _43;
+	am._41 = _14;	am._42 = _24;	am._43 = _34;	am._44 = _44;
 	return am;
 }
 //외적을 통한 뷰 행렬 계산

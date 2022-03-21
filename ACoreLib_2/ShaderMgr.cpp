@@ -6,15 +6,19 @@ bool    AShader::CreateVertexShader(ID3D11Device* pd3dDevice, wstring filename, 
 		entry.c_str(), "vs_5_0", 0, 0, &m_pVSCodeResult, &m_pErrorMsgs);
 	if (FAILED(hr))
 	{
-		MessageBoxA(NULL,
-			(char*)m_pErrorMsgs->GetBufferPointer(), "ERROR", MB_OK);
-		if (m_pErrorMsgs) m_pErrorMsgs->Release();
+		if (m_pErrorMsgs)
+		{
+			MessageBoxA(NULL, (char*)m_pErrorMsgs->GetBufferPointer(), "ERROR", MB_OK);
+			m_pErrorMsgs->Release();
+		}
 		return false;
 	}
 	hr = pd3dDevice->CreateVertexShader(m_pVSCodeResult->GetBufferPointer(),
 		m_pVSCodeResult->GetBufferSize(), NULL, &m_pVertexShader);
-	if (FAILED(hr)) { return false; }
-
+	if (FAILED(hr)) 
+	{ 
+		return false; 
+	}
 	return true;
 }
 bool AShader::CreatePixelShader(ID3D11Device* pd3dDevice, wstring filename, string entry)
@@ -23,14 +27,19 @@ bool AShader::CreatePixelShader(ID3D11Device* pd3dDevice, wstring filename, stri
 		entry.c_str(), "ps_5_0", 0, 0, &m_pPSCodeResult, &m_pErrorMsgs);
 	if (FAILED(hr))
 	{
-		MessageBoxA(NULL,
-			(char*)m_pErrorMsgs->GetBufferPointer(), "ERROR", MB_OK);
-		if (m_pErrorMsgs) m_pErrorMsgs->Release();
+		if (m_pErrorMsgs)
+		{
+			MessageBoxA(NULL, (char*)m_pErrorMsgs->GetBufferPointer(), "ERROR", MB_OK);
+			m_pErrorMsgs->Release();
+		}
 		return false;
 	}
 	hr = pd3dDevice->CreatePixelShader(m_pPSCodeResult->GetBufferPointer(),
 		m_pPSCodeResult->GetBufferSize(), NULL, &m_pPixelShader);
-	if (FAILED(hr)) { return false; }
+	if (FAILED(hr)) 
+	{ 
+		return false; 
+	}
 
 	return true;
 }

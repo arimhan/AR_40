@@ -34,10 +34,12 @@ AVector3 AVector3::operator - (const AVector3& v)
 }
 AVector3 AVector3::operator * (float fValue)
 {
-	this->x *= fValue;
-	this->y *= fValue;
-	this->z *= fValue;
-	return *this;
+	AVector3 ret;
+	ret.x = x * fValue;
+	ret.y = y * fValue;
+	ret.z = z * fValue;
+
+	return ret;
 }
 AVector3 AVector3::operator / (float fValue)
 {
@@ -95,7 +97,7 @@ float AVector3::operator | (AVector3 const& v)
 
 AVector3 AVector3::operator ^ (AVector3 const& v)
 {
-	return AVector3((y*v.z - z*v.y) , (z * v.x - x * v.z), (x * v.z - y * v.x));
+	return AVector3((y*v.z - z*v.y) , (z * v.x - x * v.z), (x * v.y - y * v.x));
 }
 
 

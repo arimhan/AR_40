@@ -55,7 +55,7 @@ float4 PS(VS_OUTPUT input) : SV_TARGET
 
 	//소스알파(1) 마스크 이미지의 검정색 부분 -> 불투명
 	//소스알파(0) 마스크 이미지의 흰색 부분 -> 투명
-	final.a = 1.0f; //-1.0f;
+	//final.a = 1.0f; //-1.0f;
 	final = final * input.c;
 	return final;
 }

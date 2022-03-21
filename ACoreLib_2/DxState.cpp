@@ -47,23 +47,24 @@ bool ADxState::SetState(ID3D11Device* pd3dDevice)
 
 	D3D11_RASTERIZER_DESC rsDesc;
 	ZeroMemory(&rsDesc, sizeof(rsDesc));
+	rsDesc.DepthClipEnable = TRUE;
 	rsDesc.FillMode = D3D11_FILL_SOLID;
 	rsDesc.CullMode = D3D11_CULL_BACK;
 	if (FAILED(hr = pd3dDevice->CreateRasterizerState(&rsDesc, &ADxState::g_pRSBackCullSolid))) return hr;
 
+	rsDesc.DepthClipEnable = TRUE;
 	rsDesc.FillMode = D3D11_FILL_SOLID;
 	rsDesc.CullMode = D3D11_CULL_NONE;
-	rsDesc.DepthClipEnable = TRUE;
 	if (FAILED(hr = pd3dDevice->CreateRasterizerState(&rsDesc, &ADxState::g_pRSNoneCullSolid))) return hr;
 
+	rsDesc.DepthClipEnable = TRUE;
 	rsDesc.FillMode = D3D11_FILL_WIREFRAME;
 	rsDesc.CullMode = D3D11_CULL_BACK;
-	rsDesc.DepthClipEnable = TRUE;
 	if (FAILED(hr = pd3dDevice->CreateRasterizerState(&rsDesc, &ADxState::g_pRSBackCullWireFrame))) return hr;
 
+	rsDesc.DepthClipEnable = TRUE;
 	rsDesc.FillMode = D3D11_FILL_WIREFRAME;
 	rsDesc.CullMode = D3D11_CULL_NONE;
-	rsDesc.DepthClipEnable = TRUE;
 	if (FAILED(hr = pd3dDevice->CreateRasterizerState(&rsDesc, &ADxState::g_pRSNoneCullWireFrame))) return hr;
 
 	D3D11_DEPTH_STENCIL_DESC dsDescDepth;
