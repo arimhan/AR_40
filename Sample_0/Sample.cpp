@@ -1,5 +1,6 @@
 #include "Sample.h"
 
+
 bool ASample::Init()
 {
     //카메라 기능
@@ -13,7 +14,6 @@ bool ASample::Init()
     //Map Obj 불러오기
     m_MapObj.Init();
     m_MapObj.SetDevice(m_pd3dDevice.Get(), m_pImmediateContext.Get());
-
     m_MapObj.CreateHeightMap(L"../../data/map/129.jpg");            //높이맵 (그림자) 이미지
     ATexture* pTexMap = I_Texture.Load(L"../../data/map/020.bmp");  //전체지형 이미지
     m_MapObj.m_pColorTex = pTexMap;
@@ -21,7 +21,7 @@ bool ASample::Init()
     m_MapObj.m_pPSShader = pPSShader;
 
     //정점개수 (2n승 +1. ex 8 +1 = 9..)
-    m_MapObj.CreateMap(m_MapObj.m_iNumCols, m_MapObj.m_iNumRows, 10.0f);
+    m_MapObj.CreateMap(m_MapObj.m_iNumCols, m_MapObj.m_iNumRows, 20.0f);
     if (!m_MapObj.Create(m_pd3dDevice.Get(), m_pImmediateContext.Get())) { return false; }
 
     /*
@@ -32,14 +32,19 @@ bool ASample::Init()
     matScale.Scale(10, 10.0f, 10.0f);
     */
 
-  
+
     //Map Obj위에서 움직이는 PlayerObj 불러오기
     m_PlayerObj_1.Init();
-    m_PlayerObj_1.m_pColorTex = pTex;
+    m_PlayerObj_1.m_pColorTex = I_Texture.Load(L"../../data/enemy.png");
     m_PlayerObj_1.m_pVSShader = pVSShader;
     m_PlayerObj_1.m_pPSShader = pPSShader;
     m_PlayerObj_1.SetPosition(AVector3(0.0f, 1.0f, 0.0f));
     if (!m_PlayerObj_1.Create(m_pd3dDevice.Get(), m_pImmediateContext.Get())) { return false; }
+
+    m_SkyObj.Init();
+    //m_PlayerObj_1.m_pColorTex = I_Texture.Load(L"../../data/sky/skt_1/enemy.png");
+    m_SkyObj.SetPosition(AVector3(0.0f, 0.0f, 0.0f));
+    if (!m_SkyObj.Create(m_pd3dDevice.Get(), m_pImmediateContext.Get(), L"Sky.hlsl", L"../../data/sky/sky_1/xxx.bmp")) { return false; }
   /*
     //Z버퍼링 비교할 Obj 출력
     m_BackObj.Init();
@@ -81,9 +86,22 @@ bool ASample::Frame()
     {
         m_PlayerObj_1.m_vPos.x += g_fSecPerFrame * 100.0f;
     }
+
+    AMatrix matRorate;
+    AMatrix matScale;
+    static float fRadian = 0.0f;
+    fRadian += (AInput::Get().m_ptDeltaMouse.x / (float)g_rtClient.right) * ABASIS_PI;
+    matRorate.YRotate(fRadian);
+    matScale.Scale(50, 50, 50);
+
+    m_PlayerObj_1.m_matWorld = matScale * matRorate;
+    m_PlayerObj_1.m_vPos.y = m_MapObj.GetHeight(m_PlayerObj_1.m_vPos.x, m_PlayerObj_1.m_vPos.z) + 50;
     m_PlayerObj_1.SetPosition(m_PlayerObj_1.m_vPos);
+
     m_Camera.m_vTarget = m_PlayerObj_1.m_vPos;
-    m_Camera.m_vCamera = m_PlayerObj_1.m_vPos + AVector3(0, 1500.0f, -300.0f);
+
+    float y = m_MapObj.GetHeight(m_Camera.m_vCamera.x, m_Camera.m_vCamera.z);
+    m_Camera.m_vCamera = m_PlayerObj_1.m_vPos + m_PlayerObj_1.m_vLook * -1.0f * 10.0f + m_PlayerObj_1.m_vUp * 10.0f;//AVector3(0, 1500.0f, -300.0f);
 
     ////TVector3 vEye= m_vCamera;
     //AVector3 vTarget(0, 0, 0);
@@ -99,6 +117,23 @@ bool ASample::Frame()
 
 bool ASample::Render()
 {
+    //m_SkyObj 세팅 및 렌더링
+    m_SkyObj.m_matViewSky = m_Camera.m_matView;
+    m_SkyObj.m_matViewSky._41 = 0;
+    m_SkyObj.m_matViewSky._42 = 0;
+    m_SkyObj.m_matViewSky._43 = 0;
+    AMatrix matRotation, matScale;
+    matScale.Scale(3000.0f, 3000.0f, 3000.0f);
+    matRotation.YRotate(g_fGameTimer * 0.00f);
+    m_SkyObj.m_matWorld = matScale * matRotation;
+    m_SkyObj.SetMatrix(NULL, &m_SkyObj.m_matViewSky, &m_Camera.m_matProj);
+    m_pImmediateContext->RSSetState(ADxState::g_pRSNoneCullSolid);
+    m_pImmediateContext->PSSetSamplers(0, 1, &ADxState::m_pSSPoint);
+    m_SkyObj.Render();
+
+
+    m_pImmediateContext->PSSetSamplers(0, 1, &ADxState::m_pSSLinear);
+    m_pImmediateContext->RSSetState(ADxState::g_pRSBackCullSolid);
     m_MapObj.SetMatrix(nullptr, &m_Camera.m_matView, &m_Camera.m_matProj);
     m_MapObj.Render();
 
@@ -119,6 +154,7 @@ bool ASample::Render()
 
 bool ASample::Release()
 {
+    m_SkyObj.Release();
     m_MapObj.Release();
     m_PlayerObj_1.Release();
     //m_BackObj.Release();

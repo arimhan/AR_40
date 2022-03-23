@@ -15,6 +15,8 @@ struct AVertex
 	AVector3 n;	// 노말
 	AVector4 c;	// 컬러
 	AVector2 t;	// 텍스쳐
+	AVertex(AVector3 p1, AVector3 n1, AVector4 c1, AVector2 t1);
+	AVertex();
 };
 
 enum ACollisionType { Block = 0, Overlap, Ignore, };

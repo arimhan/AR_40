@@ -1,5 +1,7 @@
 #include "DxState.h"
 
+ID3D11SamplerState*			ADxState::m_pSSLinear				= nullptr;
+ID3D11SamplerState*			ADxState::m_pSSPoint 				= nullptr;
 
 ID3D11RasterizerState*		ADxState::g_pRSBackCullWireFrame	= nullptr;
 ID3D11RasterizerState*		ADxState::g_pRSNoneCullWireFrame	= nullptr;

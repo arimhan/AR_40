@@ -9,6 +9,7 @@ bool AInput::Init()
 }
 bool AInput::Frame()
 {
+	POINT ptOffset = g_ptMouse;
 	//화면(스크린)좌표계
 	GetCursorPos(&m_ptMouse);
 	//클라이언트(윈도우)좌표계
@@ -49,9 +50,28 @@ bool AInput::Frame()
 	m_dwMouseState[0] = m_dwKeyState[VK_LBUTTON];
 	m_dwMouseState[1] = m_dwKeyState[VK_RBUTTON];
 	m_dwMouseState[2] = m_dwKeyState[VK_MBUTTON];
+
+	//마우스 드래그, 클릭 기능 추가
+
+	
+	if (m_dwKeyState[0] == KEY_PUSH)
+	{
+		m_bDrag= true;
+		m_ptMouseClick = m_ptMouse;
+	}
+	if(m_bDrag)
+	{
+		m_ptDeltaMouse.x = ptOffset.x - m_ptMouse.x;
+		m_ptDeltaMouse.y = ptOffset.y - m_ptMouse.y;
+	}
+
 	return true;
 }
 bool AInput::Render() { return true; }
 bool AInput::Release() { return true; }
-AInput::AInput(){}
+AInput::AInput()
+{
+	m_ptDeltaMouse.x = 0.0f;
+	m_ptDeltaMouse.y = 0.0f;
+}
 AInput::~AInput(){}

@@ -257,3 +257,10 @@ bool ADxObject::Release()
 }
 ADxObject::ADxObject() { m_fSpeed = 0.0001f; }
 ADxObject::~ADxObject(){}
+
+
+AVertex::AVertex(AVector3 p1, AVector3 n1, AVector4 c1, AVector2 t1)
+{
+	p = p1;		n = n1;		c = c1;		t = t1;
+}
+AVertex::AVertex() {}

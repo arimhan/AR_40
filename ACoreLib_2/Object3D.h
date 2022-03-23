@@ -4,6 +4,10 @@
 class AObject3D : public ADxObject
 {
 public:
+	AVector3			m_vLight;		//X
+	AVector3			m_vUp;			//Y
+	AVector3			m_vLook;		//Z
+public:
 	AVector3			m_vPos;
 	AVector3			m_vDirection;
 	AVector4			m_vColor;

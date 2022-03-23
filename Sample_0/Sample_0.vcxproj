@@ -147,16 +147,20 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="BoxObj.h" />
     <ClInclude Include="Camera.h" />
     <ClInclude Include="Map.h" />
     <ClInclude Include="PlaneObj.h" />
     <ClInclude Include="Sample.h" />
+    <ClInclude Include="SkyObj.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="BoxObj.cpp" />
     <ClCompile Include="Camera.cpp" />
     <ClCompile Include="Map.cpp" />
     <ClCompile Include="PlaneObj.cpp" />
     <ClCompile Include="Sample.cpp" />
+    <ClCompile Include="SkyObj.cpp" />
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="Box.hlsl">
@@ -177,6 +181,12 @@
     <ProjectReference Include="..\ACoreLib_2\ACoreLib_2.vcxproj">
       <Project>{23902b20-91ab-4faa-ba53-452a0f2ec393}</Project>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <FxCompile Include="Sky.hlsl">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+      <FileType>Document</FileType>
+    </FxCompile>
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

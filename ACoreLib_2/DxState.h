@@ -3,6 +3,9 @@
 class ADxState
 {
 public:
+	static ID3D11SamplerState* m_pSSLinear;
+	static ID3D11SamplerState* m_pSSPoint;
+public:
 	static ID3D11RasterizerState* g_pRSBackCullWireFrame;
 	static ID3D11RasterizerState* g_pRSNoneCullWireFrame;
 	static ID3D11RasterizerState* g_pRSNoneCullSolid;

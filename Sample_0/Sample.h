@@ -3,6 +3,8 @@
 #include "PlaneObj.h"
 #include "Camera.h"
 #include "Map.h"
+#include "SkyObj.h"
+#include "BoxObj.h"
 
 
 class ASample : public ACore
@@ -12,6 +14,7 @@ class ASample : public ACore
 	APlaneObj		m_PlayerObj_1;
 	APlaneObj		m_PlayerObj_2;
 	APlaneObj		m_BackObj;
+	ASkyObj			m_SkyObj;
 
 public:
 	virtual bool	Init() override;

@@ -2,6 +2,71 @@
 #include "WICTextureLoader.h"
 
 
+float AMap::GetHeight(float fPosX, float fPosZ) 
+{
+	//ObJ와 Map의 높이값을 얻어오는 함수, 선형보간 함수기능을 구현한다.
+	//fPosX / fPosZ 의 위치에 해당하는 높이맵셀을 찾는다.
+	//m_iNumCols와 m_iNumRows은 가로/세로의 실제 크기값이다.
+
+	float fCellX = (float)(m_iNumCellCols * m_iCellDistance / 2.0f + fPosX);
+	float fCellZ = (float)(m_iNumCellRows * m_iCellDistance / 2.0f + fPosZ);
+
+	//셀의 크기로 나누어 0~1 단위의 값으로 바꾸어 높이맵 배열에 접근한다.
+	fCellX /= (float)m_iCellDistance;		fCellZ /= (float)m_iCellDistance;
+
+	//fCellX, fCellZ 값보다 작거나 같은 최대 정수(소수부분) 을 잘라낸다.
+	float fVertexCol = ::floorf(fCellX);	float fVertexRow = ::floorf(fCellZ);
+
+	//높이맵 범위를 벗어나면 강제로 초기화 한다.
+	if (fVertexCol < 0.0f) fVertexCol = 0.0f;
+	if (fVertexRow < 0.0f) fVertexRow = 0.0f;
+	if ((float)(m_iNumCols - 2) < fVertexCol) fVertexCol = (float)(m_iNumCols - 2);
+	if ((float)(m_iNumRows - 2) < fVertexRow) fVertexRow = (float)(m_iNumRows - 2);
+
+
+	//계산된 셀의 플랜을 구성하는 4개 정점의 높이값을 찾는다.
+	//A가 원점이 되어 좌측 상단, 시계방향으로 A->B->C->D 순으로 구성
+	float A = GetHeightMap((int)fVertexCol, (int)fVertexRow);
+	float B = GetHeightMap((int)fVertexCol + 1, (int)fVertexRow);
+	float C = GetHeightMap((int)fVertexCol + 1, (int)fVertexRow + 1);
+	float D = GetHeightMap((int)fVertexCol, (int)fVertexRow + 1);
+
+	//A정점의 위치에서 떨어진 값(변위값)을 계산한다. 0 ~ 1.0f
+	float fDeltaX = fCellX - fVertexCol;
+	float fDeltaZ = fCellZ - fVertexRow;
+
+	//보간작업을 위한 기준 Face를 찾는다.
+	float fHeight = 0.0f;
+	//위 Face를 기준으로 보간한다.  ABD
+	//fDeltaZ + fDeltaX < 1.0f;
+	if (fDeltaZ < (1.0f - fDeltaX))
+	{
+		float uy = B - A;	//A->B
+		float vy = D - A;	//A->D
+		//두 정점의 높이값의 차이를 비교하여 델타X의 값에 따라 보간값을 찾는다.
+		fHeight = A + Lerp(0.0f, uy, fDeltaX) + Lerp(0.0f, vy, fDeltaX);
+	}
+	//아래페이스를 기준으로 보간한다. CDB
+	else
+	{
+		float uy = D - C;
+		float vy = B - C;
+	}
+	return fHeight;
+}
+float AMap::GetHeightMap(int row, int col) 
+{
+	return m_VertexList[row * m_iNumRows + col].p.y;
+}
+//Linear Interpolation 선형보간함수
+float AMap::Lerp(float fStart, float fEnd, float fTangent) 
+{
+	return fStart - (fStart * fTangent) + (fEnd * fTangent);
+}
+//--------------------------HeightMap 기능 구현
+
+
+
 bool AMap::CreateHeightMap(const TCHAR* strHeightMapTex)
 {
 	HRESULT hr;
