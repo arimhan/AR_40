@@ -25,11 +25,17 @@ float AMap::GetHeight(float fPosX, float fPosZ)
 
 
 	//계산된 셀의 플랜을 구성하는 4개 정점의 높이값을 찾는다.
-	//A가 원점이 되어 좌측 상단, 시계방향으로 A->B->C->D 순으로 구성
-	float A = GetHeightMap((int)fVertexCol, (int)fVertexRow);
-	float B = GetHeightMap((int)fVertexCol + 1, (int)fVertexRow);
-	float C = GetHeightMap((int)fVertexCol + 1, (int)fVertexRow + 1);
-	float D = GetHeightMap((int)fVertexCol, (int)fVertexRow + 1);
+	//A가 원점이 되어 좌측 상단, 시계방향으로 A->B->D->C 순으로 구성
+	//  A   B
+	//  *---*
+	//  | / |
+	//  *---*  
+	//  C   D
+
+	float A = GetHeightMap((int)fVertexRow,		(int)fVertexCol);
+	float B = GetHeightMap((int)fVertexRow,		(int)fVertexCol + 1);
+	float C = GetHeightMap((int)fVertexRow + 1, (int)fVertexCol);
+	float D = GetHeightMap((int)fVertexRow + 1, (int)fVertexCol + 1);
 
 	//A정점의 위치에서 떨어진 값(변위값)을 계산한다. 0 ~ 1.0f
 	float fDeltaX = fCellX - fVertexCol;
@@ -42,15 +48,16 @@ float AMap::GetHeight(float fPosX, float fPosZ)
 	if (fDeltaZ < (1.0f - fDeltaX))
 	{
 		float uy = B - A;	//A->B
-		float vy = D - A;	//A->D
+		float vy = C - A;	//A->C
 		//두 정점의 높이값의 차이를 비교하여 델타X의 값에 따라 보간값을 찾는다.
 		fHeight = A + Lerp(0.0f, uy, fDeltaX) + Lerp(0.0f, vy, fDeltaX);
 	}
-	//아래페이스를 기준으로 보간한다. CDB
+	//아래페이스를 기준으로 보간한다. DCB
 	else
 	{
-		float uy = D - C;
-		float vy = B - C;
+		float uy = C - D;
+		float vy = B - D;
+		fHeight = D + Lerp(0.0f, uy, 1.0f - fDeltaX) + Lerp(0.0f, vy, 1.0f - fDeltaZ);
 	}
 	return fHeight;
 }

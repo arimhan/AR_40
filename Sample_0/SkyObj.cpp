@@ -66,16 +66,41 @@ bool ASkyObj::LoadTexture(const TCHAR* szColorFileName, const TCHAR* szMaskFileN
 	m_pTexArray[4] = I_Texture.Load(L"../../data/sky/sky_1/Sky_04.bmp");	//back
 	m_pTexArray[5] = I_Texture.Load(L"../../data/sky/sky_1/Sky_05.bmp");	//front
 
+	m_pSRVArray[0] = m_pTexArray[0]->m_pSRV;
+	m_pSRVArray[1] = m_pTexArray[1]->m_pSRV;
+	m_pSRVArray[2] = m_pTexArray[2]->m_pSRV;
+	m_pSRVArray[3] = m_pTexArray[3]->m_pSRV;
+	m_pSRVArray[4] = m_pTexArray[4]->m_pSRV;
+	m_pSRVArray[5] = m_pTexArray[5]->m_pSRV;
+
+	m_pTexCube = I_Texture.Load(L"../../data/sky/skycubemap.dds");
+
 	m_TextureDesc = m_pTexArray[0]->m_TextureDesc;
 	return true;
 }
 bool ASkyObj::PostRender() 
 {
-	for (int iTex = 0; iTex < 6; iTex++)
+	//기본 방법. m_pTexArray에 이미지를 저장해 출력한다.
+	//for (int iTex = 0; iTex < 6; iTex++)
+	//{
+	//	m_pContext->PSSetShaderResources(0, 1, m_pTexArray[iTex]->m_pSRV.GetAddressOf());
+	//	m_pContext->DrawIndexed(6, 6 * iTex, 0);
+	//}
+
+	//1번  -1
+	/*for (int iTex = 0; iTex < 6; iTex++)
 	{
 		m_pContext->PSSetShaderResources(0, 1, m_pTexArray[iTex]->m_pSRV.GetAddressOf());
 		m_pContext->DrawIndexed(6, 6 * iTex, 0);
 	}
+	//1번  -2
+	/*m_pContext->PSSetShaderResources(2, 6, m_pSRVArray[0].GetAddressOf());
+	m_pContext->DrawIndexed(36, 0, 0);*/
+	
+	//2번
+	m_pContext->PSSetShaderResources(3, 1, m_pTexCube->m_pSRV.GetAddressOf());
+	m_pContext->DrawIndexed(36, 0, 0);
+
 	return true;
 }
 ASkyObj::ASkyObj() {}

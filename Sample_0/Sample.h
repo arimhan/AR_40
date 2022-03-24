@@ -11,7 +11,7 @@ class ASample : public ACore
 {
 	ACamera			m_Camera;
 	AMap			m_MapObj;
-	APlaneObj		m_PlayerObj_1;
+	ABoxObj			m_PlayerObj_1;
 	APlaneObj		m_PlayerObj_2;
 	APlaneObj		m_BackObj;
 	ASkyObj			m_SkyObj;

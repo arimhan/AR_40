@@ -5,8 +5,10 @@
 class ASkyObj : public AObject3D
 {
 public:
-	AMatrix		m_matViewSky;
-	ATexture*	m_pTexArray[Tex_Size];
+	AMatrix			m_matViewSky;
+	ATexture*		m_pTexArray[Tex_Size];
+	ATexture*		m_pTexCube;
+	ComPtr<ID3D11ShaderResourceView>	m_pSRVArray[Tex_Size];
 public:
 	virtual bool	SetVertexData();
 	virtual bool	SetIndexData();

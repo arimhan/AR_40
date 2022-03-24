@@ -11,6 +11,8 @@ struct VS_OUTPUT
 	float3 n : NORMAL;
 	float4 c : COLOR0;			//INPUT 3 + W -> OUTPUT 4
 	float2 t : TEXCOORD0;
+
+	float3 r : TEXCOORD1;		//넘길 값 추가
 };
 
 //상수버퍼 (레지스터 단위 float4로 할당)
@@ -21,7 +23,7 @@ cbuffer cb0 : register(b0)
 	matrix	g_matView	:	packoffset(c4);
 	matrix	g_matProj	:	packoffset(c8);
 	float4	Color0		:	packoffset(c12);
-	float	TimerX : packoffset(c13.x);
+	float	TimerX		: packoffset(c13.x);
 };
 
 VS_OUTPUT VS(VS_INPUT v)
@@ -34,16 +36,20 @@ VS_OUTPUT VS(VS_INPUT v)
 	float4 vProj = mul(vView, g_matProj);
 
 	pOut.p = vProj;
-	pOut.n = v.n;
+	//float3 vNormal = mul(v.n, g_matWorld);
+	float3 vNormal = mul(v.n, (float3x3)g_matWorld);
+	pOut.n = normalize(vNormal);
 	pOut.t = v.t;
-	//pOut.c = v.c;
-	float fDot = max(0, dot(pOut.n, -Color0.xyz));
+	float fDot = max(0.5f, dot(pOut.n, - Color0.xyz));
 	pOut.c = float4(fDot, fDot, fDot, 1);
+
+	pOut.r = normalize(vLocal.xyz);
 
 	return pOut;
 }
 Texture2D		g_txColor	: register(t0);
 Texture2D		g_txMask	: register(t1);
+TextureCube		g_txCubeMap	: register(t3);	//3번으로 넘긴것 CubeMap
 SamplerState	g_Sample	: register(s0);
 
 float4 PS(VS_OUTPUT input) : SV_TARGET
@@ -57,6 +63,9 @@ float4 PS(VS_OUTPUT input) : SV_TARGET
 	//소스알파(0) 마스크 이미지의 흰색 부분 -> 투명
 	//final.a = 1.0f; //-1.0f;
 	final = final * input.c;
+
+	final = g_txCubeMap.Sample(g_Sample, input.r);
+
 	return final;
 }
 

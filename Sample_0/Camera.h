@@ -14,12 +14,15 @@ public:
 	//카메라 벡터
 	AVector3		m_vCamera;
 	AVector3		m_vTarget;
+	AVector3		m_vDefaultUp;
 
 	//행렬
 	AMatrix			m_matWorld;
 	AMatrix			m_matView;
 	AMatrix			m_matProj;
 
+public:
+	virtual bool Update(AVector4 vValue);
 public:
 	virtual bool Init();
 	virtual bool Frame();

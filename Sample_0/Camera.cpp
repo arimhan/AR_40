@@ -12,7 +12,8 @@ bool ACamera::Init()
 }
 bool ACamera::Frame()
 {
-    m_matView.CreateViewLook(m_vCamera, m_vTarget, m_vUp);
+ 
+    m_matView.CreateViewLook(m_vCamera, m_vTarget, m_vDefaultUp);//m_vUp);
 
     //카메라 행렬값 세팅
     m_vLight.x = m_matView._11;
@@ -29,11 +30,16 @@ bool ACamera::Frame()
 
     return true;
 }
+
+bool ACamera::Update(AVector4 vValue)
+{
+    return true;
+}
 ACamera::ACamera() 
 {
     m_vCamera.x = 0.0f;
     m_vCamera.y = 9.0f;
     m_vCamera.z = -15.0f;
-    m_vUp = AVector3(0, 1, 0);
+    m_vDefaultUp = AVector3(0, 1, 0);
 }
 ACamera:: ~ACamera() {}
