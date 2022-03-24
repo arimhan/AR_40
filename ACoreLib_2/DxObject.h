@@ -6,16 +6,16 @@
 
 struct ASimpleVertex
 {
-	AVector2 v;
-	AVector2 t;
+	T::TVector2 v;
+	T::TVector2 t;
 };
 struct AVertex
 {
-	AVector3 p; // 위치
-	AVector3 n;	// 노말
-	AVector4 c;	// 컬러
-	AVector2 t;	// 텍스쳐
-	AVertex(AVector3 p1, AVector3 n1, AVector4 c1, AVector2 t1);
+	T::TVector3 p; // 위치
+	T::TVector3 n;	// 노말
+	T::TVector4 c;	// 컬러
+	T::TVector2 t;	// 텍스쳐
+	AVertex(T::TVector3 p1, T::TVector3 n1, T::TVector4 c1, T::TVector2 t1);
 	AVertex();
 };
 
@@ -77,12 +77,11 @@ struct AIndex
 
 struct AConstantData
 {
-	AMatrix		matWorld;	//월드
-	AMatrix		matView;	//뷰
-	AMatrix		matProj;	//투영
-
-	AVector4	Color;		//기존 컬러값
-	AVector4	Timer;		//타이머
+	T::TMatrix		matWorld;	//월드
+	T::TMatrix		matView;	//뷰
+	T::TMatrix		matProj;	//투영
+	T::TVector4		Color;		//기존 컬러값
+	T::TVector4		Timer;		//타이머
 };
 class ADxObject : public ABaseObject
 {

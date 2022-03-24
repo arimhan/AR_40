@@ -4,12 +4,11 @@ class AObject2D : public ADxObject
 {
 public:
 	vector<ASimpleVertex> m_VertexList2D;
-	AVector2			m_vPos;
-	AVector2			m_vDirection;
-
+	T::TVector2			m_vPos;
+	T::TVector2			m_vDirection;
 	RECT				m_rtSource;
 	RECT				m_rtDraw;	
-	AVector4			m_vColor;
+	T::TVector4			m_vColor;
 public:
 	float			m_fAlpha = 0.0f;
 	bool			m_bFadeIn = false;
@@ -19,19 +18,19 @@ public:
 public:	
 	virtual void		SetRectSource(RECT rt);
 	virtual void		SetRectDraw(RECT rt);
-	virtual void		AddPosition(AVector2 vPos);
-	virtual void		SetPosition(AVector2 vPos);		
+	virtual void		AddPosition(T::TVector2 vPos);
+	virtual void		SetPosition(T::TVector2 vPos);		
 	virtual void		UpdateRectDraw(RECT rt);
 
 
 	// 화면좌표 위치를 중점으로 NDC 변환
-	virtual void	Convert(AVector2 center, float fWidth, float fHeight,
+	virtual void	Convert(T::TVector2 center, float fWidth, float fHeight,
 		vector<ASimpleVertex>& retList);
 
 	// 화면좌표계를 NDC 변환
 	virtual void	Convert(vector<ASimpleVertex>& list,
 		vector<ASimpleVertex>& retList);
-	virtual void	ConvertIndex(AVector2 center, float fWidth, float fHeight,
+	virtual void	ConvertIndex(T::TVector2 center, float fWidth, float fHeight,
 		vector<ASimpleVertex>& retList);
 
 	// 화면좌표계를 NDC 변환

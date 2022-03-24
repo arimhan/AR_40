@@ -14,11 +14,14 @@
 #include <atlconv.h> // A2W
 #include "Collision.h"
 #include <wrl.h> 
+#include "AMath.h"
 
 //3D
 #include <DirectXMath.h>
 #include <DirectXPackedVector.h>
 #include <DirectXCollision.h>
+
+
 
 using namespace Microsoft::WRL;
 

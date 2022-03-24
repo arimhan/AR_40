@@ -1,6 +1,6 @@
 #include "Object3D.h"
 
-void AObject3D::AddPosition(AVector3 vPos)
+void AObject3D::AddPosition(T::TVector3 vPos)
 {
 	m_vPos += vPos;
 
@@ -12,7 +12,7 @@ void AObject3D::AddPosition(AVector3 vPos)
 	}
 }
 
-void AObject3D::SetPosition(AVector3 vPos)
+void AObject3D::SetPosition(T::TVector3 vPos)
 {
 	m_vPos = vPos;
 	//행렬의 이동성분이 들어가는 41~43성분에 각 x,y,z값을 넣어 이동처리를 할 수 있도록 한다.
@@ -46,14 +46,14 @@ bool AObject3D::Frame()
 	if (m_bFadeIn)	FadeIn();
 	if (m_bFadeOut)	FadeOut();
 	m_ConstantList.Color = m_vColor;
-	m_ConstantList.Timer = AVector4(g_fGameTimer, 0, 0, 1.0f);
+	m_ConstantList.Timer = T::TVector4(g_fGameTimer, 0, 0, 1.0f);
 	//m_pContext->UpdateSubresource(m_pConstantBuffer, 0, NULL, &m_ConstantList, 0, 0);
 	return true;
 }
 
 bool AObject3D::Load(ID3D11Device* pd3dDevice, wstring filename) { return true; };
 void AObject3D::UpdateData() {}
-void AObject3D::SetMatrix(AMatrix* matWorld, AMatrix* matView, AMatrix* matProj)
+void AObject3D::SetMatrix(T::TMatrix* matWorld, T::TMatrix* matView, T::TMatrix* matProj)
 {
 	//각 월드 전환 시 필요한 값 세팅 
 	//상수버퍼리스트 내 월드행렬 전치시킨다.해당하는 행렬이 존재하면 현재 받은 행렬을 전치시킨다.
@@ -91,7 +91,7 @@ void AObject3D::SetMatrix(AMatrix* matWorld, AMatrix* matView, AMatrix* matProj)
 AObject3D::AObject3D()
 {
 	m_fAlpha = 1.0f;
-	m_vColor = AVector4(1, 1, 1, 1);
+	m_vColor = T::TVector4(1, 1, 1, 1);
 
 	//카메라 행렬 세팅
 	m_vLight.x = 1;

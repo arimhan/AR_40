@@ -81,6 +81,9 @@
     <ClCompile Include="Matrix.cpp">
       <Filter>Math</Filter>
     </ClCompile>
+    <ClCompile Include="..\ACoreLib2\AMath.cpp">
+      <Filter>Math</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Core.h">
@@ -144,6 +147,9 @@
       <Filter>헤더 파일</Filter>
     </ClInclude>
     <ClInclude Include="Matrix.h">
+      <Filter>Math</Filter>
+    </ClInclude>
+    <ClInclude Include="..\ACoreLib2\AMath.h">
       <Filter>Math</Filter>
     </ClInclude>
   </ItemGroup>

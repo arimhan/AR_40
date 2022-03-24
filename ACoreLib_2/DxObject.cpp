@@ -24,9 +24,9 @@ bool ADxObject::SetConstantData()
 {
 	ZeroMemory(&m_ConstantList, sizeof(AConstantData));
 	//좌표계 세팅
-	m_ConstantList.matWorld = AMatrix();
-	m_ConstantList.matView = AMatrix();
-	m_ConstantList.matProj = AMatrix();
+	m_ConstantList.matWorld = T::TMatrix();
+	m_ConstantList.matView = T::TMatrix();
+	m_ConstantList.matProj = T::TMatrix();
 	//AMatrix생성자 호출 시 단일행렬이 적용됨.
 
 	m_ConstantList.Color.x = 0.0f;
@@ -259,7 +259,7 @@ ADxObject::ADxObject() { m_fSpeed = 0.0001f; }
 ADxObject::~ADxObject(){}
 
 
-AVertex::AVertex(AVector3 p1, AVector3 n1, AVector4 c1, AVector2 t1)
+AVertex::AVertex(T::TVector3 p1, T::TVector3 n1, T::TVector4 c1, T::TVector2 t1)
 {
 	p = p1;		n = n1;		c = c1;		t = t1;
 }

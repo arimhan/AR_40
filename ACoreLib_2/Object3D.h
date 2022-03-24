@@ -4,30 +4,28 @@
 class AObject3D : public ADxObject
 {
 public:
-	AVector3			m_vLight;		//X
-	AVector3			m_vUp;			//Y
-	AVector3			m_vLook;		//Z
-public:
-	AVector3			m_vPos;
-	AVector3			m_vDirection;
-	AVector4			m_vColor;
-	AMatrix				m_matWorld;
-public:
+	T::TVector3			m_vLight;		//X
+	T::TVector3			m_vUp;			//Y
+	T::TVector3			m_vLook;		//Z
+	T::TVector3			m_vPos;
+	T::TVector3			m_vDirection;
+	T::TVector4			m_vColor;
+	T::TMatrix				m_matWorld;
 	float				m_fAlpha = 0.0f;
 	bool				m_bFadeIn = false;
 	bool				m_bFadeOut = false;
 	virtual void		FadeIn();
 	virtual void		FadeOut();
 public:
-	virtual void		AddPosition(AVector3 vPos);
-	virtual void		SetPosition(AVector3 vPos);
+	virtual void		AddPosition(T::TVector3 vPos);
+	virtual void		SetPosition(T::TVector3 vPos);
 public:
 	virtual bool		SetVertexData() override;
 	virtual bool		SetIndexData() override;
 	virtual bool		Frame() override;
 	bool				Load(ID3D11Device* pd3dDevice, wstring filename);
 	virtual void		UpdateData();
-	virtual void		SetMatrix(AMatrix* matWorld, AMatrix* matView, AMatrix* matProj);
+	virtual void		SetMatrix(T::TMatrix* matWorld, T::TMatrix* matView, T::TMatrix* matProj);
 public:
 	AObject3D();
 	virtual ~AObject3D();
