@@ -30,7 +30,8 @@ struct ARect2D
 	{
 		this->vMin = vMin;
 		this->vMax = vMax;
-		vMiddle = (vMax + vMin) / 2.0f;
+		vMiddle = (vMax + vMin);
+		vMiddle /= 2.0f;
 		size.x = vMax.x - vMin.x;
 		size.y = vMax.y - vMin.y;
 	}
@@ -38,7 +39,8 @@ struct ARect2D
 	{
 		this->vMin = v;
 		this->vMax = vMin + T::TVector2(w, h);
-		vMiddle = (vMax + vMin) / 2.0f;
+		vMiddle = (vMax + vMin);
+		vMiddle /= 2.0f;
 		this->size.x = w;
 		this->size.y = h;
 	}
@@ -66,7 +68,8 @@ struct ARect
 	{
 		this->vMin = vMin;
 		this->vMax = vMax;
-		vMiddle = (vMax + vMin) / 2.0f;
+		vMiddle = (vMax + vMin);
+		vMiddle /= 2.0f;
 		size.x = vMax.x - vMin.x;
 		size.y = vMax.y - vMin.y;
 	}
@@ -101,7 +104,8 @@ struct ABox
 	{
 		this->vMin = vMin;
 		this->vMax = vMax;
-		vMiddle = (vMax + vMin) / 2.0f;
+		vMiddle = (vMax + vMin);
+		vMiddle /= 2.0f;
 		size.x = vMax.x - vMin.x;
 		size.y = vMax.y - vMin.y;
 	}
@@ -109,7 +113,8 @@ struct ABox
 	{
 		this->vMin = v;
 		this->vMax = vMin + T::TVector3(w, h,q);
-		vMiddle = (vMax + vMin) / 2.0f;
+		vMiddle = (vMax + vMin);
+		vMiddle /= 2.0f;
 		this->size.x = w;
 		this->size.y = h;
 	}
@@ -118,10 +123,7 @@ struct ASphere
 {
 	T::TVector2 vCenter;
 	float    fRadius;
-	ASphere()
-	{
-		fRadius = 3.0f;
-	}
+	ASphere() { fRadius = 3.0f; }
 };
 class ACollision
 {

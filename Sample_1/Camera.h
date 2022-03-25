@@ -7,25 +7,32 @@ public:
 	//오브젝트 정점을 움직여 카메라가 있는 것 처럼 보여준다.
 	//카메라를 X축으로 10 움직임 -> 오브젝트 정점을 X축으로 -10 움직임
 
-	AVector3		m_vLight;	//X
-	AVector3		m_vUp;		//Y
-	AVector3		m_vLook;	//Z
+	float				m_fRadius = 10.0f;
+	T::TQuaternion		m_qRoration;
+
+	T::TVector3			m_vRight;	//X
+	T::TVector3			m_vUp;		//Y
+	T::TVector3			m_vLook;	//Z
 
 	//카메라 벡터
-	AVector3		m_vCamera;
-	AVector3		m_vTarget;
-	AVector3		m_vDefaultUp;
+	T::TVector3			m_vCamera;
+	T::TVector3			m_vTarget;
+	T::TVector3			m_vDefaultUp;
 
 	//행렬
-	AMatrix			m_matWorld;
-	AMatrix			m_matView;
-	AMatrix			m_matProj;
+	T::TMatrix			m_matWorld;
+	T::TMatrix			m_matView;
+	T::TMatrix			m_matProj;
 
 public:
-	virtual bool Update(AVector4 vValue);
-public:
-	virtual bool Init();
-	virtual bool Frame();
+	virtual bool	Init();
+	virtual bool	Frame();
+	virtual bool	Update(T::TVector4 vDirValue);
+	void			MoveLook(float fValue);
+	void			MoveSide(float fValue);
+	void			MoveUp(float fValue);
+	bool			UpdateVector();
+
 public:
 	ACamera();
 	virtual ~ACamera();

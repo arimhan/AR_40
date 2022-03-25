@@ -11,6 +11,9 @@ enum KeyState
 class AInput
 {
 public:
+	float	m_fRadianX = 0.0f;
+	float	m_fRadianY = 0.0f;
+	
 	//마우스 드래그, 클릭기능 추가
 	bool	m_bDrag = false;
 	POINT	m_ptMouseClick;

@@ -40,13 +40,14 @@ bool ASample::Init()
     m_PlayerObj_1.m_pColorTex = I_Texture.Load(L"../../data/Img/charport.bmp"); //enemy.png
     m_PlayerObj_1.m_pVSShader = pVSShader;
     m_PlayerObj_1.m_pPSShader = pPSShader;
-    m_PlayerObj_1.SetPosition(AVector3(0.0f, 1.0f, 0.0f));
+    m_PlayerObj_1.SetPosition(T::TVector3(0.0f, 1.0f, 0.0f));
     if (!m_PlayerObj_1.Create(m_pd3dDevice.Get(), m_pImmediateContext.Get())) { return false; }
 
     m_SkyObj.Init();
     //m_PlayerObj_1.m_pColorTex = I_Texture.Load(L"../../data/sky/skt_1/enemy.png");
-    m_SkyObj.SetPosition(AVector3(0.0f, 0.0f, 0.0f));
-    if (!m_SkyObj.Create(m_pd3dDevice.Get(), m_pImmediateContext.Get(), L"Sky.hlsl", L"../../data/sky/LobbyCube.dds")) { return false; }
+    m_SkyObj.SetPosition(T::TVector3(0.0f, 0.0f, 0.0f));
+    if (!m_SkyObj.Create(m_pd3dDevice.Get(), m_pImmediateContext.Get(), L"Sky.hlsl", 
+        L"../../data/sky/LobbyCube.dds")) { return false; }
     //m_pTexCube = I_Texture.Load(L"../../data/sky/LobbyCube.dds");
   /*
     //Z버퍼링 비교할 Obj 출력
@@ -72,49 +73,28 @@ bool ASample::Init()
 
 bool ASample::Frame()
 {
-    //키 조작
-    if (AInput::Get().GetKey('W'))
-    {
-        m_PlayerObj_1.m_vPos.z += g_fSecPerFrame * 100.0f;
-    }
-    if (AInput::Get().GetKey('S'))
-    {
-        m_PlayerObj_1.m_vPos.z -= g_fSecPerFrame * 100.0f;
-    }
-    if (AInput::Get().GetKey('A'))
-    {
-        m_PlayerObj_1.m_vPos.x -= g_fSecPerFrame * 100.0f;
-    }
-    if (AInput::Get().GetKey('D'))
-    {
-        m_PlayerObj_1.m_vPos.x += g_fSecPerFrame * 100.0f;
-    }
+    T::TVector2 dir = AInput::Get().GetDelta();
+    T::TMatrix matRotate, matScale;
+    T::D3DXMatrixRotationY(&matRotate, -dir.y);
+    T::D3DXMatrixScaling(&matScale, 50, 50, 50);
 
-    AMatrix matRorate, matScale;
-    //AMatrix matScale;
-    static float fRadian = 0.0f;
-    fRadian += (AInput::Get().m_ptDeltaMouse.x / (float)g_rtClient.right) * ABASIS_PI;
-    matRorate.YRotate(fRadian);
-    matScale.Scale(50, 50, 50);
-
-    m_PlayerObj_1.m_matWorld = matScale * matRorate;
+    m_PlayerObj_1.m_matWorld = matScale * matRotate;
     m_PlayerObj_1.m_vPos.y = m_MapObj.GetHeight(m_PlayerObj_1.m_vPos.x, m_PlayerObj_1.m_vPos.z) + 50;
     m_PlayerObj_1.SetPosition(m_PlayerObj_1.m_vPos);
-
+   
     m_Camera.m_vTarget = m_PlayerObj_1.m_vPos;
-
     float y = m_MapObj.GetHeight(m_Camera.m_vCamera.x, m_Camera.m_vCamera.z);
-    m_Camera.m_vCamera = m_PlayerObj_1.m_vPos + m_PlayerObj_1.m_vLook * -1.0f * 5.0f + m_PlayerObj_1.m_vUp * 5.0f;//AVector3(0, 1500.0f, -300.0f);
+    //m_Camera.m_vCamera = m_PlayerObj_1.m_vPos + m_PlayerObj_1.m_vLook * -1.0f * 5.0f + m_PlayerObj_1.m_vUp * 5.0f;//AVector3(0, 1500.0f, -300.0f);
 
-    ////TVector3 vEye= m_vCamera;
-    //AVector3 vTarget(0, 0, 0);
-    //vTarget.x = m_Camera.m_vCamera.x;
-    //AVector3 vUp(0, 1, 0);
+    if (AInput::Get().GetKey('W')) { m_Camera.MoveLook(g_fSecPerFrame * 100.0f); }
+    if (AInput::Get().GetKey('S')) { m_Camera.MoveLook(-g_fSecPerFrame * 100.0f); }
+    if (AInput::Get().GetKey('A')) { m_Camera.MoveSide(-g_fSecPerFrame * 100.0f); }
+    if (AInput::Get().GetKey('D')) { m_Camera.MoveSide(g_fSecPerFrame * 100.0f); }
 
-    m_Camera.Frame();
+    m_Camera.Update(T::TVector4(-dir.x, -dir.y, 0, 0));
     m_MapObj.Frame();
     m_PlayerObj_1.Frame();
-    //m_BackObj.Frame();
+
     return true;
 }
 
@@ -125,9 +105,9 @@ bool ASample::Render()
     m_SkyObj.m_matViewSky._41 = 0;
     m_SkyObj.m_matViewSky._42 = 0;
     m_SkyObj.m_matViewSky._43 = 0;
-    AMatrix matRotation, matScale;
-    matScale.Scale(3000.0f, 3000.0f, 3000.0f);
-    matRotation.YRotate(g_fGameTimer * 0.00f);
+    T::TMatrix matRotation, matScale;
+    T::D3DXMatrixScaling(&matScale, 3000.0f, 3000.0f, 3000.0f);
+    T::D3DXMatrixRotationY(&matRotation, g_fGameTimer * 0.00f);
 
     m_SkyObj.m_matWorld = matScale * matRotation;
     m_SkyObj.SetMatrix(NULL, &m_SkyObj.m_matViewSky, &m_Camera.m_matProj);

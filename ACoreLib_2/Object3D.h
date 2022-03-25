@@ -4,13 +4,13 @@
 class AObject3D : public ADxObject
 {
 public:
-	T::TVector3			m_vLight;		//X
+	T::TVector3			m_vRight;		//X
 	T::TVector3			m_vUp;			//Y
 	T::TVector3			m_vLook;		//Z
 	T::TVector3			m_vPos;
 	T::TVector3			m_vDirection;
 	T::TVector4			m_vColor;
-	T::TMatrix				m_matWorld;
+	T::TMatrix			m_matWorld;
 	float				m_fAlpha = 0.0f;
 	bool				m_bFadeIn = false;
 	bool				m_bFadeOut = false;

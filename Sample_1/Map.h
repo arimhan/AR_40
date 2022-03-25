@@ -4,8 +4,8 @@
 //Face, 정점등을 관리
 struct AFace
 {
-	UINT		v0, v1, v2;	//vb index
-	AVector3	vNormal;
+	UINT			v0, v1, v2;	//vb index
+	T::TVector3		vNormal;
 };
 //struct AVertexFace
 //{

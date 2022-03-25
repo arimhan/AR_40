@@ -1,7 +1,8 @@
 #include "Input.h"
+
+
 POINT g_ptMouse;
 
-DWORD AInput::GetKey(DWORD dwKey) { return m_dwKeyState[dwKey]; }
 bool AInput::Init()
 {
 	ZeroMemory(&m_dwKeyState, sizeof(DWORD) * 256 );
@@ -69,6 +70,15 @@ bool AInput::Frame()
 }
 bool AInput::Render() { return true; }
 bool AInput::Release() { return true; }
+DWORD AInput::GetKey(DWORD dwKey) { return m_dwKeyState[dwKey]; }
+T::TVector2	AInput::GetDelta()
+{
+	T::TVector2 ret;
+	m_fRadianX += (AInput::Get().m_ptDeltaMouse.x / (float)g_rtClient.right) * ABASIS_PI;
+	m_fRadianY += (AInput::Get().m_ptDeltaMouse.y / (float)g_rtClient.bottom) * ABASIS_PI;
+
+	return TVector2(m_fRadianX, m_fRadianY);
+}
 AInput::AInput()
 {
 	m_ptDeltaMouse.x = 0.0f;

@@ -72,9 +72,9 @@ void AObject3D::SetMatrix(T::TMatrix* matWorld, T::TMatrix* matView, T::TMatrix*
 	}
 
 	//카메라 행렬 세팅
-	m_vLight.x = m_matWorld._11;
-	m_vLight.y = m_matWorld._12;
-	m_vLight.z = m_matWorld._13;
+	m_vRight.x = m_matWorld._11;
+	m_vRight.y = m_matWorld._12;
+	m_vRight.z = m_matWorld._13;
 
 	m_vUp.x = m_matWorld._21;
 	m_vUp.y = m_matWorld._22;
@@ -94,9 +94,9 @@ AObject3D::AObject3D()
 	m_vColor = T::TVector4(1, 1, 1, 1);
 
 	//카메라 행렬 세팅
-	m_vLight.x = 1;
-	m_vLight.y = 0;
-	m_vLight.z = 0;
+	m_vRight.x = 1;
+	m_vRight.y = 0;
+	m_vRight.z = 0;
 
 	m_vUp.x = 0;
 	m_vUp.y = 1;
