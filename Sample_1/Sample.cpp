@@ -86,10 +86,10 @@ bool ASample::Frame()
     float y = m_MapObj.GetHeight(m_Camera.m_vCamera.x, m_Camera.m_vCamera.z);
     //m_Camera.m_vCamera = m_PlayerObj_1.m_vPos + m_PlayerObj_1.m_vLook * -1.0f * 5.0f + m_PlayerObj_1.m_vUp * 5.0f;//AVector3(0, 1500.0f, -300.0f);
 
-    if (AInput::Get().GetKey('W')) { m_Camera.MoveLook(g_fSecPerFrame * 100.0f); }
-    if (AInput::Get().GetKey('S')) { m_Camera.MoveLook(-g_fSecPerFrame * 100.0f); }
-    if (AInput::Get().GetKey('A')) { m_Camera.MoveSide(-g_fSecPerFrame * 100.0f); }
-    if (AInput::Get().GetKey('D')) { m_Camera.MoveSide(g_fSecPerFrame * 100.0f); }
+    if (AInput::Get().GetKey('W')) { m_Camera.MoveLook(g_fSecPerFrame * 200.0f); }
+    if (AInput::Get().GetKey('S')) { m_Camera.MoveLook(-g_fSecPerFrame * 200.0f); }
+    if (AInput::Get().GetKey('A')) { m_Camera.MoveSide(-g_fSecPerFrame * 200.0f); }
+    if (AInput::Get().GetKey('D')) { m_Camera.MoveSide(g_fSecPerFrame * 200.0f); }
 
     m_Camera.Update(T::TVector4(-dir.x, -dir.y, 0, 0));
     m_MapObj.Frame();
@@ -149,7 +149,7 @@ bool ASample::Release()
 
 ASample::ASample() {}
 ASample::~ASample() {}
-void ASample::CreateResizeDevice(UINT iWidth, UINT iHeight) { int k = 0; }
-void ASample::DeleteResizeDevice(UINT iWidth, UINT iHeight) { int k = 0; }
+//void ASample::CreateResizeDevice(UINT iWidth, UINT iHeight) { int k = 0; }
+//void ASample::DeleteResizeDevice(UINT iWidth, UINT iHeight) { int k = 0; }
 
 SIMPLE_ARUN();

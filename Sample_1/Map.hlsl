@@ -22,7 +22,7 @@ cbuffer cb0 : register(b0)
 	matrix	g_matProj	: packoffset(c8);
 
 	float4	Color0		: packoffset(c12);
-	float	TimerX : packoffset(c13.x);
+	float	TimerX		: packoffset(c13.x);
 };
 
 //SV(System Value)시스템값 : 정점인덱스, 페이스 인덱스 등..

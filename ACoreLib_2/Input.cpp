@@ -16,6 +16,13 @@ bool AInput::Frame()
 	//클라이언트(윈도우)좌표계
 	ScreenToClient(g_hWnd, &m_ptMouse);
 	g_ptMouse = m_ptMouse;
+	if(	m_ptMouse.x < 0 || m_ptMouse.x > g_rtClient.right ||
+		m_ptMouse.y < 0 || m_ptMouse.y > g_rtClient.bottom) 
+	{
+		//클라이언트 영역을 벗어나면 드래그 불가능하도록 설정
+		m_bDrag = false;
+	}
+
 
 	// 마우스 버튼 VK_LBUTTON,  VK_RBUTTON, VK_MBUTTON,
 	for (int iKey = 0; iKey < 256; iKey++)
@@ -52,13 +59,16 @@ bool AInput::Frame()
 	m_dwMouseState[1] = m_dwKeyState[VK_RBUTTON];
 	m_dwMouseState[2] = m_dwKeyState[VK_MBUTTON];
 
-	//마우스 드래그, 클릭 기능 추가
 
-	
-	if (m_dwKeyState[0] == KEY_PUSH)
+	//마우스 왼쪽 버튼을 누르고 있거나, 눌렀다 뗐을 경우 처리
+	if (m_dwMouseState[0] == KEY_PUSH)	//누르고 있을 경우 드래그 처리하며 이때 마우스의 위치를 읽는다.
 	{
 		m_bDrag= true;
 		m_ptMouseClick = m_ptMouse;
+	}
+	if (m_dwMouseState[0] == KEY_UP)
+	{
+		m_bDrag = false;				//눌렀다 뗐을 경우에는 드래그 기능을 막는다. (true일 경우 클릭하는 순간 계속 드래그 됨)
 	}
 	if(m_bDrag)
 	{
@@ -74,8 +84,8 @@ DWORD AInput::GetKey(DWORD dwKey) { return m_dwKeyState[dwKey]; }
 T::TVector2	AInput::GetDelta()
 {
 	T::TVector2 ret;
-	m_fRadianX += (AInput::Get().m_ptDeltaMouse.x / (float)g_rtClient.right) * ABASIS_PI;
-	m_fRadianY += (AInput::Get().m_ptDeltaMouse.y / (float)g_rtClient.bottom) * ABASIS_PI;
+	m_fRadianY += (AInput::Get().m_ptDeltaMouse.x / (float)g_rtClient.right) * ABASIS_PI;
+	m_fRadianX += (AInput::Get().m_ptDeltaMouse.y / (float)g_rtClient.bottom) * ABASIS_PI;
 
 	return TVector2(m_fRadianX, m_fRadianY);
 }

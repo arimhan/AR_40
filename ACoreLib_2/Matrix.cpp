@@ -103,7 +103,7 @@ namespace AMath
 	//외적을 통한 뷰 행렬 계산
 	AMatrix AMatrix::ViewLookAt(AVector3& vPosition, AVector3& vTarget, AVector3& vUp)
 	{
-		AMatrix mat;
+		AMatrix  mat;
 		AVector3 vDirection = (vTarget - vPosition).Normal();		//Z Axis
 		AVector3 vRightVector = (vUp ^ vDirection).Normal();		//X Axis
 		AVector3 vUpVector = (vDirection ^ vRightVector).Normal();	//Y Axis
@@ -162,7 +162,17 @@ namespace AMath
 		memcpy((void*)&mat, this, 16 * sizeof(float));
 		return mat;
 	}
-
+	AMatrix AMatrix::RotationYawPitchRoll(float yaw, float pitch, float roll)
+	{
+		AMatrix matY;
+		matY.YRotate(yaw);
+		AMatrix matX;
+		matX.XRotate(pitch);
+		AMatrix matZ;
+		matZ.ZRotate(roll);
+		AMatrix ret = matZ * matX * matY;
+		return ret;
+	}
 
 	AMatrix::AMatrix() 
 	{ 

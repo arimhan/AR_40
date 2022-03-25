@@ -51,7 +51,7 @@ namespace AMath
 		AMatrix	CreateViewLook(AVector3& vPosition, AVector3& vTarget, AVector3& vUp);
 		//원근 투영 행렬 계산
 		AMatrix	PerspectiveFovLH(float fNearPlane, float fFarPlane, float fovy, float Aspect);
-
+		static AMatrix RotationYawPitchRoll(float yaw, float pitch, float roll);
 
 	public:
 		AMatrix();
