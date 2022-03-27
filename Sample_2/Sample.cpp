@@ -3,13 +3,25 @@
 
 bool ASample::Init()
 {
-    //카메라 기능
-    m_Camera.Init();
 
-    /**/
     ATexture* pTex = I_Texture.Load(L"../../data/ui/save_0000_O-K.png");
     AShader* pVSShader = I_Shader.CreateVertexShader(m_pd3dDevice.Get(), L"Box.hlsl", "VS");
     AShader* pPSShader = I_Shader.CreatePixelShader(m_pd3dDevice.Get(), L"Box.hlsl", "PS");
+
+    //카메라 기능
+    m_Camera.Init();
+
+    //Frustum 추가하면서 카메라 위치 세팅 추가 (TopView)
+    m_Camera.CreateViewMatrix(T::TVector3(0, 300.0f, -100.0f), T::TVector3(0, 0.0f, 0));
+    m_Camera.CreateProjMatrix(XM_PI * 0.25f,
+        (float)g_rtClient.right / (float)g_rtClient.bottom, 0.1f, 1000.0f);
+    m_Camera.m_pColorTex = I_Texture.Load(L"../../data/Img/charport.bmp");
+    m_Camera.m_pVSShader = I_Shader.CreateVertexShader(m_pd3dDevice.Get(), L"Box.hlsl", "VSColor");
+    m_Camera.m_pPSShader = I_Shader.CreatePixelShader(m_pd3dDevice.Get(), L"Box.hlsl", "PSColor");
+    m_Camera.SetPosition(T::TVector3(0.0f, 1.0f, 0.0f));
+    if (!m_Camera.Create(m_pd3dDevice.Get(), m_pImmediateContext.Get())) 
+    { return false;}
+
 
     //Map Obj 불러오기
     m_MapObj.Init();
@@ -37,7 +49,7 @@ bool ASample::Init()
 
     //Map Obj위에서 움직이는 PlayerObj 불러오기
     m_PlayerObj_1.Init();
-    m_PlayerObj_1.m_pColorTex = I_Texture.Load(L"../../data/Img/ship.png");//charport.bmp"); //enemy.png
+    m_PlayerObj_1.m_pColorTex = I_Texture.Load(L"../../data/Img/charport.bmp"); //enemy.png
     m_PlayerObj_1.m_pVSShader = pVSShader;
     m_PlayerObj_1.m_pPSShader = pPSShader;
     m_PlayerObj_1.SetPosition(T::TVector3(0.0f, 1.0f, 0.0f));
@@ -68,6 +80,21 @@ bool ASample::Init()
     m_matWorld = matRotate;
     matRotate.XRotate(DegreeToRadian(90));*/
 
+    //Frustum 확인용 ObjList 추가
+    m_ObjList.resize(10);
+    for (int iObj = 0; iObj < m_ObjList.size(); iObj++)
+    {
+        m_ObjList[iObj].Init();
+        m_ObjList[iObj].m_pColorTex = I_Texture.Load(L"../../data/Img/ship.png");
+        m_ObjList[iObj].m_pVSShader = pVSShader;
+        m_ObjList[iObj].m_pPSShader = pPSShader;
+        m_ObjList[iObj].SetPosition(T::TVector3(-300.0f + rand() % 600, 100.0f, -300.0f + rand() % 600));
+        if(!m_ObjList[iObj].Create(m_pd3dDevice.Get(), m_pImmediateContext.Get()))
+        {
+            return false;
+        }
+    }
+
     return true;
 }
 
@@ -95,6 +122,20 @@ bool ASample::Frame()
     m_MapObj.Frame();
     m_PlayerObj_1.Frame();
 
+    //Frustum 출력 용 m_ObjList 세팅
+    T::TMatrix matRotObjList;
+    for (auto& obj : m_ObjList)
+    {
+        T::D3DXMatrixScaling(&matScale,
+            10 * cosf(g_fGameTimer), 10 * cosf(g_fGameTimer), 10 * cosf(g_fGameTimer));
+        T::D3DXMatrixRotationYawPitchRoll(&matRotObjList,
+            cosf(g_fGameTimer * obj.m_vPos.x * 0.001f) * XM_PI,
+            sinf(g_fGameTimer * obj.m_vPos.y * 0.001f) * XM_PI, 1.0f);
+        obj.m_matWorld = matScale * matRotObjList;
+        obj.m_vPos.y = m_MapObj.GetHeight(obj.m_vPos.x, obj.m_vPos.z) + 50;
+        obj.SetPosition(obj.m_vPos);
+        obj.Frame();
+    }
     return true;
 }
 
@@ -127,6 +168,26 @@ bool ASample::Render()
     //m_BackObj.SetMatrix(nullptr, &m_Camera.m_matView, &m_Camera.m_matProj);
     //m_BackObj.Render();
 
+    //Frustum 출력 용 m_ObjList 세팅
+    for (auto& obj : m_ObjList) //vector<ABoxObj>::iterator::value_type=ABoxObj
+    {
+        obj.SetMatrix(nullptr, &m_Camera.m_matView, &m_Camera.m_matProj);
+        if (m_Camera.ClassifyOBB(&obj.m_BoxCollision) == TRUE)
+        {
+            obj.Render();
+        }
+        else
+        {
+            obj.SetMatrix(nullptr,  &m_CameraTopView.m_matView,
+                                    &m_CameraTopView.m_matProj);
+            obj.m_ConstantList.Color = T::TVector4(0, 0, 0, 1);
+            obj.Render();
+        }
+    }
+
+    m_Camera.SetMatrix(nullptr, &m_CameraTopView.m_matView, &m_CameraTopView.m_matProj);
+    m_Camera.Render();
+
     wstring msg = L"[ FPS: ";
     msg += std::to_wstring(m_GameTimer.m_iFPS);
     msg += L"  GT: ";
@@ -141,8 +202,11 @@ bool ASample::Release()
     m_SkyObj.Release();
     m_MapObj.Release();
     m_PlayerObj_1.Release();
-    //m_BackObj.Release();
-
+    m_Camera.Release();
+    for(auto& obj : m_ObjList)
+    {
+        obj.Release();
+    }
     return true;
 }
 

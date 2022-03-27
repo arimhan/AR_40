@@ -1,13 +1,13 @@
 #include "Collision.h"
 
 
-bool  ACollision::SphereToPoint(ASphere sp, int x, int y)
+bool  ACollision::SphereToPoint(ASphere sp, int x, int y, float z)
 {
-	float fDistance = (sp.vCenter - T::TVector2(x, y)).Length();
+	float fDistance = (sp.vCenter - T::TVector3(x, y, z)).Length();
 	if (fDistance <= sp.fRadius) { return true; }
 	return false;
 }
-bool   ACollision::SphereToPoint(ASphere sp, T::TVector2 v)
+bool   ACollision::SphereToPoint(ASphere sp, T::TVector3 v)
 {
 	float fDistance = (sp.vCenter - v).Length();
 	if (fDistance <= sp.fRadius) { return true; }

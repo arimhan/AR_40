@@ -40,6 +40,7 @@ public:
 	float			m_fWidth;
 	float			m_fHeight;
 	ARect			m_rtCollision;
+	ABox			m_BoxCollision;
 	DWORD			m_dwCollisionType;
 	DWORD			m_dwSelectType;
 	DWORD			m_dwSelectState;

@@ -84,6 +84,9 @@ struct ARect
 };
 struct ABox
 {
+	T::TVector3 vList[8];
+	T::TVector3	vAxis[3];
+
 	T::TVector3 vMin;
 	T::TVector3 vMax;
 	T::TVector3 vMiddle;
@@ -121,15 +124,15 @@ struct ABox
 };
 struct ASphere
 {
-	T::TVector2 vCenter;
-	float    fRadius;
+	T::TVector3		vCenter;
+	float			fRadius;
 	ASphere() { fRadius = 3.0f; }
 };
 class ACollision
 {
 public:
-	static bool   SphereToPoint(ASphere rt, int x, int y);
-	static bool   SphereToPoint(ASphere rt, T::TVector2 v);
+	static bool   SphereToPoint(ASphere rt, int x, int y, float z);
+	static bool   SphereToPoint(ASphere rt, T::TVector3 v);
 	static bool   RectToPoint(ARect rt, int x, int y);
 	static bool   RectToPoint(ARect rt, T::TVector2 v);
 	static ACollisionResult    RectToRect(ARect, ARect);

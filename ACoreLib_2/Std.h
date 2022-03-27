@@ -14,14 +14,18 @@
 #include <atlconv.h> // A2W
 #include "Collision.h"
 #include <wrl.h> 
-#include "AMath.h"
-
 //3D
 #include <DirectXMath.h>
 #include <DirectXPackedVector.h>
 #include <DirectXCollision.h>
+#include "AMath.h"
 
 
+
+
+//#define Tex_Size		6
+//#define Plane_Size	6
+//#define Frustum_Size	8
 
 using namespace Microsoft::WRL;
 
