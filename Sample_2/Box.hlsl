@@ -23,7 +23,7 @@ cbuffer cb0 : register(b0)
 	matrix	g_matView	:	packoffset(c4);
 	matrix	g_matProj	:	packoffset(c8);
 	float4	Color0		:	packoffset(c12);
-	float	TimerX		: packoffset(c13.x);
+	float	TimerX		:	packoffset(c13.x);
 };
 
 VS_OUTPUT VS(VS_INPUT v)
@@ -62,14 +62,6 @@ VS_OUTPUT VSColor(VS_INPUT v)
 	return pOut;
 }
 
-//Frustum 확인용 ObjList 추가
-float4 PSColor(VS_OUTPUT input) : SV_TARGET
-{
-	float4 vColor = input.c;
-	vColor.a = 0.5f;
-	return vColor;
-}
-
 Texture2D		g_txColor	: register(t0);
 Texture2D		g_txMask	: register(t1);
 TextureCube		g_txCubeMap	: register(t3);	//3번으로 넘긴것 CubeMap
@@ -85,9 +77,9 @@ float4 PS(VS_OUTPUT input) : SV_TARGET
 	//소스알파(1) 마스크 이미지의 검정색 부분 -> 불투명
 	//소스알파(0) 마스크 이미지의 흰색 부분 -> 투명
 	//final.a = 1.0f; //-1.0f;
-	final = final * input.c;
+	final = final * Color0;
 
-	final = g_txCubeMap.Sample(g_Sample, input.r);
+	//final = g_txCubeMap.Sample(g_Sample, input.r);
 
 	return final;
 }
@@ -98,4 +90,12 @@ float4 PSAlphaBlend(VS_OUTPUT input) : SV_TARGET
 	float4 final = color * input.c;
 	final.a = color.a;
 	return final;
+}
+
+//Frustum 확인용 ObjList 추가
+float4 PSColor(VS_OUTPUT input) : SV_TARGET
+{
+	float4 vColor = input.c;
+	vColor.a = 0.5f;
+	return vColor;
 }

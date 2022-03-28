@@ -249,6 +249,7 @@ bool ADxObject::Release()
 	if (m_pConstantBuffer) m_pConstantBuffer->Release();	
 	if (m_pVertexLayout) m_pVertexLayout->Release();
 
+
 	m_pVertexBuffer = nullptr;
 	m_pIndexBuffer = nullptr;
 	m_pConstantBuffer = nullptr;

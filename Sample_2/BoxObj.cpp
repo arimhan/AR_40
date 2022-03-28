@@ -110,6 +110,7 @@ bool ABoxObj::SetVertexData()
 	m_VertexList[index].c = T::TVector4(1.0f, 1.0f, 1.0f, 1.0f);
 	m_VertexList[index].t = T::TVector2(1.0f, 1.0f);
 
+	GenAABB();
 	//아림Ver 수정 필요.
 	////앞면 Front
 	//m_VertexList[0] = AVertex(T::TVector3(-1.0f, 1.0f, -1.0f), T::TVector3(0.0f, 0.0f, -1.0f), T::TVector4(1.0f, 0.0f, 0.0f, 1.0f), T::TVector2(0.0f, 0.0f));
@@ -147,7 +148,9 @@ bool ABoxObj::SetVertexData()
 	//m_VertexList[22] = AVertex(T::TVector3(1.0f, -1.0f, -1.0f), T::TVector3(0.0f, -1.0f, 0.0f), T::TVector4(1.0f, 0.0f, 0.0f, 1.0f), T::TVector2(0.0f, 0.0f));
 	//m_VertexList[23] = AVertex(T::TVector3(-1.0f, -1.0f, -1.0f), T::TVector3(0.0f, -1.0f, 0.0f), T::TVector4(1.0f, 0.0f, 0.0f, 1.0f), T::TVector2(0.0f, 0.0f));
 	//
-	m_pTexCube = I_Texture.Load(L"../../data/sky/LobbyCube.dds");
+
+
+	//m_pTexCube = I_Texture.Load(L"../../data/sky/LobbyCube.dds");
 	
 	return true;
 }
@@ -189,7 +192,7 @@ bool ABoxObj::PostRender()
 	}
 	else
 	{
-		m_pContext->PSSetShaderResources(3, 1, m_pTexCube->m_pSRV.GetAddressOf());
+		//m_pContext->PSSetShaderResources(3, 1, m_pTexCube->m_pSRV.GetAddressOf());
 		m_pContext->DrawIndexed(m_IndexList.size(), 0, 0); //DirextXTK -> DirextTexture가 지원함..
 	}
 	return true;

@@ -24,7 +24,7 @@ bool AFrustum::Init()
 
 	return true;
 }
-bool AFrustum::CreateFrustum(T::TMatrix& matView, T::TMatrix& matProj) 
+void AFrustum::CreateFrustum(T::TMatrix& matView, T::TMatrix& matProj) 
 {
 	AFrustum::Init();
 	//똑같이 세팅할거니까 걍 Init함수 호출로 처리
@@ -83,7 +83,6 @@ bool AFrustum::CreateFrustum(T::TMatrix& matView, T::TMatrix& matProj)
 	m_Plane[4] = T::TPlane(m_vFrustum[4], m_vFrustum[5], m_vFrustum[1]);
 	m_Plane[5] = T::TPlane(m_vFrustum[3], m_vFrustum[2], m_vFrustum[6]); //762
 
-	return true;
 }
 
 BOOL AFrustum::ClassifyPoint(T::TVector3* v) 

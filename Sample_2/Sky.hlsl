@@ -30,7 +30,6 @@ cbuffer cb0 : register(b0)
 	matrix	g_matWorld	: packoffset(c0);
 	matrix	g_matView	: packoffset(c4);
 	matrix	g_matProj	: packoffset(c8);
-
 	float4	Color0		: packoffset(c12);
 	float	TimerX		: packoffset(c13.x);
 };
@@ -65,12 +64,12 @@ float4 GetTextureColor(uint index, float2 uv)
 	float4 fColor = float4(1, 1, 1, 1);
 	switch (index)
 	{
-	case 0: fColor = g_txColorArray[0].Sample(g_SamplePoint, uv); break;
-	case 1: fColor = g_txColorArray[1].Sample(g_SamplePoint, uv); break;
-	case 2: fColor = g_txColorArray[2].Sample(g_SamplePoint, uv); break;
-	case 3: fColor = g_txColorArray[3].Sample(g_SamplePoint, uv); break;
-	case 4: fColor = g_txColorArray[4].Sample(g_SamplePoint, uv); break;
-	case 5: fColor = g_txColorArray[5].Sample(g_SamplePoint, uv); break;
+		case 0: fColor = g_txColorArray[0].Sample(g_SamplePoint, uv); break;
+		case 1: fColor = g_txColorArray[1].Sample(g_SamplePoint, uv); break;
+		case 2: fColor = g_txColorArray[2].Sample(g_SamplePoint, uv); break;
+		case 3: fColor = g_txColorArray[3].Sample(g_SamplePoint, uv); break;
+		case 4: fColor = g_txColorArray[4].Sample(g_SamplePoint, uv); break;
+		case 5: fColor = g_txColorArray[5].Sample(g_SamplePoint, uv); break;
 	}
 	return fColor;
 }

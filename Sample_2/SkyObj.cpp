@@ -6,7 +6,6 @@ bool ASkyObj::SetVertexData()
 	m_VertexList.resize(24); //Box 면 6개, 정점 4개 6*4 =24
 	//차례대로 정점위치, 노멀값, 컬러값, UV : 라이트 방향에 따라 세팅
 	
-	m_VertexList.resize(24);
 	m_VertexList[0] = AVertex(T::TVector3(-1.0f, 1.0f, -1.0f), T::TVector3(0.0f, 0.0f, -1.0f), T::TVector4(1.0f, 0.0f, 0.0f, 1.0f), T::TVector2(0.0f, 0.0f));
 	m_VertexList[1] = AVertex(T::TVector3(1.0f, 1.0f, -1.0f), T::TVector3(0.0f, 0.0f, -1.0f), T::TVector4(1.0f, 0.0f, 0.0f, 1.0f), T::TVector2(1.0f, 0.0f));
 	m_VertexList[2] = AVertex(T::TVector3(1.0f, -1.0f, -1.0f), T::TVector3(0.0f, 0.0f, -1.0f), T::TVector4(1.0f, 0.0f, 0.0f, 1.0f), T::TVector2(1.0f, 1.0f));

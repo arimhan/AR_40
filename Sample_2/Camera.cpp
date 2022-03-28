@@ -5,7 +5,8 @@ bool ACamera::Init()
 {
     AFrustum::Init();
     CreateViewMatrix(m_vCamera, m_vTarget, m_vUp);
-    CreateProjMatrix(XM_PI * 0.25f, (float)g_rtClient.right / (float)g_rtClient.bottom, 0.1f, 5000.f);
+    CreateProjMatrix(XM_PI * 0.25f, 
+        (float)g_rtClient.right / (float)g_rtClient.bottom, 0.1f, 5000.f);
     UpdateVector();
     //T::D3DXMatrixLookAtLH(&m_matView, &m_vCamera, &m_vTarget, &m_vUp);
     ////m_matView.CreateViewLook(m_vCamera, m_vTarget, m_vUp);

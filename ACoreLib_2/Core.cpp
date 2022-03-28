@@ -62,7 +62,7 @@ bool ACore::CoreRender()
 	m_pImmediateContext->OMSetRenderTargets(1, m_pRenderTargetView.GetAddressOf(), m_pDepthStencilView.Get());
 	
 	m_pImmediateContext->PSSetSamplers(0, 1, &ADxState::m_pSSLinear);
-	m_pImmediateContext->PSSetSamplers(0, 1, &ADxState::m_pSSPoint);
+	m_pImmediateContext->PSSetSamplers(1, 1, &ADxState::m_pSSPoint);
 	m_pImmediateContext->OMSetDepthStencilState(ADxState::g_pDSSDepthEnable, 0x00);
 
 	//V키 누르면 와이어프레임 모드로 변환 기능 추가함.

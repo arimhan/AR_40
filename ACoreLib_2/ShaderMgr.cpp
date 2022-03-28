@@ -91,6 +91,7 @@ AShader* AShaderMgr::CreatePixelShader(ID3D11Device* pd3dDevice,
 	if (pData != nullptr) { return pData; }
 
 	auto pNewData = make_shared<AShader>();
+	//shared_ptr<AShader> pNewData = make_shared<AShader>();
 	if (!pNewData->CreatePixelShader(pd3dDevice, filename, entry))
 	{
 		return nullptr;

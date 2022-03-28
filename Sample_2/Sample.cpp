@@ -9,6 +9,10 @@ bool ASample::Init()
     AShader* pPSShader = I_Shader.CreatePixelShader(m_pd3dDevice.Get(), L"Box.hlsl", "PS");
 
     //카메라 기능
+    m_CameraTopView.CreateViewMatrix(T::TVector3(0, 3000.0f, -1), T::TVector3(0, 0.0f, 0));
+    m_CameraTopView.CreateProjMatrix(XM_PI * 0.25f, 
+        (float)g_rtClient.right / (float)g_rtClient.bottom, 1.0f, 30000.0f);
+    
     m_Camera.Init();
 
     //Frustum 추가하면서 카메라 위치 세팅 추가 (TopView)
@@ -81,11 +85,11 @@ bool ASample::Init()
     matRotate.XRotate(DegreeToRadian(90));*/
 
     //Frustum 확인용 ObjList 추가
-    m_ObjList.resize(10);
+    m_ObjList.resize(100);
     for (int iObj = 0; iObj < m_ObjList.size(); iObj++)
     {
         m_ObjList[iObj].Init();
-        m_ObjList[iObj].m_pColorTex = I_Texture.Load(L"../../data/Img/ship.png");
+        m_ObjList[iObj].m_pColorTex = I_Texture.Load(L"../../data/Img/KGCABK.bmp");
         m_ObjList[iObj].m_pVSShader = pVSShader;
         m_ObjList[iObj].m_pPSShader = pPSShader;
         m_ObjList[iObj].SetPosition(T::TVector3(-300.0f + rand() % 600, 100.0f, -300.0f + rand() % 600));
@@ -147,7 +151,7 @@ bool ASample::Render()
     m_SkyObj.m_matViewSky._42 = 0;
     m_SkyObj.m_matViewSky._43 = 0;
     T::TMatrix matRotation, matScale;
-    T::D3DXMatrixScaling(&matScale, 3000.0f, 3000.0f, 3000.0f);
+    T::D3DXMatrixScaling(&matScale, 10.0f, 10.0f, 10.0f);
     T::D3DXMatrixRotationY(&matRotation, g_fGameTimer * 0.00f);
 
     m_SkyObj.m_matWorld = matScale * matRotation;
@@ -174,6 +178,7 @@ bool ASample::Render()
         obj.SetMatrix(nullptr, &m_Camera.m_matView, &m_Camera.m_matProj);
         if (m_Camera.ClassifyOBB(&obj.m_BoxCollision) == TRUE)
         {
+            //Frustum Rendering
             obj.Render();
         }
         else

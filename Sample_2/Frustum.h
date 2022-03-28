@@ -10,7 +10,7 @@ public:
 	T::TVector3		m_vFrustum[8];
 public:
 	bool			Init();
-	bool			CreateFrustum(T::TMatrix& matView, T::TMatrix& matProj);
+	void			CreateFrustum(T::TMatrix& matView, T::TMatrix& matProj);
 
 	//C언어의 논리자료형, 정수형 4Byte, 초기값 쓰레기
 	BOOL			ClassifyPoint(T::TVector3* v);

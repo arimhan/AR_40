@@ -84,8 +84,117 @@ void AObject3D::SetMatrix(T::TMatrix* matWorld, T::TMatrix* matView, T::TMatrix*
 	m_vLook.y = m_matWorld._32;
 	m_vLook.z = m_matWorld._33;
 
+	T::D3DXVec3Normalize(&m_vRight, &m_vRight);
+	T::D3DXVec3Normalize(&m_vUp, &m_vUp);
+	T::D3DXVec3Normalize(&m_vLook, &m_vLook);
+
+	m_BoxCollision.vAxis[0] = m_vRight;
+	m_BoxCollision.vAxis[1] = m_vUp;
+	m_BoxCollision.vAxis[2] = m_vLook;
+
+	//GetAABB();
+	m_BoxCollision.vMin = T::TVector3(100000, 100000, 100000);
+	m_BoxCollision.vMax = T::TVector3(-100000, -100000, -100000);
+	for (int iV = 0; iV < 8; iV++)
+	{
+		T::TVector3 pos;
+		T::D3DXVec3TransformCoord(&pos, &m_BoxCollision.vList[iV], &m_matWorld);
+		if (m_BoxCollision.vMin.x > pos.x)
+		{
+			m_BoxCollision.vMin.x = pos.x;
+		}
+		if (m_BoxCollision.vMin.y > pos.y)
+		{
+			m_BoxCollision.vMin.y = pos.y;
+		}
+		if (m_BoxCollision.vMin.z > pos.z)
+		{
+			m_BoxCollision.vMin.z = pos.z;
+		}
+
+		if (m_BoxCollision.vMax.x < pos.x)
+		{
+			m_BoxCollision.vMax.x = pos.x;
+		}
+		if (m_BoxCollision.vMax.y < pos.y)
+		{
+			m_BoxCollision.vMax.y = pos.y;
+		}
+		if (m_BoxCollision.vMax.z < pos.z)
+		{
+			m_BoxCollision.vMax.z = pos.z;
+		}
+	}
+	T::TVector3 vHalf = m_BoxCollision.vMax - m_BoxCollision.vMiddle;
+	m_BoxCollision.size.x = fabs(T::D3DXVec3Dot(&m_BoxCollision.vAxis[0], &vHalf));
+	m_BoxCollision.size.y = fabs(T::D3DXVec3Dot(&m_BoxCollision.vAxis[1], &vHalf));
+	m_BoxCollision.size.z = fabs(T::D3DXVec3Dot(&m_BoxCollision.vAxis[2], &vHalf));
+	m_BoxCollision.vMiddle = (m_BoxCollision.vMin + m_BoxCollision.vMax);
+	m_BoxCollision.vMiddle /= 2.0f;
 }
 
+
+void AObject3D::GenAABB()
+{
+	//AABB구현
+	m_BoxCollision.vMin = T::TVector3(100000, 100000, 100000);
+	m_BoxCollision.vMax = T::TVector3(-100000, -100000, -100000);
+
+	for (int i = 0; i < m_VertexList.size(); i++)
+	{
+		//박스 충돌값의 min, max의 x,y,z값을 비교한다. (충돌값 체크)
+		if (m_BoxCollision.vMin.x > m_VertexList[i].p.x)
+		{
+			m_BoxCollision.vMin.x = m_VertexList[i].p.x;
+		}
+		if (m_BoxCollision.vMin.y > m_VertexList[i].p.y)
+		{
+			m_BoxCollision.vMin.y = m_VertexList[i].p.y;
+		}
+		if (m_BoxCollision.vMin.z > m_VertexList[i].p.z)
+		{
+			m_BoxCollision.vMin.z = m_VertexList[i].p.z;
+		}
+		//max 체크
+		if (m_BoxCollision.vMax.x < m_VertexList[i].p.x)
+		{
+			m_BoxCollision.vMax.x = m_VertexList[i].p.x;
+		}
+		if (m_BoxCollision.vMax.y < m_VertexList[i].p.y)
+		{
+			m_BoxCollision.vMax.y = m_VertexList[i].p.y;
+		}
+		if (m_BoxCollision.vMax.z < m_VertexList[i].p.z)
+		{
+			m_BoxCollision.vMax.z = m_VertexList[i].p.z;
+		}
+	}
+
+	// 4     5
+	// 
+	// 6     7
+
+	// 0     1
+	// 
+	// 2     3
+	m_BoxCollision.vList[0] = T::TVector3(//각VB의 좌표값을 위치 min,max로 표기한다. (-1,1,-1)
+		m_BoxCollision.vMin.x, m_BoxCollision.vMax.y, m_BoxCollision.vMin.z);
+	m_BoxCollision.vList[1] = T::TVector3(
+		m_BoxCollision.vMax.x, m_BoxCollision.vMax.y, m_BoxCollision.vMin.z);
+	m_BoxCollision.vList[2] = T::TVector3(
+		m_BoxCollision.vMin.x, m_BoxCollision.vMin.y, m_BoxCollision.vMin.z);
+	m_BoxCollision.vList[3] = T::TVector3(
+		m_BoxCollision.vMax.x, m_BoxCollision.vMin.y, m_BoxCollision.vMin.z);
+
+	m_BoxCollision.vList[4] = T::TVector3(
+		m_BoxCollision.vMin.x, m_BoxCollision.vMax.y, m_BoxCollision.vMax.z);
+	m_BoxCollision.vList[5] = T::TVector3(
+		m_BoxCollision.vMax.x, m_BoxCollision.vMax.y, m_BoxCollision.vMax.z);
+	m_BoxCollision.vList[6] = T::TVector3(
+		m_BoxCollision.vMin.x, m_BoxCollision.vMin.y, m_BoxCollision.vMax.z);
+	m_BoxCollision.vList[7] = T::TVector3(
+		m_BoxCollision.vMax.x, m_BoxCollision.vMin.y, m_BoxCollision.vMax.z);
+}
 
 
 AObject3D::AObject3D()
@@ -105,5 +214,14 @@ AObject3D::AObject3D()
 	m_vLook.x = 0;
 	m_vLook.y = 0;
 	m_vLook.z = 1;
+
+	m_BoxCollision.vAxis[0] = T::TVector3(1, 0, 0);
+	m_BoxCollision.vAxis[1] = T::TVector3(0, 1, 0);
+	m_BoxCollision.vAxis[2] = T::TVector3(0, 0, 1);
+	m_BoxCollision.size.x = 1.0f;
+	m_BoxCollision.size.y = 1.0f;
+	m_BoxCollision.size.z = 1.0f;
+	m_BoxCollision.vMin = T::TVector3(-1.0f, -1.0f, -1.0f);
+	m_BoxCollision.vMax = T::TVector3(1.0f, 1.0f, 1.0f);
 }
 AObject3D::~AObject3D() {}
