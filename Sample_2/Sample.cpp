@@ -146,25 +146,18 @@ bool ASample::Frame()
 bool ASample::Render()
 {
     //m_SkyObj 세팅 및 렌더링
-    m_SkyObj.m_matViewSky = m_Camera.m_matView;
-    m_SkyObj.m_matViewSky._41 = 0;
-    m_SkyObj.m_matViewSky._42 = 0;
-    m_SkyObj.m_matViewSky._43 = 0;
-    T::TMatrix matRotation, matScale;
-    T::D3DXMatrixScaling(&matScale, 10.0f, 10.0f, 10.0f);
-    T::D3DXMatrixRotationY(&matRotation, g_fGameTimer * 0.00f);
 
-    m_SkyObj.m_matWorld = matScale * matRotation;
-    m_SkyObj.SetMatrix(NULL, &m_SkyObj.m_matViewSky, &m_Camera.m_matProj);
-    m_pImmediateContext->RSSetState(ADxState::g_pRSNoneCullSolid);
-    m_pImmediateContext->PSSetSamplers(0, 1, &ADxState::m_pSSLinear);
-    m_pImmediateContext->PSSetSamplers(1, 1, &ADxState::m_pSSPoint);
+    m_SkyObj.SetMatrix(NULL, &m_Camera.m_matWorld, &m_Camera.m_matProj);
     m_SkyObj.Render();
 
-    //m_pImmediateContext->PSSetSamplers(0, 1, &ADxState::m_pSSLinear);
-    m_pImmediateContext->RSSetState(ADxState::g_pRSBackCullSolid);
+    if (m_bWireFrame)
+        m_pImmediateContext->RSSetState(ADxState::g_pRSBackCullWireFrame);
+    else
+        m_pImmediateContext->RSSetState(ADxState::g_pRSBackCullSolid);
+    m_pImmediateContext->PSSetSamplers(0, 1, &ADxState::m_pSSLinear);
+
     m_MapObj.SetMatrix(nullptr, &m_Camera.m_matView, &m_Camera.m_matProj);
-    m_MapObj.Render();
+    //m_MapObj.Render();
 
     m_PlayerObj_1.SetMatrix(nullptr, &m_Camera.m_matView, &m_Camera.m_matProj);
     m_PlayerObj_1.Render();

@@ -27,6 +27,12 @@
     <ClCompile Include="SkyObj.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
+    <ClCompile Include="Quadtree.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="Node.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="BoxObj.h">
@@ -48,6 +54,12 @@
       <Filter>헤더 파일</Filter>
     </ClInclude>
     <ClInclude Include="SkyObj.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="Quadtree.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="Node.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
   </ItemGroup>

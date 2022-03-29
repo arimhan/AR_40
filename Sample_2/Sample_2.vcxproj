@@ -151,7 +151,9 @@
     <ClInclude Include="Camera.h" />
     <ClInclude Include="Frustum.h" />
     <ClInclude Include="Map.h" />
+    <ClInclude Include="Node.h" />
     <ClInclude Include="PlaneObj.h" />
+    <ClInclude Include="Quadtree.h" />
     <ClInclude Include="Sample.h" />
     <ClInclude Include="SkyObj.h" />
   </ItemGroup>
@@ -160,7 +162,9 @@
     <ClCompile Include="Camera.cpp" />
     <ClCompile Include="Frustum.cpp" />
     <ClCompile Include="Map.cpp" />
+    <ClCompile Include="Node.cpp" />
     <ClCompile Include="PlaneObj.cpp" />
+    <ClCompile Include="Quadtree.cpp" />
     <ClCompile Include="Sample.cpp" />
     <ClCompile Include="SkyObj.cpp" />
   </ItemGroup>

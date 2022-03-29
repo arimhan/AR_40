@@ -31,6 +31,7 @@ public:
 	virtual void		UpdateData();
 	virtual void		SetMatrix(T::TMatrix* matWorld, T::TMatrix* matView, T::TMatrix* matProj);
 public:
+	virtual void		UpdateCollision();
 	virtual void		GenAABB();
 public:
 	AObject3D();

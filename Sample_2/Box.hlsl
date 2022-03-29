@@ -11,7 +11,6 @@ struct VS_OUTPUT
 	float3 n : NORMAL;
 	float4 c : COLOR0;			//INPUT 3 + W -> OUTPUT 4
 	float2 t : TEXCOORD0;
-
 	float3 r : TEXCOORD1;		//넘길 값 추가
 };
 
