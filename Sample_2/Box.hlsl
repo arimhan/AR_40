@@ -25,6 +25,13 @@ cbuffer cb0 : register(b0)
 	float	TimerX		:	packoffset(c13.x);
 };
 
+cbuffer cb1 : register(b1)
+{
+	//Light전용 거리, 위치값
+	float4 vLightDir : packoffset(c0);
+	float4 vLightPos : packoffset(c1);
+};
+
 VS_OUTPUT VS(VS_INPUT v)
 {
 	//hlsl에서 mul은 기본 내적으로 계산. 그러므로 행렬 전치처리를 해야 외적결과가 나온다.
@@ -39,8 +46,8 @@ VS_OUTPUT VS(VS_INPUT v)
 	float3 vNormal = mul(v.n, (float3x3)g_matWorld);
 	pOut.n = normalize(vNormal);
 	pOut.t = v.t;
-	float fDot = max(0.5f, dot(pOut.n, - Color0.xyz));
-	pOut.c = float4(fDot, fDot, fDot, 1);
+	float fDot = max(0.5f, dot(pOut.n, - vLightDir.xyz));
+	pOut.c = v.c * float4(fDot, fDot, fDot, 1) * Color0;
 
 	pOut.r = normalize(vLocal.xyz);
 

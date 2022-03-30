@@ -1,5 +1,27 @@
 #include "SkyObj.h"
 
+void ASkyObj::SetMatrix(T::TMatrix* matWorld, T::TMatrix* matView, T::TMatrix* matProj) 
+{
+	m_ConstantList.matWorld = m_matWorld.Transpose();
+	if (matWorld != nullptr)
+	{
+		m_ConstantList.matWorld = matWorld->Transpose();
+	}
+	if (matView != nullptr)
+	{
+		T::TMatrix matViewSky = *matView;
+		matViewSky._41 = 0;
+		matViewSky._42 = 0;
+		matViewSky._43 = 0;
+		m_ConstantList.matView = matViewSky.Transpose();
+	}
+	if (matProj != nullptr)
+	{
+		m_ConstantList.matProj = matProj->Transpose();
+	}
+	UpdateData();
+	UpdateCollision();
+}
 
 bool ASkyObj::SetVertexData() 
 {
@@ -40,6 +62,7 @@ bool ASkyObj::SetVertexData()
 	m_VertexList[22] = AVertex(T::TVector3(1.0f, -1.0f, 1.0f), T::TVector3(0.0f, -1.0f, 0.0f), T::TVector4(0.0f, 1.0f, 1.0f, 1.0f), T::TVector2(1.0f, 1.0f));
 	m_VertexList[23] = AVertex(T::TVector3(-1.0f, -1.0f, 1.0f), T::TVector3(0.0f, -1.0f, 0.0f), T::TVector4(0.0f, 1.0f, 1.0f, 1.0f), T::TVector2(0.0f, 1.0f));
 
+	GenAABB();
 	return true;
 }
 bool ASkyObj::SetIndexData()
@@ -87,6 +110,18 @@ bool ASkyObj::LoadTexture(const TCHAR* szColorFileName, const TCHAR* szMaskFileN
 	m_TextureDesc = m_pTexArray[0]->m_TextureDesc;
 	return true;
 }
+
+bool ASkyObj::Render() 
+{
+	PreRender();
+	m_pContext->RSSetState(ADxState::g_pRSNoneCullSolid);
+	m_pContext->PSSetSamplers(0, 1, &ADxState::m_pSSLinear);
+	m_pContext->PSSetSamplers(1, 1, &ADxState::m_pSSPoint);
+	Draw();
+	PostRender();
+	return true;
+}
+
 bool ASkyObj::PostRender() 
 {
 	//기본 방법. m_pTexArray에 이미지를 저장해 출력한다.

@@ -134,7 +134,23 @@ TVector2 AQuadtree::GetHeightFromNode(DWORD dwTL, DWORD dwTR, DWORD dwBL, DWORD 
 
 	//DWORD dwCellWidth = (dwEndCol - dwStartCol);
 	//DWORD dwCellHeight = (dwEndRow - dwStartRow);
-	return TVector2();
+	
+	for (DWORD dwRow = dwStartRow; dwRow < dwEndRow; dwRow++)
+	{
+		for (DWORD dwCol = dwStartCol; dwCol < dwEndCol; dwCol++)
+		{
+			if (m_pMap->m_VertexList[dwRow * m_iWidth + dwCol].p.y > vHeight.x)
+			{
+				vHeight.x = m_pMap->m_VertexList[dwRow * m_iWidth + dwCol].p.y;
+			}
+			if (m_pMap->m_VertexList[dwRow * m_iWidth + dwCol].p.y < vHeight.y)
+			{
+				vHeight.y = m_pMap->m_VertexList[dwRow * m_iWidth + dwCol].p.y;
+			}
+		}
+	}
+
+	return vHeight;
 }
 
 bool AQuadtree::AddObject(AMapObj* pObj)

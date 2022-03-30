@@ -9,7 +9,7 @@ float AMap::GetHeight(float fPosX, float fPosZ)
 	//m_iNumCols와 m_iNumRows은 가로/세로의 실제 크기값이다.
 
 	float fCellX = (float)(m_iNumCellCols * m_iCellDistance / 2.0f + fPosX);
-	float fCellZ = (float)(m_iNumCellRows * m_iCellDistance / 2.0f + fPosZ);
+	float fCellZ = (float)(m_iNumCellRows * m_iCellDistance / 2.0f - fPosZ);
 
 	//셀의 크기로 나누어 0~1 단위의 값으로 바꾸어 높이맵 배열에 접근한다.
 	fCellX /= (float)m_iCellDistance;		fCellZ /= (float)m_iCellDistance;
@@ -50,7 +50,7 @@ float AMap::GetHeight(float fPosX, float fPosZ)
 		float uy = B - A;	//A->B
 		float vy = C - A;	//A->C
 		//두 정점의 높이값의 차이를 비교하여 델타X의 값에 따라 보간값을 찾는다.
-		fHeight = A + Lerp(0.0f, uy, fDeltaX) + Lerp(0.0f, vy, fDeltaX);
+		fHeight = A + Lerp(0.0f, uy, fDeltaX) + Lerp(0.0f, vy, fDeltaZ);
 	}
 	//아래페이스를 기준으로 보간한다. DCB
 	else
@@ -132,6 +132,11 @@ bool AMap::CreateMap(UINT width, UINT height, float fDistance)
 	m_iNumCellCols = m_iNumCols - 1;
 	m_iNumCellRows = m_iNumRows - 1;
 	m_iNumFaces = m_iNumCellCols * m_iNumCellRows * 2;
+
+	m_BoxCollision.vMax.x = (m_iNumCols / 2 * m_iCellDistance);
+	m_BoxCollision.vMin.x = -m_BoxCollision.vMax.x;
+	m_BoxCollision.vMax.z = (m_iNumRows / 2 * m_iCellDistance);
+	m_BoxCollision.vMin.z = -m_BoxCollision.vMax.z;
 
 	return true;
 }
