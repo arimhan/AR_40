@@ -41,7 +41,7 @@ public:
 	void		SetIndexData(ANode* pNode);
 	bool		CreateIndexBuffer(ANode* pNode);
 	void		Update(ACamera* pCamera);
-	void		Render();
+	bool		Render();
 	void		RenderObject(ANode* pNode);
 	void		RenderTile(ANode* pNode);
 

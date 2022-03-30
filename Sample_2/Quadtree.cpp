@@ -1,4 +1,7 @@
 #include "Quadtree.h"
+
+//#include "Object3D.h"
+
 int AQuadtree::g_iCount = 0;
 
 void AQuadtree::Build(int iWidth, int iHeight, int iMaxDepth)
@@ -84,11 +87,53 @@ void AQuadtree::BuildTree(ANode* pParent)
 
 ABox AQuadtree::GenBoundingBox(ANode* pNode)
 {
-	return ABox();
+	//Box를 두 점으로 표기. 0번은 코너리스트 0번, 24번은 코너리스트 3번으로 두 점 min, max를 찍어 생성가능하다.
+	TVector3 v0, v4;
+	v0 = m_pMap->m_VertexList[pNode->m_CornerList[0]].p;	//0
+	v4 = m_pMap->m_VertexList[pNode->m_CornerList[3]].p;	//24
+
+	pNode->m_Box.vMin.x = v0.x;
+	pNode->m_Box.vMin.z = v4.z;
+	pNode->m_Box.vMax.x = v4.x;
+	pNode->m_Box.vMax.z = v0.z;
+
+	TVector2 vHeight = GetHeightFromNode(	pNode->m_CornerList[0], 
+											pNode->m_CornerList[1], 
+											pNode->m_CornerList[2], 
+											pNode->m_CornerList[3]);
+	pNode->m_Box.vMin.y = vHeight.y;
+	pNode->m_Box.vMax.y = vHeight.x;
+	pNode->m_Box.vAxis[0] = TVector3(1, 0, 0);
+	pNode->m_Box.vAxis[1] = TVector3(0, 1, 0);
+	pNode->m_Box.vAxis[2] = TVector3(0, 0, 1);
+
+	pNode->m_Box.size.x = (pNode->m_Box.vMax.x - pNode->m_Box.vMin.x) / 2.0f;
+	pNode->m_Box.size.y = (pNode->m_Box.vMax.y - pNode->m_Box.vMin.y) / 2.0f;
+	pNode->m_Box.size.z = (pNode->m_Box.vMax.z - pNode->m_Box.vMin.z) / 2.0f;
+
+	pNode->m_Box.vMiddle = (pNode->m_Box.vMax + pNode->m_Box.vMin);
+	pNode->m_Box.vMiddle /= 2.0f;
+
+	return pNode->m_Box;
 }
 
 TVector2 AQuadtree::GetHeightFromNode(DWORD dwTL, DWORD dwTR, DWORD dwBL, DWORD dwBR)
 {
+	assert(m_pMap);
+
+	DWORD dwStartRow = dwTL / m_iWidth;
+	DWORD dwEndRow = dwBL / m_iWidth;
+
+	DWORD dwStartCol = dwTL % m_iWidth;
+	DWORD dwEndCol = dwTR % m_iWidth;
+
+	TVector2 vHeight;
+	vHeight.x = -999999.0f;
+	vHeight.y = 999999.0f;
+
+
+	//DWORD dwCellWidth = (dwEndCol - dwStartCol);
+	//DWORD dwCellHeight = (dwEndRow - dwStartRow);
 	return TVector2();
 }
 
@@ -128,29 +173,128 @@ void AQuadtree::DelDynamicObject(ANode* pNode)
 
 ANode* AQuadtree::FindNode(ANode* pNode, ABox& box)
 {
-	return nullptr;
+	//pNode 가 있을 때 까지 Node 의 갯수만큼 돌면서 자식노드를 찾는다
+	do 
+	{
+		for(int iNode =0; iNode<4; iNode++)
+		{
+			if (pNode->m_pChild[iNode] != nullptr)
+			{
+				if (CheckBox(pNode->m_pChild[iNode]->m_Box, box))
+				{
+					g_pQueue.push(pNode->m_pChild[iNode]);
+					break;
+				}
+			}
+		}
+		if (g_pQueue.empty()) break;
+		pNode = g_pQueue.front();
+		g_pQueue.pop();
+	} while (pNode);
+	return pNode;
 }
 
 bool AQuadtree::CheckBox(ABox& abox, ABox& bbox)
 {
-	return true;
+	//abox와 bbox의 충돌체크를 한다. AABB abox와 bbox가 겹칠경우 return true를 한다.
+	if (abox.vMin.x <= bbox.vMin.x && abox.vMin.y <= bbox.vMin.y && abox.vMin.z <= bbox.vMin.z)
+	{
+		if (abox.vMax.x >= bbox.vMax.x && abox.vMax.y >= bbox.vMax.y && abox.vMax.z >= bbox.vMax.z)
+		{
+			return true;
+		}
+	}
+	return false;
 }
 
 void AQuadtree::SetIndexData(ANode* pNode)
 {
+	//m_pMap가 존재할 때에만 진행되도록? 디버깅 모드에서만 발동하는 에러 검출용 코드
+	assert(m_pMap);
+
+	//Row : 행 (가로)
+	//Col : 열 (세로)
+	DWORD dwStartRow = pNode->m_CornerList[0] / m_iWidth;
+	DWORD dwEndRow = pNode->m_CornerList[2] / m_iWidth;
+
+	DWORD dwStartCol = pNode->m_CornerList[0] % m_iWidth;
+	DWORD dwEndCol = pNode->m_CornerList[1] % m_iWidth;
+
+	DWORD dwCellWidth = (dwEndCol - dwStartCol);
+	DWORD dwCellHeight = (dwEndRow - dwStartRow);
+
+	int iNumFace = dwCellWidth * dwCellHeight * 2; //삼각형2개니까 2배
+	pNode->m_IndexList.resize(iNumFace * 3);	//Index는 삼각형 그릴 시 3점이 필요하므로 3배
+	UINT iIndex = 0;
+	for (DWORD iRow = dwStartRow; iRow < dwStartRow; iRow++)
+	{
+		for (DWORD iCol = dwStartCol; iCol < dwStartCol; iCol++)
+		{
+			pNode->m_IndexList[iIndex + 0] = iRow * m_iWidth + iCol;
+			pNode->m_IndexList[iIndex + 1] = (iRow * m_iWidth + iCol) + 1;
+			pNode->m_IndexList[iIndex + 2] = (iRow + 1) * m_iWidth + iCol;
+
+			pNode->m_IndexList[iIndex + 3] = pNode->m_IndexList[iIndex + 2];
+			pNode->m_IndexList[iIndex + 4] = pNode->m_IndexList[iIndex + 1];
+			pNode->m_IndexList[iIndex + 5] = pNode->m_IndexList[iIndex + 2] + 1;
+			iIndex += 6;
+		}			
+	}
 }
 
 bool AQuadtree::CreateIndexBuffer(ANode* pNode)
 {
+
+	HRESULT hr;
+	if (pNode->m_IndexList.size() <= 0) return true;
+
+	D3D11_BUFFER_DESC bd;
+	ZeroMemory(&bd, sizeof(D3D11_BUFFER_DESC));
+	bd.ByteWidth = sizeof(DWORD) *pNode->m_IndexList.size();
+	bd.Usage = D3D11_USAGE_DEFAULT;
+	bd.BindFlags = D3D11_BIND_INDEX_BUFFER;
+
+	D3D11_SUBRESOURCE_DATA sd;
+	ZeroMemory(&sd, sizeof(D3D11_SUBRESOURCE_DATA));
+	sd.pSysMem = &pNode->m_IndexList.at(0);
+
+	if(FAILED(hr = m_pMap->m_pd3dDevice->CreateBuffer(&bd, &sd, 
+		pNode->m_pIndexBuffer.GetAddressOf())))
+	{
+		return false;
+	}
 	return true;
 }
 
 void AQuadtree::Update(ACamera* pCamera)
 {
+	g_pDrawLeafNodes.clear();
+	m_pObjList.clear();
+	RenderTile(m_pRootNode);
 }
 
-void AQuadtree::Render()
+bool AQuadtree::Render()
 {
+	m_pMap->PreRender();
+	m_pMap->Draw();
+
+	for (int iNode = 0; iNode < g_pDrawLeafNodes.size(); iNode++)
+	{
+		m_pMap->m_ConstantList.Color = T::TVector4(1, 1, 0, 1);
+		m_pMap->m_pContext->UpdateSubresource(m_pMap->m_pConstantBuffer, 
+			0, NULL, &m_pMap->m_ConstantList, 0, 0);
+		
+		m_pMap->m_pContext->IASetIndexBuffer(g_pDrawLeafNodes[iNode]->
+			m_pIndexBuffer.Get(), DXGI_FORMAT_R32_UINT, 0);
+		m_pMap->m_pContext->DrawIndexed(g_pDrawLeafNodes[iNode]->m_IndexList.size(), 0, 0);
+	}
+	for (auto obj : m_pObjList)
+	{
+		obj->pObject->SetMatrix(&obj->matWorld, &m_pMap->m_matView, &m_pMap->m_matProj);
+		obj->pObject->m_ConstantList.Color = T::TVector4(1, 1, 1, 1);
+		obj->pObject->Render();
+	}
+	return true;
 }
 
 void AQuadtree::RenderObject(ANode* pNode)
@@ -171,10 +315,42 @@ void AQuadtree::RenderObject(ANode* pNode)
 
 void AQuadtree::RenderTile(ANode* pNode)
 {
+	if (pNode == nullptr) return;
+	if (m_pCamera->ClassifyOBB(&pNode->m_Box) == TRUE)
+	{
+		for (auto obj : pNode->m_pStaticObjList)
+		{
+			if (m_pCamera->ClassifyOBB(&obj->box) == TRUE)
+			{
+				m_pObjList.push_back(obj);
+			}
+		}
+		if (pNode->m_bLeaf == true)
+		{
+			g_pDrawLeafNodes.push_back(pNode);
+			return;
+		}
+		for (int iNode = 0; iNode < pNode->m_pChild.size(); iNode++)
+		{
+			RenderTile(pNode->m_pChild[iNode]);
+		}
+	}
 }
 
 void AQuadtree::PrintObjList(ANode* pNode)
 {
+	if (pNode == nullptr) return;
+	for (list<AMapObj*>::iterator iter = pNode->m_pDynamicObjList.begin(); 
+		iter != pNode->m_pDynamicObjList.end(); iter++)
+	{
+		AMapObj* pObj = *iter;
+		cout << "[" << pNode->m_iIndex << "]" << (int)pObj->vPos.x << ":" << (int)pObj->vPos.y << " ";
+	}
+	cout << endl;
+	for (int iNode = 0; iNode << 4; iNode++)
+	{
+		PrintObjList(pNode->m_pChild[iNode]);
+	}
 }
 
 

@@ -13,6 +13,8 @@ public:
 	T::TVector4			m_vColor;
 
 	T::TMatrix			m_matWorld;
+	T::TMatrix			m_matView;
+	T::TMatrix			m_matProj;
 
 	float				m_fAlpha = 0.0f;
 	bool				m_bFadeIn = false;

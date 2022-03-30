@@ -183,6 +183,14 @@ bool ADxObject::Create(ID3D11Device* pd3dDevice, ID3D11DeviceContext* pContext,
 }
 bool ADxObject::Init() { return true; }
 bool ADxObject::Frame() { return true; }
+bool ADxObject::Render()
+{
+	PreRender();
+	Draw();
+	PostRender();
+	return true;
+}
+
 bool ADxObject::PreRender()
 {
 	if (m_pColorTex != nullptr)
@@ -191,10 +199,8 @@ bool ADxObject::PreRender()
 		m_pContext->PSSetShaderResources(1, 1, m_pMaskTex->m_pSRV.GetAddressOf());
 	return true;
 }
-bool ADxObject::Render()
-{	
-	PreRender();
-	
+bool ADxObject::Draw()
+{
 	m_pContext->UpdateSubresource(m_pConstantBuffer, 0, NULL, &m_ConstantList, 0, 0);
 	m_pContext->GSSetShader(nullptr, NULL, 0);
 	m_pContext->HSSetShader(nullptr, NULL, 0);
@@ -218,7 +224,7 @@ bool ADxObject::Render()
 		m_pContext->OMSetBlendState(ADxState::m_AlphaBlendDisable, 0, -1);
 	}
 	m_pContext->IASetInputLayout(m_pVertexLayout);
-	
+
 	UINT StartSlot;
 	UINT NumBuffers;
 	UINT Strides = sizeof(AVertex);
@@ -229,11 +235,11 @@ bool ADxObject::Render()
 	m_pContext->VSSetConstantBuffers(0, 1, &m_pConstantBuffer);
 	m_pContext->PSSetConstantBuffers(0, 1, &m_pConstantBuffer);
 	m_pContext->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
-		//D3D_PRIMITIVE_TOPOLOGY_POINTLIST ,D3D_PRIMITIVE_TOPOLOGY_LINELIST
+	//D3D_PRIMITIVE_TOPOLOGY_POINTLIST ,D3D_PRIMITIVE_TOPOLOGY_LINELIST
 
-	PostRender();
 	return true;
 }
+
 bool ADxObject::PostRender()
 {
 	if (m_IndexList.size() <= 0)
