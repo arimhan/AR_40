@@ -87,8 +87,8 @@ bool AIntroWorld::Release()
 bool AIntroWorld::CreateModelType()
 {
 	//¹è°æ (kgcabk)
-	AShader* pVSShader = I_Shader.CreateVertexShader(m_pd3dDevice, L"Shader.txt", "VS");
-	AShader* pPSShader = I_Shader.CreatePixelShader(m_pd3dDevice, L"Shader.txt", "PSAlphaBlend");
+	AShader* pVShader = I_Shader.CreateVertexShader(m_pd3dDevice, L"Shader.txt", "VS");
+	AShader* pPShader = I_Shader.CreatePixelShader(m_pd3dDevice, L"Shader.txt", "PSAlphaBlend");
 	shared_ptr<AImageObject> Obj(new AImageObject);
 	Obj->m_csName = L"AImageObject:bk";
 	Obj->Init();
@@ -96,8 +96,8 @@ bool AIntroWorld::CreateModelType()
 	Obj->SetPosition(AVector2(0, 0));
 	Obj->m_pColorTex = m_pColorTex;
 	Obj->m_pMaskTex = nullptr;
-	Obj->m_pVSShader = pVSShader;
-	Obj->m_pPSShader = pPSShader;
+	Obj->m_pVShader = pVShader;
+	Obj->m_pPShader = pPShader;
 
 	if (!Obj->Create(m_pd3dDevice, m_pContext)) { return false; }
 

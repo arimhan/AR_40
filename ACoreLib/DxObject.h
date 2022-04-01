@@ -79,8 +79,8 @@ class ADxObject : public ABaseObject
 public:
 	ATexture*	m_pColorTex = nullptr;
 	ATexture*	m_pMaskTex	= nullptr;
-	AShader*	m_pVSShader = nullptr;
-	AShader*	m_pPSShader = nullptr;
+	AShader*	m_pVShader = nullptr;
+	AShader*	m_pPShader = nullptr;
 public:
 
 	ID3D11BlendState*			m_AlphaBlend;

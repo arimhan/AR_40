@@ -35,12 +35,12 @@ bool ADxObject::SetConstantData()
 }
 bool ADxObject::CreateVertexShader(const TCHAR* szFile)
 {
-	m_pVSShader = I_Shader.CreateVertexShader(m_pd3dDevice, szFile, "VS");
+	m_pVShader = I_Shader.CreateVertexShader(m_pd3dDevice, szFile, "VS");
 	return true;
 }
 bool ADxObject::CreatePixelShader(const TCHAR* szFile)
 {
-	m_pPSShader = I_Shader.CreatePixelShader(m_pd3dDevice, szFile, "PS");
+	m_pPShader = I_Shader.CreatePixelShader(m_pd3dDevice, szFile, "PS");
 	return true;
 }
 //VertexBuffer, IndexBuffer, ConstantBuffer 积己 规过 悼老------------
@@ -109,8 +109,8 @@ bool ADxObject::CreateInputLayout()
 	};
 	UINT NumElements = sizeof(layout) / sizeof(layout[0]);
 	HRESULT hr = m_pd3dDevice->CreateInputLayout(layout, NumElements,
-		m_pVSShader->m_pVSCodeResult->GetBufferPointer(), 
-		m_pVSShader->m_pVSCodeResult->GetBufferSize(), &m_pVertexLayout);
+		m_pVShader->m_pVSCodeResult->GetBufferPointer(), 
+		m_pVShader->m_pVSCodeResult->GetBufferSize(), &m_pVertexLayout);
 	if (FAILED(hr)) { return false; }
 	return true;
 }
@@ -174,10 +174,10 @@ bool ADxObject::Render()
 		m_pContext->PSSetShaderResources(0, 1, m_pColorTex->m_pSRV.GetAddressOf());
 	if(m_pMaskTex != nullptr)
 		m_pContext->PSSetShaderResources(1, 1, m_pMaskTex->m_pSRV.GetAddressOf());
-	if (m_pVSShader != nullptr)
-		m_pContext->VSSetShader(m_pVSShader->m_pVertexShader, NULL, 0);
-	if (m_pPSShader != nullptr)
-		m_pContext->PSSetShader(m_pPSShader->m_pPixelShader, NULL, 0);
+	if (m_pVShader != nullptr)
+		m_pContext->VSSetShader(m_pVShader->m_pVertexShader, NULL, 0);
+	if (m_pPShader != nullptr)
+		m_pContext->PSSetShader(m_pPShader->m_pPixelShader, NULL, 0);
 
 	if (m_bAlphaBlend)
 	{

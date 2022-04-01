@@ -98,16 +98,16 @@ bool AIntroWorld::Load(wstring file)
 	}
 
 	//¹è°æ (kgcabk)
-	AShader* pVSShader = I_Shader.CreateVertexShader(m_pd3dDevice, L"Shader.txt", "VS");
-	AShader* pPSShader = I_Shader.CreatePixelShader(m_pd3dDevice, L"Shader.txt", "PSAlphaBlend");
+	AShader* pVShader = I_Shader.CreateVertexShader(m_pd3dDevice, L"Shader.txt", "VS");
+	AShader* pPShader = I_Shader.CreatePixelShader(m_pd3dDevice, L"Shader.txt", "PSAlphaBlend");
 	AImageObject* Obj = new AImageObject;
 	Obj->Init();
 	Obj->SetRectDraw({ 0,0 ,g_rtClient.right, g_rtClient.bottom });
 	Obj->SetPosition(AVector2(g_rtClient.right / 2.0f, g_rtClient.bottom / 2.0f));
 	Obj->m_pColorTex = m_pColorTex;
 	Obj->m_pMaskTex = nullptr;
-	Obj->m_pVSShader = pVSShader;
-	Obj->m_pPSShader = pPSShader;
+	Obj->m_pVShader = pVShader;
+	Obj->m_pPShader = pPShader;
 
 	if (!Obj->Create(m_pd3dDevice, m_pContext)) { return false; }
 

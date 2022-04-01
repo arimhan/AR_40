@@ -19,6 +19,9 @@
     <Filter Include="Math">
       <UniqueIdentifier>{34509274-334e-4f55-8038-4cf05db4bce0}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Obj">
+      <UniqueIdentifier>{860c3821-f63c-4cea-bb6c-182b8d5b76f6}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Core.cpp">
@@ -83,6 +86,24 @@
     </ClCompile>
     <ClCompile Include="..\ACoreLib2\AMath.cpp">
       <Filter>Math</Filter>
+    </ClCompile>
+    <ClCompile Include="PlaneObj.cpp">
+      <Filter>Obj</Filter>
+    </ClCompile>
+    <ClCompile Include="Camera.cpp">
+      <Filter>Obj</Filter>
+    </ClCompile>
+    <ClCompile Include="BoxObj.cpp">
+      <Filter>Obj</Filter>
+    </ClCompile>
+    <ClCompile Include="Node.cpp">
+      <Filter>Obj</Filter>
+    </ClCompile>
+    <ClCompile Include="SkyObj.cpp">
+      <Filter>Obj</Filter>
+    </ClCompile>
+    <ClCompile Include="Frustum.cpp">
+      <Filter>Obj</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -151,6 +172,24 @@
     </ClInclude>
     <ClInclude Include="..\ACoreLib2\AMath.h">
       <Filter>Math</Filter>
+    </ClInclude>
+    <ClInclude Include="PlaneObj.h">
+      <Filter>Obj</Filter>
+    </ClInclude>
+    <ClInclude Include="BoxObj.h">
+      <Filter>Obj</Filter>
+    </ClInclude>
+    <ClInclude Include="Frustum.h">
+      <Filter>Obj</Filter>
+    </ClInclude>
+    <ClInclude Include="SkyObj.h">
+      <Filter>Obj</Filter>
+    </ClInclude>
+    <ClInclude Include="Camera.h">
+      <Filter>Obj</Filter>
+    </ClInclude>
+    <ClInclude Include="Node.h">
+      <Filter>Obj</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

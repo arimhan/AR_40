@@ -41,12 +41,12 @@ bool ADxObject::SetConstantData()
 }
 bool ADxObject::CreateVertexShader(const TCHAR* szFile)
 {
-	m_pVSShader = I_Shader.CreateVertexShader(m_pd3dDevice, szFile, "VS");
+	m_pVShader = I_Shader.CreateVertexShader(m_pd3dDevice, szFile, "VS");
 	return true;
 }
 bool ADxObject::CreatePixelShader(const TCHAR* szFile)
 {
-	m_pPSShader = I_Shader.CreatePixelShader(m_pd3dDevice, szFile, "PS");
+	m_pPShader = I_Shader.CreatePixelShader(m_pd3dDevice, szFile, "PS");
 	return true;
 }
 bool ADxObject::CreateVertexBuffer()
@@ -125,8 +125,8 @@ bool ADxObject::CreateInputLayout()
 	};
 	UINT NumElements = sizeof(layout) / sizeof(layout[0]);
 	HRESULT hr = m_pd3dDevice->CreateInputLayout(layout,NumElements,
-		m_pVSShader->m_pVSCodeResult->GetBufferPointer(),
-		m_pVSShader->m_pVSCodeResult->GetBufferSize(),&m_pVertexLayout);
+		m_pVShader->m_pVSCodeResult->GetBufferPointer(),
+		m_pVShader->m_pVSCodeResult->GetBufferSize(),&m_pVertexLayout);
 	if (FAILED(hr))
 	{
 		return false;
@@ -206,13 +206,13 @@ bool ADxObject::Draw()
 	m_pContext->HSSetShader(nullptr, NULL, 0);
 	m_pContext->DSSetShader(nullptr, NULL, 0);
 
-	if (m_pVSShader != nullptr)
+	if (m_pVShader != nullptr)
 	{
-		m_pContext->VSSetShader(m_pVSShader->m_pVertexShader, NULL, 0);
+		m_pContext->VSSetShader(m_pVShader->m_pVertexShader, NULL, 0);
 	}
-	if (m_pPSShader != nullptr)
+	if (m_pPShader != nullptr)
 	{
-		m_pContext->PSSetShader(m_pPSShader->m_pPixelShader, NULL, 0);
+		m_pContext->PSSetShader(m_pPShader->m_pPixelShader, NULL, 0);
 	}
 
 	if (m_bAlphaBlend)

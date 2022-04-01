@@ -5,8 +5,8 @@ bool ASample::Init()
 {
 
     ATexture* pTex = I_Texture.Load(L"../../data/ui/save_0000_O-K.png");
-    AShader* pVSShader = I_Shader.CreateVertexShader(m_pd3dDevice.Get(), L"Box.hlsl", "VS");
-    AShader* pPSShader = I_Shader.CreatePixelShader(m_pd3dDevice.Get(), L"Box.hlsl", "PS");
+    AShader* pVShader = I_Shader.CreateVertexShader(m_pd3dDevice.Get(), L"Box.hlsl", "VS");
+    AShader* pPShader = I_Shader.CreatePixelShader(m_pd3dDevice.Get(), L"Box.hlsl", "PS");
 
     //카메라 기능
     m_CameraTopView.CreateViewMatrix(T::TVector3(0, 3000.0f, -1), T::TVector3(0, 0.0f, 0));
@@ -20,8 +20,8 @@ bool ASample::Init()
     m_Camera.CreateProjMatrix(XM_PI * 0.25f,
         (float)g_rtClient.right / (float)g_rtClient.bottom, 0.1f, 1000.0f);
     m_Camera.m_pColorTex = I_Texture.Load(L"../../data/Img/charport.bmp");
-    m_Camera.m_pVSShader = I_Shader.CreateVertexShader(m_pd3dDevice.Get(), L"Box.hlsl", "VSColor");
-    m_Camera.m_pPSShader = I_Shader.CreatePixelShader(m_pd3dDevice.Get(), L"Box.hlsl", "PSColor");
+    m_Camera.m_pVShader = I_Shader.CreateVertexShader(m_pd3dDevice.Get(), L"Box.hlsl", "VSColor");
+    m_Camera.m_pPShader = I_Shader.CreatePixelShader(m_pd3dDevice.Get(), L"Box.hlsl", "PSColor");
     m_Camera.SetPosition(T::TVector3(0.0f, 1.0f, 0.0f));
     if (!m_Camera.Create(m_pd3dDevice.Get(), m_pImmediateContext.Get())) 
     { return false;}
@@ -35,8 +35,8 @@ bool ASample::Init()
     ATexture* pTexMap = I_Texture.Load(L"../../data/map/020.bmp");  //전체지형 이미지
     m_MapObj.m_pColorTex = pTexMap;
 
-    m_MapObj.m_pVSShader = I_Shader.CreateVertexShader(m_pd3dDevice.Get(), L"Map.hlsl", "VS");
-    m_MapObj.m_pPSShader = I_Shader.CreatePixelShader(m_pd3dDevice.Get(), L"Map.hlsl", "PS");
+    m_MapObj.m_pVShader = I_Shader.CreateVertexShader(m_pd3dDevice.Get(), L"Map.hlsl", "VS");
+    m_MapObj.m_pPShader = I_Shader.CreatePixelShader(m_pd3dDevice.Get(), L"Map.hlsl", "PS");
 
     //정점개수 (2n승 +1. ex 8 +1 = 9..)
     m_MapObj.CreateMap(m_MapObj.m_iNumCols, m_MapObj.m_iNumRows, 20.0f);
@@ -54,8 +54,8 @@ bool ASample::Init()
     //Map Obj위에서 움직이는 PlayerObj 불러오기
     m_PlayerObj_1.Init();
     m_PlayerObj_1.m_pColorTex = I_Texture.Load(L"../../data/Img/charport.bmp"); //enemy.png
-    m_PlayerObj_1.m_pVSShader = pVSShader;
-    m_PlayerObj_1.m_pPSShader = pPSShader;
+    m_PlayerObj_1.m_pVShader = pVShader;
+    m_PlayerObj_1.m_pPShader = pPShader;
     m_PlayerObj_1.SetPosition(T::TVector3(0.0f, 1.0f, 0.0f));
     if (!m_PlayerObj_1.Create(m_pd3dDevice.Get(), m_pImmediateContext.Get())) { return false; }
 
@@ -69,8 +69,8 @@ bool ASample::Init()
     //Z버퍼링 비교할 Obj 출력
     m_BackObj.Init();
     m_BackObj.m_pColorTex = I_Texture.Load(L"../../data/ui/_exit_lg.bmp");
-    m_BackObj.m_pVSShader = pVSShader;
-    m_BackObj.m_pPSShader = pPSShader;
+    m_BackObj.m_pVShader = pVShader;
+    m_BackObj.m_pPShader = pPShader;
     m_BackObj.SetPosition(AVector3(0.0f, 1.0f, 0.0f));
     if (!m_BackObj.Create(m_pd3dDevice.Get(), m_pImmediateContext.Get())) { return false; }
     m_BackObj.m_matWorld.Translation(1.0f, 0.0f, 0.0f);
@@ -90,8 +90,8 @@ bool ASample::Init()
     {
         m_ObjList[iObj].Init();
         m_ObjList[iObj].m_pColorTex = I_Texture.Load(L"../../data/Img/KGCABK.bmp");
-        m_ObjList[iObj].m_pVSShader = pVSShader;
-        m_ObjList[iObj].m_pPSShader = pPSShader;
+        m_ObjList[iObj].m_pVShader = pVShader;
+        m_ObjList[iObj].m_pPShader = pPShader;
         m_ObjList[iObj].SetPosition(T::TVector3(-300.0f + rand() % 600, 100.0f, -300.0f + rand() % 600));
         if(!m_ObjList[iObj].Create(m_pd3dDevice.Get(), m_pImmediateContext.Get()))
         {

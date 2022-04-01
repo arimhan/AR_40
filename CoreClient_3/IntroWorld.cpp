@@ -16,8 +16,8 @@ bool	AIntroWorld::CreateModelType()
 	obj->SetPosition(AVector2(0, 0));
 	obj->m_pColorTex = m_pColorTex;
 	obj->m_pMaskTex = nullptr;
-	obj->m_pVSShader = pVShader;
-	obj->m_pPSShader = pPShader;
+	obj->m_pVShader = pVShader;
+	obj->m_pPShader = pPShader;
 	if (!obj->Create(m_pd3dDevice, m_pContext))
 	{
 		return false;

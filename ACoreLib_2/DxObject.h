@@ -89,8 +89,8 @@ class ADxObject : public ABaseObject
 public:
 	ATexture*	m_pColorTex = nullptr;
 	ATexture*	m_pMaskTex = nullptr;
-	AShader*	m_pVSShader = nullptr;
-	AShader*	m_pPSShader = nullptr;
+	AShader*	m_pVShader = nullptr;
+	AShader*	m_pPShader = nullptr;
 	D3D11_TEXTURE2D_DESC	m_TextureDesc;
 public:
 	vector<ASimpleVertex>	m_InitScreenList;

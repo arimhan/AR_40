@@ -154,17 +154,23 @@ copy "..\\..\\output\\Debug\\ACoreLib_2.lib" "..\\..\\Lib\\ACoreLib_2_d.lib"
   <ItemGroup>
     <ClCompile Include="..\ACoreLib2\AMath.cpp" />
     <ClCompile Include="BaseMgr.cpp" />
+    <ClCompile Include="BoxObj.cpp" />
+    <ClCompile Include="Camera.cpp" />
     <ClCompile Include="Collision.cpp" />
     <ClCompile Include="Core.cpp" />
     <ClCompile Include="Device.cpp" />
     <ClCompile Include="DxObject.cpp" />
     <ClCompile Include="DxState.cpp" />
+    <ClCompile Include="Frustum.cpp" />
     <ClCompile Include="Input.cpp" />
     <ClCompile Include="Matrix.cpp" />
+    <ClCompile Include="Node.cpp" />
     <ClCompile Include="Object2D.cpp" />
     <ClCompile Include="Object3D.cpp" />
     <ClCompile Include="ObjectMgr.cpp" />
+    <ClCompile Include="PlaneObj.cpp" />
     <ClCompile Include="ShaderMgr.cpp" />
+    <ClCompile Include="SkyObj.cpp" />
     <ClCompile Include="SoundMgr.cpp" />
     <ClCompile Include="TexturerMgr.cpp" />
     <ClCompile Include="Timer.cpp" />
@@ -177,17 +183,23 @@ copy "..\\..\\output\\Debug\\ACoreLib_2.lib" "..\\..\\Lib\\ACoreLib_2_d.lib"
   <ItemGroup>
     <ClInclude Include="..\ACoreLib2\AMath.h" />
     <ClInclude Include="BaseMgr.h" />
+    <ClInclude Include="BoxObj.h" />
+    <ClInclude Include="Camera.h" />
     <ClInclude Include="Collision.h" />
     <ClInclude Include="Core.h" />
     <ClInclude Include="Device.h" />
     <ClInclude Include="DxObject.h" />
     <ClInclude Include="DxState.h" />
+    <ClInclude Include="Frustum.h" />
     <ClInclude Include="Input.h" />
     <ClInclude Include="Matrix.h" />
+    <ClInclude Include="Node.h" />
     <ClInclude Include="Object2D.h" />
     <ClInclude Include="Object3D.h" />
     <ClInclude Include="ObjectMgr.h" />
+    <ClInclude Include="PlaneObj.h" />
     <ClInclude Include="ShaderMgr.h" />
+    <ClInclude Include="SkyObj.h" />
     <ClInclude Include="SoundMgr.h" />
     <ClInclude Include="Std.h" />
     <ClInclude Include="TextureMgr.h" />
