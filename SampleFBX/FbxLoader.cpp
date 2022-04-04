@@ -1,12 +1,6 @@
 #include "FbxLoader.h"
 
 
-bool AFbxObj::SetIndexData()
-{
-	return true;
-}
-
-
 bool AFbxLoader::Load(string filename)
 {
 	bool bRet = m_pFbxImporter->Initialize(filename.c_str());
@@ -21,27 +15,38 @@ bool AFbxLoader::Load(string filename)
 	return true;
 }
 
-void AFbxLoader::PreProcess(FbxNode* pNode, FbxNode* pParent)
+void AFbxLoader::PreProcess(FbxNode* pNode, AFbxObject* pParent)
 {
-	//Camera, Light, Mesh, Shape, Animation 작업 시 Mesh를 얻어오는 작업을 한다.
-	FbxMesh* pMesh = pNode->GetMesh();
-	if (pMesh)
+	AFbxObject* pfbx = nullptr;
+	if (pNode != nullptr)
 	{
-		//FbxParent와 FbxNode를 나눠 세팅해준다.
-		AFbxObj* pFbx = new AFbxObj;
-		pFbx->m_pFbxParent = pParent;
-		pFbx->m_pFbxNode = pNode;
-		m_ObjList.push_back(pFbx);
+		pfbx = new AFbxObject;
+		pfbx->m_pFbxParent = pNode->GetParent();
+		pfbx->m_pFbxNode = pNode;
+		pfbx->m_csName = to_mw(pNode->GetName());
+		pfbx->m_pParentObj = pParent;
+		pfbx->m_iIndex = m_pTreeList.size();
 	}
-	int iNumChild = pNode->GetChildCount();
-	for (int iNode = 0; iNode < iNumChild; iNode++)
-	{
-		FbxNode* pChild = pNode->GetChild(iNode);
-		PreProcess(pChild, pNode);
-	}
+
+	////Camera, Light, Mesh, Shape, Animation 작업 시 Mesh를 얻어오는 작업을 한다.
+	//FbxMesh* pMesh = pNode->GetMesh();
+	//if (pMesh)
+	//{
+	//	//FbxParent와 FbxNode를 나눠 세팅해준다.
+	//	AFbxObject* pFbx = new AFbxObject;
+	//	pFbx->m_pFbxParent = pParent;
+	//	pFbx->m_pFbxNode = pNode;
+	//	m_ObjList.push_back(pFbx);
+	//}
+	//int iNumChild = pNode->GetChildCount();
+	//for (int iNode = 0; iNode < iNumChild; iNode++)
+	//{
+	//	FbxNode* pChild = pNode->GetChild(iNode);
+	//	PreProcess(pChild, pNode);
+	//}
 }
 
-void AFbxLoader::ParseMesh(AFbxObj* pObj)
+void AFbxLoader::ParseMesh(AFbxObject* pObj)
 {
 	FbxMesh* pFbxMesh = pObj->m_pFbxNode->GetMesh();
 	if (pFbxMesh)
@@ -116,88 +121,13 @@ void AFbxLoader::ParseMesh(AFbxObj* pObj)
 						tVertex.t.x = uv.mData[0];
 						tVertex.t.y = 1.0f - uv.mData[1];
 					}
-					pObj->m_VertexList.push_back(tVertex);
+					pObj->m_VertexList.push_back(tVertex); //36
 				}
 			}
 		}
 	}
 }
 
-void AFbxLoader::ReadTextureCoord(FbxMesh* pFbxMesh, FbxLayerElementUV* pUVset, int iVIndex, int iUVIndex, FbxVector2& uv)
-{
-	FbxLayerElementUV* pFbxLayerElementUV = pUVset;
-	if (pFbxLayerElementUV == nullptr) { return; }
-
-	switch (pFbxLayerElementUV->GetMappingMode())
-	{
-		case FbxLayerElementUV::eByControlPoint:
-		{
-			switch (pFbxLayerElementUV->GetReferenceMode())
-			{
-				case FbxLayerElementUV::eDirect:
-				{
-					FbxVector2 fbxUV = pFbxLayerElementUV->GetDirectArray().GetAt(iVIndex);
-					uv.mData[0] = fbxUV.mData[0];
-					uv.mData[1] = fbxUV.mData[1];
-					break;
-				}
-				case FbxLayerElementUV::eIndexToDirect:
-				{
-					int id = pFbxLayerElementUV->GetIndexArray().GetAt(iVIndex);
-					FbxVector2 fbxUV = pFbxLayerElementUV->GetDirectArray().GetAt(id);
-					uv.mData[0] = fbxUV.mData[0];
-					uv.mData[1] = fbxUV.mData[1];
-					break;
-				}
-			}
-			break;
-		}
-		case FbxLayerElementUV::eByPolygonVertex:
-		{
-			switch (pFbxLayerElementUV->GetReferenceMode())
-			{
-				case FbxLayerElementUV::eDirect:
-				case FbxLayerElementUV::eIndexToDirect:
-				{
-					uv.mData[0] = pFbxLayerElementUV->GetDirectArray().GetAt(iUVIndex).mData[0];
-					uv.mData[1] = pFbxLayerElementUV->GetDirectArray().GetAt(iUVIndex).mData[1];
-					break;
-				}
-			}
-			break;
-		}
-	}
-}
-
-string AFbxLoader::ParseMaterial(FbxSurfaceMaterial* pMtrl)
-{
-	string name = pMtrl->GetName();
-	auto Property = pMtrl->FindProperty(FbxSurfaceMaterial::sDiffuse);
-	//fbxsdk::FbxProperty
-	if (Property.IsValid())
-	{
-		const FbxFileTexture* pTex = Property.GetSrcObject<FbxFileTexture>(0);
-		if (pTex != nullptr)
-		{
-			const CHAR* szFileName = pTex->GetFileName();
-			CHAR Drive	[MAX_PATH];
-			CHAR Dir	[MAX_PATH];
-			CHAR FName	[MAX_PATH];
-			CHAR Ext	[MAX_PATH];
-			_splitpath_s(szFileName, Drive, Dir, FName, Ext);
-			string TexName = FName;
-			string ext = Ext;
-			if (ext == ".tga" || ".TGA")
-			{
-				ext.clear();
-				ext = ".dds";
-			}
-			TexName += ext;
-			return TexName;
-		}
-	}
-	return string("");
-}
 
 bool AFbxLoader::Init()
 {
@@ -230,3 +160,74 @@ bool AFbxLoader::Release()
 	return true;
 }
 
+
+
+//Animation 추가
+TMatrix	AFbxLoader::DxConvertMatrix(TMatrix m) 
+{
+	TMatrix mat;
+	mat._11 = m._11;	mat._12 = m._13;	mat._13 = m._12;
+	mat._21 = m._31;	mat._22 = m._33;	mat._23 = m._32;
+	mat._31 = m._21;	mat._32 = m._23;	mat._33 = m._22;
+	mat._41 = m._41;	mat._42 = m._43;	mat._43 = m._42;
+
+	mat._14 = mat._24 = mat._34 = 0.0f;
+
+	mat._44 = 1.0f;
+	return mat;
+}
+TMatrix	AFbxLoader::ConvertMatrix(FbxMatrix& m) 
+{
+	TMatrix mat;
+	float* pMatArray = reinterpret_cast<float*>(&mat);
+	double* pSrcArray = reinterpret_cast<double*>(&m);
+
+	for (int i = 0; i < 16; i++)
+	{
+		pMatArray[i] = pSrcArray[i];
+	}
+	return mat;
+}
+TMatrix	AFbxLoader::ConvertAMatrix(FbxAMatrix& m) 
+{
+	TMatrix mat;
+	float* pMatArray = reinterpret_cast<float*>(&mat);
+	double* pSrcArray = reinterpret_cast<double*>(&m);
+
+	for (int i = 0; i < 16; i++)
+	{
+		pMatArray[i] = pSrcArray[i];
+	}
+	return mat;
+}
+void AFbxLoader::ParseAnimation() 
+{
+	FbxTime::SetGlobalTimeMode(FbxTime::eFrames30);
+	FbxAnimStack* pStack = m_pFbxScene->GetSrcObject<FbxAnimStack>(0);
+	FbxString TakeName = pStack->GetName();
+	FbxTakeInfo* pTakeInfo = m_pFbxScene->GetTakeInfo(TakeName);
+
+	FbxTimeSpan LocalTimeSpan = pTakeInfo->mLocalTimeSpan;
+	FbxTime		Start		= LocalTimeSpan.GetStart();
+	FbxTime		End			= LocalTimeSpan.GetStop();
+	FbxTime		Duration	= LocalTimeSpan.GetDuration();
+
+	FbxTime::EMode TimeMode = FbxTime::GetGlobalTimeMode();
+	FbxLongLong s = Start.GetFrameCount(TimeMode);
+	FbxLongLong n = End.GetFrameCount(TimeMode);
+
+	//1초에 30 Frame, 1 Frame = 160 Tick, 50Frame으로 설정함.
+	FbxTime time;
+	ATrack aTrack;
+	for (FbxLongLong t = s; t <= n; t++)
+	{
+		time.SetFrame(t, TimeMode);
+		for (int iObj = 0; iObj < m_pTreeList.size(); iObj++)
+		{
+			FbxAMatrix matGlobal = m_pTreeList[iObj]->m_pFbxNode->EvaluateGlobalTransform(time);
+			aTrack.iFrame = t;
+			aTrack.matTrack = DxConvertMatrix(ConvertAMatrix(matGlobal));
+			m_pTreeList[iObj]->m_AnimTrack.push_back(aTrack);
+		}
+	}
+}

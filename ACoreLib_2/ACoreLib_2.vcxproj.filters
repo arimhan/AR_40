@@ -22,6 +22,9 @@
     <Filter Include="Obj">
       <UniqueIdentifier>{860c3821-f63c-4cea-bb6c-182b8d5b76f6}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Map">
+      <UniqueIdentifier>{3179171c-7aec-46e4-82b1-60d98eb24228}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Core.cpp">
@@ -104,6 +107,12 @@
     </ClCompile>
     <ClCompile Include="Frustum.cpp">
       <Filter>Obj</Filter>
+    </ClCompile>
+    <ClCompile Include="Map.cpp">
+      <Filter>Map</Filter>
+    </ClCompile>
+    <ClCompile Include="Quadtree.cpp">
+      <Filter>Map</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -190,6 +199,12 @@
     </ClInclude>
     <ClInclude Include="Node.h">
       <Filter>Obj</Filter>
+    </ClInclude>
+    <ClInclude Include="Map.h">
+      <Filter>Map</Filter>
+    </ClInclude>
+    <ClInclude Include="Quadtree.h">
+      <Filter>Map</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

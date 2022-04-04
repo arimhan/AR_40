@@ -10,7 +10,8 @@ public:
 	ACamera*	 m_pCamera = nullptr;
 	int			 m_iWidth;
 	int			 m_iHeight;
-	int			 m_iMaxDepth;
+	int			 m_iLeafDepth = 0;
+	int			 m_iMaxDepth = 0;
 	int			 m_iNumLOD = 1;
 	int			 m_iLeafLOD = 1;
 	ANode*		 m_pRootNode;

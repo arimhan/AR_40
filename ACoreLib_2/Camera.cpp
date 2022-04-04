@@ -80,6 +80,8 @@ void ACamera::CreateViewMatrix(T::TVector3 p, T::TVector3 t, T::TVector3 u)
 }
 void ACamera::CreateProjMatrix(float fovy, float Aspect, float zn, float zf)
 {
+    m_fFarDistance = zf;
+    m_fNearDistance = zn;
     T::D3DXMatrixPerspectiveFovLH(&m_matProj, fovy, Aspect, zn, zf);
 }
 

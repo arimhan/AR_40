@@ -84,6 +84,13 @@ struct AConstantData
 	T::TVector4		Color;		//기존 컬러값
 	T::TVector4		Timer;		//타이머
 };
+
+struct ALightData
+{
+	T::TVector4		vLightDir;
+	T::TVector4		vLightPos;
+};
+
 class ADxObject : public ABaseObject
 {
 public:
@@ -98,15 +105,17 @@ public:
 
 	ID3D11Buffer*			m_pVertexBuffer = nullptr;
 	
-	vector<DWORD> m_IndexList;
-	ID3D11Buffer* m_pIndexBuffer = nullptr;
+	vector<DWORD>			m_IndexList;
+	ID3D11Buffer*			m_pIndexBuffer = nullptr;
 
-	AConstantData    m_ConstantList;
-	ID3D11Buffer*    m_pConstantBuffer = nullptr;
+	AConstantData			m_ConstantList;
+	ID3D11Buffer*			m_pConstantBuffer = nullptr;
+	ALightData				m_LightConstantList;
+	ID3D11Buffer*			m_pLightConstantBuffer = nullptr;
 
-	ID3D11InputLayout* m_pVertexLayout = nullptr;
-	ID3D11Device*		 m_pd3dDevice = nullptr;
-	ID3D11DeviceContext* m_pContext=nullptr;
+	ID3D11InputLayout*		m_pVertexLayout = nullptr;
+	ID3D11Device*			m_pd3dDevice = nullptr;
+	ID3D11DeviceContext*	m_pContext=nullptr;
 public:	
 	void    SetDevice(ID3D11Device* m_pd3dDevice,
 					  ID3D11DeviceContext* m_pContext);

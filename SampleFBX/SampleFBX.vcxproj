@@ -148,10 +148,13 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="FbxLoader.h" />
+    <ClInclude Include="FbxObject.h" />
     <ClInclude Include="Sample.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="FbxLoader.cpp" />
+    <ClCompile Include="FbxObject.cpp" />
+    <ClCompile Include="FbxVLoader.cpp" />
     <ClCompile Include="Sample.cpp" />
   </ItemGroup>
   <ItemGroup>

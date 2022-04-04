@@ -37,6 +37,18 @@ bool ADxObject::SetConstantData()
 	m_ConstantList.Timer.y = 1.0f;
 	m_ConstantList.Timer.z = 0.0f;
 	m_ConstantList.Timer.w = 0.0f;
+
+	//조명 정보 추가
+	ZeroMemory(&m_LightConstantList, sizeof(ALightData));
+	m_LightConstantList.vLightDir.x = 0.0f;
+	m_LightConstantList.vLightDir.y = 1.0f;
+	m_LightConstantList.vLightDir.z = 0.0f;
+	m_LightConstantList.vLightDir.w = 1.0f;
+
+	m_LightConstantList.vLightPos.x = 0.0f;
+	m_LightConstantList.vLightPos.y = 1.0f;
+	m_LightConstantList.vLightPos.z = 0.0f;
+	m_LightConstantList.vLightPos.w = 0.0f;
 	return true;
 }
 bool ADxObject::CreateVertexShader(const TCHAR* szFile)
@@ -106,6 +118,19 @@ bool ADxObject::CreateConstantBuffer()
 	sd.pSysMem = &m_ConstantList;
 
 	if (FAILED(hr = m_pd3dDevice->CreateBuffer(&bd, &sd, &m_pConstantBuffer)))
+	{
+		return false;
+	}
+	return true;
+
+	//LightData
+	ZeroMemory(&bd, sizeof(D3D11_BUFFER_DESC));
+	bd.ByteWidth = sizeof(AConstantData);
+	bd.Usage = D3D11_USAGE_DEFAULT;
+	bd.BindFlags = D3D11_BIND_CONSTANT_BUFFER;
+	ZeroMemory(&sd, sizeof(D3D11_SUBRESOURCE_DATA));
+	sd.pSysMem = &m_LightConstantList;
+	if (FAILED(hr = m_pd3dDevice->CreateBuffer(&bd, &sd, &m_pLightConstantBuffer)))
 	{
 		return false;
 	}
@@ -202,6 +227,8 @@ bool ADxObject::PreRender()
 bool ADxObject::Draw()
 {
 	m_pContext->UpdateSubresource(m_pConstantBuffer, 0, NULL, &m_ConstantList, 0, 0);
+	m_pContext->UpdateSubresource(m_pLightConstantBuffer, 0, NULL, &m_LightConstantList, 0, 0);
+
 	m_pContext->GSSetShader(nullptr, NULL, 0);
 	m_pContext->HSSetShader(nullptr, NULL, 0);
 	m_pContext->DSSetShader(nullptr, NULL, 0);
@@ -234,6 +261,10 @@ bool ADxObject::Draw()
 	m_pContext->IASetIndexBuffer(m_pIndexBuffer, DXGI_FORMAT_R32_UINT, 0);
 	m_pContext->VSSetConstantBuffers(0, 1, &m_pConstantBuffer);
 	m_pContext->PSSetConstantBuffers(0, 1, &m_pConstantBuffer);
+	//Light 
+	m_pContext->VSSetConstantBuffers(1, 1, &m_pLightConstantBuffer);
+	m_pContext->PSSetConstantBuffers(1, 1, &m_pLightConstantBuffer);
+
 	m_pContext->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
 	//D3D_PRIMITIVE_TOPOLOGY_POINTLIST ,D3D_PRIMITIVE_TOPOLOGY_LINELIST
 
@@ -253,12 +284,14 @@ bool ADxObject::Release()
 	if (m_pVertexBuffer) m_pVertexBuffer->Release();
 	if (m_pIndexBuffer) m_pIndexBuffer->Release();
 	if (m_pConstantBuffer) m_pConstantBuffer->Release();	
+	if (m_pLightConstantBuffer) m_pLightConstantBuffer->Release();
 	if (m_pVertexLayout) m_pVertexLayout->Release();
 
 
 	m_pVertexBuffer = nullptr;
 	m_pIndexBuffer = nullptr;
 	m_pConstantBuffer = nullptr;
+	m_pLightConstantBuffer = nullptr;
 	m_pVertexLayout = nullptr;
 	return true;
 }

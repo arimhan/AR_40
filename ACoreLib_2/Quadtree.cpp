@@ -1,6 +1,5 @@
 #include "Quadtree.h"
 
-//#include "Object3D.h"
 
 int AQuadtree::g_iCount = 0;
 
@@ -393,7 +392,8 @@ ANode* AQuadtree::CheckBoxtoPoint(T::TVector3 p)
 {
 	for (auto node : g_pLeafNodes)
 	{
-		if(node->m_Box.vMin.x <= p.x && node->m_Box.vMax.x >= p.x && node->m_Box.vMin.z <= p.z && node->m_Box.size >= p.z)
+		if(node->m_Box.vMin.x <= p.x && node->m_Box.vMax.x >= p.x && 
+			node->m_Box.vMin.z <= p.z && node->m_Box.vMax.z >= p.z)
 		{
 			return node;
 		}
