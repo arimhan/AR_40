@@ -19,7 +19,7 @@ public:
 	FbxNode*	m_pFbxParent	= nullptr;
 	FbxNode*	m_pFbxNode		= nullptr;
 	AFbxObject*	m_pParentObj	= nullptr;
-	wstring		m_szTexFileNmae;
+	wstring		m_szTexFileName;
 
 	//SubMaterial
 	vector<wstring>			m_szTexFileList;
@@ -37,6 +37,7 @@ public:
 	virtual bool PostRender()			override;
 	virtual bool Release()				override;
 };
+
 
 class AFbxLoader
 {

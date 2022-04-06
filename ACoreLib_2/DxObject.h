@@ -85,6 +85,12 @@ struct AConstantData
 	T::TVector4		Timer;		//≈∏¿Ã∏”
 };
 
+
+
+struct ABoneWorld
+{
+	T::TMatrix matBoneWorld[255];
+};
 struct ALightData
 {
 	T::TVector4		vLightDir;
@@ -115,7 +121,7 @@ public:
 
 	ID3D11InputLayout*		m_pVertexLayout = nullptr;
 	ID3D11Device*			m_pd3dDevice = nullptr;
-	ID3D11DeviceContext*	m_pContext=nullptr;
+	ID3D11DeviceContext* m_pContext = nullptr;
 public:	
 	void    SetDevice(ID3D11Device* m_pd3dDevice,
 					  ID3D11DeviceContext* m_pContext);

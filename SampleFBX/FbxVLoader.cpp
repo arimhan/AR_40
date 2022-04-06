@@ -20,7 +20,7 @@ string AFbxLoader::ParseMaterial(FbxSurfaceMaterial* pMtrl)
 			_splitpath_s(szFileName, Drive, Dir, FName, Ext);
 			string TexName = FName;
 			string ext = Ext;
-			if (ext == ".tga" || ".TGA")
+			if (ext == ".tga" || ext == ".TGA")
 			{
 				ext.clear();
 				ext = ".dds";

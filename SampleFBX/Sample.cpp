@@ -4,16 +4,15 @@
 bool ASample::Init()
 {
     m_FbxObj.Init();
-    m_FbxObj.Load("../../data/fbx/SM_Rock.fbx");
+    //m_FbxObj.Load("../../data/fbx/SM_Rock.fbx");
+    m_FbxObj.Load("../../data/fbx/Turret_Deploy1/Turret_Deploy1.FBX");
     //ATexture* pTex = I_Texture.Load(L"../../data/ui/main_start_nor.png");
-    AShader* pVShader = I_Shader.CreateVertexShader(
-        m_pd3dDevice.Get(), L"Box.hlsl", "VS");
-    AShader* pPShader = I_Shader.CreatePixelShader(
-        m_pd3dDevice.Get(), L"Box.hlsl", "PS");
+    AShader* pVShader = I_Shader.CreateVertexShader(m_pd3dDevice.Get(), L"Box.hlsl", "VS");
+    AShader* pPShader = I_Shader.CreatePixelShader(m_pd3dDevice.Get(), L"Box.hlsl", "PS");
     for (int iObj = 0; iObj < m_FbxObj.m_pDrawList.size(); iObj++)
     {
         m_FbxObj.m_pDrawList[iObj]->Init();
-        m_FbxObj.m_pDrawList[iObj]->m_pColorTex = I_Texture.Load(m_FbxObj.m_pDrawList[iObj]->m_szTexFileNmae);
+        m_FbxObj.m_pDrawList[iObj]->m_pColorTex = I_Texture.Load(m_FbxObj.m_pDrawList[iObj]->m_szTexFileName);
         m_FbxObj.m_pDrawList[iObj]->m_pVShader = pVShader;
         m_FbxObj.m_pDrawList[iObj]->m_pPShader = pPShader;
         //m_FbxObj.m_pDrawList[iObj]->SetPosition(T::TVector3(0.0f, 1.0f, 0.0f));
@@ -46,18 +45,36 @@ bool ASample::Frame()
     for (int iObj = 0; iObj < m_FbxObj.m_pTreeList.size(); iObj++)
     {
         AFbxObject* pObj = m_FbxObj.m_pTreeList[iObj];
-        m_FbxObj.m_pTreeList[iObj]->
+        m_FbxObj.m_pTreeList[iObj]->m_matAnim = pObj->m_AnimTrack[iFrame].matTrack;
     }
     return true;
 }
 
 bool ASample::Render()
 {
-    for (int iObj = 0; iObj < m_FbxObj.m_ObjList.size(); iObj++)
+    for (int iObj = 0; iObj < m_FbxObj.m_pDrawList.size(); iObj++)
     {
-        m_FbxObj.m_ObjList[iObj]->SetMatrix(nullptr, 
+        T::TVector3 vLight(cosf(g_fGameTimer) * 100.0f, 100, sinf(g_fGameTimer) * 100.0f);
+        T::D3DXVec3Normalize(&vLight, &vLight);
+        vLight = vLight * -1.0f;
+
+        m_FbxObj.m_pDrawList[iObj]->m_LightConstantList.vLightDir.x = vLight.x;
+        m_FbxObj.m_pDrawList[iObj]->m_LightConstantList.vLightDir.y = vLight.y;
+        m_FbxObj.m_pDrawList[iObj]->m_LightConstantList.vLightDir.z = vLight.z;
+        m_FbxObj.m_pDrawList[iObj]->m_LightConstantList.vLightDir.w = 1.0f;
+
+        //m_FbxObj.m_DrawList[iObj]->m_bAlphaBlend = false;
+        /*m_pImmediateContext->OMSetDepthStencilState(
+        TDxState::g_pDSSDepthEnableWriteDisable, 0x00);*/
+
+        /*m_FbxObj.m_DrawList[iObj]->SetMatrix(
+        &m_FbxObj.m_DrawList[iObj]->m_matWorld,
+        &m_pMainCamera->m_matView,
+        &m_pMainCamera->m_matProj);*/
+
+        m_FbxObj.m_pDrawList[iObj]->SetMatrix(&m_FbxObj.m_pDrawList[iObj]->m_matAnim,
             &m_pMainCamera->m_matView, &m_pMainCamera->m_matProj);
-        m_FbxObj.m_ObjList[iObj]->Render();
+        m_FbxObj.m_pDrawList[iObj]->Render();
     }
 
     wstring msg = L"[ FPS: ";

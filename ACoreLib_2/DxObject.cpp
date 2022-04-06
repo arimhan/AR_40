@@ -20,6 +20,7 @@ bool ADxObject::LoadTexture(const TCHAR* szColorFileName, const TCHAR* szMaskFil
 }
 bool ADxObject::SetVertexData() { return true; }
 bool ADxObject::SetIndexData() { return true; }
+
 bool ADxObject::SetConstantData()
 {
 	ZeroMemory(&m_ConstantList, sizeof(AConstantData));
@@ -33,6 +34,7 @@ bool ADxObject::SetConstantData()
 	m_ConstantList.Color.y = 1.0f;
 	m_ConstantList.Color.z = 0.0f;
 	m_ConstantList.Color.w = 1.0f;
+
 	m_ConstantList.Timer.x = 0.0f;
 	m_ConstantList.Timer.y = 1.0f;
 	m_ConstantList.Timer.z = 0.0f;
@@ -121,7 +123,7 @@ bool ADxObject::CreateConstantBuffer()
 	{
 		return false;
 	}
-	return true;
+
 
 	//LightData
 	ZeroMemory(&bd, sizeof(D3D11_BUFFER_DESC));
@@ -291,7 +293,7 @@ bool ADxObject::Release()
 	m_pVertexBuffer = nullptr;
 	m_pIndexBuffer = nullptr;
 	m_pConstantBuffer = nullptr;
-	m_pLightConstantBuffer = nullptr;
+	//m_pLightConstantBuffer = nullptr;
 	m_pVertexLayout = nullptr;
 	return true;
 }

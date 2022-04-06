@@ -69,7 +69,13 @@ float4 PS(VS_OUTPUT input) : SV_TARGET
 	float4 color = g_txColor.Sample(g_Sample, input.t);
 	float4 mask = g_txMask.Sample(g_Sample, input.t);
 	float4 final = color;
-	final = final;
+	final = final * input.c; // *Color0;
+	//알파테스팅 (완전 투명과 완전 불투명일 때 사용한다.)
+	//장점 : 순서를 구분하기 어려운 오브젝트 렌더링 시 정렬된 상태와 유사하게 렌더링 된다.
+	if(final.a < 0.5f)
+	{
+		discard;
+	}
 
 	return final;
 }

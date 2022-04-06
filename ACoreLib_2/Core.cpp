@@ -87,7 +87,6 @@ bool ACore::CoreRender()
 	else 
 		m_pImmediateContext->RSSetState(ADxState::g_pRSBackCullSolid);
 
-	//m_pImmediateContext->RSSetState(ADxState::g_pRSBackCullSolid);
 	// 백버퍼에 랜더링 한다.
 	Render();
 
