@@ -7,7 +7,7 @@ bool ASample::Init()
     //m_FbxObj.Load("../../data/fbx/SM_Rock.fbx");
     m_FbxObj.Load("../../data/fbx/Turret_Deploy1/Turret_Deploy1.FBX");
 
-    //ATexture* pTex = I_Texture.Load(L"../../data/ui/main_start_nor.png");
+    ATexture* pTex = I_Texture.Load(L"../../data/ui/main_start_nor.png");
     AShader* pVShader = I_Shader.CreateVertexShader(m_pd3dDevice.Get(), L"Box.hlsl", "VS");
     AShader* pPShader = I_Shader.CreatePixelShader(m_pd3dDevice.Get(), L"Box.hlsl", "PS");
     for (int iObj = 0; iObj < m_FbxObj.m_pDrawList.size(); iObj++)

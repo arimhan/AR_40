@@ -25,6 +25,9 @@
     <Filter Include="Map">
       <UniqueIdentifier>{3179171c-7aec-46e4-82b1-60d98eb24228}</UniqueIdentifier>
     </Filter>
+    <Filter Include="fbx">
+      <UniqueIdentifier>{c20c7fa5-a555-403d-8065-5bfda09f1cd4}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Core.cpp">
@@ -113,6 +116,15 @@
     </ClCompile>
     <ClCompile Include="Quadtree.cpp">
       <Filter>Map</Filter>
+    </ClCompile>
+    <ClCompile Include="FbxImporter.cpp">
+      <Filter>fbx</Filter>
+    </ClCompile>
+    <ClCompile Include="FbxModel.cpp">
+      <Filter>fbx</Filter>
+    </ClCompile>
+    <ClCompile Include="FbxVLoader.cpp">
+      <Filter>fbx</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -205,6 +217,9 @@
     </ClInclude>
     <ClInclude Include="Quadtree.h">
       <Filter>Map</Filter>
+    </ClInclude>
+    <ClInclude Include="FbxImporter.h">
+      <Filter>fbx</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

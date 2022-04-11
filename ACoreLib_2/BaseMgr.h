@@ -7,12 +7,14 @@ class ABaseMgr : public ASingleton<S>
 public:
 	friend class ASingleton<ABaseMgr>;
 public:
-	int								m_iIndex;
-	ID3D11Device*					m_pd3dDevice;
+	int							m_iIndex;
+	ID3D11Device*				m_pd3dDevice;
+	ID3D11DeviceContext*		m_pContext;
+
 	map<wstring, shared_ptr<T>>		m_list;
 public:
 	wstring			Splitpath(wstring path, wstring entry);
-	virtual void	Set(ID3D11Device* pd3dDevice);
+	virtual void	Set(ID3D11Device* pd3dDevice, ID3D11DeviceContext* pContext = nullptr);
 	virtual T*		Load(wstring filename);
 	T*				GetPtr(wstring key);
 	bool			Init();
@@ -46,9 +48,10 @@ wstring ABaseMgr<T, S>::Splitpath(wstring path, wstring entry)
 }
 
 template <class T, class S>
-void ABaseMgr<T, S>::Set(ID3D11Device* pd3dDevice)
+void ABaseMgr<T, S>::Set(ID3D11Device* pd3dDevice, ID3D11DeviceContext* pContext)
 {
 	m_pd3dDevice = pd3dDevice;
+	m_pContext = pContext;
 }
 
 template<class T, class S>

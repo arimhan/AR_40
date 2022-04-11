@@ -29,14 +29,8 @@ bool ACore::CoreInit()
 	m_DefaultCamera.CreateProjMatrix(XM_PI * 0.25f, 
 		(float)g_rtClient.right / (float)g_rtClient.bottom, 0.1f, 5000.0f);
 	m_DefaultCamera.m_pColorTex = I_Texture.Load(L"../../data/Img/charport.bmp");
-
-	//m_DefaultCamera.m_pVShader = I_Shader.CreateVertexShader(m_pd3dDevice.Get(), 
-		//L"../../data/shader/Box.hlsl", "VSColor");
-	//m_DefaultCamera.m_pPShader = I_Shader.CreatePixelShader(m_pd3dDevice.Get(), 
-		//L"../../data/shader/Box.hlsl", "PSColor");
-
-	m_DefaultCamera.m_pVShader = I_Shader.CreateVertexShader(m_pd3dDevice.Get(), L"Box.hlsl", "VSColor");
-	m_DefaultCamera.m_pPShader = I_Shader.CreatePixelShader(m_pd3dDevice.Get(), L"Box.hlsl", "PSColor");
+	m_DefaultCamera.m_pVShader = I_Shader.CreateVertexShader(m_pd3dDevice.Get(), L"../../data/shader/Box.hlsl", "VSColor");
+	m_DefaultCamera.m_pPShader = I_Shader.CreatePixelShader(m_pd3dDevice.Get(), L"../../data/shader/Box.hlsl", "PSColor");
 	m_DefaultCamera.SetPosition(T::TVector3(0.0f, 1.0f, 0.0f));
 	if(!m_DefaultCamera.Create(m_pd3dDevice.Get(), m_pImmediateContext.Get()))
 	{

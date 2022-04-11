@@ -220,10 +220,17 @@ bool ADxObject::Render()
 
 bool ADxObject::PreRender()
 {
+	ID3D11ShaderResourceView* nullSRV = nullptr;
 	if (m_pColorTex != nullptr)
 		m_pContext->PSSetShaderResources(0, 1, m_pColorTex->m_pSRV.GetAddressOf());
+	else
+		m_pContext->PSSetShaderResources(0, 1, &nullSRV);
+
 	if (m_pMaskTex != nullptr)
 		m_pContext->PSSetShaderResources(1, 1, m_pMaskTex->m_pSRV.GetAddressOf());
+	else
+		m_pContext->PSSetShaderResources(1, 1, &nullSRV);
+
 	return true;
 }
 bool ADxObject::Draw()

@@ -121,7 +121,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>_DEBUG;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>../../include/dxtk;../../include/fmod;</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>../../include/dxtk;../../include/fmod; ../../fbx/include;</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>
@@ -161,6 +161,9 @@ copy "..\\..\\output\\Debug\\ACoreLib_2.lib" "..\\..\\Lib\\ACoreLib_2_d.lib"
     <ClCompile Include="Device.cpp" />
     <ClCompile Include="DxObject.cpp" />
     <ClCompile Include="DxState.cpp" />
+    <ClCompile Include="FbxImporter.cpp" />
+    <ClCompile Include="FbxModel.cpp" />
+    <ClCompile Include="FbxVLoader.cpp" />
     <ClCompile Include="Frustum.cpp" />
     <ClCompile Include="Input.cpp" />
     <ClCompile Include="Map.cpp" />
@@ -192,6 +195,7 @@ copy "..\\..\\output\\Debug\\ACoreLib_2.lib" "..\\..\\Lib\\ACoreLib_2_d.lib"
     <ClInclude Include="Device.h" />
     <ClInclude Include="DxObject.h" />
     <ClInclude Include="DxState.h" />
+    <ClInclude Include="FbxImporter.h" />
     <ClInclude Include="Frustum.h" />
     <ClInclude Include="Input.h" />
     <ClInclude Include="Map.h" />

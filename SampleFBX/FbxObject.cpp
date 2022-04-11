@@ -19,7 +19,7 @@ bool AFbxObject::CreateVertexBuffer()
 
 		D3D11_SUBRESOURCE_DATA sd;
 		ZeroMemory(&sd, sizeof(D3D11_SUBRESOURCE_DATA));
-		sd.pSysMem = &m_pSubVertexList.at(0);
+		sd.pSysMem = &m_pSubVertexList[iMtrl].at(0);
 
 		if (FAILED(hr = m_pd3dDevice->CreateBuffer(&bd, &sd, &m_pVBList[iMtrl])))
 		{

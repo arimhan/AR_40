@@ -85,8 +85,6 @@ struct AConstantData
 	T::TVector4		Timer;		//≈∏¿Ã∏”
 };
 
-
-
 struct ABoneWorld
 {
 	T::TMatrix matBoneWorld[255];

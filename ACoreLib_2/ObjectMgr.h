@@ -1,9 +1,11 @@
 #pragma once
 #include "Object2D.h"
+#include "FbxImporter.h"
 
 using CollisionFunction = function<void(ABaseObject*, DWORD)>;
 using SelectFunction = function<void(ABaseObject*, DWORD)>;
-class AObjectMgr : public ASingleton<AObjectMgr>
+
+class AObjectMgr : public ABaseMgr<AFbxImporter, AObjectMgr>
 {
 private:
 	int			m_iExcueteCollisionID;
@@ -13,16 +15,19 @@ private:
 	
 public:
 	friend ASingleton<AObjectMgr>;
+
 public:	
 	typedef map<int, CollisionFunction>::iterator FuncionIterator;
 	map<int, CollisionFunction> m_fnCollisionExecute;
 	typedef map<int, SelectFunction>::iterator FuncionIterator;
 	map<int, SelectFunction> m_fnSelectExecute;
+
 public:
 	void  AddCollisionExecute(ABaseObject* owner, CollisionFunction func);
 	void  DeleteCollisionExecute(ABaseObject* owner);
 	void  AddSelectExecute(ABaseObject* owner, CollisionFunction func);
 	void  DeleteSelectExecute(ABaseObject* owner);
+
 	bool  Init();
 	bool  Frame();
 	bool  Release();

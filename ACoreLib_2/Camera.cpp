@@ -9,13 +9,7 @@ bool ACamera::Init()
     CreateProjMatrix(XM_PI * 0.25f, 
         (float)g_rtClient.right / (float)g_rtClient.bottom, 0.1f, 5000.f);
     UpdateVector();
-    //T::D3DXMatrixLookAtLH(&m_matView, &m_vCamera, &m_vTarget, &m_vUp);
-    ////m_matView.CreateViewLook(m_vCamera, m_vTarget, m_vUp);
-    //// Projection
-    //T::D3DXMatrixPerspectiveFovLH(&m_matProj, XM_PI * 0.25f,
-    //    (float)g_rtClient.right / (float)g_rtClient.bottom, 0.1f, 5000.0f);
-    ////m_matProj.PerspectiveFovLH(
-    //0.1f, 5000.0f, ABASIS_PI * 0.25f, (float)g_rtClient.right / (float)g_rtClient.bottom);
+
     return true;
 }
 bool ACamera::Frame()
