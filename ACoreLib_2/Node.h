@@ -42,8 +42,14 @@ public:
 	vector<int>		 m_CornerList;	//¡§¡°¿Œµ¶Ω∫
 	list<AMapObj*>	 m_pStaticObjList;
 	list<AMapObj*>	 m_pDynamicObjList;
-	vector<DWORD>	 m_IndexList;
-	ComPtr<ID3D11Buffer> m_pIndexBuffer = nullptr;
+
+
+	//vector<DWORD> m_IndexList;
+	//ComPtr<ID3D11Buffer> m_pIndexBuffer;
+	using INDEXLIST = vector<DWORD>; //m_IndexList;
+	using INDEXBUFFER = ComPtr<ID3D11Buffer>; //m_pIndexBuffer0;
+	vector<INDEXLIST>	 m_IndexList;
+	vector<INDEXBUFFER> m_pIndexBuffer;
 public:
 	void AddObject(AMapObj* pObj);
 	void AddDynamicObject(AMapObj* pObj);

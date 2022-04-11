@@ -41,7 +41,7 @@ VS_OUTPUT VS(VS_INPUT v)
 	pOut.n = normalize(vNormal);
 	pOut.t = v.t;
 	float fDot = max(0.5f, dot(pOut.n, -vLightDir.xyz));
-	pOut.c = v.c;
+	pOut.c = v.c * float4(fDot, fDot, fDot, 1);
 
 	pOut.r = normalize(vLocal.xyz);
 	return pOut;
@@ -58,10 +58,10 @@ VS_OUTPUT VSColor(VS_INPUT v)
 	pOut.r = normalize(vLocal.xyz);
 	return pOut;
 }
-Texture2D		g_txColor : register(t0);
-Texture2D		g_txMask : register(t1);
+Texture2D		g_txColor	: register(t0);
+Texture2D		g_txMask	: register(t1);
 TextureCube	    g_txCubeMap : register(t3);
-SamplerState	g_Sample : register(s0);
+SamplerState	g_Sample	: register(s0);
 
 float4 PS(VS_OUTPUT input) : SV_TARGET
 {

@@ -44,8 +44,8 @@ public:
 	bool		CheckBox(ABox& abox, ABox& bbox);
 
 public:
-	void		SetIndexData(ANode* pNode);
-	bool		CreateIndexBuffer(ANode* pNode);
+	void		SetIndexData(ANode* pNode, int iLodLevel);
+	bool		CreateIndexBuffer(ANode* pNode, int iLodLevel);
 	void		Update(ACamera* pCamera);
 	bool		Render();
 	void		RenderObject(ANode* pNode);

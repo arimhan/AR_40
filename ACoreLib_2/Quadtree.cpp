@@ -5,7 +5,7 @@ int AQuadtree::g_iCount = 0;
 
 void AQuadtree::Build(int iWidth, int iHeight, int iMaxDepth)
 {
-	m_iMaxDepth = iMaxDepth;
+	m_iLeafDepth = iMaxDepth;
 	m_iWidth = iWidth;
 	m_iHeight = iHeight;
 
@@ -15,13 +15,33 @@ void AQuadtree::Build(int iWidth, int iHeight, int iMaxDepth)
 
 void AQuadtree::Build(AMap* pMap, int iMaxDepth)
 {
+
+	HRESULT hr;
 	m_pMap = pMap;
-	m_iMaxDepth = iMaxDepth;
+	m_IndexList.resize(m_pMap->m_IndexList.size());
+
+	D3D11_BUFFER_DESC bd;
+	ZeroMemory(&bd, sizeof(D3D11_BUFFER_DESC));
+	bd.ByteWidth = sizeof(DWORD) * m_IndexList.size();
+	bd.Usage = D3D11_USAGE_DEFAULT;
+	bd.BindFlags = D3D11_BIND_INDEX_BUFFER;
+	if (FAILED(hr = m_pMap->m_pd3dDevice->CreateBuffer(&bd, NULL,
+		m_pIndexBuffer.GetAddressOf()))) { return; }
+
+
+	m_iLeafDepth = iMaxDepth;
 	m_iWidth = pMap->m_iNumCols;
 	m_iHeight = pMap->m_iNumRows;
 
 	m_pRootNode = CreateNode(nullptr, 0, m_iWidth - 1, m_iWidth * (m_iHeight - 1), m_iWidth * m_iHeight - 1);
 	BuildTree(m_pRootNode);
+	FindNeighborNode();
+
+	for (auto node : g_pLeafNodes)
+	{
+		SetIndexData(node, m_iNumLOD);	//둘 다 *16개
+		CreateIndexBuffer(node, m_iNumLOD);
+	}
 }
 
 ANode* AQuadtree::CreateNode(ANode* pParent, float x, float y, float w, float h)
@@ -40,13 +60,20 @@ ANode* AQuadtree::CreateNode(ANode* pParent, float x, float y, float w, float h)
 void AQuadtree::BuildTree(ANode* pParent)
 {
 	if (pParent != nullptr) { return; }
-	if (pParent->m_iDepth == m_iMaxDepth)
+
+	if ((pParent->m_CornerList[1] - pParent->m_CornerList[0]) == 1)
 	{
-		pParent->m_bLeaf = true;
-		SetIndexData(pParent);
-		CreateIndexBuffer(pParent);
-		g_pLeafNodes.push_back(pParent);
+		m_iMaxDepth = pParent->m_iDepth;
+		m_iNumLOD = (m_iMaxDepth - m_iLeafLOD) + 1;
 		return;
+	}
+
+	if (pParent->m_iDepth == m_iLeafDepth)
+	{
+		m_iLeafDepth = pParent->m_iDepth;
+		pParent->m_bLeaf = true;
+
+		g_pLeafNodes.push_back(pParent);
 	}
 
 	//(0)   1   (2)   3   (4)
@@ -166,7 +193,6 @@ bool AQuadtree::AddObject(AMapObj* pObj)
 
 bool AQuadtree::AddDynamicObject(AMapObj* pObj)
 {
-	//AddDynamicObject 뭐가 다른겨..?
 	ANode* pFindNode = FindNode(m_pRootNode, pObj->box);
 	if (pFindNode != nullptr)
 	{
@@ -222,61 +248,70 @@ bool AQuadtree::CheckBox(ABox& abox, ABox& bbox)
 	return false;
 }
 
-void AQuadtree::SetIndexData(ANode* pNode)
+void AQuadtree::SetIndexData(ANode* pNode, int iLodLevel)
 {
 	//m_pMap가 존재할 때에만 진행되도록? 디버깅 모드에서만 발동하는 에러 검출용 코드
 	assert(m_pMap);
+	pNode->m_IndexList.resize(iLodLevel);
 
-	//Row : 행 (가로)
-	//Col : 열 (세로)
-	DWORD dwStartRow = pNode->m_CornerList[0] / m_iWidth;
-	DWORD dwEndRow = pNode->m_CornerList[2] / m_iWidth;
+	for (int iLod = 0; iLod < iLodLevel; iLod++)
+	{ 
+		//Row : 행 (가로)
+		//Col : 열 (세로)
+		DWORD dwStartRow = pNode->m_CornerList[0] / m_iWidth;
+		DWORD dwEndRow = pNode->m_CornerList[2] / m_iWidth;
 
-	DWORD dwStartCol = pNode->m_CornerList[0] % m_iWidth;
-	DWORD dwEndCol = pNode->m_CornerList[1] % m_iWidth;
+		DWORD dwStartCol = pNode->m_CornerList[0] % m_iWidth;
+		DWORD dwEndCol = pNode->m_CornerList[1] % m_iWidth;
 
-	DWORD dwCellWidth = (dwEndCol - dwStartCol);
-	DWORD dwCellHeight = (dwEndRow - dwStartRow);
+		DWORD dwCellWidth = (dwEndCol - dwStartCol);
+		DWORD dwCellHeight = (dwEndRow - dwStartRow);
 
-	int iNumFace = dwCellWidth * dwCellHeight * 2; //삼각형2개니까 2배
-	pNode->m_IndexList.resize(iNumFace * 3);	//Index는 삼각형 그릴 시 3점이 필요하므로 3배
-	UINT iIndex = 0;
-	for (DWORD iRow = dwStartRow; iRow < dwStartRow; iRow++)
-	{
-		for (DWORD iCol = dwStartCol; iCol < dwStartCol; iCol++)
+		int iNumFace = (dwCellWidth * dwCellHeight * 2) / pow(4, iLod); //삼각형2개니까 2배
+		int iOffset = pow(2, iLod); // 0->1, 1->2, 2->4
+		pNode->m_IndexList.resize(iNumFace * 3);	//Index는 삼각형 그릴 시 3점이 필요하므로 3배
+		UINT iIndex = 0;
+		for (DWORD iRow = dwStartRow; iRow < dwEndRow; iRow += iOffset)
 		{
-			pNode->m_IndexList[iIndex + 0] = iRow * m_iWidth + iCol;
-			pNode->m_IndexList[iIndex + 1] = (iRow * m_iWidth + iCol) + 1;
-			pNode->m_IndexList[iIndex + 2] = (iRow + 1) * m_iWidth + iCol;
+			for (DWORD iCol = dwStartCol; iCol < dwEndCol; iCol += iOffset)
+			{
+				pNode->m_IndexList[iLod][iIndex + 0] = iRow * m_iWidth + iCol;
+				pNode->m_IndexList[iLod][iIndex + 1] = (iRow * m_iWidth + iCol) + iOffset;
+				pNode->m_IndexList[iLod][iIndex + 2] = (iRow + iOffset) * m_iWidth + iCol;
 
-			pNode->m_IndexList[iIndex + 3] = pNode->m_IndexList[iIndex + 2];
-			pNode->m_IndexList[iIndex + 4] = pNode->m_IndexList[iIndex + 1];
-			pNode->m_IndexList[iIndex + 5] = pNode->m_IndexList[iIndex + 2] + 1;
-			iIndex += 6;
-		}			
+				pNode->m_IndexList[iLod][iIndex + 3] = pNode->m_IndexList[iLod][iIndex + 2];
+				pNode->m_IndexList[iLod][iIndex + 4] = pNode->m_IndexList[iLod][iIndex + 1];
+				pNode->m_IndexList[iLod][iIndex + 5] = pNode->m_IndexList[iLod][iIndex + 2] + iOffset;
+				iIndex += 6;
+			}			
+		}
 	}
 }
 
-bool AQuadtree::CreateIndexBuffer(ANode* pNode)
+bool AQuadtree::CreateIndexBuffer(ANode* pNode, int iLodLevel)
 {
 
 	HRESULT hr;
-	if (pNode->m_IndexList.size() <= 0) return true;
+	pNode->m_pIndexBuffer.resize(iLodLevel);
+	for(int iLod = 0; iLod < iLodLevel; iLod++)
+	{ 
+		if (pNode->m_IndexList[iLod].size() <= 0) return true;
 
-	D3D11_BUFFER_DESC bd;
-	ZeroMemory(&bd, sizeof(D3D11_BUFFER_DESC));
-	bd.ByteWidth = sizeof(DWORD) *pNode->m_IndexList.size();
-	bd.Usage = D3D11_USAGE_DEFAULT;
-	bd.BindFlags = D3D11_BIND_INDEX_BUFFER;
+		D3D11_BUFFER_DESC bd;
+		ZeroMemory(&bd, sizeof(D3D11_BUFFER_DESC));
+		bd.ByteWidth = sizeof(DWORD) *pNode->m_IndexList[iLod].size();
+		bd.Usage = D3D11_USAGE_DEFAULT;
+		bd.BindFlags = D3D11_BIND_INDEX_BUFFER;
 
-	D3D11_SUBRESOURCE_DATA sd;
-	ZeroMemory(&sd, sizeof(D3D11_SUBRESOURCE_DATA));
-	sd.pSysMem = &pNode->m_IndexList.at(0);
+		D3D11_SUBRESOURCE_DATA sd;
+		ZeroMemory(&sd, sizeof(D3D11_SUBRESOURCE_DATA));
+		sd.pSysMem = &pNode->m_IndexList[iLod].at(0);
 
-	if(FAILED(hr = m_pMap->m_pd3dDevice->CreateBuffer(&bd, &sd, 
-		pNode->m_pIndexBuffer.GetAddressOf())))
-	{
-		return false;
+		if(FAILED(hr = m_pMap->m_pd3dDevice->CreateBuffer(&bd, &sd, 
+			pNode->m_pIndexBuffer[iLod].GetAddressOf())))
+		{
+			return false;
+		}
 	}
 	return true;
 }
@@ -300,7 +335,7 @@ m_pMap->m_pContext->UpdateSubresource(m_pMap->m_pConstantBuffer,
 	0, NULL, &m_pMap->m_ConstantList, 0, 0);
 
 m_pMap->m_pContext->IASetIndexBuffer(g_pDrawLeafNodes[iNode]->
-	m_pIndexBuffer.Get(), DXGI_FORMAT_R32_UINT, 0);
+	m_pIndexBuffer[iNode].Get(), DXGI_FORMAT_R32_UINT, 0);
 m_pMap->m_pContext->DrawIndexed(g_pDrawLeafNodes[iNode]->m_IndexList.size(), 0, 0);
 	}
 	for (auto obj : m_pObjList)

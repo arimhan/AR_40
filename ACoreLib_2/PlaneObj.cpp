@@ -13,12 +13,10 @@ bool APlaneObj::SetVertexData()
     m_VertexList[1].c = T::TVector4(1.0f, 1.0f, 1.0f, 1.0f);
     m_VertexList[1].t = T::TVector2(1.0f, 0.0f);
 
-
     m_VertexList[2].p = T::TVector3(-1.0f, -1.0f, 0.0f);
     m_VertexList[2].n = T::TVector3(0.0f, 0.0f, -1.0f);
     m_VertexList[2].c = T::TVector4(1.0f, 1.0f, 1.0f, 1.0f);
     m_VertexList[2].t = T::TVector2(0.0f, 1.0f);
-
 
     m_VertexList[3].p = T::TVector3(1.0f, -1.0f, 0.0f);
     m_VertexList[3].n = T::TVector3(0.0f, 0.0f, -1.0f);

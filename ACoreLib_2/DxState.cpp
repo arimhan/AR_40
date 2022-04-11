@@ -101,6 +101,8 @@ bool ADxState::SetState(ID3D11Device* pd3dDevice)
 
 	dsDescDepth.DepthWriteMask = D3D11_DEPTH_WRITE_MASK_ZERO;
 	if (FAILED(hr = pd3dDevice->CreateDepthStencilState(&dsDescDepth, &g_pDSSDepthDisableWirteDisable))) return hr;
+
+	dsDescDepth.DepthEnable = TRUE;
 	dsDescDepth.DepthWriteMask = D3D11_DEPTH_WRITE_MASK_ZERO;
 	if (FAILED(hr = pd3dDevice->CreateDepthStencilState(&dsDescDepth, &g_pDSSDepthEnableWirteDisable))) return hr;
 

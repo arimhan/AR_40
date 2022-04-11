@@ -192,7 +192,6 @@ bool ABoxObj::PostRender()
 	}
 	else
 	{
-		//m_pContext->PSSetShaderResources(3, 1, m_pTexCube->m_pSRV.GetAddressOf());
 		m_pContext->DrawIndexed(m_IndexList.size(), 0, 0); //DirextXTK -> DirextTexture가 지원함..
 	}
 	return true;

@@ -181,7 +181,8 @@ FbxVector4 AFbxLoader::ReadNormal(const FbxMesh* pMesh, int ictrPointIndex, int 
 
 int	 AFbxLoader::GetSubMaterialIndex(int iPoly, FbxLayerElementMaterial* pMtrlSetList) 
 {
-	// SubMtrl
+	// SubMtrl 매핑방식
+	// eNone, eBycontrolPoint(제어점), eByPolygonVertex, eByPolygon(폴리곤마다), eAllSame (전체표면에 1개의 매핑좌표 존재)
 	int iSubMtrl = 0;
 	if (pMtrlSetList != nullptr)
 	{
@@ -189,6 +190,7 @@ int	 AFbxLoader::GetSubMaterialIndex(int iPoly, FbxLayerElementMaterial* pMtrlSe
 		{
 		case FbxLayerElement::eByPolygon:
 		{
+			//매빙 정보가 배열에 저장되는 방식
 			switch (pMtrlSetList->GetReferenceMode())
 			{
 			case FbxLayerElement::eIndex:

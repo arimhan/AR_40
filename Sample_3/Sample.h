@@ -22,10 +22,10 @@ class ASample : public ACore
 public:
 	T::TVector3			m_vIntersection;
 	vector<T::TVector3>	m_vIntersectionList;
-	bool GetIntersection(T::TVector3 vStart, T::TVector3 vEnd,
-		T::TVector3 v0, T::TVector3 v1, T::TVector3 v2, T::TVector3 vNormal);
-	bool PointInPolygon(T::TVector3 vert, T::TVector3 faceNormal,
-		T::TVector3 v0, T::TVector3 v1, T::TVector3 v2);
+	//bool GetIntersection(T::TVector3 vStart, T::TVector3 vEnd,
+		//T::TVector3 v0, T::TVector3 v1, T::TVector3 v2, T::TVector3 vNormal);
+	//bool PointInPolygon(T::TVector3 vert, T::TVector3 faceNormal,
+		//T::TVector3 v0, T::TVector3 v1, T::TVector3 v2);
 public:
 	virtual bool	Init() override;
 	virtual bool	Render()override;

@@ -14,7 +14,7 @@ public:
 	//Animation Ãß°¡
 	TMatrix		m_matLocal;
 	TMatrix		m_matAnim;
-	int			m_iIndex = -1;
+	//int			m_iIndex = -1;
 
 	FbxNode*	m_pFbxParent	= nullptr;
 	FbxNode*	m_pFbxNode		= nullptr;
@@ -23,7 +23,7 @@ public:
 
 	//SubMaterial
 	vector<wstring>			m_szTexFileList;
-	using ASubVertex =		vector<AVertex>;
+	using ASubVertex = vector<AVertex>;
 	vector<ASubVertex>		m_pSubVertexList;
 	vector<ID3D11Buffer*>	m_pVBList;
 	vector<ATexture*>		m_pTextureList;

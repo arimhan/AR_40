@@ -6,6 +6,7 @@ bool ASample::Init()
     m_FbxObj.Init();
     //m_FbxObj.Load("../../data/fbx/SM_Rock.fbx");
     m_FbxObj.Load("../../data/fbx/Turret_Deploy1/Turret_Deploy1.FBX");
+
     //ATexture* pTex = I_Texture.Load(L"../../data/ui/main_start_nor.png");
     AShader* pVShader = I_Shader.CreateVertexShader(m_pd3dDevice.Get(), L"Box.hlsl", "VS");
     AShader* pPShader = I_Shader.CreatePixelShader(m_pd3dDevice.Get(), L"Box.hlsl", "PS");
@@ -15,7 +16,6 @@ bool ASample::Init()
         m_FbxObj.m_pDrawList[iObj]->m_pColorTex = I_Texture.Load(m_FbxObj.m_pDrawList[iObj]->m_szTexFileName);
         m_FbxObj.m_pDrawList[iObj]->m_pVShader = pVShader;
         m_FbxObj.m_pDrawList[iObj]->m_pPShader = pPShader;
-        //m_FbxObj.m_pDrawList[iObj]->SetPosition(T::TVector3(0.0f, 1.0f, 0.0f));
         if(!m_FbxObj.m_pDrawList[iObj]->Create(m_pd3dDevice.Get(), m_pImmediateContext.Get()))
         { return false;}
     }
@@ -40,8 +40,8 @@ bool ASample::Frame()
         fDir *= -1.0f;
     }
     int iFrame = fTime;
-    iFrame = min(50, iFrame);
-    iFrame = max(0, iFrame);
+    //iFrame = min(50, iFrame);
+    iFrame = max(0, min(50, iFrame));
     for (int iObj = 0; iObj < m_FbxObj.m_pTreeList.size(); iObj++)
     {
         AFbxObject* pObj = m_FbxObj.m_pTreeList[iObj];

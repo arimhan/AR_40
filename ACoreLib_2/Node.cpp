@@ -21,7 +21,7 @@ void AMapObj::UpdateData()
 
 void AMapObj::UpdateCollision()
 {
-	box.vAxis[0] = m_vRight;		//vLight로 변경하기?
+	box.vAxis[0] = m_vRight;
 	box.vAxis[1] = m_vUp;
 	box.vAxis[2] = m_vLook;
 
@@ -29,7 +29,6 @@ void AMapObj::UpdateCollision()
 	box.vMin = T::TVector3(100000, 100000, 100000);
 	box.vMax = T::TVector3(-100000, -100000, -100000);
 
-	//m_VertexList.size();
 	for (int i = 0; i < 8; i++)
 	{
 		T::TVector3 pos;
