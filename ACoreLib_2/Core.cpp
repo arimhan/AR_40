@@ -2,6 +2,8 @@
 #include "ObjectMgr.h"
 #include "SoundMgr.h"
 
+ABoxObj* g_pBoxDebug = nullptr;
+
 bool ACore::CoreInit()
 {
 	m_GameTimer.Init();	
@@ -37,6 +39,20 @@ bool ACore::CoreInit()
 		return false;
 	}
 	m_pMainCamera = &m_DefaultCamera;
+
+	m_SkyObj.Init();
+	m_SkyObj.SetPosition(T::TVector3(0.0f, 0.0f, 0.0f));
+
+	if(!m_SkyObj.Create(m_pd3dDevice.Get(), m_pImmediateContext.Get(), 
+		L"../../data/shader/sky.hlsl", L"../../data/sky/skybox02.dds"))
+	{
+		return false;
+	}
+
+	DrawDebugInit(m_pd3dDevice.Get(), m_pImmediateContext.Get());
+
+	g_pBoxDebug = &m_BoxDebug;
+
 	Init();
 
 	return true;
@@ -126,6 +142,16 @@ void ACore::ResizeDevice(UINT iWidth, UINT iHeight)
 	if (pSurface) pSurface->Release();
 
 	CreateResizeDevice(iWidth, iHeight);
+}
+
+//디버그 모드일때만 사용함.
+void ACore::DrawDebugInit(ID3D11Device* pd3dDevice, ID3D11DeviceContext* pContext)
+{
+	m_BoxDebug.m_pColorTex = I_Texture.Load(L"../../data/charport.bmp");
+	m_BoxDebug.m_pVShader = I_Shader.CreateVertexShader(pd3dDevice, L"Box.hlsl", "VSColor");
+	m_BoxDebug.m_pPShader = I_Shader.CreatePixelShader(pd3dDevice, L"Box.hlsl", "PSColor");
+	m_BoxDebug.SetPosition(T::TVector3(0.0f, 1.0f, 0.0f));
+	if (!m_BoxDebug.Create(pd3dDevice, pContext)) { return; }
 }
 
 bool ACore::Init() { return true; }

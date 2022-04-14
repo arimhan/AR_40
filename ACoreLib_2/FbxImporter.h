@@ -1,6 +1,7 @@
 #pragma once
 #include "Object3D.h"
 #include <fbxsdk.h>
+#include "Camera.h"
 
 
 struct PNCT
@@ -12,8 +13,9 @@ struct PNCT
 };
 struct AVertexIW
 {
-	float i[4]; //index
-	float w[4]; //weight
+	float			i[4]; //index
+	float			w[4]; //weight
+	T::TVector3		tan;  //tangent
 	AVertexIW()
 	{
 		i[0] = i[1] = i[2] = i[3] = 0;
@@ -29,9 +31,9 @@ struct ATrack
 	TMatrix matTrack;
 
 	//SRT 값
-	T::TVector3 s;
-	T::TQuaternion r; //Rotation은 TQuaternion로 해야 짐벌현상이 발생하지 않는다.
-	T::TVector3 t;
+	T::TVector3		s;
+	T::TQuaternion	r; //Rotation은 TQuaternion로 해야 짐벌현상이 발생하지 않는다.
+	T::TVector3		t;
 };
 
 struct AWeight					//가중치
@@ -78,7 +80,7 @@ public:
 
 	vector<ATrack>			m_AnimTrack;
 	map<wstring, TMatrix>	m_dxMatrixBindPoseMap;
-	TMatrix mmm[255];		
+	ACamera*				m_pMainCamera;
 
 public:
 
@@ -90,6 +92,8 @@ public:
 
 	virtual bool PostRender()			override;
 	virtual bool Release()				override;
+
+	virtual void GenAABB()				override;
 };
 
 struct AScene

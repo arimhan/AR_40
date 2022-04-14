@@ -81,6 +81,7 @@ struct AConstantData
 	T::TMatrix		matWorld;	//월드
 	T::TMatrix		matView;	//뷰
 	T::TMatrix		matProj;	//투영
+	T::TMatrix		matNormal;	//노말맵
 	T::TVector4		Color;		//기존 컬러값
 	T::TVector4		Timer;		//타이머
 };
@@ -91,6 +92,8 @@ struct ABoneWorld
 };
 struct ALightData
 {
+	T::TVector4		vCameraDir;
+	T::TVector4		vCameraPos;
 	T::TVector4		vLightDir;
 	T::TVector4		vLightPos;
 };

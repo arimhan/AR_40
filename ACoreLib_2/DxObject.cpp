@@ -28,6 +28,7 @@ bool ADxObject::SetConstantData()
 	m_ConstantList.matWorld = T::TMatrix();
 	m_ConstantList.matView = T::TMatrix();
 	m_ConstantList.matProj = T::TMatrix();
+	m_ConstantList.matNormal = T::TMatrix();
 	//AMatrix생성자 호출 시 단일행렬이 적용됨.
 
 	m_ConstantList.Color.x = 0.0f;

@@ -3,6 +3,14 @@
 
 bool ASample::Init()
 {
+    //MAP 만들기
+    map.init;
+    map.setdevice;
+    map.createmap;
+    if (!mapobj.create(, 경로설정 map.hlsl, img파일));
+    quadtree.카메라설정;
+    quadtree.build. (LOD);
+
     return true;
 }
 

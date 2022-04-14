@@ -1,7 +1,7 @@
 #include "FbxImporter.h"
 
 
-//-------------------------  AFbxImporter  -----------------------------------
+//-------------------  AFbxImporter  Load, Mesh, Skinning-------------------------
 
 
 bool AFbxImporter::Load(ID3D11Device* pd3dDevice, wstring filename) 
@@ -26,6 +26,7 @@ bool AFbxImporter::Load(ID3D11Device* pd3dDevice, wstring filename)
 
 	return true;
 }
+
 bool AFbxImporter::Load(string filename)
 {
 	Init();
@@ -175,6 +176,12 @@ void AFbxImporter::ParseMesh(AFbxModel* pObj)
 			iCornerIndex[1] = pFbxMesh->GetPolygonVertex(iPoly, iVertexIndex[1]);
 			iCornerIndex[2] = pFbxMesh->GetPolygonVertex(iPoly, iVertexIndex[2]);
 
+			//UV
+			int u[3];
+			u[0] = pFbxMesh->GetTextureUVIndex(iPoly, 0);
+			u[1] = pFbxMesh->GetTextureUVIndex(iPoly, iFace + 2);
+			u[2] = pFbxMesh->GetTextureUVIndex(iPoly, iFace + 1);
+
 			for (int iIndex = 0; iIndex < 3; iIndex++)
 			{
 
@@ -186,11 +193,7 @@ void AFbxImporter::ParseMesh(AFbxModel* pObj)
 				tVertex.p.y = v.mData[2]; //y,z값 바꿀것
 				tVertex.p.z = v.mData[1];
 
-				//UV
-				int u[3];
-				u[0] = pFbxMesh->GetTextureUVIndex(iPoly, iVertexIndex[0]);
-				u[1] = pFbxMesh->GetTextureUVIndex(iPoly, iVertexIndex[1]);
-				u[2] = pFbxMesh->GetTextureUVIndex(iPoly, iVertexIndex[2]);
+				
 				if (pVertexUvSet.size() > 0)
 				{
 					FbxLayerElementUV* pUVset = pVertexUvSet[0];
@@ -328,7 +331,7 @@ bool AFbxImporter::ParseMeshSkinning(FbxMesh* pFbxMesh, AFbxModel* pObject)
 
 
 
-//-------------------------  AFbxImporter  -----------------------------------
+//-------------------------  Animation  -----------------------------------
 
 //Animation 추가
 TMatrix	AFbxImporter::DxConvertMatrix(TMatrix m)
@@ -375,7 +378,7 @@ void AFbxImporter::ParseAnimation()
 {
 	FbxTime::SetGlobalTimeMode(FbxTime::eFrames30);
 	FbxAnimStack* pStack = m_pFbxScene->GetSrcObject<FbxAnimStack>(0);
-	if (pStack = nullptr) return;
+	if (pStack == nullptr) return;
 
 	FbxString TakeName = pStack->GetName();
 	FbxTakeInfo* pTakeInfo = m_pFbxScene->GetTakeInfo(TakeName);
@@ -418,6 +421,16 @@ bool AFbxImporter::Init()
 	m_pFbxManager = FbxManager::Create();
 	m_pFbxImporter = FbxImporter::Create(m_pFbxManager,"");
 	m_pFbxScene = FbxScene::Create(m_pFbxManager, "");
+
+	FbxAxisSystem m_SceneAxisSystem = m_pFbxScene->GetGlobalSettings().GetAxisSystem();
+	FbxAxisSystem::MayaZUp.ConvertScene(m_pFbxScene);
+	m_SceneAxisSystem = m_pFbxScene->GetGlobalSettings().GetAxisSystem();
+
+	FbxSystemUnit m_SceneSystemUnit = m_pFbxScene->GetGlobalSettings().GetSystemUnit();
+	if (m_SceneSystemUnit.GetScaleFactor() != 1.0f)
+	{
+		FbxSystemUnit::cm.ConvertScene(m_pFbxScene);
+	}
 
 	return true;
 }

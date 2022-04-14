@@ -5,6 +5,7 @@ bool ASample::Init()
 {
     m_FbxObj.Init();
     //m_FbxObj.Load("../../data/fbx/SM_Rock.fbx");
+    //m_FbxObj.Load("../../data/fbx/SM_Barrel.fbx");
     m_FbxObj.Load("../../data/fbx/Turret_Deploy1/Turret_Deploy1.FBX");
 
     ATexture* pTex = I_Texture.Load(L"../../data/ui/main_start_nor.png");

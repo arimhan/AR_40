@@ -1,0 +1,25 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <ClCompile Include="Sample.cpp" />
+    <ClCompile Include="FbxObj.cpp">
+      <Filter>fbxresource</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="Sample.h" />
+    <ClInclude Include="FbxObj.h">
+      <Filter>fbxresource</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <Filter Include="fbxresource">
+      <UniqueIdentifier>{10bed31e-d804-4cb2-8f61-d09d894d75d6}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <FxCompile Include="Box.hlsl">
+      <Filter>fbxresource</Filter>
+    </FxCompile>
+  </ItemGroup>
+</Project>
