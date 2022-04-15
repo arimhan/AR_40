@@ -48,7 +48,7 @@ wstring ABaseMgr<T, S>::Splitpath(wstring path, wstring entry)
 }
 
 template <class T, class S>
-void ABaseMgr<T, S>::Set(ID3D11Device* pd3dDevice, ID3D11DeviceContext* pContext)
+void ABaseMgr<T, S>::Set(ID3D11Device* pd3dDevice, ID3D11DeviceContext* pContext )
 {
 	m_pd3dDevice = pd3dDevice;
 	m_pContext = pContext;

@@ -95,9 +95,28 @@ void AFbxImporter::ParseMesh(AFbxModel* pObj)
 	//Layer 개념. (여러번에 걸쳐 랜더링)
 	vector<FbxLayerElementUV*> pVertexUvSet;
 	vector<FbxLayerElementVertexColor*> pVertexColorSet;
+	vector<FbxLayerElementTangent*> pVertexTangentSet;
 	vector<FbxLayerElementMaterial*> pMaterialSet;
+	vector<FbxLayerElementNormal*> pVertexNormalSets;
 
 	int iLayerCount = pFbxMesh->GetLayerCount();
+	bool bFlag = false;
+
+	if (iLayerCount == 0 || pFbxMesh->GetLayer(0)->GetNormals() == nullptr)
+	{
+		pFbxMesh->InitNormals();
+#if (FBXSDK_VERSION_MAJOR >= 2015)
+		pFbxMesh->GenerateNormals();
+#else
+		pFbxMesh->ComputeVertexNormals();
+#endif
+	}
+
+	if (pFbxMesh->GetLayer(0)->GetNormals() == nullptr)
+	{
+		bFlag = pFbxMesh->GenerateTangentsData(0);
+	}
+
 	for (int iLayer = 0; iLayer < iLayerCount; iLayer++)
 	{
 		FbxLayer* pFbxLayer = pFbxMesh->GetLayer(iLayer);
@@ -108,6 +127,14 @@ void AFbxImporter::ParseMesh(AFbxModel* pObj)
 		if (pFbxLayer->GetVertexColors() != nullptr)
 		{
 			pVertexColorSet.push_back(pFbxLayer->GetVertexColors());
+		}
+		if (pFbxLayer->GetTangents() != nullptr)
+		{
+			pVertexTangentSet.push_back(pFbxLayer->GetTangents());
+		}
+		if (pFbxLayer->GetNormals() != nullptr)
+		{
+			pVertexNormalSets.push_back(pFbxLayer->GetNormals());
 		}
 		if (pFbxLayer->GetMaterials() != nullptr)
 		{
@@ -172,9 +199,9 @@ void AFbxImporter::ParseMesh(AFbxModel* pObj)
 			// max 021, 032 -> 012, 023
 			int iVertexIndex[3] = { 0, iFace + 2, iFace + 1 };
 			int iCornerIndex[3];
-			iCornerIndex[0] = pFbxMesh->GetPolygonVertex(iPoly, iVertexIndex[0]);
-			iCornerIndex[1] = pFbxMesh->GetPolygonVertex(iPoly, iVertexIndex[1]);
-			iCornerIndex[2] = pFbxMesh->GetPolygonVertex(iPoly, iVertexIndex[2]);
+			iCornerIndex[0] = pFbxMesh->GetPolygonVertex(iPoly, 0);
+			iCornerIndex[1] = pFbxMesh->GetPolygonVertex(iPoly, iFace+2);
+			iCornerIndex[2] = pFbxMesh->GetPolygonVertex(iPoly, iFace+1);
 
 			//UV
 			int u[3];
@@ -184,23 +211,25 @@ void AFbxImporter::ParseMesh(AFbxModel* pObj)
 
 			for (int iIndex = 0; iIndex < 3; iIndex++)
 			{
-
-				AVertex tVertex;
+				int DCCIndex = iCornerIndex[iIndex];
+				AVertex aVertex;
 				//max (x,z,y) -> dx (x,y,z)
-				FbxVector4 v = pVertexPositions[iCornerIndex[iIndex]];
-				v = geom.MultT(v);
-				tVertex.p.x = v.mData[0];
-				tVertex.p.y = v.mData[2]; //y,z값 바꿀것
-				tVertex.p.z = v.mData[1];
+				//FbxVector4 v = pVertexPositions[iCornerIndex[iIndex]];
+				//v = geom.MultT(v);
+				auto v = geom.MultT(pVertexPositions[DCCIndex]);
+
+				aVertex.p.x = v.mData[0];
+				aVertex.p.y = v.mData[2]; //y,z값 바꿀것
+				aVertex.p.z = v.mData[1];
 
 				
 				if (pVertexUvSet.size() > 0)
 				{
 					FbxLayerElementUV* pUVset = pVertexUvSet[0];
 					FbxVector2 uv;
-					ReadTextureCoord(pFbxMesh, pUVset, iCornerIndex[iIndex], u[iIndex], uv);
-					tVertex.t.x = uv.mData[0];
-					tVertex.t.y = 1.0f - uv.mData[1];
+					ReadTextureCoord(pFbxMesh, pUVset, DCCIndex, u[iIndex], uv);
+					aVertex.t.x = uv.mData[0];
+					aVertex.t.y = 1.0f - uv.mData[1];
 				}
 
 				//Color값 세팅
@@ -208,24 +237,41 @@ void AFbxImporter::ParseMesh(AFbxModel* pObj)
 				if (pVertexColorSet.size() > 0)
 				{
 					color = ReadColor(pFbxMesh, pVertexColorSet.size(), pVertexColorSet[0],
-						iCornerIndex[iIndex], iBasePolyIndex + iVertexIndex[iIndex]);
+						DCCIndex, iBasePolyIndex + iVertexIndex[iIndex]);
 				}
-				tVertex.c.x = color.mRed;
-				tVertex.c.y = color.mGreen;
-				tVertex.c.z = color.mBlue;
-				tVertex.c.w = 1;
+				aVertex.c.x = color.mRed;
+				aVertex.c.y = color.mGreen;
+				aVertex.c.z = color.mBlue;
+				aVertex.c.w = pObj->m_iIndex;//1;
 
 				//normal값
-				FbxVector4 normal = ReadNormal(pFbxMesh, iCornerIndex[iIndex], iBasePolyIndex + iVertexIndex[iIndex]);
-				normal = normalMatrix.MultT(normal);
-				tVertex.n.x = normal.mData[0];
-				tVertex.n.y = normal.mData[2];	//z
-				tVertex.n.z = normal.mData[1];	//y
+				if (pVertexNormalSets.size() <= 0)
+				{
+					FbxVector4 Normal = ReadNormal(pFbxMesh, DCCIndex, iBasePolyIndex + iVertexIndex[iIndex]);
+					Normal = normalMatrix.MultT(Normal);
+					aVertex.n.x = Normal.mData[0];
+					aVertex.n.y = Normal.mData[2];	//z
+					aVertex.n.z = Normal.mData[1];	//y
+					D3DXVec3Normalize(&aVertex.n, &aVertex.n);
+				}
+				else //Noraml이 있으면 Store vertex normal
+				{
+
+					FbxVector4 FinalNormal = ReadNormal(pFbxMesh, pVertexNormalSets.size(), pVertexNormalSets[0],
+						DCCIndex, iBasePolyIndex + iVertexIndex[iIndex]);
+					FinalNormal = normalMatrix.MultT(FinalNormal);
+					FinalNormal.Normalize();
+					aVertex.n.x = FinalNormal.mData[0];
+					aVertex.n.y = FinalNormal.mData[2];	//z
+					aVertex.n.z = FinalNormal.mData[1];	//y
+					D3DXVec3Normalize(&aVertex.n, &aVertex.n);
+				}
+
 
 				AVertexIW iwVertex;
 				if (pObj->m_bSkinned)
 				{
-					AWeight* pWeight = &pObj->m_WeightList[iCornerIndex[iIndex]];
+					AWeight* pWeight = &pObj->m_WeightList[DCCIndex];
 					for (int i = 0; i < 4; i++)
 					{
 						iwVertex.i[i] = pWeight->Index[i];
@@ -240,7 +286,7 @@ void AFbxImporter::ParseMesh(AFbxModel* pObj)
 				}
 
 				//pObj->m_pSubVertexList[iSubMtrl].push_back(tVertex); //36
-				pObj->m_pSubVertexList[iSubMtrl].push_back(tVertex);
+				pObj->m_pSubVertexList[iSubMtrl].push_back(aVertex);
 				pObj->m_pSubIWVertexList[iSubMtrl].push_back(iwVertex);
 			}
 		}

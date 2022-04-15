@@ -1,6 +1,6 @@
 #include "Sample.h"
 #include "ObjectMgr.h"
-
+#include "BoxObj.h"
 
 bool ASample::Init()
 {
@@ -9,7 +9,7 @@ bool ASample::Init()
     //Greystone.fbx LOD Mesh 5개
     //Greystone -> character, idel -> anim
     listname.push_back(L"../../data/fbx/Greystone.fbx");
-    listname.push_back(L"../../data/fbx/idle.fbx");
+    //listname.push_back(L"../../data/fbx/idle.fbx");
         // 0 ~ 60  idel
         // 61 ~91  walk;
         // 92 ~ 116	  run
@@ -57,11 +57,25 @@ bool ASample::Frame()
 
 bool ASample::Render()
 {
+    //LightTex와 NormalMap을 넘겨 렌더링 한다.
     m_pImmediateContext->PSSetShaderResources(1, 1, m_pLightTex->m_pSRV.GetAddressOf());
+    m_pImmediateContext->PSSetShaderResources(4, 1, m_pNormalMap->m_pSRV.GetAddressOf());
+
     for (int iObj = 0; iObj < m_FbxObj.size(); iObj++)
     {
         m_FbxObj[iObj].SetMatrix(nullptr, &m_pMainCamera->m_matView, &m_pMainCamera->m_matProj);
         m_FbxObj[iObj].Render();
+    }
+
+    for (int iObj = 0; iObj < m_FbxObj.size(); iObj++)
+    {
+        for (int iDraw = 0; iDraw < m_FbxObj[iObj].m_DrawList.size(); iDraw++)
+        { 
+            g_pBoxDebug->SetMatrix(&m_FbxObj[iObj].m_pMeshImp->m_pDrawList[iDraw]->m_matWorld,
+                &m_pMainCamera->m_matView, &m_pMainCamera->m_matProj);
+            g_pBoxDebug->DrawDebugRender(&m_FbxObj[iObj].m_pMeshImp->m_pDrawList[iDraw]->m_BoxCollision);
+        }
+
     }
     wstring msg = L"[ FPS: ";
     msg += std::to_wstring(m_GameTimer.m_iFPS);

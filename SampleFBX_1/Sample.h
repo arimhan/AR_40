@@ -2,6 +2,12 @@
 #include "Core.h"
 #include "FbxObj.h"
 
+#include <tchar.h>
+#include <stdio.h>
+#include <strsafe.h>
+
+
+
 class ASample : public ACore
 {
 	vector<AFbxObj>		m_FbxObj;

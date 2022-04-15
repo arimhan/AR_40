@@ -91,6 +91,7 @@ FbxColor AFbxImporter::ReadColor(const FbxMesh* pMesh, DWORD dwVertexColorCount,
 	return Value;
 }
 
+
 FbxVector4	AFbxImporter::ReadNormal(const FbxMesh* pMesh, int ictrPointIndex, int iVcounter)
 {
 	//Mesh의 노말이 존재하면 노말획득
@@ -147,6 +148,144 @@ FbxVector4	AFbxImporter::ReadNormal(const FbxMesh* pMesh, int ictrPointIndex, in
 	}
 	return fvresult;
 }
+
+
+//정점 노말을 읽는 함수
+FbxVector4	AFbxImporter::ReadNormal(const FbxMesh* pMesh, DWORD dwVertexNormalCount, FbxLayerElementNormal* pVertexNormalSets,
+	int ictrPointIndex, int iVIndex)
+{
+	FbxVector4 Value(0, 0, 0);
+	if (dwVertexNormalCount < 1) { return Value; }
+	int iVNormalLayer = pMesh->GetElementNormalCount();
+
+	//Get Normal
+	const FbxGeometryElementNormal* pVNormal = pMesh->GetElementNormal(0);
+	
+	//Create Vecter(for Save Normal)
+	switch (pVertexNormalSets->GetMappingMode()) //Mapping Mode
+	{
+	case FbxGeometryElement::eByControlPoint:
+	{
+		//Control Point Mapping
+		switch (pVertexNormalSets->GetReferenceMode())
+		{
+		case FbxGeometryElement::eDirect:
+		{
+			Value[0] = static_cast<float>(pVertexNormalSets->GetDirectArray().GetAt(ictrPointIndex).mData[0]);
+			Value[1] = static_cast<float>(pVertexNormalSets->GetDirectArray().GetAt(ictrPointIndex).mData[1]);
+			Value[2] = static_cast<float>(pVertexNormalSets->GetDirectArray().GetAt(ictrPointIndex).mData[2]);
+		}break;
+		case FbxGeometryElement::eIndexToDirect:
+		{
+			int index = pVertexNormalSets->GetIndexArray().GetAt(ictrPointIndex);
+
+			//Get Index
+			Value[0] = static_cast<float>(pVertexNormalSets->GetDirectArray().GetAt(index).mData[0]);
+			Value[1] = static_cast<float>(pVertexNormalSets->GetDirectArray().GetAt(index).mData[1]);
+			Value[2] = static_cast<float>(pVertexNormalSets->GetDirectArray().GetAt(index).mData[2]);
+		}break;
+		}break;
+	}break;
+	//PolygonVertex
+	case FbxGeometryElement::eByPolygonVertex:
+	{
+		//Control Point Mapping
+		switch (pVNormal->GetReferenceMode())
+		{
+		case FbxGeometryElement::eDirect:
+		{
+			Value[0] = static_cast<float>(pVertexNormalSets->GetDirectArray().GetAt(iVIndex).mData[0]);
+			Value[1] = static_cast<float>(pVertexNormalSets->GetDirectArray().GetAt(iVIndex).mData[1]);
+			Value[2] = static_cast<float>(pVertexNormalSets->GetDirectArray().GetAt(iVIndex).mData[2]);
+		}break;
+		case FbxGeometryElement::eIndexToDirect:
+		{
+			int index = pVertexNormalSets->GetIndexArray().GetAt(iVIndex);
+
+			//Get Index
+			Value[0] = static_cast<float>(pVertexNormalSets->GetDirectArray().GetAt(index).mData[0]);
+			Value[1] = static_cast<float>(pVertexNormalSets->GetDirectArray().GetAt(index).mData[1]);
+			Value[2] = static_cast<float>(pVertexNormalSets->GetDirectArray().GetAt(index).mData[2]);
+		}break;
+		}
+	}break;
+	}
+	return Value;
+}
+
+FbxVector4	AFbxImporter::ReadTangent(const FbxMesh* pMesh, DWORD dwVertexTangentCount, FbxGeometryElementTangent* pVertexTangentSets,
+	DWORD dwDCCIndex, DWORD dwVertexIndex)
+{
+	FbxVector4 tanret(0, 0, 0);
+	if (dwVertexTangentCount < 1) { return tanret; }
+	int dwVTangentCountLayer = pMesh->GetElementTangentCount();
+	//Get Normal
+	const FbxGeometryElementTangent* pVTangent = pMesh->GetElementTangent(0);
+
+	if (pVTangent != nullptr)
+	{
+		//Create Vecter(for Save Normal)
+		switch (pVTangent->GetMappingMode()) //Mapping Mode
+		{
+		case FbxGeometryElement::eByControlPoint:
+		{
+			//Control Point Mapping
+			switch (pVTangent->GetReferenceMode())
+			{
+			case FbxGeometryElement::eDirect:
+			{
+				tanret[0] = static_cast<float>(pVTangent->GetDirectArray().GetAt(dwDCCIndex).mData[0]);
+				tanret[1] = static_cast<float>(pVTangent->GetDirectArray().GetAt(dwDCCIndex).mData[1]);
+				tanret[2] = static_cast<float>(pVTangent->GetDirectArray().GetAt(dwDCCIndex).mData[2]);
+			}break;
+			case FbxGeometryElement::eIndexToDirect:
+			{
+				int index = pVTangent->GetIndexArray().GetAt(dwDCCIndex);
+
+				//Get Index
+				tanret[0] = static_cast<float>(pVTangent->GetDirectArray().GetAt(index).mData[0]);
+				tanret[1] = static_cast<float>(pVTangent->GetDirectArray().GetAt(index).mData[1]);
+				tanret[2] = static_cast<float>(pVTangent->GetDirectArray().GetAt(index).mData[2]);
+			}break;
+			default:
+			{
+				assert(0);
+			}break;
+			}break;
+		}
+		//PolygonVertex
+		case FbxGeometryElement::eByPolygonVertex:
+		{
+			//Control Point Mapping
+			switch (pVTangent->GetReferenceMode())
+			{
+			case FbxGeometryElement::eDirect:
+			{
+				int iTIndex = dwVertexIndex;
+				tanret[0] = static_cast<float>(pVTangent->GetDirectArray().GetAt(iTIndex).mData[0]);
+				tanret[1] = static_cast<float>(pVTangent->GetDirectArray().GetAt(iTIndex).mData[1]);
+				tanret[2] = static_cast<float>(pVTangent->GetDirectArray().GetAt(iTIndex).mData[2]);
+			}break;
+			case FbxGeometryElement::eIndexToDirect:
+			{
+
+				int iTIndex = pVTangent->GetIndexArray().GetAt(dwVertexIndex);
+				//Get Index
+				tanret[0] = static_cast<float>(pVTangent->GetDirectArray().GetAt(iTIndex).mData[0]);
+				tanret[1] = static_cast<float>(pVTangent->GetDirectArray().GetAt(iTIndex).mData[1]);
+				tanret[2] = static_cast<float>(pVTangent->GetDirectArray().GetAt(iTIndex).mData[2]);
+			}break;
+			default:
+			{
+				assert(0);
+			}
+			}
+		}
+		}
+	}
+	return tanret;
+}
+
 
 int	 AFbxImporter::GetSubMaterialIndex(int iPoly, FbxLayerElementMaterial* pMtrlSetList)
 {

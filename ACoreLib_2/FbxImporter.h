@@ -138,6 +138,10 @@ public:
 	FbxColor		ReadColor(const FbxMesh* pMesh, DWORD dwVertexColorCount, FbxLayerElementVertexColor* pVertexColorSet,
 					DWORD dwDCCIndex, DWORD dwVertexIndex);
 	FbxVector4		ReadNormal(const FbxMesh* pMesh, int ictrPointIndex, int iVcounter);
+	FbxVector4		ReadNormal(const FbxMesh* pMesh, DWORD dwVertexNormalCount,FbxLayerElementNormal* pVertexNormalSets,
+					int ictrPointIndex, int iVIndex);
+	FbxVector4		ReadTangent(const FbxMesh* pMesh, DWORD dwVertexTangentCount, FbxGeometryElementTangent* pVertexTangentSets,
+					DWORD dwDCCIndex, DWORD dwVertexIndex);
 	bool			ParseMeshSkinning(FbxMesh* pFbxMesh, AFbxModel* pObject);
 	int				GetSubMaterialIndex(int iPoly, FbxLayerElementMaterial* pMtrlSetList);
 

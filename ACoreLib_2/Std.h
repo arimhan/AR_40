@@ -21,12 +21,11 @@
 #include "AMath.h"
 
 
-
-
 //#define Tex_Size		6
 //#define Plane_Size	6
 //#define Frustum_Size	8
 
+class ABoxObj;
 using namespace Microsoft::WRL;
 
 
@@ -52,11 +51,12 @@ using namespace std;
 #define randstep(fMin,fMax) (fMin+((float)fMax-(float)fMin)*rand()/(float)RAND_MAX)
 #define clamp(x,MinX,MaxX) if (x>MaxX) x=MaxX; else if (x<MinX) x=MinX;
 
-extern RECT		g_rtClient;
-extern HWND		g_hWnd;
-extern float	g_fSecPerFrame;
-extern float	g_fGameTimer;
-extern POINT	g_ptMouse;
+extern RECT			g_rtClient;
+extern HWND			g_hWnd;
+extern float		g_fSecPerFrame;
+extern float		g_fGameTimer;
+extern POINT		g_ptMouse;
+extern ABoxObj*		g_pBoxDebug;
 
 static std::wstring to_mw(const std::string& _src)
 {

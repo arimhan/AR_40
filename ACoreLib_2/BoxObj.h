@@ -8,7 +8,8 @@ public:
 public:
 	virtual bool	SetVertexData();
 	virtual bool	SetIndexData();
-	bool			PostRender();
+	virtual bool	PostRender();
+	virtual void	DrawDebugRender(ABox* pBox);
 public:
 	ABoxObj();
 	virtual ~ABoxObj();
