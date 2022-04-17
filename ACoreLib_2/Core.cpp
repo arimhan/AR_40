@@ -103,6 +103,17 @@ bool ACore::CoreRender()
 	else 
 		m_pImmediateContext->RSSetState(ADxState::g_pRSBackCullSolid);
 
+	//---------------------------SkyObj Render Set
+
+	m_SkyObj.m_matView = m_pMainCamera->m_matView;
+	m_SkyObj.m_matView._41 = 0;
+	m_SkyObj.m_matView._42 = 0;
+	m_SkyObj.m_matView._43 = 0;
+	T::TMatrix matRotation, matScale;
+	m_SkyObj.SetMatrix(NULL, &m_SkyObj.m_matView, &m_pMainCamera->m_matProj);
+	m_SkyObj.Render();
+	m_pImmediateContext->RSSetState(ADxState::g_pRSBackCullSolid);
+
 	// 백버퍼에 랜더링 한다.
 	Render();
 

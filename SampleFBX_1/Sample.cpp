@@ -30,7 +30,14 @@ bool ASample::Init()
         pFbx->m_pContext = m_pImmediateContext.Get();
         pFbx->m_pMeshImp = I_ObjectMgr.Load((listname[iObj]));
         pFbx->m_DrawList.resize(pFbx->m_pMeshImp->m_pDrawList.size());
-        pFbx->SetPosition(T::TVector3(iObj * 100.0f, 0, 0));
+
+        //-------------FbxObj Render Set ´Ù¼ö ·»´õ¸µ ½Ã ÁÂ¿ì ¿­ ¸ÂÃç ·»´õ¸µ ÇÏµµ·Ï °è»ê
+        int iRow = iObj / 10;
+        int iCol = iObj / 10;
+        int iOffRow = iObj % 10;
+        int iOffCol = iObj % 10;
+
+        pFbx->SetPosition(T::TVector3(iOffCol * 300.0f, 0, iRow * 300.0f));
 
         for (int iDraw = 0; iDraw < pFbx->m_pMeshImp->m_pDrawList.size(); iDraw++)
         {

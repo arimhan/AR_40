@@ -264,10 +264,11 @@ void ABoxObj::DrawDebugRender(ABox* pBox)
 	m_VertexList[index].t = T::TVector2(1.0f, 1.0f);
 
 	//SetMatrix(NULL, &m_pCamera->m_matView, &m_pCamera->m_matProj);
-	m_BoxDebug.PreRender();
-	m_BoxDebug.Draw();
-	m_BoxDebug.m_pContext->UpdateSubresource(m_BoxDebug.m_pVertexBuffer, 0, NULL, &m_BoxDebug.m_VertexList.at(0), 0, 0);
-	m_BoxDebug.PostRender();
+	PreRender();
+	Draw();
+	m_pContext->UpdateSubresource(m_pVertexBuffer, 0, NULL, &m_VertexList.at(0), 0, 0);
+	PostRender();
+
 }
 
 ABoxObj::ABoxObj() {}
