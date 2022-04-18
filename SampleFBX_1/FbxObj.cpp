@@ -185,9 +185,9 @@ bool AFbxObj::RenderShadoe(AShader* pShader)
 	for (int iObj = 0; iObj < m_pMeshImp->m_pDrawList.size(); iObj++)
 	{
 		AFbxModel* pFbxObj = m_pMeshImp->m_pDrawList[iObj];
-		if (_tcsstr(pFbxObj->m_csName.c_str(), L"LOD") !== nullptr)
+		if (_tcsstr(pFbxObj->m_csName.c_str(), L"LOD") != nullptr)
 		{
-			if(_tcsstr(pFbxObj->m_csName.c_str(), L"LOD0") !== nullptr)
+			if(_tcsstr(pFbxObj->m_csName.c_str(), L"LOD0") == nullptr)
 			{	continue; }
 		}
 
@@ -202,17 +202,23 @@ bool AFbxObj::RenderShadoe(AShader* pShader)
 
 				auto model = m_pMeshImp->m_pFbxModelMap.find(name);
 				if (model == m_pMeshImp->m_pFbxModelMap.end())
-				{					continue;				}
+				{					
+					continue;		
+				}
 				AFbxModel* pTreeModel = model->second;
 				if(pTreeModel == nullptr)
-				{					continue;				}
+				{					
+					continue;			
+				}
 				auto bindpose = pFbxObj->m_dxMatrixBindPoseMap.find(name);
 				if (bindpose != pFbxObj->m_dxMatrixBindPoseMap.end() && pAnimModel)
 				{
 					TMatrix matInverseBindpose = bindpose->second;
-					m_matBoneArray.matBoneWorld[pTreeModel->m_iIndex] = matInverseBindpose * Interplate(pAnimImp, pAnimModel, m_fTimer);
+					m_matBoneArray.matBoneWorld[pTreeModel->m_iIndex] = 
+						matInverseBindpose * Interplate(pAnimImp, pAnimModel, m_fTimer);
 				}
-				T::D3DXMatrixTranspose(&m_matBoneArray.matBoneWorld[pTreeModel->m_iIndex], &m_matBoneArray.matBoneWorld[pTreeModel->m_iIndex]);
+				T::D3DXMatrixTranspose(&m_matBoneArray.matBoneWorld[pTreeModel->m_iIndex], 
+					&m_matBoneArray.matBoneWorld[pTreeModel->m_iIndex]);
 			}
 		}
 		else
@@ -227,10 +233,50 @@ bool AFbxObj::RenderShadoe(AShader* pShader)
 					//Interplate 보간작업
 					m_matBoneArray.matBoneWorld[iNode] = Interplate(pAnimImp, pFbxModel, m_fTimer);
 				}
-				T::D3DXMatrixTranspose(&m_matBoneArray.matBoneWorld[pFbxModel->m_iIndex], &m_matBoneArray.matBoneWorld[pFbxModel->m_iIndex]);
+				T::D3DXMatrixTranspose(&m_matBoneArray.matBoneWorld[iNode],
+					&m_matBoneArray.matBoneWorld[iNode]);
 			}
 		}
+		m_pContext->UpdateSubresource(m_pMeshImp->m_pBoneCB, 0, NULL, &m_matBoneArray, 0, 0);
+		m_pContext->VSSetConstantBuffers(2, 1, &m_pMeshImp->m_pBoneCB);
+
+		T::TVector3 vLight(cosf(g_fGameTimer) * 100.0f, 100, sinf(g_fGameTimer) * 100.0f);
+		T::D3DXVec3Normalize(&vLight, &vLight);
+		vLight = vLight * -1.0f;
+
+		pFbxObj->m_LightConstantList.vLightDir.x = vLight.x;
+		pFbxObj->m_LightConstantList.vLightDir.y = vLight.y;
+		pFbxObj->m_LightConstantList.vLightDir.z = vLight.z;
+		pFbxObj->m_LightConstantList.vLightDir.w = 1.0f;
+
+		pFbxObj->m_LightConstantList.vCameraDir.x = m_pMainCamera->m_vLook.x;
+		pFbxObj->m_LightConstantList.vCameraDir.y = m_pMainCamera->m_vLook.y;
+		pFbxObj->m_LightConstantList.vCameraDir.z = m_pMainCamera->m_vLook.z;
+		pFbxObj->m_LightConstantList.vCameraDir.w = 1.0f;
+
+		pFbxObj->m_LightConstantList.vCameraPos.x = m_pMainCamera->m_vCamera.x;
+		pFbxObj->m_LightConstantList.vCameraPos.y = m_pMainCamera->m_vCamera.y;
+		pFbxObj->m_LightConstantList.vCameraPos.z = m_pMainCamera->m_vCamera.z;
+		pFbxObj->m_LightConstantList.vCameraPos.w = 1.0f;
+
+		pFbxObj->SetMatrix(&m_matWorld, &m_matView, &m_matProj);
+
+		pFbxObj->PreRender();
+		pFbxObj->Draw();
+
+		if (pShader != nullptr)
+		{
+			m_pContext->PSSetShader(pShader->m_pPixelShader, NULL, 0);
+		}
+
+		//PostRender -> m_bAlphaBlend를 false로 다시 돌려준다.
+		auto bAlphaBlend = pFbxObj->m_bAlphaBlend;
+		pFbxObj->m_bAlphaBlend = true;
+		pFbxObj->PostRender();
+		pFbxObj->m_bAlphaBlend = false;
+
 	}
+	return true;
 }
 
 T::TMatrix	AFbxObj::Interplate(AFbxImporter* pAnimImp, AFbxModel* pModel, float fTime) 

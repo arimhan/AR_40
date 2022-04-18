@@ -3,7 +3,7 @@
 #include "BoxObj.h"
 #include "DxState.h"
 
-float ASampleMap::GetHeight(int index) { return AMap::GetHeight(index) * 0.1f; }
+//float ASampleMap::GetHeight(int index) { return AMap::GetHeight(index) * 0.1f; }
 
 bool ASample::Init()
 {
@@ -52,6 +52,7 @@ bool ASample::Init()
         int iCol = iObj / 10;
         int iOffRow = iObj % 10;
         int iOffCol = iObj % 10;
+        float fHeight = m_pMapObj.AMap::GetHeight(m_FbxObj[iObj].m_vPos.x, m_FbxObj[iObj].m_vPos.z);
 
         pFbx->SetPosition(T::TVector3(iOffCol * 300.0f, 0, iRow * 300.0f));
 
@@ -217,6 +218,8 @@ void ASample::RenderMTR(ID3D11DeviceContext* pContext)
 
 ASample::ASample() {}
 ASample::~ASample() {}
+ASampleMap::~ASampleMap() {}
+
 void ASample::CreateResizeDevice(UINT iWidth, UINT iHeight) { int k = 0; }
 void ASample::DeleteResizeDevice(UINT iWidth, UINT iHeight) { int k = 0; }
 

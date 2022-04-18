@@ -12,7 +12,10 @@
 class ASampleMap :public AMap
 {
 public:
-	virtual float GetHeight(int index) override;
+	virtual float GetHeight(int index) override
+	{
+		return AMap::GetHeight(index) * 0.1f;
+	}
 	virtual ~ASampleMap();
 };
 
