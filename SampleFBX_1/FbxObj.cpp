@@ -210,10 +210,24 @@ bool AFbxObj::RenderShadoe(AShader* pShader)
 				if (bindpose != pFbxObj->m_dxMatrixBindPoseMap.end() && pAnimModel)
 				{
 					TMatrix matInverseBindpose = bindpose->second;
-
-
-
+					m_matBoneArray.matBoneWorld[pTreeModel->m_iIndex] = matInverseBindpose * Interplate(pAnimImp, pAnimModel, m_fTimer);
 				}
+				T::D3DXMatrixTranspose(&m_matBoneArray.matBoneWorld[pTreeModel->m_iIndex], &m_matBoneArray.matBoneWorld[pTreeModel->m_iIndex]);
+			}
+		}
+		else
+		{
+			for (int iNode = 0; iNode < m_pMeshImp->m_pTreeList.size(); iNode++)
+			{
+				AFbxModel* pFbxModel = m_pMeshImp->m_pTreeList[iNode];
+
+				//AnimTrack이 있을경우
+				if (pFbxModel->m_AnimTrack.size() > 0)
+				{
+					//Interplate 보간작업
+					m_matBoneArray.matBoneWorld[iNode] = Interplate(pAnimImp, pFbxModel, m_fTimer);
+				}
+				T::D3DXMatrixTranspose(&m_matBoneArray.matBoneWorld[pFbxModel->m_iIndex], &m_matBoneArray.matBoneWorld[pFbxModel->m_iIndex]);
 			}
 		}
 	}
