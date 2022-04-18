@@ -104,6 +104,121 @@ bool AFbxObj::Render()
 	return true;
 }
 bool AFbxObj::Release() { return true; }
+
+void AFbxObj::GenAABB()
+{
+	m_BoxCollision.vMin = T::TVector3(100000, 100000, 100000);
+	m_BoxCollision.vMax = T::TVector3(-100000, -100000, -100000);
+
+	for (int i = 0; i < m_VertexList.size(); i++)
+	{
+		//박스 충돌값의 min, max의 x,y,z값을 비교한다. (충돌값 체크)
+		if (m_BoxCollision.vMin.x > m_VertexList[i].p.x)
+		{
+			m_BoxCollision.vMin.x = m_VertexList[i].p.x;
+		}
+		if (m_BoxCollision.vMin.y > m_VertexList[i].p.y)
+		{
+			m_BoxCollision.vMin.y = m_VertexList[i].p.y;
+		}
+		if (m_BoxCollision.vMin.z > m_VertexList[i].p.z)
+		{
+			m_BoxCollision.vMin.z = m_VertexList[i].p.z;
+		}
+		//max 체크
+		if (m_BoxCollision.vMax.x < m_VertexList[i].p.x)
+		{
+			m_BoxCollision.vMax.x = m_VertexList[i].p.x;
+		}
+		if (m_BoxCollision.vMax.y < m_VertexList[i].p.y)
+		{
+			m_BoxCollision.vMax.y = m_VertexList[i].p.y;
+		}
+		if (m_BoxCollision.vMax.z < m_VertexList[i].p.z)
+		{
+			m_BoxCollision.vMax.z = m_VertexList[i].p.z;
+		}
+	}
+
+	m_BoxCollision.vList[0] = T::TVector3(//각VB의 좌표값을 위치 min,max로 표기한다. (-1,1,-1)
+		m_BoxCollision.vMin.x, m_BoxCollision.vMax.y, m_BoxCollision.vMin.z);
+	m_BoxCollision.vList[1] = T::TVector3(
+		m_BoxCollision.vMax.x, m_BoxCollision.vMax.y, m_BoxCollision.vMin.z);
+	m_BoxCollision.vList[2] = T::TVector3(
+		m_BoxCollision.vMin.x, m_BoxCollision.vMin.y, m_BoxCollision.vMin.z);
+	m_BoxCollision.vList[3] = T::TVector3(
+		m_BoxCollision.vMax.x, m_BoxCollision.vMin.y, m_BoxCollision.vMin.z);
+
+	m_BoxCollision.vList[4] = T::TVector3(
+		m_BoxCollision.vMin.x, m_BoxCollision.vMax.y, m_BoxCollision.vMax.z);
+	m_BoxCollision.vList[5] = T::TVector3(
+		m_BoxCollision.vMax.x, m_BoxCollision.vMax.y, m_BoxCollision.vMax.z);
+	m_BoxCollision.vList[6] = T::TVector3(
+		m_BoxCollision.vMin.x, m_BoxCollision.vMin.y, m_BoxCollision.vMax.z);
+	m_BoxCollision.vList[7] = T::TVector3(
+		m_BoxCollision.vMax.x, m_BoxCollision.vMin.y, m_BoxCollision.vMax.z);
+}
+
+
+bool AFbxObj::RenderShadoe(AShader* pShader)
+{
+	//Shadow Render시, Anim이 있을 경우 Anim으로, 없을 경우 Mesh로
+	AFbxImporter* pAnimImp = nullptr;
+	if (m_pAnimImp != nullptr)
+	{
+		pAnimImp = m_pAnimImp;
+	}
+	else
+	{
+		pAnimImp = m_pMeshImp;
+	}
+
+	m_fTimer += g_fSecPerFrame * pAnimImp->m_Scene.iFrameSpeed * m_fDir * 0.3f;
+	if (m_fTimer >= pAnimImp->m_Scene.iEnd)
+	{
+		m_fTimer = pAnimImp->m_Scene.iStart;
+	}
+
+	int iFrame = m_fTimer;
+	iFrame = max(0, min(pAnimImp->m_Scene.iEnd - 1, iFrame));
+
+	for (int iObj = 0; iObj < m_pMeshImp->m_pDrawList.size(); iObj++)
+	{
+		AFbxModel* pFbxObj = m_pMeshImp->m_pDrawList[iObj];
+		if (_tcsstr(pFbxObj->m_csName.c_str(), L"LOD") !== nullptr)
+		{
+			if(_tcsstr(pFbxObj->m_csName.c_str(), L"LOD0") !== nullptr)
+			{	continue; }
+		}
+
+		//m_bSkinned 애니메이션일때
+		if (pFbxObj->m_bSkinned)
+		{
+			for (auto data : pAnimImp->m_pFbxModelMap)
+			{
+				//전부 map으로 묶어둠. 
+				wstring name = data.first;
+				AFbxModel* pAnimModel = data.second;
+
+				auto model = m_pMeshImp->m_pFbxModelMap.find(name);
+				if (model == m_pMeshImp->m_pFbxModelMap.end())
+				{					continue;				}
+				AFbxModel* pTreeModel = model->second;
+				if(pTreeModel == nullptr)
+				{					continue;				}
+				auto bindpose = pFbxObj->m_dxMatrixBindPoseMap.find(name);
+				if (bindpose != pFbxObj->m_dxMatrixBindPoseMap.end() && pAnimModel)
+				{
+					TMatrix matInverseBindpose = bindpose->second;
+
+
+
+				}
+			}
+		}
+	}
+}
+
 T::TMatrix	AFbxObj::Interplate(AFbxImporter* pAnimImp, AFbxModel* pModel, float fTime) 
 { 
 	T::TMatrix matAnim;

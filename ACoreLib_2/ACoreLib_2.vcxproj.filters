@@ -28,6 +28,9 @@
     <Filter Include="fbx">
       <UniqueIdentifier>{c20c7fa5-a555-403d-8065-5bfda09f1cd4}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Camera">
+      <UniqueIdentifier>{d892ef6d-b9de-477a-b8bd-c4a808013aeb}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Core.cpp">
@@ -96,9 +99,6 @@
     <ClCompile Include="PlaneObj.cpp">
       <Filter>Obj</Filter>
     </ClCompile>
-    <ClCompile Include="Camera.cpp">
-      <Filter>Obj</Filter>
-    </ClCompile>
     <ClCompile Include="BoxObj.cpp">
       <Filter>Obj</Filter>
     </ClCompile>
@@ -106,9 +106,6 @@
       <Filter>Obj</Filter>
     </ClCompile>
     <ClCompile Include="SkyObj.cpp">
-      <Filter>Obj</Filter>
-    </ClCompile>
-    <ClCompile Include="Frustum.cpp">
       <Filter>Obj</Filter>
     </ClCompile>
     <ClCompile Include="Map.cpp">
@@ -125,6 +122,12 @@
     </ClCompile>
     <ClCompile Include="FbxVLoader.cpp">
       <Filter>fbx</Filter>
+    </ClCompile>
+    <ClCompile Include="Frustum.cpp">
+      <Filter>Camera</Filter>
+    </ClCompile>
+    <ClCompile Include="Camera.cpp">
+      <Filter>Camera</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -200,13 +203,7 @@
     <ClInclude Include="BoxObj.h">
       <Filter>Obj</Filter>
     </ClInclude>
-    <ClInclude Include="Frustum.h">
-      <Filter>Obj</Filter>
-    </ClInclude>
     <ClInclude Include="SkyObj.h">
-      <Filter>Obj</Filter>
-    </ClInclude>
-    <ClInclude Include="Camera.h">
       <Filter>Obj</Filter>
     </ClInclude>
     <ClInclude Include="Node.h">
@@ -221,9 +218,24 @@
     <ClInclude Include="FbxImporter.h">
       <Filter>fbx</Filter>
     </ClInclude>
+    <ClInclude Include="Frustum.h">
+      <Filter>Camera</Filter>
+    </ClInclude>
+    <ClInclude Include="Camera.h">
+      <Filter>Camera</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="..\..\data\shader\Character.hlsl">
+      <Filter>리소스 파일</Filter>
+    </FxCompile>
+    <FxCompile Include="..\..\data\shader\Box.hlsl">
+      <Filter>리소스 파일</Filter>
+    </FxCompile>
+    <FxCompile Include="..\..\data\shader\sky.hlsl">
+      <Filter>리소스 파일</Filter>
+    </FxCompile>
+    <FxCompile Include="MapRT.hlsl">
       <Filter>리소스 파일</Filter>
     </FxCompile>
   </ItemGroup>

@@ -169,7 +169,7 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "UdpClient", "UdpClient\UdpC
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "BroadCastSender", "BroadCastSender\BroadCastSender.vcxproj", "{993AEB3C-6844-45C7-8028-C0A01FE09FA0}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "IOCP_chat_과제", "IOCP_chat_과제", "{694BA382-714B-400D-B344-74A0E3AB5E3D}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "IOCP_chat", "IOCP_chat", "{694BA382-714B-400D-B344-74A0E3AB5E3D}"
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Core_Server", "Core_Server\Core_Server.vcxproj", "{2A2BB0D2-5D96-4F2E-A325-5EF265D5119F}"
 EndProject

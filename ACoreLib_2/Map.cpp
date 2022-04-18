@@ -60,6 +60,8 @@ float AMap::GetHeight(float fPosX, float fPosZ)
 	}
 	return fHeight;
 }
+float AMap::GetHeight(int index) { return m_fHeightList[index]; }
+
 float AMap::GetHeightMap(int row, int col) 
 {
 	return m_VertexList[row * m_iNumRows + col].p.y;
@@ -69,9 +71,8 @@ float AMap::Lerp(float fStart, float fEnd, float fTangent)
 {
 	return fStart - (fStart * fTangent) + (fEnd * fTangent);
 }
+
 //--------------------------HeightMap 기능 구현
-
-
 
 bool AMap::CreateHeightMap(const TCHAR* strHeightMapTex)
 {

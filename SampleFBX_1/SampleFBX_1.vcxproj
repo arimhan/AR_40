@@ -124,7 +124,7 @@
       <SubSystem>Windows</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <AdditionalLibraryDirectories>../../lib/; ../../fbx/lib/debug;</AdditionalLibraryDirectories>
-      <AdditionalDependencies>libfbxsdk-md.lib;libxml2-md.lib;zlib-md.lib;DirectXTK.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>DirectXTK.lib;libfbxsdk-md.lib;libxml2-md.lib;zlib-md.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
     <ProjectReference>
       <LinkLibraryDependencies>true</LinkLibraryDependencies>
@@ -148,10 +148,12 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="FbxObj.h" />
+    <ClInclude Include="QuadObject.h" />
     <ClInclude Include="Sample.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="FbxObj.cpp" />
+    <ClCompile Include="QuadObject.cpp" />
     <ClCompile Include="Sample.cpp" />
   </ItemGroup>
   <ItemGroup>

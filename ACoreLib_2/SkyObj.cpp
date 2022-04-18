@@ -105,7 +105,7 @@ bool ASkyObj::LoadTexture(const TCHAR* szColorFileName, const TCHAR* szMaskFileN
 	m_pSRVArray[4] = m_pTexArray[4]->m_pSRV;
 	m_pSRVArray[5] = m_pTexArray[5]->m_pSRV;
 
-	m_pTexCube = I_Texture.Load(L"../../data/sky/skycubemap.dds");
+	m_pTexCube = I_Texture.Load(L"../../data/sky/skybox02.dds");//skycubemap.dds");
 
 	m_TextureDesc = m_pTexArray[0]->m_TextureDesc;
 	return true;

@@ -5,12 +5,14 @@
     <ClCompile Include="FbxObj.cpp">
       <Filter>fbxresource</Filter>
     </ClCompile>
+    <ClCompile Include="QuadObject.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Sample.h" />
     <ClInclude Include="FbxObj.h">
       <Filter>fbxresource</Filter>
     </ClInclude>
+    <ClInclude Include="QuadObject.h" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="fbxresource">

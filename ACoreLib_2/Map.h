@@ -30,6 +30,7 @@ public:
 public:
 	//ObJ와 Map의 높이값을 얻어오는 함수, 선형보간 함수기능을 구현한다.
 	float GetHeight(float fPosX, float fPosZ);
+	virtual float GetHeight(int index);
 	float GetHeightMap(int row, int col);
 	//Linear Interpolation 선형보간함수
 	float Lerp(float fStart, float fEnd, float fTangent); 
