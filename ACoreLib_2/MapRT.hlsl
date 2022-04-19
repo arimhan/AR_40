@@ -11,7 +11,9 @@ struct VS_OUTPUT
 	float3 n : NORMAL;
 	float4 c : COLOR0;    // COLOR0 ~ COLOR1
 	float2 t : TEXCOORD0; // TEXCOORD0 ~ TEXCOORD15
+
 	float3 r  : TEXCOORD1;
+	float4 l  : TEXCOORD2;
 };
 
 // 상수버퍼(단위:레지스터 단위(float4)로 할당되어야 한다.)
@@ -26,8 +28,9 @@ cbuffer cb0 : register(b0)
 };
 cbuffer cb1 : register(b1)
 {
-	float4   vLightDir : packoffset(c0);
-	float4   vLightPos : packoffset(c1);
+	float4   vLightDir	: packoffset(c0);
+	float4   vLightPos	: packoffset(c1);
+	matrix	 g_matLight	: packoffset(c2);	//L(WVPT)행렬
 };
 VS_OUTPUT VS(VS_INPUT v)
 {
@@ -37,6 +40,9 @@ VS_OUTPUT VS(VS_INPUT v)
 	float4 vView = mul(vWorld, g_matView);
 	float4 vProj = mul(vView, g_matProj);
 	pOut.p = vProj;
+
+	float4 vLight = mul(vLocal, g_matLight);	//Light에서 바라본 Texture변환좌표 ->PS 에 넘긴다.
+
 	float3 vNormal = mul(v.n, (float3x3)g_matWorld);
 	pOut.n = normalize(vNormal);
 	pOut.t = v.t * 2.0f;	//텍스쳐 갯수

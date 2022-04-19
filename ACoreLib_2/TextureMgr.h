@@ -1,5 +1,10 @@
 #pragma once
 #include "BaseMgr.h"
+//#include <wincodec.h>
+//#include <wincodecsdk.h>
+//#include <ScreenGrab.h> - dds.h(direct TX안에 있는 화면 캡쳐, 저장하는 기능)
+//Shadow를 텍스쳐로 저장해서 만들기 때문에 필요하다.
+//TextureMgr 참조
 #include "DDSTextureLoader.h"
 #include "WICTextureLoader.h"
 #pragma comment	(lib, "d3dcompiler.lib")

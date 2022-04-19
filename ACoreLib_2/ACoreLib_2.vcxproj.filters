@@ -238,5 +238,8 @@
     <FxCompile Include="MapRT.hlsl">
       <Filter>리소스 파일</Filter>
     </FxCompile>
+    <FxCompile Include="..\..\data\shader\Quad.hlsl">
+      <Filter>리소스 파일</Filter>
+    </FxCompile>
   </ItemGroup>
 </Project>

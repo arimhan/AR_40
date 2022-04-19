@@ -3,15 +3,23 @@
 ID3D11BlendState*	ADxState::m_AlphaBlend = nullptr;
 ID3D11BlendState*	ADxState::m_AlphaBlendDisable = nullptr;
 //ID3D11SamplerState*			ADxState::m_pSamplerState			= nullptr;
+
+ID3D11BlendState* ADxState::m_BSNoneColor = nullptr;
 ID3D11SamplerState* ADxState::m_pSSLinear = nullptr;
 ID3D11SamplerState* ADxState::m_pSSPoint = nullptr;
+
+ID3D11SamplerState* ADxState::g_pSSMirrorLinear = nullptr;
+ID3D11SamplerState* ADxState::g_pSSMirrorPoint = nullptr;
+ID3D11SamplerState* ADxState::g_pSSClampLinear = nullptr;
+ID3D11SamplerState* ADxState::g_pSSClampPoint = nullptr;
+
 
 ID3D11RasterizerState* ADxState::g_pRSBackCullSolid = nullptr;
 ID3D11RasterizerState* ADxState::g_pRSNoneCullSolid = nullptr;
 
 ID3D11RasterizerState*		ADxState::g_pRSBackCullWireFrame	= nullptr;
 ID3D11RasterizerState*		ADxState::g_pRSNoneCullWireFrame	= nullptr;
-ID3D11DepthStencilState*	ADxState::g_pDSSDepthEnable = nullptr;
+ID3D11DepthStencilState*	ADxState::g_pDSSDepthEnable			= nullptr;
 ID3D11DepthStencilState*	ADxState::g_pDSSDepthDisable		= nullptr;
 
 ID3D11DepthStencilState* ADxState::g_pDSSDepthEnableWirteDisable = nullptr;
@@ -53,6 +61,33 @@ bool ADxState::SetState(ID3D11Device* pd3dDevice)
 	hr = pd3dDevice->CreateSamplerState(&sd, &m_pSSLinear);//&m_pSamplerState);
 	sd.Filter = D3D11_FILTER_MIN_MAG_MIP_POINT;
 	hr = pd3dDevice->CreateSamplerState(&sd, &m_pSSPoint);//&m_pSamplerState);
+
+	//g_pSSMirror
+	sd.AddressU = D3D11_TEXTURE_ADDRESS_MIRROR;
+	sd.AddressV = D3D11_TEXTURE_ADDRESS_MIRROR;
+	sd.AddressW = D3D11_TEXTURE_ADDRESS_MIRROR;
+	sd.Filter = D3D11_FILTER_MIN_MAG_MIP_LINEAR;
+	if (FAILED(hr = pd3dDevice->CreateSamplerState(&sd, &ADxState::g_pSSMirrorLinear))) return hr;
+
+	sd.AddressU = D3D11_TEXTURE_ADDRESS_MIRROR;
+	sd.AddressV = D3D11_TEXTURE_ADDRESS_MIRROR;
+	sd.AddressW = D3D11_TEXTURE_ADDRESS_MIRROR;
+	sd.Filter = D3D11_FILTER_MIN_MAG_MIP_POINT;
+	if (FAILED(hr = pd3dDevice->CreateSamplerState(&sd, &ADxState::g_pSSMirrorPoint))) return hr;
+
+	//g_pSSClamp
+	sd.AddressU = D3D11_TEXTURE_ADDRESS_CLAMP;
+	sd.AddressV = D3D11_TEXTURE_ADDRESS_CLAMP;
+	sd.AddressW = D3D11_TEXTURE_ADDRESS_CLAMP;
+	sd.Filter = D3D11_FILTER_MIN_MAG_MIP_LINEAR;
+	if (FAILED(hr = pd3dDevice->CreateSamplerState(&sd, &ADxState::g_pSSClampLinear))) return hr;
+
+	sd.AddressU = D3D11_TEXTURE_ADDRESS_CLAMP;
+	sd.AddressV = D3D11_TEXTURE_ADDRESS_CLAMP;
+	sd.AddressW = D3D11_TEXTURE_ADDRESS_CLAMP;
+	sd.Filter = D3D11_FILTER_MIN_MAG_MIP_POINT;
+	if (FAILED(hr = pd3dDevice->CreateSamplerState(&sd, &ADxState::g_pSSClampPoint))) return hr;
+
 
 	D3D11_RASTERIZER_DESC rsDesc;
 	ZeroMemory(&rsDesc, sizeof(rsDesc));
@@ -127,7 +162,39 @@ bool ADxState::Release()
 	m_AlphaBlend = nullptr;
 	m_AlphaBlendDisable = nullptr;
 
-	if (m_pSSLinear)						m_pSSLinear->Release();
-	if (m_pSSPoint)							m_pSSPoint->Release();
+	if (m_pSSLinear)			m_pSSLinear->Release();
+	if (m_pSSPoint)				m_pSSPoint->Release();
+	if (g_pSSMirrorLinear)		g_pSSMirrorLinear->Release();
+	if (g_pSSMirrorPoint)		g_pSSMirrorPoint->Release();
+	if (g_pSSClampLinear)		g_pSSClampLinear->Release();
+	if (g_pSSClampPoint)		g_pSSClampPoint->Release();
 	return true;
 }
+
+
+//void ADxState::ApplyRS(ID3D11DeviceContext* pContext, ID3D11RasterizerState* pState)
+//{
+//	assert(pContext);
+//	pContext->RSSetState(pState);
+//}
+//void ADxState::ApplyDSS(ID3D11DeviceContext* pContext, ID3D11DepthStencilState* pDepthStencilState,
+//	UINT iRef)
+//{
+//	assert(pContext);
+//	pContext->OMSetDepthStencilState(pDepthStencilState, iRef);
+//
+//}
+//
+//void ADxState::ApplyBS(ID3D11DeviceContext* pContext, ID3D11BlendState* pBlendState,
+//	const FLOAT fBlendFactor[]=0, UINT iMask)
+//{
+//	assert(pContext);
+//	pContext->OMSetBlendState(pBlendState, fBlendFactor, iMask);
+//}
+//
+//void ADxState::ApplySS(ID3D11DeviceContext* pContext, ID3D11SamplerState* pSamplerState,
+//	UINT iSlot, UINT iArray)
+//{
+//	assert(pContext);
+//	pContext->PSSetSamplers(iSlot, iArray, &pSamplerState);
+//}

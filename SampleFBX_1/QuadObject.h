@@ -2,6 +2,7 @@
 #include "PlaneObj.h"
 
 #define MAX_MASKCOUNT 25 //625=25*25
+
 struct TKernelMask
 {
 	float fMask[MAX_MASKCOUNT*MAX_MASKCOUNT];
@@ -11,7 +12,7 @@ struct VSCB
 	float		g_fMask;
 	float		g_fTexSizeX;
 	float		g_fTexSizeY;
-	float		a;
+	float		a;			//더미. 레지스트리 단위로 넘어가기 때문에 a는 더미로 놔둠.
 };
 class AQuadObject : public APlaneObj
 {
@@ -39,7 +40,7 @@ public:
 	void		ComputeKernel(int iMask=3);
 	
 public:
-	TQuadObject(void);
-	~TQuadObject(void);
+	AQuadObject();
+	~AQuadObject();
 };
 

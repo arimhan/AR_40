@@ -178,7 +178,7 @@ bool AQuadObject::Render()
 	PostRender();
 	return true;
 }
-AQuadObject::AQuadObject(void)
+AQuadObject::AQuadObject()
 {
 	m_pfKernelMask = 0;	
 	m_iMask = 3;
@@ -188,7 +188,7 @@ AQuadObject::AQuadObject(void)
 }
 
 
-AQuadObject::~AQuadObject(void)
+AQuadObject::~AQuadObject()
 {	
 	SAFE_DELETE_ARRAY(m_pfKernelMask);
 }

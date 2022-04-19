@@ -10,17 +10,15 @@ bool ASample::Init()
     vector<wstring> listname;
     
     //------------Load Map
-    m_pMapObj->Init();
-    m_pMapObj->SetDevice(m_pd3dDevice.Get(), m_pImmediateContext.Get());
-    m_pMapObj->CreateHeightMap(L"../../map/heightmap.bmp"); //heightMap513.bmp
-    m_pMapObj->CreateMap(m_pMapObj->m_iNumCols, m_pMapObj->m_iNumRows, 10.0f);
-    if (!m_pMapObj->Create(m_pd3dDevice.Get(), m_pImmediateContext.Get(), L"MapRT.hlsl", L"../../data/map/020.bmp")); //map Texture
+    m_pMapObj.Init();
+    m_pMapObj.SetDevice(m_pd3dDevice.Get(), m_pImmediateContext.Get());
+    m_pMapObj.CreateHeightMap(L"../../map/heightmap.bmp"); //heightMap513.bmp
+    m_pMapObj.CreateMap(m_pMapObj.m_iNumCols, m_pMapObj.m_iNumRows, 10.0f);
+    if (!m_pMapObj.Create(m_pd3dDevice.Get(), m_pImmediateContext.Get(), L"MapRT.hlsl", L"../../data/map/020.bmp")); //map Texture
     { return false; }
     
     m_QuadTree.m_pCamera = m_pMainCamera;
     m_QuadTree.Build(&m_pMapObj, 5);
-
-
 
     //------------Load Fbx
     //Greystone.fbx LOD Mesh 5개
@@ -66,12 +64,14 @@ bool ASample::Init()
     m_FbxObj[0].m_pAnimImp = m_FbxObj[1].m_pMeshImp;
 
 
+    m_pShadowPShader = I_Shader.CreatePixelShader(m_pd3dDevice.Get(), L"Character.hlsl", "PSColor");
+
     //-----------MainCamera, Light, Normal Map Set
 
     //QuadObj Set
     m_QuadObj.CreateTextures(m_pd3dDevice.Get(), m_SwapChainDesc.BufferDesc.Width, m_SwapChainDesc.BufferDesc.Height);
     m_QuadObj.SetBuffer(m_pd3dDevice.Get());
-
+    m_QuadObj.ComputeKernel(9);
 
     m_pMainCamera->CreateViewMatrix(T::TVector3(0, 25.0f, -50.0f), T::TVector3(0, 0.0f, 0));
     m_pMainCamera->CreateProjMatrix(XM_PI * 0.25f, (float)g_rtClient.right / (float)g_rtClient.bottom, 0.1f, 1000.0f);
@@ -83,9 +83,8 @@ bool ASample::Init()
 
 bool ASample::Frame()
 {
-
     m_QuadObj.Frame();
-    m_pMapObj->Frame();
+    m_pMapObj.Frame();
     m_QuadTree.Update(m_pMainCamera);
     
     for (int iObj = 0; iObj < m_FbxObj.size(); iObj++)
@@ -97,29 +96,35 @@ bool ASample::Frame()
 
 bool ASample::Render()
 {
+    RenderIntoBuffer(m_pImmediateContext.Get());
     
+    ApplySS(m_pImmediateContext.Get(), ADxState::m_pSSLinear);
+    ApplySS(m_pImmediateContext.Get(), ADxState::g_pSSClampLinear);
+    m_QuadObj.SetMatrix(nullptr, nullptr, nullptr);
+    m_QuadObj.Render();
 
     //LightTex와 NormalMap을 넘겨 렌더링 한다.
-    m_pImmediateContext->PSSetShaderResources(1, 1, m_pLightTex->m_pSRV.GetAddressOf());
-    m_pImmediateContext->PSSetShaderResources(4, 1, m_pNormalMap->m_pSRV.GetAddressOf());
+    //m_pImmediateContext->PSSetShaderResources(1, 1, m_pLightTex->m_pSRV.GetAddressOf());
+    //m_pImmediateContext->PSSetShaderResources(4, 1, m_pNormalMap->m_pSRV.GetAddressOf());
+    //for (int iObj = 0; iObj < m_FbxObj.size(); iObj++)
+    //{
+    //    m_FbxObj[iObj].SetMatrix(nullptr, &m_pMainCamera->m_matView, &m_pMainCamera->m_matProj);
+    //    m_FbxObj[iObj].Render();
+    //}
 
-    for (int iObj = 0; iObj < m_FbxObj.size(); iObj++)
-    {
-        m_FbxObj[iObj].SetMatrix(nullptr, &m_pMainCamera->m_matView, &m_pMainCamera->m_matProj);
-        m_FbxObj[iObj].Render();
-    }
-
-    //Debug Mode Render Set
+#ifdef _DEBUG
+        //Debug Mode Render Set
     for (int iObj = 0; iObj < m_FbxObj.size(); iObj++)
     {
         for (int iDraw = 0; iDraw < m_FbxObj[iObj].m_DrawList.size(); iDraw++)
-        { 
+        {
             g_pBoxDebug->SetMatrix(&m_FbxObj[iObj].m_pMeshImp->m_pDrawList[iDraw]->m_matWorld,
                 &m_pMainCamera->m_matView, &m_pMainCamera->m_matProj);
             g_pBoxDebug->DrawDebugRender(&m_FbxObj[iObj].m_pMeshImp->m_pDrawList[iDraw]->m_BoxCollision);
         }
-
     }
+#endif // _DEBUG
+
     wstring msg = L"[ FPS: ";
     msg += std::to_wstring(m_GameTimer.m_iFPS);
     msg += L"  GT: ";
@@ -131,13 +136,15 @@ bool ASample::Render()
 
 bool ASample::Release()
 {
+    m_QuadObj.Release();
+    m_pMapObj.Release();
+
     for (int iObj = 0; iObj < m_FbxObj.size(); iObj++)
     {
         m_FbxObj[iObj].Release();
     }
     return true;
 }
-
 
 
 //Rendering 후 buffer내 RT를 초기화 시켜준다.
@@ -208,11 +215,10 @@ void ASample::RenderMTR(ID3D11DeviceContext* pContext)
         TMatrix matSaveShadow = m_FbxObj[iObj].m_matWorld;
         matShadow = m_FbxObj[iObj].m_matWorld * matShadow;
         m_FbxObj[iObj].SetMatrix(&matShadow, &m_pMainCamera->m_matView, &m_pMainCamera->m_matProj);
-        m_FbxObj[iObj].
-
-
+        m_FbxObj[iObj].RenderShadoe(m_pShadowPShader);
+        m_FbxObj[iObj].m_matWorld = matSaveShadow;
     }
-
+    ClearD3D11DeviceContext(pContext);
 }
 
 

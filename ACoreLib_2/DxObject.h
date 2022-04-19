@@ -96,6 +96,8 @@ struct ALightData
 	T::TVector4		vCameraPos;
 	T::TVector4		vLightDir;
 	T::TVector4		vLightPos;
+
+	T::TMatrix		matLight;	//W * v * p * t (월드, 뷰, 투영, 텍스쳐)를 합친 Light행렬
 };
 
 class ADxObject : public ABaseObject

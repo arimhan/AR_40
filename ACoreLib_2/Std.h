@@ -30,6 +30,9 @@ using namespace Microsoft::WRL;
 
 
 #pragma comment	(lib, "d3d11.lib")
+#pragma comment	(lib, "dxguid.lib")	
+#pragma comment	(lib, "dxgi.lib")	
+
 #ifdef _DEBUG
 #pragma comment	(lib, "ACoreLib_2_d.lib")
 #else
@@ -51,12 +54,30 @@ using namespace std;
 #define randstep(fMin,fMax) (fMin+((float)fMax-(float)fMin)*rand()/(float)RAND_MAX)
 #define clamp(x,MinX,MaxX) if (x>MaxX) x=MaxX; else if (x<MinX) x=MinX;
 
-extern RECT			g_rtClient;
-extern HWND			g_hWnd;
-extern float		g_fSecPerFrame;
-extern float		g_fGameTimer;
-extern POINT		g_ptMouse;
-extern ABoxObj*		g_pBoxDebug;
+extern RECT			 g_rtClient;
+extern HWND			 g_hWnd;
+extern float		 g_fSecPerFrame;
+extern float		 g_fGameTimer;
+extern POINT		 g_ptMouse;
+extern ABoxObj*		 g_pBoxDebug;
+extern ID3D11Device* g_pd3dDevice;
+
+//-------------자료형 줄여서 별칭으로 사용하기
+typedef basic_string<TCHAR>				T_STR;
+typedef basic_string<wchar_t>			W_STG;
+typedef basic_string<char>				C_STR;
+typedef vector<T_STR>					T_STR_VECTOR;
+typedef basic_string<TCHAR>::iterator	T_ITOR;
+typedef basic_string<wchar_t>::iterator	W_ITOR;
+typedef basic_string<char>::iterator	C_ITOR;
+typedef vector<T_STR>					T_ARRAY_ITOR;
+typedef vector<DWORD>				DWORD_VECTOR;
+typedef	vector< DWORD >::iterator	DWORD_VECTOR_ITOR;
+typedef list<DWORD>					DWORD_LIST;
+typedef list<DWORD>::iterator		DWORD_LIST_ITOR;
+typedef list< HANDLE >				HANDLE_LIST;
+typedef	list< HANDLE >::iterator	HANDLE_LIST_ITOR;
+
 
 static std::wstring to_mw(const std::string& _src)
 {
