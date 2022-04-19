@@ -273,7 +273,7 @@ bool AFbxObj::RenderShadoe(AShader* pShader)
 		auto bAlphaBlend = pFbxObj->m_bAlphaBlend;
 		pFbxObj->m_bAlphaBlend = true;
 		pFbxObj->PostRender();
-		pFbxObj->m_bAlphaBlend = false;
+		pFbxObj->m_bAlphaBlend = bAlphaBlend;
 
 	}
 	return true;

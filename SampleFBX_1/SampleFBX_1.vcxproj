@@ -147,11 +147,13 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="DxRT.h" />
     <ClInclude Include="FbxObj.h" />
     <ClInclude Include="QuadObject.h" />
     <ClInclude Include="Sample.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="DxRT.cpp" />
     <ClCompile Include="FbxObj.cpp" />
     <ClCompile Include="QuadObject.cpp" />
     <ClCompile Include="Sample.cpp" />

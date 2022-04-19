@@ -1,9 +1,6 @@
 #pragma once
 #include "BaseMgr.h"
-//#include <wincodec.h>
-//#include <wincodecsdk.h>
-//#include <ScreenGrab.h> - dds.h(direct TX안에 있는 화면 캡쳐, 저장하는 기능)
-//Shadow를 텍스쳐로 저장해서 만들기 때문에 필요하다.
+
 //TextureMgr 참조
 #include "DDSTextureLoader.h"
 #include "WICTextureLoader.h"
@@ -33,6 +30,9 @@ public:
 class ATextureMgr : public ABaseMgr<ATexture, ATextureMgr>
 {
 	friend class ASingleton<ATextureMgr>;
+public:
+	static HRESULT SaveFile(ID3D11DeviceContext* pContext, ID3D11Texture2D* pRes, T_STR name);
+	static HRESULT SaveFile(ID3D11DeviceContext* pContext, IDXGISwapChain* pSwapChain, T_STR name);
 private:
 	ATextureMgr() {};
 public:
