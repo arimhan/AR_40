@@ -2,19 +2,15 @@
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
     <ClCompile Include="Sample.cpp" />
-    <ClCompile Include="FbxObj.cpp">
-      <Filter>fbxresource</Filter>
-    </ClCompile>
     <ClCompile Include="QuadObject.cpp" />
     <ClCompile Include="DxRT.cpp" />
+    <ClCompile Include="FbxObj.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Sample.h" />
-    <ClInclude Include="FbxObj.h">
-      <Filter>fbxresource</Filter>
-    </ClInclude>
     <ClInclude Include="QuadObject.h" />
     <ClInclude Include="DxRT.h" />
+    <ClInclude Include="FbxObj.h" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="fbxresource">
@@ -23,6 +19,21 @@
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="Box.hlsl">
+      <Filter>fbxresource</Filter>
+    </FxCompile>
+    <FxCompile Include="Projection.hlsl">
+      <Filter>fbxresource</Filter>
+    </FxCompile>
+    <FxCompile Include="Character.hlsl">
+      <Filter>fbxresource</Filter>
+    </FxCompile>
+    <FxCompile Include="Quad.hlsl">
+      <Filter>fbxresource</Filter>
+    </FxCompile>
+    <FxCompile Include="MapRT.hlsl">
+      <Filter>fbxresource</Filter>
+    </FxCompile>
+    <FxCompile Include="sky.hlsl">
       <Filter>fbxresource</Filter>
     </FxCompile>
   </ItemGroup>

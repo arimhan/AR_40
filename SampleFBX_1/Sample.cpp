@@ -11,9 +11,9 @@ bool ASample::Init()
     //------------Load Map
     m_pMapObj.Init();
     m_pMapObj.SetDevice(m_pd3dDevice.Get(), m_pImmediateContext.Get());
-    m_pMapObj.CreateHeightMap(L"../../map/heightmap.bmp"); //heightMap513.bmp
+    m_pMapObj.CreateHeightMap(L"../../data/map/heightMap513.bmp"); //heightMap513.bmp  heightmap
     m_pMapObj.CreateMap(m_pMapObj.m_iNumCols, m_pMapObj.m_iNumRows, 10.0f);
-    if (!m_pMapObj.Create(m_pd3dDevice.Get(), m_pImmediateContext.Get(), L"MapRT.hlsl", L"../../data/map/020.bmp")) //map Texture
+    if (!m_pMapObj.Create(m_pd3dDevice.Get(), m_pImmediateContext.Get(), L"MapRT.hlsl", L"../../data/map/002.jpg")) //map Texture
     { return false; }
     
     m_QuadTree.m_pCamera = m_pMainCamera;

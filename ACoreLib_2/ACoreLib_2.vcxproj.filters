@@ -235,10 +235,10 @@
     <FxCompile Include="..\..\data\shader\sky.hlsl">
       <Filter>리소스 파일</Filter>
     </FxCompile>
-    <FxCompile Include="MapRT.hlsl">
+    <FxCompile Include="..\..\data\shader\Quad.hlsl">
       <Filter>리소스 파일</Filter>
     </FxCompile>
-    <FxCompile Include="..\..\data\shader\Quad.hlsl">
+    <FxCompile Include="..\..\data\shader\MapRT.hlsl">
       <Filter>리소스 파일</Filter>
     </FxCompile>
   </ItemGroup>
