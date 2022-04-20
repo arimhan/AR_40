@@ -2,23 +2,41 @@
 #include "ObjectMgr.h"
 #include "BoxObj.h"
 
-//float ASampleMap::GetHeight(int index) { return AMap::GetHeight(index) * 0.1f; }
-
-bool ASample::Init()
+void ASample::RenderShadow(TMatrix* pmatView, TMatrix* pmatProj) 
 {
-    vector<wstring> listname;
-    
+    ApplyDSS(m_pImmediateContext.Get(), ADxState::g_pDSSDepthEnable);
+    ApplyRS(m_pImmediateContext.Get(), ADxState::g_pRSNoneCullSolid);
+
+    ApplyBS(m_pImmediateContext.Get(), ADxState::m_AlphaBlend);
+
+    for (int iObj = 0; iObj < m_FbxObj.size(); iObj++)
+    {
+        m_FbxObj[iObj].SetMatrix(nullptr, pmatView, pmatProj);
+        m_FbxObj[iObj].RenderShadoe(m_pProjShadowPSShader);
+    }
+}
+
+bool ASample::LoadMap() 
+{
     //------------Load Map
     m_pMapObj.Init();
     m_pMapObj.SetDevice(m_pd3dDevice.Get(), m_pImmediateContext.Get());
     m_pMapObj.CreateHeightMap(L"../../data/map/heightMap513.bmp"); //heightMap513.bmp  heightmap
     m_pMapObj.CreateMap(m_pMapObj.m_iNumCols, m_pMapObj.m_iNumRows, 10.0f);
     if (!m_pMapObj.Create(m_pd3dDevice.Get(), m_pImmediateContext.Get(), L"MapRT.hlsl", L"../../data/map/002.jpg")) //map Texture
-    { return false; }
-    
+    {
+        return false;
+    }
+
     m_QuadTree.m_pCamera = m_pMainCamera;
     m_QuadTree.Build(&m_pMapObj, 5);
 
+    return true;
+}
+
+bool ASample::LoadFbx() 
+{
+    vector<wstring> listname;
     //------------Load Fbx
     //Greystone.fbx LOD Mesh 5개
     //Greystone -> character, idel -> anim
@@ -31,7 +49,7 @@ bool ASample::Init()
         // 	205 ~289  attack
     listname.push_back(L"../../data/fbx/Man.FBX");
     //("../../data/fbx/Turret_Deploy1/Turret_Deploy1.FBX");
-    
+
     I_ObjectMgr.Set(m_pd3dDevice.Get(), m_pImmediateContext.Get());
     m_FbxObj.resize(listname.size());
     for (int iObj = 0; iObj < m_FbxObj.size(); iObj++)
@@ -62,6 +80,14 @@ bool ASample::Init()
     //m_pAnimImp에 해당하는 Mesh를 연결.
     m_FbxObj[0].m_pAnimImp = m_FbxObj[1].m_pMeshImp;
 
+    return true;
+}
+
+bool ASample::Init()
+{
+
+    LoadMap();
+    LoadFbx();
 
     m_pShadowPShader = I_Shader.CreatePixelShader(m_pd3dDevice.Get(), L"Character.hlsl", "PSColor");
 
@@ -95,6 +121,7 @@ bool ASample::Frame()
 
 bool ASample::Render()
 {
+    ApplyRS(m_pImmediateContext.Get(), ADxState::g_pRSBackCullSolid);
     RenderIntoBuffer(m_pImmediateContext.Get());
     
     ApplySS(m_pImmediateContext.Get(), ADxState::m_pSSLinear);
@@ -111,18 +138,18 @@ bool ASample::Render()
     //    m_FbxObj[iObj].Render();
     //}
 
-#ifdef _DEBUG
-        //Debug Mode Render Set
-    for (int iObj = 0; iObj < m_FbxObj.size(); iObj++)
-    {
-        for (int iDraw = 0; iDraw < m_FbxObj[iObj].m_DrawList.size(); iDraw++)
-        {
-            g_pBoxDebug->SetMatrix(&m_FbxObj[iObj].m_pMeshImp->m_pDrawList[iDraw]->m_matWorld,
-                &m_pMainCamera->m_matView, &m_pMainCamera->m_matProj);
-            g_pBoxDebug->DrawDebugRender(&m_FbxObj[iObj].m_pMeshImp->m_pDrawList[iDraw]->m_BoxCollision);
-        }
-    }
-#endif // _DEBUG
+//#ifdef _DEBUG
+//        //Debug Mode Render Set
+//    for (int iObj = 0; iObj < m_FbxObj.size(); iObj++)
+//    {
+//        for (int iDraw = 0; iDraw < m_FbxObj[iObj].m_DrawList.size(); iDraw++)
+//        {
+//            g_pBoxDebug->SetMatrix(&m_FbxObj[iObj].m_pMeshImp->m_pDrawList[iDraw]->m_matWorld,
+//                &m_pMainCamera->m_matView, &m_pMainCamera->m_matProj);
+//            g_pBoxDebug->DrawDebugRender(&m_FbxObj[iObj].m_pMeshImp->m_pDrawList[iDraw]->m_BoxCollision);
+//        }
+//    }
+//#endif // _DEBUG
 
     wstring msg = L"[ FPS: ";
     msg += std::to_wstring(m_GameTimer.m_iFPS);
@@ -130,11 +157,15 @@ bool ASample::Render()
     msg += std::to_wstring(m_GameTimer.m_fTimer);
     msg += L"]";
     m_dxWrite.Draw(msg, g_rtClient, D2D1::ColorF(1, 1, 1, 1));
+
+    ClearD3D11DeviceContext(m_pImmediateContext.Get());
+
     return true;
 }
 
 bool ASample::Release()
 {
+    m_dxRT.Release();
     m_QuadObj.Release();
     m_pMapObj.Release();
 

@@ -40,6 +40,8 @@ public:
 	bool	End(ID3D11DeviceContext*    pImmediateContext);
 	HRESULT SaveFile(ID3D11DeviceContext*    pContext, T_STR name);
 	HRESULT SaveBackBuffer(ID3D11DeviceContext*    pContext, T_STR name);
+public:
+	bool	Release() { return true; }
 
 public:
 	ADxRT();

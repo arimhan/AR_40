@@ -4,6 +4,7 @@
 #include "Map.h"
 #include "Quadtree.h"
 #include "QuadObject.h"
+#include "DxRT.h"
 
 #include <tchar.h>
 #include <stdio.h>
@@ -30,7 +31,20 @@ class ASample : public ACore
 
 	ATexture*			m_pLightTex;
 	ATexture*			m_pNormalMap;
-
+public:
+	AShader*			m_pProjShadowVSShader = nullptr;
+	AShader*			m_pProjShadowPSShader = nullptr;
+	ADxRT				m_dxRT;
+	TVector3			m_vLightPos;
+	TVector3			m_vLightDir;
+	TMatrix				m_matShadow;
+	TMatrix				m_matViewLight;
+	TMatrix				m_matProjLight;
+	TMatrix				m_matTex;
+public:
+	void				RenderShadow(TMatrix* pmatView, TMatrix* pmatProj);
+	bool				LoadMap();
+	bool				LoadFbx();
 
 public:
 	virtual bool	Init() override;
