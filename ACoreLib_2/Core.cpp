@@ -31,8 +31,8 @@ bool ACore::CoreInit()
 	m_DefaultCamera.CreateProjMatrix(XM_PI * 0.25f, 
 		(float)g_rtClient.right / (float)g_rtClient.bottom, 0.1f, 5000.0f);
 	m_DefaultCamera.m_pColorTex = I_Texture.Load(L"../../data/Img/charport.bmp");
-	m_DefaultCamera.m_pVShader = I_Shader.CreateVertexShader(m_pd3dDevice.Get(), L"../../data/shader/Box.hlsl", "VSColor");
-	m_DefaultCamera.m_pPShader = I_Shader.CreatePixelShader(m_pd3dDevice.Get(), L"../../data/shader/Box.hlsl", "PSColor");
+	m_DefaultCamera.m_pVShader = I_Shader.CreateVertexShader(m_pd3dDevice.Get(), L"Box.hlsl", "VSColor");
+	m_DefaultCamera.m_pPShader = I_Shader.CreatePixelShader(m_pd3dDevice.Get(), L"Box.hlsl", "PSColor");
 	m_DefaultCamera.SetPosition(T::TVector3(0.0f, 1.0f, 0.0f));
 	if(!m_DefaultCamera.Create(m_pd3dDevice.Get(), m_pImmediateContext.Get()))
 	{
@@ -44,7 +44,7 @@ bool ACore::CoreInit()
 	m_SkyObj.SetPosition(T::TVector3(0.0f, 0.0f, 0.0f));
 
 	if(!m_SkyObj.Create(m_pd3dDevice.Get(), m_pImmediateContext.Get(), 
-		L"../../data/shader/sky.hlsl", L"../../data/sky/skybox02.dds"))
+		L"sky.hlsl", L"../../data/sky/skybox02.dds"))
 	{
 		return false;
 	}
@@ -104,7 +104,7 @@ bool ACore::CoreRender()
 		m_pImmediateContext->RSSetState(ADxState::g_pRSBackCullSolid);
 
 	//---------------------------SkyObj Render Set
-
+	//Skybox안에 camera를 넣을 경우 이동성분은 0으로 고정한다. (회전만 가능하도록)
 	m_SkyObj.m_matView = m_pMainCamera->m_matView;
 	m_SkyObj.m_matView._41 = 0;
 	m_SkyObj.m_matView._42 = 0;
@@ -113,6 +113,8 @@ bool ACore::CoreRender()
 	m_SkyObj.SetMatrix(NULL, &m_SkyObj.m_matView, &m_pMainCamera->m_matProj);
 	m_SkyObj.Render();
 	m_pImmediateContext->RSSetState(ADxState::g_pRSBackCullSolid);
+
+
 
 	// 백버퍼에 랜더링 한다.
 	Render();

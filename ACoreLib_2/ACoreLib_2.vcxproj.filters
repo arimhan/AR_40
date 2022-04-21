@@ -226,9 +226,6 @@
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <FxCompile Include="..\..\data\shader\Character.hlsl">
-      <Filter>리소스 파일</Filter>
-    </FxCompile>
     <FxCompile Include="..\..\data\shader\Box.hlsl">
       <Filter>리소스 파일</Filter>
     </FxCompile>
@@ -242,6 +239,9 @@
       <Filter>리소스 파일</Filter>
     </FxCompile>
     <FxCompile Include="..\..\data\shader\Projection.hlsl">
+      <Filter>리소스 파일</Filter>
+    </FxCompile>
+    <FxCompile Include="..\SampleFBX_1\Character.hlsl">
       <Filter>리소스 파일</Filter>
     </FxCompile>
   </ItemGroup>

@@ -2,6 +2,35 @@
 #include "ObjectMgr.h"
 #include "BoxObj.h"
 
+void ASample::DisplayErrorBox(const WCHAR* lpszFunction)
+{
+    LPVOID lpMsgBuf;
+    LPVOID lpDisplayBuf;
+    DWORD dw = GetLastError();
+
+    FormatMessage(
+        FORMAT_MESSAGE_ALLOCATE_BUFFER |
+        FORMAT_MESSAGE_FROM_SYSTEM |
+        FORMAT_MESSAGE_IGNORE_INSERTS,
+        NULL,
+        dw,
+        MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT),
+        (LPTSTR)&lpMsgBuf,
+        0, NULL);
+
+    lpDisplayBuf = (LPVOID)LocalAlloc(LMEM_ZEROINIT,
+        (lstrlen((LPCTSTR)lpMsgBuf) + lstrlen((LPCTSTR)lpszFunction) + 40) * sizeof(TCHAR));
+    StringCchPrintf((LPTSTR)lpDisplayBuf,
+        LocalSize(lpDisplayBuf) / sizeof(TCHAR),
+        TEXT("%s failed with error %d: %s"),
+        lpszFunction, dw, lpMsgBuf);
+    MessageBox(NULL, (LPCTSTR)lpDisplayBuf, TEXT("Error"), MB_OK);
+
+    LocalFree(lpMsgBuf);
+    LocalFree(lpDisplayBuf);
+}
+
+
 void ASample::RenderShadow(TMatrix* pmatView, TMatrix* pmatProj) 
 {
     ApplyDSS(m_pImmediateContext.Get(), ADxState::g_pDSSDepthEnable);
@@ -40,14 +69,14 @@ bool ASample::LoadFbx()
     //------------Load Fbx
     //Greystone.fbx LOD Mesh 5개
     //Greystone -> character, idel -> anim
-    //listname.push_back(L"../../data/fbx/Greystone.FBX");
-    //listname.push_back(L"../../data/fbx/idle.fbx");
+    listname.push_back(L"../../data/fbx/Greystone.FBX");
+    listname.push_back(L"../../data/fbx/idle.fbx");
         // 0 ~ 60  idel
         // 61 ~91  walk;
         // 92 ~ 116	  run
         // 120 ~205 jump
         // 	205 ~289  attack
-    listname.push_back(L"../../data/fbx/Man.FBX");
+    //listname.push_back(L"../../data/fbx/Man.FBX");
     //("../../data/fbx/Turret_Deploy1/Turret_Deploy1.FBX");
 
     I_ObjectMgr.Set(m_pd3dDevice.Get(), m_pImmediateContext.Get());
@@ -56,10 +85,14 @@ bool ASample::LoadFbx()
     {
         AFbxObj* pFbx = &m_FbxObj[iObj];
         pFbx->Init();
+        pFbx->m_iShadowID = (iObj * 2) + 1;
+        pFbx->m_vShadowColor = TVector4(pFbx->m_iShadowID / 255.0f, 1, 1, 1);   //id를 255(최대값) 나누어 컬러배분
         pFbx->m_pMainCamera = m_pMainCamera;
         pFbx->m_pd3dDevice = m_pd3dDevice.Get();
         pFbx->m_pContext = m_pImmediateContext.Get();
         pFbx->m_pMeshImp = I_ObjectMgr.Load((listname[iObj]));
+        pFbx->m_pVShader = I_Shader.CreateVertexShader(g_pd3dDevice, L"../../data/shader/Character.hlsl", "VS");
+        pFbx->m_pPShader = I_Shader.CreatePixelShader(g_pd3dDevice, L"../../data/shader/Character.hlsl", "PSMRT");
         pFbx->m_DrawList.resize(pFbx->m_pMeshImp->m_pDrawList.size());
 
         //-------------FbxObj Render Set 다수 렌더링 시 좌우 열 맞춰 렌더링 하도록 계산
@@ -85,11 +118,17 @@ bool ASample::LoadFbx()
 
 bool ASample::Init()
 {
+    HRESULT hr;
+    if (FAILED(m_QuadObj.Create(m_pd3dDevice.Get(), m_pImmediateContext.Get(), L"Quad.hlsl")))
+    {
+        MessageBox(0, _T("m_QuadObj 실패"), _T("Fatal Error"), MB_OK);
+        return 0;
+    }
+
+    //m_pShadowPShader = I_Shader.CreatePixelShader(m_pd3dDevice.Get(), L"PlaneShadowCharacter.hlsl", "PSColor");
 
     LoadMap();
     LoadFbx();
-
-    m_pShadowPShader = I_Shader.CreatePixelShader(m_pd3dDevice.Get(), L"Character.hlsl", "PSColor");
 
     //-----------MainCamera, Light, Normal Map Set
 
@@ -217,7 +256,14 @@ void ASample::RenderMTR(ID3D11DeviceContext* pContext)
 
     m_pMapObj.m_bAlphaBlend = false;
     m_pMapObj.SetMatrix(nullptr, &m_pMainCamera->m_matView, &m_pMainCamera->m_matProj);
-    m_QuadTree.Render();
+    m_pMapObj.m_LightConstantList.matLight = m_matViewLight * m_matProjLight * m_matTex;
+    T::D3DXMatrixTranspose(&m_pMapObj.m_LightConstantList.matLight, &m_pMapObj.m_LightConstantList.matLight);
+    m_pImmediateContext->PSSetSamplers(1, 1, &ADxState::g_pSSClampLinear);
+  
+    m_QuadTree.PreRender();
+    pContext->PSSetShaderResources(1, 1, m_dxRT.m_pSRV.GetAddressOf());
+
+    m_QuadTree.PostRender();
 
     if (m_pLightTex)
         m_pImmediateContext->PSSetShaderResources(1, 1, m_pLightTex->m_pSRV.GetAddressOf());

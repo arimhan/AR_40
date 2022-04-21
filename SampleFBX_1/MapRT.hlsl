@@ -61,11 +61,11 @@ VS_OUTPUT VS(VS_INPUT v)
 	return pOut;
 }
 
-Texture2D		g_txColor	: register(t0);
-Texture2D		g_txMask	: register(t1);
-TextureCube	    g_txCubeMap : register(t3);
-SamplerState	g_Sample	: register(s0);
-SamplerState	g_SpClamp	: register(s1);	//SampleClamp 추가
+Texture2D		g_txColor		: register(t0);
+Texture2D		g_txMask		: register(t1);
+TextureCube	    g_txCubeMap		: register(t3);
+SamplerState	g_Sample		: register(s0);
+SamplerState	g_SampleClamp	: register(s1);	//SampleClamp 추가
 
 struct PBUFFER_OUTPUT
 {
@@ -79,8 +79,8 @@ PBUFFER_OUTPUT PS(VS_OUTPUT input) : SV_TARGET
 	PBUFFER_OUTPUT output;
 	//텍스쳐에서 T좌표에 해당하는 컬러값(픽셀)반환
 	float4 color = g_txColor.Sample(g_Sample, input.t);
-	float4 LightUV = float2(input.l.xy / input.l.w);
-	float4 mask = g_txMask.Sample(g_SpClamp, LightUV);
+	float2 LightUV = float2(input.l.xy / input.l.w);
+	float4 mask = g_txMask.Sample(g_SampleClamp, LightUV);
 
 	//mask의 r값이 존재하면 지정한 컬러로 출력 ->검은색 반투명 그림자
 	if (mask.r > 0.0f)

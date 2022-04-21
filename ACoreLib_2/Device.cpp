@@ -1,6 +1,6 @@
 #include "Device.h"
 ID3D11Device*			g_pd3dDevice = nullptr;
-ID3D11DeviceContext*	g_pImmediateContext = nullptr;
+//ID3D11DeviceContext*	g_pImmediateContext = nullptr;
 
 HRESULT ADevice::InitDeivice()
 {
@@ -45,6 +45,9 @@ bool ADevice::CreateDevice()
 	}	
 	DXGI_SWAP_CHAIN_DESC scd;
 	m_pSwapChain->GetDesc(&scd);
+
+	g_pd3dDevice = m_pd3dDevice.Get();
+
 	return true;
 }
 bool ADevice::CreateRenderTargetView()

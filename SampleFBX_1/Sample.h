@@ -56,6 +56,7 @@ public:
 public:
 	void			RenderIntoBuffer(ID3D11DeviceContext* pContext);
 	void			RenderMTR(ID3D11DeviceContext* pContext);
+	void			DisplayErrorBox(const WCHAR* lpszFunction);
 
 	ASample();
 	virtual ~ASample();

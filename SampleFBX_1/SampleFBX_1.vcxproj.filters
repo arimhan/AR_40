@@ -21,19 +21,22 @@
     <FxCompile Include="Box.hlsl">
       <Filter>fbxresource</Filter>
     </FxCompile>
-    <FxCompile Include="Projection.hlsl">
+    <FxCompile Include="MapRT.hlsl">
       <Filter>fbxresource</Filter>
     </FxCompile>
-    <FxCompile Include="Character.hlsl">
+    <FxCompile Include="Projection.hlsl">
       <Filter>fbxresource</Filter>
     </FxCompile>
     <FxCompile Include="Quad.hlsl">
       <Filter>fbxresource</Filter>
     </FxCompile>
-    <FxCompile Include="MapRT.hlsl">
+    <FxCompile Include="sky.hlsl">
       <Filter>fbxresource</Filter>
     </FxCompile>
-    <FxCompile Include="sky.hlsl">
+    <FxCompile Include="..\..\..\doc\git2\KGCA40b\SampleFBXLoader_5\PlaneShadowCharacter.hlsl">
+      <Filter>fbxresource</Filter>
+    </FxCompile>
+    <FxCompile Include="..\..\..\doc\git2\KGCA40b\SampleFBXLoader_5\Character.hlsl">
       <Filter>fbxresource</Filter>
     </FxCompile>
   </ItemGroup>

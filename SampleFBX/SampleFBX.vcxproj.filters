@@ -38,5 +38,6 @@
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="Box.hlsl" />
+    <FxCompile Include="..\SampleFBX_1\sky.hlsl" />
   </ItemGroup>
 </Project>

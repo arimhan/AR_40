@@ -6,6 +6,10 @@ class AFbxObj : public AObject3D
 {
 public:
 	ACamera*		m_pMainCamera;
+	UINT			m_iShadowID = 0;
+	TVector4		m_vShadowColor;
+
+public:
 	AFbxImporter*	m_pMeshImp;
 	AFbxImporter*	m_pAnimImp;
 

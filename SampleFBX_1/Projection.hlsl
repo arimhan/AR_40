@@ -3,17 +3,18 @@
 cbuffer cb0 : register(b0)
 {
 	// 1개의 레지스터(x,y,z,w)
-	matrix   g_matWorld : packoffset(c0);
-	matrix   g_matView	: packoffset(c4);
-	matrix   g_matProj	: packoffset(c8);
-	float4   Color0		: packoffset(c12);
-	float    TimerX		: packoffset(c13.x); // Timer.x, Timer.y, Timer.z, Timer.w	
+	matrix   g_matWorld		: packoffset(c0);
+	matrix   g_matView		: packoffset(c4);
+	matrix   g_matProj		: packoffset(c8);
+	matrix	 g_matNormal	: packoffset(c12);
+
+	float4   Color0			: packoffset(c16);
+	float    TimerX			: packoffset(c17.x); // Timer.x, Timer.y, Timer.z, Timer.w	
 };
 
-VS_OUTPUT VS( VS_INPUT v)
+struct VS_OUTPUT
 {
 	float4 p : SV_POSITION;
-	return pOut;
 }
 
 //Composite partices into the scene

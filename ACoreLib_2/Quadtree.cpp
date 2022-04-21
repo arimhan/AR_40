@@ -322,21 +322,34 @@ void AQuadtree::Update(ACamera* pCamera)
 	m_pObjList.clear();
 	RenderTile(m_pRootNode);
 }
+bool AQuadtree::PreRender() 
+{
+	if (m_pMap)
+	{
+		m_pMap->PreRender();
+		m_pMap->Draw();
+
+		m_pMap->m_pContext->UpdateSubresource(m_pIndexBuffer.Get(),
+			0, NULL, &m_IndexList.at(0), 0, 0);
+
+		m_pMap->m_pContext->IASetIndexBuffer(m_pIndexBuffer.Get(), DXGI_FORMAT_R32_UINT, 0);
+
+	}
+	return true;
+}
 
 bool AQuadtree::Render()
 {
-	m_pMap->PreRender();
-	m_pMap->Draw();
+	PreRender();
+	PostRender();
+	return true;
+}
 
-	for (int iNode = 0; iNode < g_pDrawLeafNodes.size(); iNode++)
+bool AQuadtree::PostRender() 
+{
+	if (m_pMap)
 	{
-		m_pMap->m_ConstantList.Color = T::TVector4(1, 1, 0, 1);
-m_pMap->m_pContext->UpdateSubresource(m_pMap->m_pConstantBuffer,
-	0, NULL, &m_pMap->m_ConstantList, 0, 0);
-
-m_pMap->m_pContext->IASetIndexBuffer(g_pDrawLeafNodes[iNode]->
-	m_pIndexBuffer[iNode].Get(), DXGI_FORMAT_R32_UINT, 0);
-m_pMap->m_pContext->DrawIndexed(g_pDrawLeafNodes[iNode]->m_IndexList.size(), 0, 0);
+		m_pMap->m_pContext->DrawIndexed(m_iNumFace * 3, 0, 0);
 	}
 	for (auto obj : m_pObjList)
 	{
