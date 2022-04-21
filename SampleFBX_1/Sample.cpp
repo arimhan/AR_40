@@ -265,10 +265,11 @@ void ASample::RenderMTR(ID3D11DeviceContext* pContext)
 
     m_QuadTree.PostRender();
 
-    if (m_pLightTex)
-        m_pImmediateContext->PSSetShaderResources(1, 1, m_pLightTex->m_pSRV.GetAddressOf());
-    if(m_pNormalMap)
-        m_pImmediateContext->PSSetShaderResources(4, 1, m_pNormalMap->m_pSRV.GetAddressOf());
+    if (m_pLightTex)      pContext->PSSetShaderResources(1, 1, m_pLightTex->m_pSRV.GetAddressOf());
+    if(m_pNormalMap)      pContext->PSSetShaderResources(4, 1, m_pNormalMap->m_pSRV.GetAddressOf());
+    if (m_dxRT.m_pSRV)    pContext->PSSetShaderResources(5, 1, m_dxRT.m_pSRV.GetAddressOf());
+
+
     for (int iObj = 0; iObj < m_FbxObj.size(); iObj++)
     {
         m_FbxObj[iObj].SetMatrix(nullptr, &m_pMainCamera->m_matView, &m_pMainCamera->m_matProj);
