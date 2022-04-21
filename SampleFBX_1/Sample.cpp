@@ -272,28 +272,30 @@ void ASample::RenderMTR(ID3D11DeviceContext* pContext)
 
     for (int iObj = 0; iObj < m_FbxObj.size(); iObj++)
     {
+        m_FbxObj[iObj].m_LightConstantList.matLight = m_matViewLight * m_matProjLight * m_matTex;
+        T::D3DXMatrixTranspose(&m_FbxObj[iObj].m_LightConstantList.matLight, &m_FbxObj[iObj].m_LightConstantList.matLight);
+
         m_FbxObj[iObj].SetMatrix(nullptr, &m_pMainCamera->m_matView, &m_pMainCamera->m_matProj);
         m_FbxObj[iObj].Render();
 
-        TVector3 vLight = TVector3(1000, 2000, 0);
-        TMatrix matRotation;
-        D3DXMatrixRotationY(&matRotation, g_fGameTimer);
-        D3DXVec3TransformCoord(&vLight, &vLight, &matRotation);
-        D3DXVec3Normalize(&vLight, &vLight);
-
-        TVector4 pLight = TVector4(vLight.x, vLight.y, vLight.z, 1.0f);
-        TPlane pPlane = TPlane(0, 1, 0, - (m_FbxObj[iObj].m_vPos.y + 1.1f)); //FBXObj의 Y위치 + 1.1f 
-        
-        TVector4 p(pPlane.x, pPlane.y, pPlane.z, pPlane.w);
-        TMatrix matShadow;
-        D3DXMatrixShadow(&matShadow, &pLight, &pPlane);
-        
-        //렌더 후 이전 Shadow로 바꿔치기 해줘야 함. 안그러면 두 번째 렌더링부터 Fbxobj가 Shadow로 렌더링 됨.....
-        TMatrix matSaveShadow = m_FbxObj[iObj].m_matWorld;
-        matShadow = m_FbxObj[iObj].m_matWorld * matShadow;
-        m_FbxObj[iObj].SetMatrix(&matShadow, &m_pMainCamera->m_matView, &m_pMainCamera->m_matProj);
-        m_FbxObj[iObj].RenderShadoe(m_pShadowPShader);
-        m_FbxObj[iObj].m_matWorld = matSaveShadow;
+        //TVector3 vLight = TVector3(1000, 2000, 0);
+        //TMatrix matRotation;
+        //D3DXMatrixRotationY(&matRotation, g_fGameTimer);
+        //D3DXVec3TransformCoord(&vLight, &vLight, &matRotation);
+        //D3DXVec3Normalize(&vLight, &vLight);
+        //TVector4 pLight = TVector4(vLight.x, vLight.y, vLight.z, 1.0f);
+        //TPlane pPlane = TPlane(0, 1, 0, - (m_FbxObj[iObj].m_vPos.y + 1.1f)); //FBXObj의 Y위치 + 1.1f 
+        //
+        //TVector4 p(pPlane.x, pPlane.y, pPlane.z, pPlane.w);
+        //TMatrix matShadow;
+        //D3DXMatrixShadow(&matShadow, &pLight, &pPlane);
+        //
+        ////렌더 후 이전 Shadow로 바꿔치기 해줘야 함. 안그러면 두 번째 렌더링부터 Fbxobj가 Shadow로 렌더링 됨.....
+        //TMatrix matSaveShadow = m_FbxObj[iObj].m_matWorld;
+        //matShadow = m_FbxObj[iObj].m_matWorld * matShadow;
+        //m_FbxObj[iObj].SetMatrix(&matShadow, &m_pMainCamera->m_matView, &m_pMainCamera->m_matProj);
+        //m_FbxObj[iObj].RenderShadoe(m_pShadowPShader);
+        //m_FbxObj[iObj].m_matWorld = matSaveShadow;
     }
     ClearD3D11DeviceContext(pContext);
 }
