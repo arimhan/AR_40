@@ -25,7 +25,7 @@ public:
 	virtual bool	Release() override;
 	void			GenAABB() override;
 
-	bool			RenderShadoe(AShader* pShader);
+	bool			RenderShadow(AShader* pShader);
 	T::TMatrix		Interplate(AFbxImporter* pAnimImp, AFbxModel* pModel, float fTime);
 };
 

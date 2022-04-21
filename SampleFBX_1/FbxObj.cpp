@@ -160,7 +160,7 @@ void AFbxObj::GenAABB()
 }
 
 
-bool AFbxObj::RenderShadoe(AShader* pShader)
+bool AFbxObj::RenderShadow(AShader* pShader)
 {
 	//Shadow Render시, Anim이 있을 경우 Anim으로, 없을 경우 Mesh로
 	AFbxImporter* pAnimImp = nullptr;

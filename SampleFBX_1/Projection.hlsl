@@ -19,7 +19,7 @@ struct VS_OUTPUT
 
 //Composite partices into the scene
 
-VS_OUTPUT VSColor(VS_INPUT v)
+VS_OUTPUT VS ( float4 p : POSITION )
 {
 	VS_OUTPUT output;
 	output.p = mul(p, g_matWorld);
@@ -29,7 +29,7 @@ VS_OUTPUT VSColor(VS_INPUT v)
 	return output;
 }
 
-float4 PS(VS_OUTPUT input) : SV_TARGET
+float4 PS(VS_OUTPUT vIn) : SV_Target
 {
 	return Color0;
 }

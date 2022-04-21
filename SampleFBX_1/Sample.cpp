@@ -41,7 +41,7 @@ void ASample::RenderShadow(TMatrix* pmatView, TMatrix* pmatProj)
     for (int iObj = 0; iObj < m_FbxObj.size(); iObj++)
     {
         m_FbxObj[iObj].SetMatrix(nullptr, pmatView, pmatProj);
-        m_FbxObj[iObj].RenderShadoe(m_pProjShadowPSShader);
+        m_FbxObj[iObj].RenderShadow(m_pProjShadowPSShader);
     }
 }
 
@@ -142,11 +142,28 @@ bool ASample::Init()
     m_pLightTex = I_Texture.Load(L"../../data/pung00.dds");
     m_pNormalMap = I_Texture.Load(L"../../data/NormalMap/tileADOT3.jpg");
 
+    m_vLightPos = TVector3(500, 8000, 100);
+    T::D3DXVec3Normalize(&m_vLightDir, &m_vLightPos);
+    m_dxRT.Create(m_pd3dDevice.Get(), 4096 * 4, 4096 * 4);
+    m_pProjShadowVSShader = I_Shader.CreateVertexShader(m_pd3dDevice.Get(), L"Projection.hlsl", "VS");
+    m_pProjShadowPSShader = I_Shader.CreatePixelShader(m_pd3dDevice.Get(), L"Projection.hlsl", "PS");
+
+    m_matTex = TMatrix( 0.5f,  0.0f,  0.0f,  0.0f,
+                        0.0f,  -0.5f, 0.0f,  0.0f,
+                        0.0f,  0.0f,  1.0f,  0.0f,
+                        0.5f,  0.5f,  0.0f,  1.0f);
+
     return true;
 }
 
 bool ASample::Frame()
 {
+    TMatrix matRotation;
+    TVector3 vLight = m_vLightPos;
+    D3DXMatrixRotationY(&matRotation, g_fGameTimer);
+    D3DXVec3TransformCoord(&vLight, &vLight, &matRotation);
+    D3DXVec3Normalize(&m_vLightDir, &vLight);
+
     m_QuadObj.Frame();
     m_pMapObj.Frame();
     m_QuadTree.Update(m_pMainCamera);
@@ -155,6 +172,26 @@ bool ASample::Frame()
     {
         m_FbxObj[iObj].Frame();
     }
+
+    TVector4 vClearColor(0.0f, 0.0f, 0.0f, 1.0f);
+    if(m_dxRT.Begin(m_pImmediateContext.Get(), vClearColor))
+    {
+        // 1path 그림자맵 생성
+        TVector3 vEye = vLight;
+        TVector3 vLookAt = { 0,0,0 };
+        TVector3 vUp = TVector3(0.0f, 1.0f, 0.0f);
+
+        D3DXMatrixLookAtLH(&m_matViewLight, &vEye, &vLookAt, &vUp);
+        D3DXMatrixPerspectiveFovLH(&m_matProjLight, XM_PI / 4, 1, 0.1f, 30000.0f);
+        RenderShadow(&m_matViewLight, &m_matProjLight);
+        m_dxRT.End(m_pImmediateContext.Get());
+    }
+
+    if (AInput::Get().GetKey('5') == KEY_PUSH)  //8번키 -> saveproj.bmp로 그림자 img저장
+    {
+        ATextureMgr::SaveFile(m_pImmediateContext.Get(), m_dxRT.m_pTexture.Get(), L"saveproj.bmp");
+    }
+
     return true;
 }
 
@@ -262,7 +299,6 @@ void ASample::RenderMTR(ID3D11DeviceContext* pContext)
   
     m_QuadTree.PreRender();
     pContext->PSSetShaderResources(1, 1, m_dxRT.m_pSRV.GetAddressOf());
-
     m_QuadTree.PostRender();
 
     if (m_pLightTex)      pContext->PSSetShaderResources(1, 1, m_pLightTex->m_pSRV.GetAddressOf());
@@ -274,9 +310,21 @@ void ASample::RenderMTR(ID3D11DeviceContext* pContext)
     {
         m_FbxObj[iObj].m_LightConstantList.matLight = m_matViewLight * m_matProjLight * m_matTex;
         T::D3DXMatrixTranspose(&m_FbxObj[iObj].m_LightConstantList.matLight, &m_FbxObj[iObj].m_LightConstantList.matLight);
-
         m_FbxObj[iObj].SetMatrix(nullptr, &m_pMainCamera->m_matView, &m_pMainCamera->m_matProj);
         m_FbxObj[iObj].Render();
+
+        //Plane Shadow
+        //TVector4 vLight = TVector4(m_vLightDir.x, m_vLightDir.y, m_vLightDir.z, 1.0f);
+        //TPlane plane = TPlane(0, 1, 0, -(m_FbxObj[iObj].m_vPos.y + 1.1f));
+        //TVector4 p(plane.x, plane.y, plane.z, plane.w);
+        //TMatrix matShadow;
+        //D3DXMatrixShadow(&matShadow, &vLight, &plane);
+
+        //TMatrix matSaveWorld = m_FbxObj[iObj].m_matWorld;
+        //matShadow = m_FbxObj[iObj].m_matWorld * matShadow;
+        //m_FbxObj[iObj].SetMatrix(&matShadow, &m_pMainCamera->m_matView, &m_pMainCamera->m_matProj);
+        //m_FbxObj[iObj].RenderShadow(m_pShadowPShader);
+        //m_FbxObj[iObj].m_matWorld = matSaveWorld;
 
         //TVector3 vLight = TVector3(1000, 2000, 0);
         //TMatrix matRotation;
