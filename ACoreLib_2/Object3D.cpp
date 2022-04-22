@@ -94,6 +94,9 @@ void AObject3D::SetMatrix(T::TMatrix* matWorld, T::TMatrix* matView, T::TMatrix*
 		m_ConstantList.matProj = matProj->Transpose();
 	}
 
+	T::D3DXMatrixInverse(&m_ConstantList.matNormal, NULL, &m_matWorld);
+	T::D3DXMatrixTranspose(&m_ConstantList.matNormal, &m_ConstantList.matNormal);
+	T::D3DXMatrixTranspose(&m_ConstantList.matNormal, &m_ConstantList.matNormal);
 	UpdateData();
 	UpdateCollision();
 }

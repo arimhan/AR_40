@@ -59,7 +59,7 @@ ANode* AQuadtree::CreateNode(ANode* pParent, float x, float y, float w, float h)
 
 void AQuadtree::BuildTree(ANode* pParent)
 {
-	if (pParent != nullptr) { return; }
+	if (pParent == nullptr) { return; }
 
 	if ((pParent->m_CornerList[1] - pParent->m_CornerList[0]) == 1)
 	{
@@ -70,7 +70,7 @@ void AQuadtree::BuildTree(ANode* pParent)
 
 	if (pParent->m_iDepth == m_iLeafDepth)
 	{
-		m_iLeafDepth = pParent->m_iDepth;
+		m_iLeafLOD = pParent->m_iDepth;
 		pParent->m_bLeaf = true;
 
 		g_pLeafNodes.push_back(pParent);
@@ -256,6 +256,7 @@ void AQuadtree::SetIndexData(ANode* pNode, int iLodLevel)
 
 	for (int iLod = 0; iLod < iLodLevel; iLod++)
 	{ 
+		int iOffset = pow(2, iLod); // 0->1, 1->2, 2->4
 		//Row : 행 (가로)
 		//Col : 열 (세로)
 		DWORD dwStartRow = pNode->m_CornerList[0] / m_iWidth;
@@ -268,8 +269,8 @@ void AQuadtree::SetIndexData(ANode* pNode, int iLodLevel)
 		DWORD dwCellHeight = (dwEndRow - dwStartRow);
 
 		int iNumFace = (dwCellWidth * dwCellHeight * 2) / pow(4, iLod); //삼각형2개니까 2배
-		int iOffset = pow(2, iLod); // 0->1, 1->2, 2->4
-		pNode->m_IndexList.resize(iNumFace * 3);	//Index는 삼각형 그릴 시 3점이 필요하므로 3배
+
+		pNode->m_IndexList[iLod].resize(iNumFace * 3);	//Index는 삼각형 그릴 시 3점이 필요하므로 3배
 		UINT iIndex = 0;
 		for (DWORD iRow = dwStartRow; iRow < dwEndRow; iRow += iOffset)
 		{
@@ -321,6 +322,21 @@ void AQuadtree::Update(ACamera* pCamera)
 	g_pDrawLeafNodes.clear();
 	m_pObjList.clear();
 	RenderTile(m_pRootNode);
+
+	//전체 노드의 LOD 레벨을 저장한다
+	for (auto node : g_pLeafNodes)
+	{
+		GetRatio(node);
+	}
+	//보이는 노드들의 LOD Type ( 0~15) 을 결정한다
+	m_iNumFace = 0;
+	for (auto node : g_pDrawLeafNodes)
+	{
+		GetLodType(node);
+		//전체 인덱스 버퍼를 1개만 사용, LOD 버퍼를 저장
+		m_iNumFace += UpdateIndexList(node, m_iNumFace * 3, node->m_iCurrentLod);
+	}
+
 }
 bool AQuadtree::PreRender() 
 {
@@ -425,17 +441,22 @@ void AQuadtree::FindNeighborNode()
 		T::TVector3 p;
 		p.x = node->m_Box.vMiddle.x;
 		p.y = 0.0f;
+
 		p.z = node->m_Box.vMax.z + node->m_Box.size.z;
 		node->m_pNeighborList[0] = CheckBoxtoPoint(p); //북
+
 		p.z = node->m_Box.vMin.z + node->m_Box.size.z;
 		node->m_pNeighborList[1] = CheckBoxtoPoint(p); //남
-		p.x = node->m_Box.vMin.x + node->m_Box.size.x;
+
 		p.z = node->m_Box.vMiddle.z;
+		p.x = node->m_Box.vMin.x + node->m_Box.size.x;
 		node->m_pNeighborList[2] = CheckBoxtoPoint(p); //서
+
 		p.x = node->m_Box.vMax.x + node->m_Box.size.x;
 		node->m_pNeighborList[3] = CheckBoxtoPoint(p); //동
 	}
 }
+
 ANode* AQuadtree::CheckBoxtoPoint(T::TVector3 p) 
 {
 	for (auto node : g_pLeafNodes)
@@ -448,17 +469,20 @@ ANode* AQuadtree::CheckBoxtoPoint(T::TVector3 p)
 	}
 	return nullptr;
 }
+
 void AQuadtree::GetRatio(ANode* pNode)
 {
 	T::TVector3 v = m_pCamera->m_vCamera - pNode->m_Box.vMiddle;
 	float fDistance = T::D3DXVec3Length(&v);
 	float fRatio = fDistance / m_pCamera->m_fFarDistance;
 	//lod level -> 0 ~ 1 : 0~ 0.25, 0.25 ~ 0.5 : 0.5 ~ 1
+	pNode->m_iCurrentLod = fRatio * m_iNumLOD;	//0, 1, 2
 	if(pNode->m_iCurrentLod >= m_iNumLOD)
 	{
 		pNode->m_iCurrentLod = m_iNumLOD - 1;
 	}
 }
+
 int	AQuadtree::GetLodType(ANode* pNode) 
 {
 	if (pNode->m_pNeighborList.size() <= 0) return 0;
@@ -476,6 +500,7 @@ int	AQuadtree::GetLodType(ANode* pNode)
 	return dwType;
 
 }
+
 int	 AQuadtree::UpdateIndexList(ANode* pNode, DWORD dwCurentIndex, DWORD dwNumLevel) 
 {
 	if (m_IndexList.size() <= 0) return false;
@@ -560,6 +585,7 @@ int	 AQuadtree::UpdateIndexList(ANode* pNode, DWORD dwCurentIndex, DWORD dwNumLe
 	}
 	return iNumFaces;
 }
+
 int	 AQuadtree::SetLodIndexBuffer(ANode* pNode, DWORD& dwCurentIndex,
 	DWORD dwA, DWORD dwB, DWORD dwC, DWORD dwType) 
 {
@@ -631,6 +657,7 @@ void AQuadtree::DrawDebugInit(ID3D11Device* pd3dDevice, ID3D11DeviceContext* pCo
 	m_BoxDebug.SetPosition(T::TVector3(0.0f, 1.0f, 0.0f));
 	if (!m_BoxDebug.Create(pd3dDevice, pContext)) { return; }
 }
+
 //디버그 모드일때만 사용함.
 void AQuadtree::DrawDebugRender(ABox* pBox) 
 {
@@ -763,6 +790,7 @@ void AQuadtree::DrawDebugRender(ABox* pBox)
 }
 
 AQuadtree::AQuadtree() {}
+
 AQuadtree::~AQuadtree() 
 { 
 	m_BoxDebug.Release();

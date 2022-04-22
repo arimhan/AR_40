@@ -58,6 +58,7 @@ void AFbxImporter::PreProcess(FbxNode* pNode, AFbxModel* pParent)
 		pFbx->m_pFbxNode = pNode;
 		pFbx->m_csName = to_mw(pNode->GetName());
 		pFbx->m_pParentObj = pParent;
+		pFbx->m_iIndex = m_pTreeList.size();	//index를 TreeList만큼 부여
 		m_pTreeList.push_back(pFbx);
 		m_pFbxNodeMap.insert(make_pair(pNode, pFbx->m_iIndex));
 		m_pFbxModelMap.insert(make_pair(pFbx->m_csName, pFbx));
@@ -81,6 +82,8 @@ void AFbxImporter::ParseMesh(AFbxModel* pObj)
 {
 	FbxMesh* pFbxMesh = pObj->m_pFbxNode->GetMesh();
 
+	pObj->m_bSkinned = ParseMeshSkinning(pFbxMesh, pObj); // m_bSkinned 불러오기
+	
 	//기하행렬 (초기 정점 위치를 변환할 때 사용한다)
 	FbxAMatrix geom;
 	FbxVector4 trans = pObj->m_pFbxNode->GetGeometricTranslation(FbxNode::eSourcePivot);

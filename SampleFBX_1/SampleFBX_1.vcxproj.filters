@@ -39,5 +39,8 @@
     <FxCompile Include="..\..\..\doc\git2\KGCA40b\SampleFBXLoader_5\Character.hlsl">
       <Filter>fbxresource</Filter>
     </FxCompile>
+    <FxCompile Include="..\..\..\doc\git2\KGCA40b\SampleFBXLoader_5\ProjShadow.hlsl">
+      <Filter>fbxresource</Filter>
+    </FxCompile>
   </ItemGroup>
 </Project>

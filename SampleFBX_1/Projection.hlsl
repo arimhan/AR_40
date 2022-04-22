@@ -19,7 +19,7 @@ struct VS_OUTPUT
 
 //Composite partices into the scene
 
-VS_OUTPUT VS ( float4 p : POSITION )
+VS_OUTPUT VS(float4 p : POSITION)
 {
 	VS_OUTPUT output;
 	output.p = mul(p, g_matWorld);

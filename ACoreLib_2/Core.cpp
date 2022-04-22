@@ -78,6 +78,7 @@ bool ACore::CoreFrame()
 	m_GameTimer.Frame();
 	AInput::Get().Frame();
 	m_pMainCamera->Frame();
+	m_SkyObj.Frame();
 	I_ObjectMgr.Frame();
 	I_Sound.Frame();
 	Frame();

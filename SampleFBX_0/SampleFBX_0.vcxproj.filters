@@ -1,0 +1,42 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <FxCompile Include="Quad.hlsl">
+      <Filter>Resource</Filter>
+    </FxCompile>
+    <FxCompile Include="sky.hlsl">
+      <Filter>Resource</Filter>
+    </FxCompile>
+    <FxCompile Include="MapRT.hlsl">
+      <Filter>Resource</Filter>
+    </FxCompile>
+    <FxCompile Include="Box.hlsl">
+      <Filter>Resource</Filter>
+    </FxCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="Sample.cpp" />
+    <ClCompile Include="QuadObject.cpp" />
+    <ClCompile Include="FbxObj.cpp" />
+    <ClCompile Include="DxRT.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="Sample.h" />
+    <ClInclude Include="QuadObject.h" />
+    <ClInclude Include="FbxObj.h" />
+    <ClInclude Include="DxRT.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <Filter Include="Resource">
+      <UniqueIdentifier>{8cb2eb42-d540-4b80-8187-20d3ab51fe8c}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Greystone.FBX">
+      <Filter>Resource</Filter>
+    </None>
+    <None Include="Idle.FBX">
+      <Filter>Resource</Filter>
+    </None>
+  </ItemGroup>
+</Project>

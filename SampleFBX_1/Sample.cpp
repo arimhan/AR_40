@@ -144,9 +144,9 @@ bool ASample::Init()
 
     m_vLightPos = TVector3(500, 8000, 100);
     T::D3DXVec3Normalize(&m_vLightDir, &m_vLightPos);
-    m_dxRT.Create(m_pd3dDevice.Get(), 4096 * 4, 4096 * 4);
-    m_pProjShadowVSShader = I_Shader.CreateVertexShader(m_pd3dDevice.Get(), L"Projection.hlsl", "VS");
-    m_pProjShadowPSShader = I_Shader.CreatePixelShader(m_pd3dDevice.Get(), L"Projection.hlsl", "PS");
+    m_dxRT.Create(m_pd3dDevice.Get(), 1024, 1024);//4096 * 4, 4096 * 4);
+    m_pProjShadowVSShader = I_Shader.CreateVertexShader(m_pd3dDevice.Get(), L"../../data/shader/ProjShadow.hlsl", "VS");//L"Projection.hlsl", "VS");
+    m_pProjShadowPSShader = I_Shader.CreatePixelShader(m_pd3dDevice.Get(), L"../../data/shader/ProjShadow.hlsl", "PS");//L"Projection.hlsl", "PS");
 
     m_matTex = TMatrix( 0.5f,  0.0f,  0.0f,  0.0f,
                         0.0f,  -0.5f, 0.0f,  0.0f,
