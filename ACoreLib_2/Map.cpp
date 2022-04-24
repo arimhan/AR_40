@@ -157,7 +157,7 @@ bool AMap::SetVertexData()
 			int index = iRow * m_iNumCols + iCol;
 			//정점리스트 내 pnct 값 세팅
 			m_VertexList[index].p.x = (iCol - hHalfCol) * m_iCellDistance;
-			m_VertexList[index].p.y = m_fHeightList[index];
+			m_VertexList[index].p.y = m_fHeightList[index] * 5.0f;
 			m_VertexList[index].p.z = -((iRow - hHalfRow)* m_iCellDistance); // 음수값이라 +로 변환
 			m_VertexList[index].n = T::TVector3( 0, 1, 0);	//노멀값이 Y축으로 1값을 향하고 있음.
 			m_VertexList[index].c =
@@ -210,9 +210,10 @@ bool AMap::SetIndexData()
 			T::TVector3 vE0 = (m_VertexList[face.v1].p - m_VertexList[face.v0].p);
 			T::D3DXVec3Normalize(&vE0, &vE0);
 			T::TVector3 vE1 = (m_VertexList[face.v2].p - m_VertexList[face.v0].p);
-			//위에서 구한 vE0과 vE1를 외적 후 정규화 한다.
-			T::D3DXVec3Normalize(&vE0, &vE1);
+			//위에서 구한 vE1을 외적 후 정규화 한다.
+			T::D3DXVec3Normalize(&vE1, &vE1);
 			//face.vNormal = (vE0 ^ vE1).Normal(); 아래 함수를 이용하여 구현
+
 			T::D3DXVec3Cross(&face.vNormal, &vE0, &vE1);
 			T::D3DXVec3Normalize(&face.vNormal, &face.vNormal);
 
@@ -230,10 +231,14 @@ bool AMap::SetIndexData()
 			face.v0 = m_IndexList[iIndex + 3];
 			face.v1 = m_IndexList[iIndex + 4];
 			face.v2 = m_IndexList[iIndex + 5];
-			vE0 = (m_VertexList[face.v1].p - m_VertexList[face.v0].p);
+			//v1-v0 = vE0 (두 벡터를 뺀 값을 vE0으로 리턴) 그리고 vE0을 정규화
+			T::D3DXVec3Subtract(&vE0, &m_VertexList[face.v1].p, &m_VertexList[face.v0].p);
 			T::D3DXVec3Normalize(&vE0, &vE0);
-			vE1 = (m_VertexList[face.v2].p - m_VertexList[face.v0].p);
+
+			T::D3DXVec3Subtract(&vE1, &m_VertexList[face.v2].p, &m_VertexList[face.v0].p);
 			T::D3DXVec3Normalize(&vE1, &vE1);
+
+			//vE0과 vE1을 외적한다
 			T::D3DXVec3Cross(&face.vNormal, &vE0, &vE1);
 			T::D3DXVec3Normalize(&face.vNormal, &face.vNormal);
 
@@ -242,6 +247,7 @@ bool AMap::SetIndexData()
 			m_VertexList[face.v2].n += face.vNormal;
 
 			fDot = max(0.0f, T::D3DXVec3Dot(&vLight, &face.vNormal));
+
 			m_VertexList[face.v0].c = T::TVector4(fDot, fDot, fDot, 1);
 			m_VertexList[face.v1].c = T::TVector4(fDot, fDot, fDot, 1);
 			m_VertexList[face.v2].c = T::TVector4(fDot, fDot, fDot, 1);

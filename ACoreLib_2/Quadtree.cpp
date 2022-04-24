@@ -1,7 +1,6 @@
 #include "Quadtree.h"
-
-
 int AQuadtree::g_iCount = 0;
+
 
 void AQuadtree::Build(int iWidth, int iHeight, int iMaxDepth)
 {
@@ -149,6 +148,8 @@ TVector2 AQuadtree::GetHeightFromNode(DWORD dwTL, DWORD dwTR, DWORD dwBL, DWORD 
 
 	DWORD dwStartRow = dwTL / m_iWidth;
 	DWORD dwEndRow = dwBL / m_iWidth;
+	//돌리는 방향이 dwTL과 dwBL이 바뀐 것 같음....
+
 
 	DWORD dwStartCol = dwTL % m_iWidth;
 	DWORD dwEndCol = dwTR % m_iWidth;
@@ -217,7 +218,7 @@ ANode* AQuadtree::FindNode(ANode* pNode, ABox& box)
 	//pNode 가 있을 때 까지 Node 의 갯수만큼 돌면서 자식노드를 찾는다
 	do 
 	{
-		for(int iNode =0; iNode<4; iNode++)
+		for (int iNode = 0; iNode < 4; iNode++)
 		{
 			if (pNode->m_pChild[iNode] != nullptr)
 			{
@@ -238,9 +239,11 @@ ANode* AQuadtree::FindNode(ANode* pNode, ABox& box)
 bool AQuadtree::CheckBox(ABox& abox, ABox& bbox)
 {
 	//abox와 bbox의 충돌체크를 한다. AABB abox와 bbox가 겹칠경우 return true를 한다.
-	if (abox.vMin.x <= bbox.vMin.x && abox.vMin.y <= bbox.vMin.y && abox.vMin.z <= bbox.vMin.z)
+	if (abox.vMin.x <= bbox.vMin.x && abox.vMin.y <= bbox.vMin.y 
+		&& abox.vMin.z <= bbox.vMin.z)
 	{
-		if (abox.vMax.x >= bbox.vMax.x && abox.vMax.y >= bbox.vMax.y && abox.vMax.z >= bbox.vMax.z)
+		if (abox.vMax.x >= bbox.vMax.x 
+			&& abox.vMax.y >= bbox.vMax.y && abox.vMax.z >= bbox.vMax.z)
 		{
 			return true;
 		}
@@ -348,7 +351,8 @@ bool AQuadtree::PreRender()
 		m_pMap->m_pContext->UpdateSubresource(m_pIndexBuffer.Get(),
 			0, NULL, &m_IndexList.at(0), 0, 0);
 
-		m_pMap->m_pContext->IASetIndexBuffer(m_pIndexBuffer.Get(), DXGI_FORMAT_R32_UINT, 0);
+		m_pMap->m_pContext->IASetIndexBuffer(
+			m_pIndexBuffer.Get(), DXGI_FORMAT_R32_UINT, 0);
 
 	}
 	return true;
@@ -369,7 +373,8 @@ bool AQuadtree::PostRender()
 	}
 	for (auto obj : m_pObjList)
 	{
-		obj->pObject->SetMatrix(&obj->matWorld, &m_pMap->m_matView, &m_pMap->m_matProj);
+		obj->pObject->SetMatrix(&obj->matWorld, 
+			&m_pMap->m_matView, &m_pMap->m_matProj);
 		obj->pObject->m_ConstantList.Color = T::TVector4(1, 1, 1, 1);
 		obj->pObject->Render();
 	}
@@ -416,21 +421,21 @@ void AQuadtree::RenderTile(ANode* pNode)
 	}
 }
 
-void AQuadtree::PrintObjList(ANode* pNode)
-{
-	if (pNode == nullptr) return;
-	for (list<AMapObj*>::iterator iter = pNode->m_pDynamicObjList.begin();
-		iter != pNode->m_pDynamicObjList.end(); iter++)
-	{
-		AMapObj* pObj = *iter;
-		cout << "[" << pNode->m_iIndex << "]" << (int)pObj->vPos.x << ":" << (int)pObj->vPos.y << " ";
-	}
-	cout << endl;
-	for (int iNode = 0; iNode << 4; iNode++)
-	{
-		PrintObjList(pNode->m_pChild[iNode]);
-	}
-}
+//void AQuadtree::PrintObjList(ANode* pNode)
+//{
+//	if (pNode == nullptr) return;
+//	for (list<AMapObj*>::iterator iter = pNode->m_pDynamicObjList.begin();
+//		iter != pNode->m_pDynamicObjList.end(); iter++)
+//	{
+//		AMapObj* pObj = *iter;
+//		cout << "[" << pNode->m_iIndex << "]" << (int)pObj->vPos.x << ":" << (int)pObj->vPos.y << " ";
+//	}
+//	cout << endl;
+//	for (int iNode = 0; iNode << 4; iNode++)
+//	{
+//		PrintObjList(pNode->m_pChild[iNode]);
+//	}
+//}
 
 
 void AQuadtree::FindNeighborNode()
@@ -441,15 +446,14 @@ void AQuadtree::FindNeighborNode()
 		T::TVector3 p;
 		p.x = node->m_Box.vMiddle.x;
 		p.y = 0.0f;
-
 		p.z = node->m_Box.vMax.z + node->m_Box.size.z;
 		node->m_pNeighborList[0] = CheckBoxtoPoint(p); //북
 
-		p.z = node->m_Box.vMin.z + node->m_Box.size.z;
+		p.z = node->m_Box.vMin.z - node->m_Box.size.z;
 		node->m_pNeighborList[1] = CheckBoxtoPoint(p); //남
 
 		p.z = node->m_Box.vMiddle.z;
-		p.x = node->m_Box.vMin.x + node->m_Box.size.x;
+		p.x = node->m_Box.vMin.x - node->m_Box.size.x;
 		node->m_pNeighborList[2] = CheckBoxtoPoint(p); //서
 
 		p.x = node->m_Box.vMax.x + node->m_Box.size.x;
@@ -493,7 +497,7 @@ int	AQuadtree::GetLodType(ANode* pNode)
 		< pNode->m_iCurrentLod) dwType += 4;
 	if (pNode->m_pNeighborList[2] && pNode->m_pNeighborList[2]->m_iCurrentLod
 		< pNode->m_iCurrentLod) dwType += 8;
-	if (pNode->m_pNeighborList[3] && pNode->m_pNeighborList[0]->m_iCurrentLod
+	if (pNode->m_pNeighborList[3] && pNode->m_pNeighborList[3]->m_iCurrentLod
 		< pNode->m_iCurrentLod) dwType += 2;
 
 	pNode->m_dwLodType = dwType;
@@ -521,9 +525,10 @@ int	 AQuadtree::UpdateIndexList(ANode* pNode, DWORD dwCurentIndex, DWORD dwNumLe
 	DWORD dwCountX = ((dwEndCol - dwStartCol) / dwOffset) - 1;
 	DWORD dwCountY = ((dwEndRow - dwStartRow) / dwOffset) - 1;
 
-	DWORD dwYCell = 0; DWORD dwXCell = 0;
+	DWORD dwYCell = 0; 
 	for (DWORD dwRow = dwStartRow; dwRow < dwEndRow; dwRow += dwOffset, dwYCell++)
 	{
+		DWORD dwXCell = 0;
 		for (DWORD dwCol = dwStartCol; dwCol < dwEndCol; dwCol += dwOffset, dwXCell++)
 		{
 			DWORD dwNextRow = dwRow + dwOffset;
@@ -539,6 +544,11 @@ int	 AQuadtree::UpdateIndexList(ANode* pNode, DWORD dwCurentIndex, DWORD dwNumLe
 				DWORD dwType = (pNode->m_dwLodType & 8) + (pNode->m_dwLodType & 1);
 				iNumFaces += SetLodIndexBuffer(pNode, dwCurentIndex,
 					i0, i1, i2, dwType);
+			}
+			else if ((dwYCell == 0) && (pNode->m_dwLodType & 8))
+			{
+				iNumFaces += SetLodIndexBuffer(pNode, dwCurentIndex,
+					i0, i1, i2, 8);
 			}
 			else if ((dwYCell == 0) && (pNode->m_dwLodType & 1))
 			{
@@ -680,104 +690,104 @@ void AQuadtree::DrawDebugRender(ABox* pBox)
 
 	//Box에서 돌린 VB 고대로~
 	// +Z plane
-	m_BoxDebug.m_VertexList[index].p = T::TVector3(1.0f, 1.0f, 1.0f);
+	m_BoxDebug.m_VertexList[index].p = pBox->vList[5];
 	m_BoxDebug.m_VertexList[index].n = T::TVector3(0.0f, 0.0f, 1.0f);
 	m_BoxDebug.m_VertexList[index].c = T::TVector4(1.0f, 1.0f, 1.0f, 1.0f);
 	m_BoxDebug.m_VertexList[index].t = T::TVector2(0.0f, 0.0f);
-	m_BoxDebug.m_VertexList[++index].p = T::TVector3(-1.0f, 1.0f, 1.0f);
+	m_BoxDebug.m_VertexList[++index].p = pBox->vList[4];
 	m_BoxDebug.m_VertexList[index].n = T::TVector3(0.0f, 0.0f, 1.0f);
 	m_BoxDebug.m_VertexList[index].c = T::TVector4(1.0f, 1.0f, 1.0f, 1.0f);
 	m_BoxDebug.m_VertexList[index].t = T::TVector2(1.0f, 0.0f);
-	m_BoxDebug.m_VertexList[++index].p = T::TVector3(1.0f, -1.0f, 1.0f);
+	m_BoxDebug.m_VertexList[++index].p = pBox->vList[7];
 	m_BoxDebug.m_VertexList[index].n = T::TVector3(0.0f, 0.0f, 1.0f);
 	m_BoxDebug.m_VertexList[index].c = T::TVector4(1.0f, 1.0f, 1.0f, 1.0f);
 	m_BoxDebug.m_VertexList[index].t = T::TVector2(0.0f, 1.0f);
-	m_BoxDebug.m_VertexList[++index].p = T::TVector3(-1.0f, -1.0f, 1.0f);
+	m_BoxDebug.m_VertexList[++index].p = pBox->vList[6];
 	m_BoxDebug.m_VertexList[index].n = T::TVector3(0.0f, 0.0f, 1.0f);
 	m_BoxDebug.m_VertexList[index].c = T::TVector4(1.0f, 1.0f, 1.0f, 1.0f);
 	m_BoxDebug.m_VertexList[index].t = T::TVector2(1.0f, 1.0f);
 	// -Z plane
-	m_BoxDebug.m_VertexList[++index].p = T::TVector3(-1.0f, 1.0f, -1.0f);
+	m_BoxDebug.m_VertexList[++index].p = pBox->vList[0];
 	m_BoxDebug.m_VertexList[index].n = T::TVector3(0.0f, 0.0f, -1.0f);
 	m_BoxDebug.m_VertexList[index].c = T::TVector4(1.0f, 1.0f, 1.0f, 1.0f);
 	m_BoxDebug.m_VertexList[index].t = T::TVector2(0.0f, 0.0f);
-	m_BoxDebug.m_VertexList[++index].p = T::TVector3(1.0f, 1.0f, -1.0f);
+	m_BoxDebug.m_VertexList[++index].p = pBox->vList[1];
 	m_BoxDebug.m_VertexList[index].n = T::TVector3(0.0f, 0.0f, -1.0f);
 	m_BoxDebug.m_VertexList[index].c = T::TVector4(1.0f, 1.0f, 1.0f, 1.0f);
 	m_BoxDebug.m_VertexList[index].t = T::TVector2(1.0f, 0.0f);
-	m_BoxDebug.m_VertexList[++index].p = T::TVector3(-1.0f, -1.0f, -1.0f);
+	m_BoxDebug.m_VertexList[++index].p = pBox->vList[2];
 	m_BoxDebug.m_VertexList[index].n = T::TVector3(0.0f, 0.0f, -1.0f);
 	m_BoxDebug.m_VertexList[index].c = T::TVector4(1.0f, 1.0f, 1.0f, 1.0f);
 	m_BoxDebug.m_VertexList[index].t = T::TVector2(0.0f, 1.0f);
-	m_BoxDebug.m_VertexList[++index].p = T::TVector3(1.0f, -1.0f, -1.0f);
+	m_BoxDebug.m_VertexList[++index].p = pBox->vList[3];
 	m_BoxDebug.m_VertexList[index].n = T::TVector3(0.0f, 0.0f, -1.0f);
 	m_BoxDebug.m_VertexList[index].c = T::TVector4(1.0f, 1.0f, 1.0f, 1.0f);
 	m_BoxDebug.m_VertexList[index].t = T::TVector2(1.0f, 1.0f);
 	// +X plane
-	m_BoxDebug.m_VertexList[++index].p = T::TVector3(1.0f, 1.0f, -1.0f);
+	m_BoxDebug.m_VertexList[++index].p = pBox->vList[1];
 	m_BoxDebug.m_VertexList[index].n = T::TVector3(1.0f, 0.0f, 0.0f);
 	m_BoxDebug.m_VertexList[index].c = T::TVector4(1.0f, 1.0f, 1.0f, 1.0f);
 	m_BoxDebug.m_VertexList[index].t = T::TVector2(0.0f, 0.0f);
-	m_BoxDebug.m_VertexList[++index].p = T::TVector3(1.0f, 1.0f, 1.0f);
+	m_BoxDebug.m_VertexList[++index].p = pBox->vList[5];
 	m_BoxDebug.m_VertexList[index].n = T::TVector3(1.0f, 0.0f, 0.0f);
 	m_BoxDebug.m_VertexList[index].c = T::TVector4(1.0f, 1.0f, 1.0f, 1.0f);
 	m_BoxDebug.m_VertexList[index].t = T::TVector2(1.0f, 0.0f);
-	m_BoxDebug.m_VertexList[++index].p = T::TVector3(1.0f, -1.0f, -1.0f);
+	m_BoxDebug.m_VertexList[++index].p = pBox->vList[3];
 	m_BoxDebug.m_VertexList[index].n = T::TVector3(1.0f, 0.0f, 0.0f);
 	m_BoxDebug.m_VertexList[index].c = T::TVector4(1.0f, 1.0f, 1.0f, 1.0f);
 	m_BoxDebug.m_VertexList[index].t = T::TVector2(0.0f, 1.0f);
-	m_BoxDebug.m_VertexList[++index].p = T::TVector3(1.0f, -1.0f, 1.0f);
+	m_BoxDebug.m_VertexList[++index].p = pBox->vList[7];
 	m_BoxDebug.m_VertexList[index].n = T::TVector3(1.0f, 0.0f, 0.0f);
 	m_BoxDebug.m_VertexList[index].c = T::TVector4(1.0f, 1.0f, 1.0f, 1.0f);
 	m_BoxDebug.m_VertexList[index].t = T::TVector2(1.0f, 1.0f);
 	// -X plane
-	m_BoxDebug.m_VertexList[++index].p = T::TVector3(-1.0f, 1.0f, 1.0f);
+	m_BoxDebug.m_VertexList[++index].p = pBox->vList[4];
 	m_BoxDebug.m_VertexList[index].n = T::TVector3(-1.0f, 0.0f, 0.0f);
 	m_BoxDebug.m_VertexList[index].c = T::TVector4(1.0f, 1.0f, 1.0f, 1.0f);
 	m_BoxDebug.m_VertexList[index].t = T::TVector2(0.0f, 0.0f);
-	m_BoxDebug.m_VertexList[++index].p = T::TVector3(-1.0f, 1.0f, -1.0f);
+	m_BoxDebug.m_VertexList[++index].p = pBox->vList[0];
 	m_BoxDebug.m_VertexList[index].n = T::TVector3(-1.0f, 0.0f, 0.0f);
 	m_BoxDebug.m_VertexList[index].c = T::TVector4(1.0f, 1.0f, 1.0f, 1.0f);
 	m_BoxDebug.m_VertexList[index].t = T::TVector2(1.0f, 0.0f);
-	m_BoxDebug.m_VertexList[++index].p = T::TVector3(-1.0f, -1.0f, 1.0f);
+	m_BoxDebug.m_VertexList[++index].p = pBox->vList[6];
 	m_BoxDebug.m_VertexList[index].n = T::TVector3(-1.0f, 0.0f, 0.0f);
 	m_BoxDebug.m_VertexList[index].c = T::TVector4(1.0f, 1.0f, 1.0f, 1.0f);
 	m_BoxDebug.m_VertexList[index].t = T::TVector2(0.0f, 1.0f);
-	m_BoxDebug.m_VertexList[++index].p = T::TVector3(-1.0f, -1.0f, -1.0f);
+	m_BoxDebug.m_VertexList[++index].p = pBox->vList[2];
 	m_BoxDebug.m_VertexList[index].n = T::TVector3(-1.0f, 0.0f, 0.0f);
 	m_BoxDebug.m_VertexList[index].c = T::TVector4(1.0f, 1.0f, 1.0f, 1.0f);
 	m_BoxDebug.m_VertexList[index].t = T::TVector2(1.0f, 1.0f);
 	// -y plane
-	m_BoxDebug.m_VertexList[++index].p = T::TVector3(-1.0f, -1.0f, -1.0f);
+	m_BoxDebug.m_VertexList[++index].p = pBox->vList[2];
 	m_BoxDebug.m_VertexList[index].n = T::TVector3(0.0f, -1.0f, 0.0f);
 	m_BoxDebug.m_VertexList[index].c = T::TVector4(1.0f, 1.0f, 1.0f, 1.0f);
 	m_BoxDebug.m_VertexList[index].t = T::TVector2(0.0f, 0.0f);
-	m_BoxDebug.m_VertexList[++index].p = T::TVector3(1.0f, -1.0f, -1.0f);
+	m_BoxDebug.m_VertexList[++index].p = pBox->vList[3];
 	m_BoxDebug.m_VertexList[index].n = T::TVector3(0.0f, -1.0f, 0.0f);
 	m_BoxDebug.m_VertexList[index].c = T::TVector4(1.0f, 1.0f, 1.0f, 1.0f);
 	m_BoxDebug.m_VertexList[index].t = T::TVector2(1.0f, 0.0f);
-	m_BoxDebug.m_VertexList[++index].p = T::TVector3(-1.0f, -1.0f, 1.0f);
+	m_BoxDebug.m_VertexList[++index].p = pBox->vList[6];
 	m_BoxDebug.m_VertexList[index].n = T::TVector3(0.0f, -1.0f, 0.0f);
 	m_BoxDebug.m_VertexList[index].c = T::TVector4(1.0f, 1.0f, 1.0f, 1.0f);
 	m_BoxDebug.m_VertexList[index].t = T::TVector2(0.0f, 1.0f);
-	m_BoxDebug.m_VertexList[++index].p = T::TVector3(1.0f, -1.0f, 1.0f);
+	m_BoxDebug.m_VertexList[++index].p = pBox->vList[7];
 	m_BoxDebug.m_VertexList[index].n = T::TVector3(0.0f, -1.0f, 0.0f);
 	m_BoxDebug.m_VertexList[index].c = T::TVector4(1.0f, 1.0f, 1.0f, 1.0f);
 	m_BoxDebug.m_VertexList[index].t = T::TVector2(1.0f, 1.0f);
 	// +y plane
-	m_BoxDebug.m_VertexList[++index].p = T::TVector3(-1.0f, 1.0f, 1.0f);
+	m_BoxDebug.m_VertexList[++index].p = pBox->vList[4];
 	m_BoxDebug.m_VertexList[index].n = T::TVector3(0.0f, 1.0f, 0.0f);
 	m_BoxDebug.m_VertexList[index].c = T::TVector4(1.0f, 1.0f, 1.0f, 1.0f);
 	m_BoxDebug.m_VertexList[index].t = T::TVector2(0.0f, 0.0f);
-	m_BoxDebug.m_VertexList[++index].p = T::TVector3(1.0f, 1.0f, 1.0f);
+	m_BoxDebug.m_VertexList[++index].p = pBox->vList[5];
 	m_BoxDebug.m_VertexList[index].n = T::TVector3(0.0f, 1.0f, 0.0f);
 	m_BoxDebug.m_VertexList[index].c = T::TVector4(1.0f, 1.0f, 1.0f, 1.0f);
 	m_BoxDebug.m_VertexList[index].t = T::TVector2(1.0f, 0.0f);
-	m_BoxDebug.m_VertexList[++index].p = T::TVector3(-1.0f, 1.0f, -1.0f);
+	m_BoxDebug.m_VertexList[++index].p = pBox->vList[0];
 	m_BoxDebug.m_VertexList[index].n = T::TVector3(0.0f, 1.0f, 0.0f);
 	m_BoxDebug.m_VertexList[index].c = T::TVector4(1.0f, 1.0f, 1.0f, 1.0f);
 	m_BoxDebug.m_VertexList[index].t = T::TVector2(0.0f, 1.0f);
-	m_BoxDebug.m_VertexList[++index].p = T::TVector3(1.0f, 1.0f, -1.0f);
+	m_BoxDebug.m_VertexList[++index].p = pBox->vList[1];
 	m_BoxDebug.m_VertexList[index].n = T::TVector3(0.0f, 1.0f, 0.0f);
 	m_BoxDebug.m_VertexList[index].c = T::TVector4(1.0f, 1.0f, 1.0f, 1.0f);
 	m_BoxDebug.m_VertexList[index].t = T::TVector2(1.0f, 1.0f);
@@ -785,7 +795,8 @@ void AQuadtree::DrawDebugRender(ABox* pBox)
 	m_BoxDebug.SetMatrix(NULL, &m_pCamera->m_matView, &m_pCamera->m_matProj);
 	m_BoxDebug.PreRender();
 	m_BoxDebug.Draw();
-	m_BoxDebug.m_pContext->UpdateSubresource(m_BoxDebug.m_pVertexBuffer, 0, NULL, &m_BoxDebug.m_VertexList.at(0), 0, 0);
+	m_BoxDebug.m_pContext->UpdateSubresource(m_BoxDebug.m_pVertexBuffer, 
+		0, NULL, &m_BoxDebug.m_VertexList.at(0), 0, 0);
 	m_BoxDebug.PostRender();
 }
 
@@ -793,6 +804,8 @@ AQuadtree::AQuadtree() {}
 
 AQuadtree::~AQuadtree() 
 { 
+#ifdef _DEBUG
 	m_BoxDebug.Release();
+#endif 
 	delete m_pRootNode; 
 }

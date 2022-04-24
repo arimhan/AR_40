@@ -98,8 +98,8 @@ ANode::ANode()
 }
 ANode::ANode(float x, float y, float w, float h) 
 {
-	m_CornerList.push_back(x);		m_CornerList.push_back(w);
-	m_CornerList.push_back(y);		m_CornerList.push_back(h);
+	m_CornerList.push_back(x);		m_CornerList.push_back(y);
+	m_CornerList.push_back(w);		m_CornerList.push_back(h);
 
 	m_pChild.resize(4);
 	m_pChild[0], m_pChild[1], m_pChild[2], m_pChild[3] = nullptr;

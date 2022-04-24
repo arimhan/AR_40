@@ -11,6 +11,8 @@
 #include "QuadObject.h"
 #include "DxRT.h"
 
+
+
 class ASampleMap : public AMap
 {
 public:
@@ -32,8 +34,10 @@ public:
 	//Light
 	TVector3		m_vLightPos;
 	TVector3		m_vLightDir;
+	ATexture*		m_pLightTex;
 	TMatrix			m_matLightView;
 	TMatrix			m_matLightProj;
+	TMatrix			m_matTex;
 	
 	//Shadow
 	AShader*		m_pProjShadowVShader = nullptr;
@@ -41,9 +45,14 @@ public:
 
 	//Map
 	ADxRT			m_dxRT;
+
+	//Mapping
+	ATexture*		m_pNormalMap;
 	
 public:
 	void			RenderShadow(TMatrix* pMatView, TMatrix* pMatProj);
+	void			RenderMRT(ID3D11DeviceContext* pContext);
+	void			RenderIntoBuffer(ID3D11DeviceContext* pContext);
 
 public:
 	virtual bool	Init() override;

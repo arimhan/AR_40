@@ -56,7 +56,7 @@ public:
 	void		RenderTile(ANode* pNode);
 
 public:
-	void		PrintObjList(ANode* pNode);
+	//void		PrintObjList(ANode* pNode);
 public:
 	void		FindNeighborNode();
 	ANode*		CheckBoxtoPoint(T::TVector3 p);

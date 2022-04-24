@@ -9,6 +9,10 @@ public:
 
 	float				m_fNearDistance = 0.01f;
 	float				m_fFarDistance = 1000.0f;
+
+	float				m_fPitch = 0.0f;
+	float				m_fYaw = 0.0f;
+	float				m_fRoll = 0.0f;
 	float				m_fRadius = 10.0f;
 	T::TQuaternion		m_qRoration;
 

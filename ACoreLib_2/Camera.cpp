@@ -15,11 +15,11 @@ bool ACamera::Init()
 bool ACamera::Frame()
 {
     T::TVector2 dir = AInput::Get().GetDelta();
-    if (AInput::Get().GetKey('W')) { MoveLook(g_fSecPerFrame * 200.0f); }
-    if (AInput::Get().GetKey('S')) { MoveLook(-g_fSecPerFrame * 200.0f); }
-    if (AInput::Get().GetKey('A')) { MoveSide(-g_fSecPerFrame * 200.0f); }
-    if (AInput::Get().GetKey('D')) { MoveSide(g_fSecPerFrame * 200.0f); }
-
+    if (AInput::Get().GetKey('W')) { MoveLook(g_fSecPerFrame * m_fSpeed); }
+    if (AInput::Get().GetKey('S')) { MoveLook(-g_fSecPerFrame * m_fSpeed); }
+    if (AInput::Get().GetKey('A')) { MoveSide(-g_fSecPerFrame * m_fSpeed); }
+    if (AInput::Get().GetKey('D')) { MoveSide(g_fSecPerFrame * m_fSpeed); }
+    if (m_fSpeed < 100.0f) m_fSpeed = 100.0f;
     Update(T::TVector4(-dir.x, -dir.y, 0, 0));
     
     return true;
@@ -27,9 +27,13 @@ bool ACamera::Frame()
 
 bool ACamera::Update(T::TVector4 vDirValue)
 {
+    m_fPitch += vDirValue.x;
+    m_fYaw += vDirValue.y;
+    m_fRoll += vDirValue.z;
+
     T::TMatrix matRot;
     T::D3DXQuaternionRotationYawPitchRoll(
-        &m_qRoration, vDirValue.y, vDirValue.x, vDirValue.z);
+        &m_qRoration, m_fYaw, m_fPitch, m_fRoll);
     //w값을 곱한 뒤, 이후 정규화를 해줄 예정.(?)
     m_vCamera += m_vLook * vDirValue.w;
     m_fRadius += vDirValue.w;
@@ -88,5 +92,6 @@ ACamera::ACamera()
     m_vTarget.y = 0;
     m_vTarget.z = 100;
     m_vUp = m_vDefaultUp = T::TVector3(0, 1, 0);
+    m_fSpeed = 100.0f;
 }
 ACamera:: ~ACamera() {}
