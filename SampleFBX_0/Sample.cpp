@@ -42,7 +42,7 @@ bool ASample::Init()
     //Set Light and Shadow
     m_vLightPos = TVector3(500, 8000, 100);
     T::D3DXVec3Normalize(&m_vLightDir, &m_vLightPos);
-    //m_dxRT.Create(m_pd3dDevice.Get(), 1024, 1024);  //RT Size (원래는 4096 * 4를 사용했었다.
+    m_dxRT.Create(m_pd3dDevice.Get(), 1024, 1024);  //RT Size (원래는 4096 * 4를 사용했었다.
 
     //m_FbxObj.Init();
     ////m_FbxObj.Load("../../data/fbx/Turret_Deploy1/Turret_Deploy1.FBX");
