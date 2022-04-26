@@ -133,9 +133,9 @@ BOOL AFrustum::ClassifyOBB(ABox* v)
 		vDir = v->vAxis[0] * v->size.x;
 		sum = fabs(m_Plane[i].x * vDir.x + m_Plane[i].y * vDir.y + m_Plane[i].z * vDir.z);
 		vDir = v->vAxis[1] * v->size.y;
-		sum = fabs(m_Plane[i].x * vDir.x + m_Plane[i].y * vDir.y + m_Plane[i].z * vDir.z);
+		sum += fabs(m_Plane[i].x * vDir.x + m_Plane[i].y * vDir.y + m_Plane[i].z * vDir.z);
 		vDir = v->vAxis[2] * v->size.z;
-		sum = fabs(m_Plane[i].x * vDir.x + m_Plane[i].y * vDir.y + m_Plane[i].z * vDir.z);
+		sum += fabs(m_Plane[i].x * vDir.x + m_Plane[i].y * vDir.y + m_Plane[i].z * vDir.z);
 
 		float pToc = m_Plane[i].x * v->vMiddle.x + m_Plane[i].y * v->vMiddle.y + 
 			m_Plane[i].z * v->vMiddle.z + m_Plane[i].w;
