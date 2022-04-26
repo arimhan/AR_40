@@ -19,7 +19,7 @@ bool ACamera::Frame()
     if (AInput::Get().GetKey('S')) { MoveLook(-g_fSecPerFrame * m_fSpeed); }
     if (AInput::Get().GetKey('A')) { MoveSide(-g_fSecPerFrame * m_fSpeed); }
     if (AInput::Get().GetKey('D')) { MoveSide(g_fSecPerFrame * m_fSpeed); }
-    if (m_fSpeed < 100.0f) m_fSpeed = 100.0f;
+    //if (m_fSpeed < 100.0f) m_fSpeed = 100.0f;
     Update(T::TVector4(-dir.x, -dir.y, 0, 0));
     
     return true;
@@ -74,6 +74,14 @@ void ACamera::CreateViewMatrix(T::TVector3 p, T::TVector3 t, T::TVector3 u)
     m_vTarget = t;
     m_vUp = u;
     T::D3DXMatrixLookAtLH(&m_matView, &m_vCamera, &m_vTarget, &m_vUp);
+
+    T::TMatrix matInvView;
+    D3DXMatrixInverse(&matInvView, NULL, &m_matView);
+    TVector3* pZBasis = (TVector3*)&matInvView._31;
+    m_fYaw = atan2f(pZBasis->x, pZBasis->z);
+    float fLen = sqrtf(pZBasis->z * pZBasis->z + pZBasis->x * pZBasis->x);
+    m_fPitch = -atan2f(pZBasis->y, fLen);
+
     UpdateVector();
 }
 void ACamera::CreateProjMatrix(float fovy, float Aspect, float zn, float zf)

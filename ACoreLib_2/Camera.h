@@ -14,8 +14,8 @@ public:
 	float				m_fYaw = 0.0f;
 	float				m_fRoll = 0.0f;
 	float				m_fRadius = 10.0f;
-	T::TQuaternion		m_qRoration;
 
+	T::TQuaternion		m_qRoration;
 	T::TVector3			m_vRight;	//X
 	T::TVector3			m_vUp;		//Y
 	T::TVector3			m_vLook;	//Z

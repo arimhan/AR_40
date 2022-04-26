@@ -251,7 +251,7 @@ bool ASample::Release()
 
 ASample::ASample() {}
 ASample::~ASample() {}
-//void ASample::CreateResizeDevice(UINT iWidth, UINT iHeight) { int k = 0; }
-//void ASample::DeleteResizeDevice(UINT iWidth, UINT iHeight) { int k = 0; }
+void ASample::CreateResizeDevice(UINT iWidth, UINT iHeight) { int k = 0; }
+void ASample::DeleteResizeDevice(UINT iWidth, UINT iHeight) { int k = 0; }
 
 SIMPLE_ARUN();

@@ -12,7 +12,6 @@
 #include "DxRT.h"
 
 
-
 class ASampleMap : public AMap
 {
 public:
@@ -42,6 +41,7 @@ public:
 	//Shadow
 	AShader*		m_pProjShadowVShader = nullptr;
 	AShader*		m_pProjShadowPShader = nullptr;
+	AShader*		m_pShadowPShader = nullptr;
 
 	//Map
 	ADxRT			m_dxRT;
@@ -59,8 +59,8 @@ public:
 	virtual bool	Render()override;
 	virtual bool	Frame()override;
 	virtual bool	Release()override;
-	//virtual void	CreateResizeDevice(UINT iWidth, UINT iHeight) override;
-	//virtual void	DeleteResizeDevice(UINT iWidth, UINT iHeight) override;
+	virtual void	CreateResizeDevice(UINT iWidth, UINT iHeight) override;
+	virtual void	DeleteResizeDevice(UINT iWidth, UINT iHeight) override;
 
 	ASample();
 	virtual ~ASample();
