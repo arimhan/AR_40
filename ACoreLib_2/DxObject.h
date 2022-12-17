@@ -6,16 +6,16 @@
 
 struct ASimpleVertex
 {
-	T::TVector2 v;
-	T::TVector2 t;
+	A::AVector2 v;
+	A::AVector2 t;
 };
 struct AVertex
 {
-	T::TVector3 p; // 위치
-	T::TVector3 n;	// 노말
-	T::TVector4 c;	// 컬러
-	T::TVector2 t;	// 텍스쳐
-	AVertex(T::TVector3 p1, T::TVector3 n1, T::TVector4 c1, T::TVector2 t1);
+	A::AVector3 p; // 위치
+	A::AVector3 n;	// 노말
+	A::AVector4 c;	// 컬러
+	A::AVector2 t;	// 텍스쳐
+	AVertex(A::AVector3 p1, A::AVector3 n1, A::AVector4 c1, A::AVector2 t1);
 	AVertex();
 };
 
@@ -78,27 +78,27 @@ struct AIndex
 
 struct AConstantData
 {
-	T::TMatrix		matWorld;	//월드
-	T::TMatrix		matView;	//뷰
-	T::TMatrix		matProj;	//투영
-	T::TMatrix		matNormal;	//노말맵
-	T::TVector4		Color;		//기존 컬러값
-	T::TVector4		Timer;		//타이머
+	A::AMatrix		matWorld;	//월드
+	A::AMatrix		matView;	//뷰
+	A::AMatrix		matProj;	//투영
+	A::AMatrix		matNormal;	//노말맵
+	A::AVector4		Color;		//기존 컬러값
+	A::AVector4		Timer;		//타이머
 };
 
 struct ABoneWorld
 {
-	T::TMatrix matBoneWorld[255];
+	A::AMatrix matBoneWorld[255];
 };
 struct ALightData
 {
-	T::TVector4		vLightDir;
-	T::TVector4		vLightPos;
+	A::AVector4		vLightDir;
+	A::AVector4		vLightPos;
 
-	T::TVector4		vCameraDir;
-	T::TVector4		vCameraPos;
+	A::AVector4		vCameraDir;
+	A::AVector4		vCameraPos;
 
-	T::TMatrix		matLight;	//W * v * p * t (월드, 뷰, 투영, 텍스쳐)를 합친 Light행렬
+	A::AMatrix		matLight;	//W * v * p * t (월드, 뷰, 투영, 텍스쳐)를 합친 Light행렬
 };
 
 class ADxObject : public ABaseObject

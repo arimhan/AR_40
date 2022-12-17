@@ -11,15 +11,15 @@ struct AMapObj
 {
 	//struct내 멤버변수와 ANode내 멤버변수 이름이 겹치는것이 일부 있음.
 	wstring			name;
-	T::TMatrix		matWorld;
-	T::TVector3		vPos;
+	A::AMatrix		matWorld;
+	A::AVector3		vPos;
 	ABox			box;
 	AObject3D*		pObject;
 
 	//Camera
-	T::TVector3		m_vRight;
-	T::TVector3		m_vUp;
-	T::TVector3		m_vLook;
+	A::AVector3		m_vRight;
+	A::AVector3		m_vUp;
+	A::AVector3		m_vLook;
 
 public:
 	void UpdateData();

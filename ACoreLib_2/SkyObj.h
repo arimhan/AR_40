@@ -9,7 +9,7 @@ public:
 	ATexture*		m_pTexCube;
 	ComPtr<ID3D11ShaderResourceView>	m_pSRVArray[6];
 public:
-	virtual void	SetMatrix(T::TMatrix* matWorld, T::TMatrix* matView, T::TMatrix* matProj);
+	virtual void	SetMatrix(A::AMatrix* matWorld, A::AMatrix* matView, A::AMatrix* matProj);
 	virtual bool	SetVertexData();
 	virtual bool	SetIndexData();
 	virtual bool	LoadTexture(const TCHAR* szColorFileName, const TCHAR* szMaskFileName);

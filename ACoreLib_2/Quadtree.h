@@ -34,7 +34,7 @@ public:
 
 	void		BuildTree(ANode* pParent);
 	ABox		GenBoundingBox(ANode* pNode);
-	TVector2	GetHeightFromNode(DWORD dwTL, DWORD dwTR, DWORD dwBL, DWORD dwBR);
+	AVector2	GetHeightFromNode(DWORD dwTL, DWORD dwTR, DWORD dwBL, DWORD dwBR);
 	bool		AddObject(AMapObj* pObj);
 	bool		AddDynamicObject(AMapObj* pObj);
 	void		DelDynamicObject(ANode* pNode);
@@ -59,7 +59,7 @@ public:
 	//void		PrintObjList(ANode* pNode);
 public:
 	void		FindNeighborNode();
-	ANode*		CheckBoxtoPoint(T::TVector3 p);
+	ANode*		CheckBoxtoPoint(A::AVector3 p);
 	void		GetRatio(ANode* pNode);
 	int			GetLodType(ANode* pNode);
 	int			UpdateIndexList(ANode* pNode, DWORD dwCurentIndex, DWORD dwNumLevel);

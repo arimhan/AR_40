@@ -4,17 +4,17 @@
 class AObject3D : public ADxObject
 {
 public:
-	T::TVector3			m_vRight;		//X
-	T::TVector3			m_vUp;			//Y
-	T::TVector3			m_vLook;		//Z
+	A::AVector3			m_vRight;		//X
+	A::AVector3			m_vUp;			//Y
+	A::AVector3			m_vLook;		//Z
 
-	T::TVector3			m_vPos;
-	T::TVector3			m_vDirection;
-	T::TVector4			m_vColor;
+	A::AVector3			m_vPos;
+	A::AVector3			m_vDirection;
+	A::AVector4			m_vColor;
 
-	T::TMatrix			m_matWorld;
-	T::TMatrix			m_matView;
-	T::TMatrix			m_matProj;
+	A::AMatrix			m_matWorld;
+	A::AMatrix			m_matView;
+	A::AMatrix			m_matProj;
 
 	float				m_fAlpha = 0.0f;
 	bool				m_bFadeIn = false;
@@ -23,15 +23,15 @@ public:
 	virtual void		FadeIn();
 	virtual void		FadeOut();
 public:
-	virtual void		AddPosition(T::TVector3 vPos);
-	virtual void		SetPosition(T::TVector3 vPos);
+	virtual void		AddPosition(A::AVector3 vPos);
+	virtual void		SetPosition(A::AVector3 vPos);
 public:
 	virtual bool		SetVertexData() override;
 	virtual bool		SetIndexData() override;
 	virtual bool		Frame() override;
 	bool				Load(ID3D11Device* pd3dDevice, wstring filename);
 	virtual void		UpdateData();
-	virtual void		SetMatrix(T::TMatrix* matWorld, T::TMatrix* matView, T::TMatrix* matProj);
+	virtual void		SeAMatrix(A::AMatrix* matWorld, A::AMatrix* matView, A::AMatrix* matProj);
 public:
 	virtual void		UpdateCollision();
 	virtual void		GenAABB();

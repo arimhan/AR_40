@@ -14,9 +14,9 @@ void AMapObj::UpdateData()
 	m_vLook.y = matWorld._32;
 	m_vLook.z = matWorld._33;
 
-	T::D3DXVec3Normalize(&m_vRight, &m_vRight);
-	T::D3DXVec3Normalize(&m_vUp, &m_vUp);
-	T::D3DXVec3Normalize(&m_vLook, &m_vLook);
+	A::D3DXVec3Normalize(&m_vRight, &m_vRight);
+	A::D3DXVec3Normalize(&m_vUp, &m_vUp);
+	A::D3DXVec3Normalize(&m_vLook, &m_vLook);
 }
 
 void AMapObj::UpdateCollision()
@@ -26,13 +26,13 @@ void AMapObj::UpdateCollision()
 	box.vAxis[2] = m_vLook;
 
 	//GenAABB();
-	box.vMin = T::TVector3(100000, 100000, 100000);
-	box.vMax = T::TVector3(-100000, -100000, -100000);
+	box.vMin = A::AVector3(100000, 100000, 100000);
+	box.vMax = A::AVector3(-100000, -100000, -100000);
 
 	for (int i = 0; i < 8; i++)
 	{
-		T::TVector3 pos;
-		T::D3DXVec3TransformCoord(&pos, &box.vList[i], &matWorld);
+		A::AVector3 pos;
+		A::D3DXVec3TransformCoord(&pos, &box.vList[i], &matWorld);
 		//박스 충돌값의 min, max의 x,y,z값을 비교한다. (충돌값 체크)
 		if (box.vMin.x > pos.x)
 		{
@@ -60,10 +60,10 @@ void AMapObj::UpdateCollision()
 			box.vMax.z = pos.z;
 		}
 	}
-	T::TVector3 vHalf = box.vMax - box.vMiddle;
-	box.size.x = fabs(T::D3DXVec3Dot(&box.vAxis[0], &vHalf));
-	box.size.y = fabs(T::D3DXVec3Dot(&box.vAxis[1], &vHalf));
-	box.size.z = fabs(T::D3DXVec3Dot(&box.vAxis[2], &vHalf));
+	A::AVector3 vHalf = box.vMax - box.vMiddle;
+	box.size.x = fabs(A::D3DXVec3Dot(&box.vAxis[0], &vHalf));
+	box.size.y = fabs(A::D3DXVec3Dot(&box.vAxis[1], &vHalf));
+	box.size.z = fabs(A::D3DXVec3Dot(&box.vAxis[2], &vHalf));
 	box.vMiddle = (box.vMin + box.vMax);
 	box.vMiddle /= 2.0f;
 }

@@ -159,11 +159,11 @@ bool AMap::SetVertexData()
 			m_VertexList[index].p.x = (iCol - hHalfCol) * m_iCellDistance;
 			m_VertexList[index].p.y = m_fHeightList[index] * 5.0f;
 			m_VertexList[index].p.z = -((iRow - hHalfRow)* m_iCellDistance); // 음수값이라 +로 변환
-			m_VertexList[index].n = T::TVector3( 0, 1, 0);	//노멀값이 Y축으로 1값을 향하고 있음.
+			m_VertexList[index].n = A::AVector3( 0, 1, 0);	//노멀값이 Y축으로 1값을 향하고 있음.
 			m_VertexList[index].c =
-				T::TVector4(randstep(0.0f, 1.0f), randstep(0.0f, 1.0f), randstep(0.0f, 1.0f), 1);
+				A::AVector4(randstep(0.0f, 1.0f), randstep(0.0f, 1.0f), randstep(0.0f, 1.0f), 1);
 				//컬러(조명)을 랜덤으로 지정
-			m_VertexList[index].t = T::TVector2(ftxOffsetU * iCol, ftxOffsetV * iRow);
+			m_VertexList[index].t = A::AVector2(ftxOffsetU * iCol, ftxOffsetV * iRow);
 			//원래는 1,1인데, 텍스쳐 1장을 전체에 바르기 때문에 위와 같이 행, 열의 사이즈대로 입힌다.
 		}
 	}
@@ -192,8 +192,8 @@ bool AMap::SetIndexData()
 
 	//다시 iIndex를 초기화 한 뒤 이번엔 vLight를 세팅해준다.
 	iIndex = 0;
-	T::TVector3 vLight(100, 100, 0);
-	T::D3DXVec3Normalize(&vLight, &vLight);
+	A::AVector3 vLight(100, 100, 0);
+	A::D3DXVec3Normalize(&vLight, &vLight);
 	vLight = vLight * 1.0f;
 	for (int iRow = 0; iRow < m_iNumCellRows; iRow++)
 	{
@@ -205,26 +205,26 @@ bool AMap::SetIndexData()
 			face.v1 = m_IndexList[iIndex + 1];
 			face.v2 = m_IndexList[iIndex + 2];
 
-			T::TVector3 vNormal;
+			A::AVector3 vNormal;
 			//노말벡터 vE0과 E1 2개가 있을 때, E0은 디렉션 1-0, E1는 디렉션 2-0을 빼면 노말벡터를 구할 수 있다.
-			T::TVector3 vE0 = (m_VertexList[face.v1].p - m_VertexList[face.v0].p);
-			T::D3DXVec3Normalize(&vE0, &vE0);
-			T::TVector3 vE1 = (m_VertexList[face.v2].p - m_VertexList[face.v0].p);
+			A::AVector3 vE0 = (m_VertexList[face.v1].p - m_VertexList[face.v0].p);
+			A::D3DXVec3Normalize(&vE0, &vE0);
+			A::AVector3 vE1 = (m_VertexList[face.v2].p - m_VertexList[face.v0].p);
 			//위에서 구한 vE1을 외적 후 정규화 한다.
-			T::D3DXVec3Normalize(&vE1, &vE1);
+			A::D3DXVec3Normalize(&vE1, &vE1);
 			//face.vNormal = (vE0 ^ vE1).Normal(); 아래 함수를 이용하여 구현
 
-			T::D3DXVec3Cross(&face.vNormal, &vE0, &vE1);
-			T::D3DXVec3Normalize(&face.vNormal, &face.vNormal);
+			A::D3DXVec3Cross(&face.vNormal, &vE0, &vE1);
+			A::D3DXVec3Normalize(&face.vNormal, &face.vNormal);
 
 			m_VertexList[face.v0].n += face.vNormal;
 			m_VertexList[face.v1].n += face.vNormal;
 			m_VertexList[face.v2].n += face.vNormal;
 
-			float fDot = max(0.0f, T::D3DXVec3Dot(&vLight , &face.vNormal));
-			m_VertexList[face.v0].c = T::TVector4(fDot, fDot, fDot, 1);
-			m_VertexList[face.v1].c = T::TVector4(fDot, fDot, fDot, 1);
-			m_VertexList[face.v2].c = T::TVector4(fDot, fDot, fDot, 1);
+			float fDot = max(0.0f, A::D3DXVec3Dot(&vLight , &face.vNormal));
+			m_VertexList[face.v0].c = A::AVector4(fDot, fDot, fDot, 1);
+			m_VertexList[face.v1].c = A::AVector4(fDot, fDot, fDot, 1);
+			m_VertexList[face.v2].c = A::AVector4(fDot, fDot, fDot, 1);
 			m_vFaceList.push_back(face);
 
 			// 1Face
@@ -232,25 +232,25 @@ bool AMap::SetIndexData()
 			face.v1 = m_IndexList[iIndex + 4];
 			face.v2 = m_IndexList[iIndex + 5];
 			//v1-v0 = vE0 (두 벡터를 뺀 값을 vE0으로 리턴) 그리고 vE0을 정규화
-			T::D3DXVec3Subtract(&vE0, &m_VertexList[face.v1].p, &m_VertexList[face.v0].p);
-			T::D3DXVec3Normalize(&vE0, &vE0);
+			A::D3DXVec3Subtract(&vE0, &m_VertexList[face.v1].p, &m_VertexList[face.v0].p);
+			A::D3DXVec3Normalize(&vE0, &vE0);
 
-			T::D3DXVec3Subtract(&vE1, &m_VertexList[face.v2].p, &m_VertexList[face.v0].p);
-			T::D3DXVec3Normalize(&vE1, &vE1);
+			A::D3DXVec3Subtract(&vE1, &m_VertexList[face.v2].p, &m_VertexList[face.v0].p);
+			A::D3DXVec3Normalize(&vE1, &vE1);
 
 			//vE0과 vE1을 외적한다
-			T::D3DXVec3Cross(&face.vNormal, &vE0, &vE1);
-			T::D3DXVec3Normalize(&face.vNormal, &face.vNormal);
+			A::D3DXVec3Cross(&face.vNormal, &vE0, &vE1);
+			A::D3DXVec3Normalize(&face.vNormal, &face.vNormal);
 
 			m_VertexList[face.v0].n += face.vNormal;
 			m_VertexList[face.v1].n += face.vNormal;
 			m_VertexList[face.v2].n += face.vNormal;
 
-			fDot = max(0.0f, T::D3DXVec3Dot(&vLight, &face.vNormal));
+			fDot = max(0.0f, A::D3DXVec3Dot(&vLight, &face.vNormal));
 
-			m_VertexList[face.v0].c = T::TVector4(fDot, fDot, fDot, 1);
-			m_VertexList[face.v1].c = T::TVector4(fDot, fDot, fDot, 1);
-			m_VertexList[face.v2].c = T::TVector4(fDot, fDot, fDot, 1);
+			m_VertexList[face.v0].c = A::AVector4(fDot, fDot, fDot, 1);
+			m_VertexList[face.v1].c = A::AVector4(fDot, fDot, fDot, 1);
+			m_VertexList[face.v2].c = A::AVector4(fDot, fDot, fDot, 1);
 			m_vFaceList.push_back(face);
 
 			iIndex += 6;
@@ -262,8 +262,8 @@ bool AMap::SetIndexData()
 		{
 			//정점의 iRow * m_iNumCols + iCol의 노멀성분을 정규화 한다.
 			m_VertexList[iRow * m_iNumCols + iCol].n.Normalize();
-			float fDot = max(0.0f, T::D3DXVec3Dot(&vLight, &m_VertexList[iRow * m_iNumCols + iCol].n));
-			m_VertexList[iRow * m_iNumCols + iCol].c = T::TVector4(fDot, fDot, fDot, 1);
+			float fDot = max(0.0f, A::D3DXVec3Dot(&vLight, &m_VertexList[iRow * m_iNumCols + iCol].n));
+			m_VertexList[iRow * m_iNumCols + iCol].c = A::AVector4(fDot, fDot, fDot, 1);
 		}
 	}
 	return true;
@@ -272,8 +272,8 @@ bool AMap::SetIndexData()
 bool AMap::Frame() 
 {
 	//깊이맵 만들때 필요한 vLight 지정
-	T::TVector3 vLight(cosf(g_fGameTimer) * 100.0f, 100, sinf(g_fGameTimer) * 100.0f);
-	T::D3DXVec3Normalize(&vLight, &vLight);
+	A::AVector3 vLight(cosf(g_fGameTimer) * 100.0f, 100, sinf(g_fGameTimer) * 100.0f);
+	A::D3DXVec3Normalize(&vLight, &vLight);
 	vLight = vLight * -1.0f;
 
 	//이름만 Color. 실제론 vLight의 값이 들어가있다. Light가 g_fGameTimer에 따라 움직인다.

@@ -314,7 +314,7 @@ ADxObject::ADxObject() { m_fSpeed = 0.0001f; }
 ADxObject::~ADxObject(){}
 
 
-AVertex::AVertex(T::TVector3 p1, T::TVector3 n1, T::TVector4 c1, T::TVector2 t1)
+AVertex::AVertex(T::AVector3 p1, T::AVector3 n1, T::AVector4 c1, T::AVector2 t1)
 {
 	p = p1;		n = n1;		c = c1;		t = t1;
 }

@@ -1,6 +1,6 @@
 #include "SkyObj.h"
 
-void ASkyObj::SetMatrix(T::TMatrix* matWorld, T::TMatrix* matView, T::TMatrix* matProj) 
+void ASkyObj::SetMatrix(A::AMatrix* matWorld, A::AMatrix* matView, A::AMatrix* matProj)
 {
 	m_ConstantList.matWorld = m_matWorld.Transpose();
 	if (matWorld != nullptr)
@@ -9,7 +9,7 @@ void ASkyObj::SetMatrix(T::TMatrix* matWorld, T::TMatrix* matView, T::TMatrix* m
 	}
 	if (matView != nullptr)
 	{
-		T::TMatrix matViewSky = *matView;
+		A::AMatrix matViewSky = *matView;
 		matViewSky._41 = 0;
 		matViewSky._42 = 0;
 		matViewSky._43 = 0;
@@ -28,39 +28,39 @@ bool ASkyObj::SetVertexData()
 	m_VertexList.resize(24); //Box 면 6개, 정점 4개 6*4 =24
 	//차례대로 정점위치, 노멀값, 컬러값, UV : 라이트 방향에 따라 세팅
 	
-	m_VertexList[0] = AVertex(T::TVector3(-1.0f, 1.0f, -1.0f), T::TVector3(0.0f, 0.0f, -1.0f), T::TVector4(1.0f, 0.0f, 0.0f, 1.0f), T::TVector2(0.0f, 0.0f));
-	m_VertexList[1] = AVertex(T::TVector3(1.0f, 1.0f, -1.0f), T::TVector3(0.0f, 0.0f, -1.0f), T::TVector4(1.0f, 0.0f, 0.0f, 1.0f), T::TVector2(1.0f, 0.0f));
-	m_VertexList[2] = AVertex(T::TVector3(1.0f, -1.0f, -1.0f), T::TVector3(0.0f, 0.0f, -1.0f), T::TVector4(1.0f, 0.0f, 0.0f, 1.0f), T::TVector2(1.0f, 1.0f));
-	m_VertexList[3] = AVertex(T::TVector3(-1.0f, -1.0f, -1.0f), T::TVector3(0.0f, 0.0f, -1.0f), T::TVector4(1.0f, 0.0f, 0.0f, 1.0f), T::TVector2(0.0f, 1.0f));
+	m_VertexList[0] = AVertex(A::AVector3(-1.0f, 1.0f, -1.0f), A::AVector3(0.0f, 0.0f, -1.0f), A::AVector4(1.0f, 0.0f, 0.0f, 1.0f), A::AVector2(0.0f, 0.0f));
+	m_VertexList[1] = AVertex(A::AVector3(1.0f, 1.0f, -1.0f), A::AVector3(0.0f, 0.0f, -1.0f), A::AVector4(1.0f, 0.0f, 0.0f, 1.0f), A::AVector2(1.0f, 0.0f));
+	m_VertexList[2] = AVertex(A::AVector3(1.0f, -1.0f, -1.0f), A::AVector3(0.0f, 0.0f, -1.0f), A::AVector4(1.0f, 0.0f, 0.0f, 1.0f), A::AVector2(1.0f, 1.0f));
+	m_VertexList[3] = AVertex(A::AVector3(-1.0f, -1.0f, -1.0f), A::AVector3(0.0f, 0.0f, -1.0f), A::AVector4(1.0f, 0.0f, 0.0f, 1.0f), A::AVector2(0.0f, 1.0f));
 	// 뒷면
-	m_VertexList[4] = AVertex(T::TVector3(1.0f, 1.0f, 1.0f), T::TVector3(0.0f, 0.0f, 1.0f), T::TVector4(0.0f, 0.0f, 0.0f, 1.0f), T::TVector2(0.0f, 0.0f));
-	m_VertexList[5] = AVertex(T::TVector3(-1.0f, 1.0f, 1.0f), T::TVector3(0.0f, 0.0f, 1.0f), T::TVector4(0.0f, 1.0f, 0.0f, 1.0f), T::TVector2(1.0f, 0.0f));
-	m_VertexList[6] = AVertex(T::TVector3(-1.0f, -1.0f, 1.0f), T::TVector3(0.0f, 0.0f, 1.0f), T::TVector4(0.0f, 1.0f, 0.0f, 1.0f), T::TVector2(1.0f, 1.0f));
-	m_VertexList[7] = AVertex(T::TVector3(1.0f, -1.0f, 1.0f), T::TVector3(0.0f, 0.0f, 1.0f), T::TVector4(0.0f, 1.0f, 0.0f, 1.0f), T::TVector2(0.0f, 1.0f));
+	m_VertexList[4] = AVertex(A::AVector3(1.0f, 1.0f, 1.0f), A::AVector3(0.0f, 0.0f, 1.0f), A::AVector4(0.0f, 0.0f, 0.0f, 1.0f), A::AVector2(0.0f, 0.0f));
+	m_VertexList[5] = AVertex(A::AVector3(-1.0f, 1.0f, 1.0f), A::AVector3(0.0f, 0.0f, 1.0f), A::AVector4(0.0f, 1.0f, 0.0f, 1.0f), A::AVector2(1.0f, 0.0f));
+	m_VertexList[6] = AVertex(A::AVector3(-1.0f, -1.0f, 1.0f), A::AVector3(0.0f, 0.0f, 1.0f), A::AVector4(0.0f, 1.0f, 0.0f, 1.0f), A::AVector2(1.0f, 1.0f));
+	m_VertexList[7] = AVertex(A::AVector3(1.0f, -1.0f, 1.0f), A::AVector3(0.0f, 0.0f, 1.0f), A::AVector4(0.0f, 1.0f, 0.0f, 1.0f), A::AVector2(0.0f, 1.0f));
 
 	// 오른쪽
-	m_VertexList[8] = AVertex(T::TVector3(1.0f, 1.0f, -1.0f), T::TVector3(1.0f, 0.0f, 0.0f), T::TVector4(0.0f, 0.0f, 1.0f, 1.0f), T::TVector2(0.0f, 0.0f));
-	m_VertexList[9] = AVertex(T::TVector3(1.0f, 1.0f, 1.0f), T::TVector3(1.0f, 0.0f, 0.0f), T::TVector4(0.0f, 0.0f, 1.0f, 1.0f), T::TVector2(1.0f, 0.0f));
-	m_VertexList[10] = AVertex(T::TVector3(1.0f, -1.0f, 1.0f), T::TVector3(1.0f, 0.0f, 0.0f), T::TVector4(0.0f, 0.0f, 1.0f, 1.0f), T::TVector2(1.0f, 1.0f));
-	m_VertexList[11] = AVertex(T::TVector3(1.0f, -1.0f, -1.0f), T::TVector3(1.0f, 0.0f, 0.0f), T::TVector4(0.0f, 0.0f, 1.0f, 1.0f), T::TVector2(0.0f, 1.0f));
+	m_VertexList[8] = AVertex(A::AVector3(1.0f, 1.0f, -1.0f), A::AVector3(1.0f, 0.0f, 0.0f), A::AVector4(0.0f, 0.0f, 1.0f, 1.0f), A::AVector2(0.0f, 0.0f));
+	m_VertexList[9] = AVertex(A::AVector3(1.0f, 1.0f, 1.0f), A::AVector3(1.0f, 0.0f, 0.0f), A::AVector4(0.0f, 0.0f, 1.0f, 1.0f), A::AVector2(1.0f, 0.0f));
+	m_VertexList[10] = AVertex(A::AVector3(1.0f, -1.0f, 1.0f), A::AVector3(1.0f, 0.0f, 0.0f), A::AVector4(0.0f, 0.0f, 1.0f, 1.0f), A::AVector2(1.0f, 1.0f));
+	m_VertexList[11] = AVertex(A::AVector3(1.0f, -1.0f, -1.0f), A::AVector3(1.0f, 0.0f, 0.0f), A::AVector4(0.0f, 0.0f, 1.0f, 1.0f), A::AVector2(0.0f, 1.0f));
 
 	// 왼쪽
-	m_VertexList[12] = AVertex(T::TVector3(-1.0f, 1.0f, 1.0f), T::TVector3(-1.0f, 0.0f, 0.0f), T::TVector4(1.0f, 1.0f, 0.0f, 1.0f), T::TVector2(0.0f, 0.0f));
-	m_VertexList[13] = AVertex(T::TVector3(-1.0f, 1.0f, -1.0f), T::TVector3(-1.0f, 0.0f, 0.0f), T::TVector4(1.0f, 1.0f, 0.0f, 1.0f), T::TVector2(1.0f, 0.0f));
-	m_VertexList[14] = AVertex(T::TVector3(-1.0f, -1.0f, -1.0f), T::TVector3(-1.0f, 0.0f, 0.0f), T::TVector4(1.0f, 1.0f, 0.0f, 1.0f), T::TVector2(1.0f, 1.0f));
-	m_VertexList[15] = AVertex(T::TVector3(-1.0f, -1.0f, 1.0f), T::TVector3(-1.0f, 0.0f, 0.0f), T::TVector4(1.0f, 1.0f, 0.0f, 1.0f), T::TVector2(0.0f, 1.0f));
+	m_VertexList[12] = AVertex(A::AVector3(-1.0f, 1.0f, 1.0f), A::AVector3(-1.0f, 0.0f, 0.0f), A::AVector4(1.0f, 1.0f, 0.0f, 1.0f), A::AVector2(0.0f, 0.0f));
+	m_VertexList[13] = AVertex(A::AVector3(-1.0f, 1.0f, -1.0f), A::AVector3(-1.0f, 0.0f, 0.0f), A::AVector4(1.0f, 1.0f, 0.0f, 1.0f), A::AVector2(1.0f, 0.0f));
+	m_VertexList[14] = AVertex(A::AVector3(-1.0f, -1.0f, -1.0f), A::AVector3(-1.0f, 0.0f, 0.0f), A::AVector4(1.0f, 1.0f, 0.0f, 1.0f), A::AVector2(1.0f, 1.0f));
+	m_VertexList[15] = AVertex(A::AVector3(-1.0f, -1.0f, 1.0f), A::AVector3(-1.0f, 0.0f, 0.0f), A::AVector4(1.0f, 1.0f, 0.0f, 1.0f), A::AVector2(0.0f, 1.0f));
 
 	// 윗면
-	m_VertexList[16] = AVertex(T::TVector3(-1.0f, 1.0f, 1.0f), T::TVector3(0.0f, 1.0f, 0.0f), T::TVector4(1.0f, 0.5f, 1.0f, 1.0f), T::TVector2(0.0f, 0.0f));
-	m_VertexList[17] = AVertex(T::TVector3(1.0f, 1.0f, 1.0f), T::TVector3(0.0f, 1.0f, 0.0f), T::TVector4(1.0f, 0.5f, 1.0f, 1.0f), T::TVector2(1.0f, 0.0f));
-	m_VertexList[18] = AVertex(T::TVector3(1.0f, 1.0f, -1.0f), T::TVector3(0.0f, 1.0f, 0.0f), T::TVector4(1.0f, 0.5f, 1.0f, 1.0f), T::TVector2(1.0f, 1.0f));
-	m_VertexList[19] = AVertex(T::TVector3(-1.0f, 1.0f, -1.0f), T::TVector3(0.0f, 1.0f, 0.0f), T::TVector4(1.0f, 0.5f, 1.0f, 1.0f), T::TVector2(0.0f, 1.0f));
+	m_VertexList[16] = AVertex(A::AVector3(-1.0f, 1.0f, 1.0f), A::AVector3(0.0f, 1.0f, 0.0f), A::AVector4(1.0f, 0.5f, 1.0f, 1.0f), A::AVector2(0.0f, 0.0f));
+	m_VertexList[17] = AVertex(A::AVector3(1.0f, 1.0f, 1.0f), A::AVector3(0.0f, 1.0f, 0.0f), A::AVector4(1.0f, 0.5f, 1.0f, 1.0f), A::AVector2(1.0f, 0.0f));
+	m_VertexList[18] = AVertex(A::AVector3(1.0f, 1.0f, -1.0f), A::AVector3(0.0f, 1.0f, 0.0f), A::AVector4(1.0f, 0.5f, 1.0f, 1.0f), A::AVector2(1.0f, 1.0f));
+	m_VertexList[19] = AVertex(A::AVector3(-1.0f, 1.0f, -1.0f), A::AVector3(0.0f, 1.0f, 0.0f), A::AVector4(1.0f, 0.5f, 1.0f, 1.0f), A::AVector2(0.0f, 1.0f));
 
 	// 아랫면
-	m_VertexList[20] = AVertex(T::TVector3(-1.0f, -1.0f, -1.0f), T::TVector3(0.0f, -1.0f, 0.0f), T::TVector4(0.0f, 1.0f, 1.0f, 1.0f), T::TVector2(0.0f, 0.0f));
-	m_VertexList[21] = AVertex(T::TVector3(1.0f, -1.0f, -1.0f), T::TVector3(0.0f, -1.0f, 0.0f), T::TVector4(0.0f, 1.0f, 1.0f, 1.0f), T::TVector2(1.0f, 0.0f));
-	m_VertexList[22] = AVertex(T::TVector3(1.0f, -1.0f, 1.0f), T::TVector3(0.0f, -1.0f, 0.0f), T::TVector4(0.0f, 1.0f, 1.0f, 1.0f), T::TVector2(1.0f, 1.0f));
-	m_VertexList[23] = AVertex(T::TVector3(-1.0f, -1.0f, 1.0f), T::TVector3(0.0f, -1.0f, 0.0f), T::TVector4(0.0f, 1.0f, 1.0f, 1.0f), T::TVector2(0.0f, 1.0f));
+	m_VertexList[20] = AVertex(A::AVector3(-1.0f, -1.0f, -1.0f), A::AVector3(0.0f, -1.0f, 0.0f), A::AVector4(0.0f, 1.0f, 1.0f, 1.0f), A::AVector2(0.0f, 0.0f));
+	m_VertexList[21] = AVertex(A::AVector3(1.0f, -1.0f, -1.0f), A::AVector3(0.0f, -1.0f, 0.0f), A::AVector4(0.0f, 1.0f, 1.0f, 1.0f), A::AVector2(1.0f, 0.0f));
+	m_VertexList[22] = AVertex(A::AVector3(1.0f, -1.0f, 1.0f), A::AVector3(0.0f, -1.0f, 0.0f), A::AVector4(0.0f, 1.0f, 1.0f, 1.0f), A::AVector2(1.0f, 1.0f));
+	m_VertexList[23] = AVertex(A::AVector3(-1.0f, -1.0f, 1.0f), A::AVector3(0.0f, -1.0f, 0.0f), A::AVector4(0.0f, 1.0f, 1.0f, 1.0f), A::AVector2(0.0f, 1.0f));
 
 	GenAABB();
 	return true;

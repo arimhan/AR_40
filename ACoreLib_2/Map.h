@@ -5,7 +5,7 @@
 struct AFace
 {
 	UINT			v0, v1, v2;	//vb index
-	T::TVector3		vNormal;	//vb index
+	A::AVector3		vNormal;	//vb index
 };
 //struct AVertexFace
 //{
