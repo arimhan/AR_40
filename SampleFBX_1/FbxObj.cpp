@@ -54,11 +54,11 @@ bool AFbxObj::Render()
 				auto bindpose = pFbxObj->m_dxMatrixBindPoseMap.find(name);
 				if (bindpose != pFbxObj->m_dxMatrixBindPoseMap.end() && pAnimModel)
 				{
-					TMatrix matInverseBindpose = bindpose->second;
+					A::AMatrix matInverseBindpose = bindpose->second;
 					m_matBoneArray.matBoneWorld[pTreeModel->m_iIndex] = matInverseBindpose
 						* Interplate(pAnimImp, pAnimModel, m_fTimer);
 				}
-				T::D3DXMatrixTranspose(&m_matBoneArray.matBoneWorld[pTreeModel->m_iIndex], 
+				A::D3DXMatrixTranspose(&m_matBoneArray.matBoneWorld[pTreeModel->m_iIndex], 
 					&m_matBoneArray.matBoneWorld[pTreeModel->m_iIndex]);
 			}
 		}
@@ -71,7 +71,7 @@ bool AFbxObj::Render()
 				{
 					m_matBoneArray.matBoneWorld[iNode] = Interplate(pAnimImp, pFbxModel, m_fTimer);
 				}
-				T::D3DXMatrixTranspose(&m_matBoneArray.matBoneWorld[iNode],
+				A::D3DXMatrixTranspose(&m_matBoneArray.matBoneWorld[iNode],
 					&m_matBoneArray.matBoneWorld[iNode]);
 			}
 		}
@@ -79,8 +79,8 @@ bool AFbxObj::Render()
 		m_pContext->UpdateSubresource(m_pMeshImp->m_pBoneCB, 0, NULL, &m_matBoneArray, 0, 0);
 		m_pContext->VSSetConstantBuffers(2, 1, &m_pMeshImp->m_pBoneCB);
 
-		T::TVector3 vLight(cosf(g_fGameTimer) * 100.0f, 100, sinf(g_fGameTimer) * 100.0f);
-		T::D3DXVec3Normalize(&vLight, &vLight);
+		A::AVector3 vLight(cosf(g_fGameTimer) * 100.0f, 100, sinf(g_fGameTimer) * 100.0f);
+		A::D3DXVec3Normalize(&vLight, &vLight);
 		vLight = vLight * -1.0f;
 
 		pFbxObj->m_LightConstantList.vLightDir.x = vLight.x;
@@ -107,8 +107,8 @@ bool AFbxObj::Release() { return true; }
 
 void AFbxObj::GenAABB()
 {
-	m_BoxCollision.vMin = T::TVector3(100000, 100000, 100000);
-	m_BoxCollision.vMax = T::TVector3(-100000, -100000, -100000);
+	m_BoxCollision.vMin = A::AVector3(100000, 100000, 100000);
+	m_BoxCollision.vMax = A::AVector3(-100000, -100000, -100000);
 
 	for (int i = 0; i < m_VertexList.size(); i++)
 	{
@@ -140,22 +140,22 @@ void AFbxObj::GenAABB()
 		}
 	}
 
-	m_BoxCollision.vList[0] = T::TVector3(//각VB의 좌표값을 위치 min,max로 표기한다. (-1,1,-1)
+	m_BoxCollision.vList[0] = A::AVector3(//각VB의 좌표값을 위치 min,max로 표기한다. (-1,1,-1)
 		m_BoxCollision.vMin.x, m_BoxCollision.vMax.y, m_BoxCollision.vMin.z);
-	m_BoxCollision.vList[1] = T::TVector3(
+	m_BoxCollision.vList[1] = A::AVector3(
 		m_BoxCollision.vMax.x, m_BoxCollision.vMax.y, m_BoxCollision.vMin.z);
-	m_BoxCollision.vList[2] = T::TVector3(
+	m_BoxCollision.vList[2] = A::AVector3(
 		m_BoxCollision.vMin.x, m_BoxCollision.vMin.y, m_BoxCollision.vMin.z);
-	m_BoxCollision.vList[3] = T::TVector3(
+	m_BoxCollision.vList[3] = A::AVector3(
 		m_BoxCollision.vMax.x, m_BoxCollision.vMin.y, m_BoxCollision.vMin.z);
 
-	m_BoxCollision.vList[4] = T::TVector3(
+	m_BoxCollision.vList[4] = A::AVector3(
 		m_BoxCollision.vMin.x, m_BoxCollision.vMax.y, m_BoxCollision.vMax.z);
-	m_BoxCollision.vList[5] = T::TVector3(
+	m_BoxCollision.vList[5] = A::AVector3(
 		m_BoxCollision.vMax.x, m_BoxCollision.vMax.y, m_BoxCollision.vMax.z);
-	m_BoxCollision.vList[6] = T::TVector3(
+	m_BoxCollision.vList[6] = A::AVector3(
 		m_BoxCollision.vMin.x, m_BoxCollision.vMin.y, m_BoxCollision.vMax.z);
-	m_BoxCollision.vList[7] = T::TVector3(
+	m_BoxCollision.vList[7] = A::AVector3(
 		m_BoxCollision.vMax.x, m_BoxCollision.vMin.y, m_BoxCollision.vMax.z);
 }
 
@@ -213,11 +213,11 @@ bool AFbxObj::RenderShadow(AShader* pShader)
 				auto bindpose = pFbxObj->m_dxMatrixBindPoseMap.find(name);
 				if (bindpose != pFbxObj->m_dxMatrixBindPoseMap.end() && pAnimModel)
 				{
-					TMatrix matInverseBindpose = bindpose->second;
+					A::AMatrix matInverseBindpose = bindpose->second;
 					m_matBoneArray.matBoneWorld[pTreeModel->m_iIndex] = 
 						matInverseBindpose * Interplate(pAnimImp, pAnimModel, m_fTimer);
 				}
-				T::D3DXMatrixTranspose(&m_matBoneArray.matBoneWorld[pTreeModel->m_iIndex], 
+				A::D3DXMatrixTranspose(&m_matBoneArray.matBoneWorld[pTreeModel->m_iIndex], 
 					&m_matBoneArray.matBoneWorld[pTreeModel->m_iIndex]);
 			}
 		}
@@ -233,15 +233,15 @@ bool AFbxObj::RenderShadow(AShader* pShader)
 					//Interplate 보간작업
 					m_matBoneArray.matBoneWorld[iNode] = Interplate(pAnimImp, pFbxModel, m_fTimer);
 				}
-				T::D3DXMatrixTranspose(&m_matBoneArray.matBoneWorld[iNode],
+				A::D3DXMatrixTranspose(&m_matBoneArray.matBoneWorld[iNode],
 					&m_matBoneArray.matBoneWorld[iNode]);
 			}
 		}
 		m_pContext->UpdateSubresource(m_pMeshImp->m_pBoneCB, 0, NULL, &m_matBoneArray, 0, 0);
 		m_pContext->VSSetConstantBuffers(2, 1, &m_pMeshImp->m_pBoneCB);
 
-		T::TVector3 vLight(cosf(g_fGameTimer) * 100.0f, 100, sinf(g_fGameTimer) * 100.0f);
-		T::D3DXVec3Normalize(&vLight, &vLight);
+		A::AVector3 vLight(cosf(g_fGameTimer) * 100.0f, 100, sinf(g_fGameTimer) * 100.0f);
+		A::D3DXVec3Normalize(&vLight, &vLight);
 		vLight = vLight * -1.0f;
 
 		pFbxObj->m_LightConstantList.vLightDir.x = vLight.x;
@@ -279,9 +279,9 @@ bool AFbxObj::RenderShadow(AShader* pShader)
 	return true;
 }
 
-T::TMatrix	AFbxObj::Interplate(AFbxImporter* pAnimImp, AFbxModel* pModel, float fTime) 
+A::AMatrix	AFbxObj::Interplate(AFbxImporter* pAnimImp, AFbxModel* pModel, float fTime)
 { 
-	T::TMatrix matAnim;
+	A::AMatrix matAnim;
 	AScene aScene = pAnimImp->m_Scene;
 	int iStart = max(aScene.iStart, fTime);
 	int iEnd = min(aScene.iEnd, fTime + 1);
@@ -291,17 +291,17 @@ T::TMatrix	AFbxObj::Interplate(AFbxImporter* pAnimImp, AFbxModel* pModel, float 
 	ATrack B = pModel->m_AnimTrack[iEnd];
 	float s = fTime - (float)iStart;
 
-	T::TVector3 Pos;
-	T::D3DXVec3Lerp(&Pos, &A.t, &B.t, s);
-	T::TVector3 Scale;
-	T::D3DXVec3Lerp(&Scale, &A.s, &B.s, s);
-
-	T::TQuaternion Rotation;
-	T::D3DXQuaternionSlerp(&Rotation, &A.r, &B.r, s);
-	T::TMatrix matScale;
-	T::D3DXMatrixScaling(&matScale, Scale.x, Scale.y, Scale.z);
-	T::TMatrix matRotation;
-	T::D3DXMatrixRotationQuaternion(&matRotation, &Rotation);
+	A::AVector3 Pos;
+	A::D3DXVec3Lerp(&Pos, &A.t, &B.t, s);
+	A::AVector3 Scale;
+	A::D3DXVec3Lerp(&Scale, &A.s, &B.s, s);
+	
+	A::AQuaternion Rotation;
+	A::D3DXQuaternionSlerp(&Rotation, &A.r, &B.r, s);
+	A::AMatrix matScale;
+	A::D3DXMatrixScaling(&matScale, Scale.x, Scale.y, Scale.z);
+	A::AMatrix matRotation;
+	A::D3DXMatrixRotationQuaternion(&matRotation, &Rotation);
 
 	matAnim = matScale * matRotation;
 	matAnim._41 = Pos.x;

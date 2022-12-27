@@ -31,18 +31,20 @@ class ASample : public ACore
 
 	ATexture*			m_pLightTex;
 	ATexture*			m_pNormalMap;
+	bool				m_bDepthShadoe = true;
+	ComPtr<ID3D11RasterizerState> m_pRSSlopeScaledDepthBias;
 public:
 	AShader*			m_pProjShadowVSShader = nullptr;
 	AShader*			m_pProjShadowPSShader = nullptr;
 	ADxRT				m_dxRT;
-	TVector3			m_vLightPos;
-	TVector3			m_vLightDir;
-	TMatrix				m_matShadow;
-	TMatrix				m_matViewLight;
-	TMatrix				m_matProjLight;
-	TMatrix				m_matTex;
+	A::AVector3			m_vLightPos;
+	A::AVector3			m_vLightDir;
+	A::AMatrix				m_matShadow;
+	A::AMatrix				m_matViewLight;
+	A::AMatrix				m_matProjLight;
+	A::AMatrix				m_matTex;
 public:
-	void				RenderShadow(TMatrix* pmatView, TMatrix* pmatProj);
+	void				RenderShadow(A::AMatrix* pmatView, A::AMatrix* pmatProj);
 	bool				LoadMap();
 	bool				LoadFbx();
 

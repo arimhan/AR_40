@@ -42,7 +42,7 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
-    <PlatformToolset>v142</PlatformToolset>
+    <PlatformToolset>v143</PlatformToolset>
     <CharacterSet>Unicode</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
@@ -79,7 +79,7 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <LinkIncremental>true</LinkIncremental>
     <OutDir>../../output/Debug/</OutDir>
-    <IntDir>../../output/Debug/SampleFBX_1</IntDir>
+    <IntDir>../../output/Debug/SampleFBX_1/</IntDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <LinkIncremental>false</LinkIncremental>
@@ -151,12 +151,14 @@
     <ClInclude Include="FbxObj.h" />
     <ClInclude Include="QuadObject.h" />
     <ClInclude Include="Sample.h" />
+    <ClInclude Include="SkyObj.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="DxRT.cpp" />
     <ClCompile Include="FbxObj.cpp" />
     <ClCompile Include="QuadObject.cpp" />
     <ClCompile Include="Sample.cpp" />
+    <ClCompile Include="SkyObj.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\ACoreLib_2\ACoreLib_2.vcxproj">

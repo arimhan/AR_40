@@ -25,8 +25,8 @@ VS_OUTPUT VS( float4 p : POSITION )
 {
     VS_OUTPUT Output;
     Output.p = p;
-    Output.t.x = (p.x + 1.0f) / 2.0f;	// x값은 -1 ~ 1의 값을 0~1로 변환 
-	Output.t.y = (-p.y+ 1.0f) / 2.0f;	// y값은 1 ~ -1의 값을 0~1로 변환
+	Output.t.x = (p.x + 1.0f) / 2.0f;	// x값은 -1 ~ 1의 값을 0~1로 변환 
+	Output.t.y = (-p.y + 1.0f) / 2.0f;	// y값은 1 ~ -1의 값을 0~1로 변환
     return Output;    
 }
 
@@ -35,21 +35,20 @@ float4 GaussianBlur( float3 vTex, Texture2D tex2D )
 	int		g_iMask = (int)iMask;
 	int		g_iTexSizeX = 800;
 	int		g_iTexSizeY = 600;
-	float dx = 1.0f/g_iTexSizeX;
-	float dy = 1.0f/g_iTexSizeY;
-	float2 vStart = float2(	vTex.x-dx*g_iMask, 
-							vTex.y-dy*g_iMask);
+	float dx = 1.0f / g_iTexSizeX;
+	float dy = 1.0f / g_iTexSizeY;
+	float2 vStart = float2(vTex.x - dx * g_iMask, vTex.y - dy * g_iMask);
 	float4 vSum = 0;
 	float fX, fY;
 	//[roll]
-	for( int ix=0; ix < g_iMask; ix++ )
+	for (int ix = 0; ix < g_iMask; ix++)
 	{
-		fX = vStart.x+dx*ix;
+		fX = vStart.x + dx * ix;
 		//[roll]
-		for( int iy=0; iy < g_iMask; iy++ )
+		for (int iy = 0; iy < g_iMask; iy++)
 		{							
-			fY = vStart.y+dy*iy;
-			vSum += tex2D.Sample(g_samLinear,float2(fX, fY))*g_fMaskArray[ix*g_iMask+iy];		
+			fY = vStart.y + dy * iy;
+			vSum += tex2D.Sample(g_samLinear, float2(fX, fY)) * g_fMaskArray[ix * g_iMask + iy];
 		}		
 	}
 	vSum.w = 1.0f;
@@ -60,23 +59,22 @@ float4 Blur( float3 vTex, Texture2D tex2D)
 	int		g_iMask = (int)iMask;
 	int		g_iTexSizeX = 800;
 	int		g_iTexSizeY = 600;
-	float dx = 1.0f/g_iTexSizeX;
-	float dy = 1.0f/g_iTexSizeY;
-	float2 vStart = float2(	vTex.x-dx*g_iMask, 
-							vTex.y-dy*g_iMask);
+	float dx = 1.0f / g_iTexSizeX;
+	float dy = 1.0f / g_iTexSizeY;
+	float2 vStart = float2(vTex.x - dx * g_iMask, vTex.y - dy * g_iMask);
 	float4 vSum = 0;
 	float fX, fY;
-	float fWeight = 1.0f/(g_iMask*g_iMask);
+	float fWeight = 1.0f / (g_iMask * g_iMask);
 		
 	//[roll]
-	for( int ix=0; ix < g_iMask; ix++ )
+	for (int ix = 0; ix < g_iMask; ix++)
 	{
-		fX = vStart.x+dx*ix;
+		fX = vStart.x + dx * ix;
 		//[roll]
-		for( int iy=0; iy < g_iMask; iy++ )
+		for (int iy = 0; iy < g_iMask; iy++)
 		{							
-			fY = vStart.y+dy*iy;
-			vSum += tex2D.Sample(g_samLinear,float2(fX, fY))*fWeight;		
+			fY = vStart.y + dy * iy;
+			vSum += tex2D.Sample(g_samLinear, float2(fX, fY)) * fWeight;
 		}		
 	}
 	vSum.w = 1.0f;
@@ -88,10 +86,9 @@ float4 Sharp( float3 vTex, Texture2D tex2D )
 	int		g_iTexSizeX = 800;
 	int		g_iTexSizeY = 600;
 
-	float dx = 1.0f/g_iTexSizeX;
-	float dy = 1.0f/g_iTexSizeY;
-	float2 vStart = float2(	vTex.x-dx*g_iMask, 
-							vTex.y-dy*g_iMask);
+	float dx = 1.0f / g_iTexSizeX;
+	float dy = 1.0f / g_iTexSizeY;
+	float2 vStart = float2(vTex.x - dx * g_iMask, vTex.y - dy * g_iMask);
 	float4 vSum = 0;
 	float fX, fY;
 	float fWeight = -1.0f;
@@ -99,16 +96,16 @@ float4 Sharp( float3 vTex, Texture2D tex2D )
 	//[roll]
 	for( int ix=0; ix < g_iMask; ix++ )
 	{
-		fX = vStart.x+dx*ix;
+		fX = vStart.x + dx * ix;
 		//[roll]
-		for( int iy=0; iy < g_iMask; iy++ )
+		for (int iy = 0; iy < g_iMask; iy++)
 		{	
 			fWeight = -1.0f;
-			if( ix* g_iMask+ iy == iSharp)
+			if (ix * g_iMask + iy == iSharp)
 			{
 				fWeight = g_iMask * g_iMask;
 			}
-			fY = vStart.y+dy*iy;
+			fY = vStart.y + dy * iy;
 			vSum += tex2D.Sample(g_samLinear, float2(fX, fY)) * fWeight;
 		}		
 	}
@@ -127,7 +124,7 @@ float4 Sobel( float3 vTex, Texture2D tex2D )
 	float dy = 1.0f / g_iTexSizeY;
 
 	float4 tl = tex2D.Sample(g_samLinear, float2(vTex.x - dx, vTex.y - dy));
-	float4 l = tex2D.Sample(g_samLinear, float2(vTex.x - dx, vTex.y));
+	float4 L = tex2D.Sample(g_samLinear, float2(vTex.x - dx, vTex.y));
 	float4 bl = tex2D.Sample(g_samLinear, float2(vTex.x - dx, vTex.y + dy));
 	float4 t = tex2D.Sample(g_samLinear, float2(vTex.x, vTex.y - dy));
 	float4 b = tex2D.Sample(g_samLinear, float2(vTex.x, vTex.y + dy));
@@ -135,7 +132,7 @@ float4 Sobel( float3 vTex, Texture2D tex2D )
 	float4 r = tex2D.Sample(g_samLinear, float2(vTex.x + dx, vTex.y));
 	float4 br = tex2D.Sample(g_samLinear, float2(vTex.x + dx, vTex.y + dy));
 	
-	float4 SobelX = -tl - 2.0f * l - bl + tr + 2.0f * r + br;
+	float4 SobelX = -tl - 2.0f * L - bl + tr + 2.0f * r + br;
 
 	// -1 -2 -1
 	// 0 0 0
@@ -146,7 +143,7 @@ float4 Sobel( float3 vTex, Texture2D tex2D )
 		min(1.0f, 32.0f * pow((SobelResult.x + SobelResult.y + SobelResult.z ) / 3, 2.0f));
 	float fDepth = 1.0f - 
 		min(1.0f, 32.0f * pow(tl.a - br.a, 2.0f) + pow(bl.a - tr.a, 2.0f));
-	deltaNormal = deltaNormal*fDepth;
+	deltaNormal = deltaNormal * fDepth;
 	return float4(deltaNormal, deltaNormal, deltaNormal, 1);
 }
 
@@ -169,12 +166,12 @@ float4 GaussianPixelShader(float3 vTex, Texture2D tex2D)
 	};
 
     // Pixel width
-    float dx = 1.0f/g_iTexSizeX;
-	float dy = 1.0f/g_iTexSizeY;
-    float4 color = {0, 0, 0, 1};
+	float dx = 1.0f / g_iTexSizeX;
+	float dy = 1.0f / g_iTexSizeY;
+	float4 color = { 0, 0, 0, 1 };
 
     float2 blur;
-    blur.y = vTex.y;
+	blur.y = vTex.y;
 
     for (int i = 0; i < 13; i++) 
     {
@@ -193,9 +190,9 @@ float4 PS(VS_OUTPUT input) : SV_Target
 	{
 		discard;
 	}
-//	// 내부 경계 및 외부 경계  	
-	float4 vEdgeColor =  Sobel(float3(input.t, 0.0f), g_txNormalDepth);
-	float4 vFinal = vEdgeColor *vTexture;
+	// 내부 경계 및 외부 경계  	
+	float4 vEdgeColor = Sobel(float3(input.t, 0.0f), g_txNormalDepth);
+	float4 vFinal = vEdgeColor * vTexture;
 #ifdef GAUSSIAN_BLUR
 	float4 vBlur = GaussianBlur(float3(input.t, 0.0f), g_txColor);
 #else

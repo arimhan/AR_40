@@ -7,7 +7,7 @@ class AFbxObj : public AObject3D
 public:
 	ACamera*		m_pMainCamera;
 	UINT			m_iShadowID = 0;
-	TVector4		m_vShadowColor;
+	A::AVector4		m_vShadowColor;
 
 public:
 	AFbxImporter*	m_pMeshImp;
@@ -26,6 +26,6 @@ public:
 	void			GenAABB() override;
 
 	bool			RenderShadow(AShader* pShader);
-	T::TMatrix		Interplate(AFbxImporter* pAnimImp, AFbxModel* pModel, float fTime);
+	A::AMatrix		Interplate(AFbxImporter* pAnimImp, AFbxModel* pModel, float fTime);
 };
 

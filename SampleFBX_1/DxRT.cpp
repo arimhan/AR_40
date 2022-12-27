@@ -1,14 +1,6 @@
 #include "DxRT.h"
 #include "DxState.h"
 
-ADxRT::ADxRT()
-{
-	m_pRenderTargetView = nullptr;
-	m_pDepthStencilView = nullptr;
-	m_pSRV = nullptr;
-	m_pTexture = nullptr;
-	m_DSFormat = DXGI_FORMAT_D24_UNORM_S8_UINT;
-}
 void ADxRT::Set(ID3D11Device* pDevice, FLOAT TopLeftX, FLOAT TopLeftY, FLOAT Width, FLOAT Height,
 	FLOAT MinDepth, FLOAT MaxDepth)
 {
@@ -85,7 +77,7 @@ HRESULT ADxRT::CreateCubeMap(ID3D11Device*	pd3dDevice, FLOAT fWidth, FLOAT fHeig
 	V(pd3dDevice->CreateDepthStencilView(pDSTexture.Get(), &DsvDesc, &m_pDepthStencilView));
 	return S_OK;
 }
-HRESULT ADxRT::Create(ID3D11Device* pd3dDevice, FLOAT Width, FLOAT Height)
+HRESULT ADxRT::Create(ID3D11Device* pd3dDevice, FLOAT Width, FLOAT Height, DXGI_FORMAT dsTexFormat)
 {
 	HRESULT hr = S_OK;
 	Set(pd3dDevice, 0, 0, Width, Height, 0.0f, 1.0f);
@@ -117,20 +109,23 @@ HRESULT ADxRT::Create(ID3D11Device* pd3dDevice, FLOAT Width, FLOAT Height)
 
 
 	//백버퍼 크기 변경 시 , 뎁스스텐실 뷰어도 변경하기~!	
-	if (FAILED(hr = UpdateDepthStencilView(pd3dDevice, (UINT)Width, (UINT)Height)))
+	if (FAILED(hr = UpdateDepthStencilView(pd3dDevice, (UINT)Width, (UINT)Height), dsTexFormat))
 	{
 		return hr;
 	}
 	return hr;
 }
-HRESULT ADxRT::UpdateDepthStencilView(ID3D11Device* pDevice, UINT Width, UINT Height)
+HRESULT ADxRT::UpdateDepthStencilView(ID3D11Device* pDevice, UINT Width, UINT Height, DXGI_FORMAT dsTexFormat)
 {
 	HRESULT hr;
 	if (m_pDepthStencilView != nullptr)
 	{
 		m_pDepthStencilView.ReleaseAndGetAddressOf();
 	}
-
+	if (dsTexFormat != m_DSTexFormat)
+	{
+		m_DSTexFormat = dsTexFormat;
+	}
 	m_vp.Width = (FLOAT)Width;
 	m_vp.Height = (FLOAT)Height;
 
@@ -160,7 +155,7 @@ HRESULT ADxRT::UpdateDepthStencilView(ID3D11Device* pDevice, UINT Width, UINT He
 		return hr;
 	}
 
-	///// 쉐이더 리소스 생성 : 깊이 맵 쉐도우에서 사용한다. ///
+	// 쉐이더 리소스 생성 : 깊이 맵 쉐도우에서 사용한다.
 	D3D11_DEPTH_STENCIL_VIEW_DESC dsvDesc;
 	D3D11_SHADER_RESOURCE_VIEW_DESC srvDesc;
 	ZeroMemory(&dsvDesc, sizeof(D3D11_DEPTH_STENCIL_VIEW_DESC));
@@ -234,7 +229,7 @@ void ADxRT::Apply(ID3D11DeviceContext* pImmediateContext,	ID3D11RenderTargetView
 	}
 	pImmediateContext->RSSetViewports(1, &m_vp);
 }
-bool ADxRT::Begin(ID3D11DeviceContext*    pContext, TVector4 vColor,
+bool ADxRT::Begin(ID3D11DeviceContext*    pContext, A::AVector4 vColor,
 	bool bTargetClear, bool bDepthClear, bool bStencilClear)
 {
 	m_nViewPorts = 1;
@@ -249,7 +244,7 @@ bool ADxRT::Begin(ID3D11DeviceContext*    pContext, TVector4 vColor,
 	pContext->RSSetViewports(1, &m_vp);
 	return true;
 }
-bool ADxRT::Clear(ID3D11DeviceContext*    pContext, TVector4 vColor,
+bool ADxRT::Clear(ID3D11DeviceContext*    pContext, A::AVector4 vColor,
 	bool bTargetClear, bool bDepthClear, bool bStencilClear)
 {
 	if (bTargetClear)
@@ -289,7 +284,7 @@ HRESULT ADxRT::SaveFile(ID3D11DeviceContext*    pContext, T_STR name)
 	}
 	else if (m_pSRV != nullptr)
 	{
-		ID3D11Resource*         resource;
+		ID3D11Resource* resource;
 		m_pSRV.Get()->GetResource(&resource);
 
 		ID3D11Texture2D* texture;
@@ -302,8 +297,8 @@ HRESULT ADxRT::SaveFile(ID3D11DeviceContext*    pContext, T_STR name)
 	}
 	else if (m_pRenderTargetView != nullptr)
 	{
-		ComPtr<ID3D11Resource>       resource;
-		ComPtr<ID3D11Texture2D>		 texture;
+		ComPtr<ID3D11Resource>  resource;
+		ComPtr<ID3D11Texture2D>	texture;
 		m_pRenderTargetView->GetResource(resource.GetAddressOf());
 		if (FAILED(hr = resource->QueryInterface(__uuidof(ID3D11Texture2D), reinterpret_cast<LPVOID*>(texture.GetAddressOf()))))
 		{
@@ -314,9 +309,7 @@ HRESULT ADxRT::SaveFile(ID3D11DeviceContext*    pContext, T_STR name)
 	return hr;
 }
 
-//--------------------------------------------------------------------------------------
 // 백버퍼 저장 
-//--------------------------------------------------------------------------------------
 HRESULT ADxRT::SaveBackBuffer(ID3D11DeviceContext*    pContext, T_STR name)
 {			
 	HRESULT hr = S_OK;
@@ -326,14 +319,10 @@ HRESULT ADxRT::SaveBackBuffer(ID3D11DeviceContext*    pContext, T_STR name)
 
 	ID3D11Texture2D* tex=nullptr;
 	if (FAILED(hr = backbufferRes->QueryInterface(__uuidof(ID3D11Texture2D),
-		reinterpret_cast<LPVOID*>(&tex))))
-	{
-
-	}
+		reinterpret_cast<LPVOID*>(&tex))))	{	}
 	D3D11_TEXTURE2D_DESC desc;
 	tex->GetDesc(&desc);
 	backbufferRes->Release();
-
 
 	ID3D11Texture2D *texture;
 	D3D11_TEXTURE2D_DESC texDesc;
@@ -356,3 +345,16 @@ HRESULT ADxRT::SaveBackBuffer(ID3D11DeviceContext*    pContext, T_STR name)
 	backbufferRes->Release();
 	return hr;
 }	
+
+bool ADxRT::Release()
+{
+	return true;
+}
+ADxRT::ADxRT()
+{
+	m_pRenderTargetView = nullptr;
+	m_pDepthStencilView = nullptr;
+	m_pSRV = nullptr;
+	m_pTexture = nullptr;
+	m_DSTexFormat = DXGI_FORMAT_R24G8_TYPELESS;
+}
