@@ -6,16 +6,16 @@
 
 struct PNCT
 {
-	T::TVector3 p;
-	T::TVector3 n;
-	T::TVector4 c;
-	T::TVector2 t;
+	A::AVector3 p;
+	A::AVector3 n;
+	A::AVector4 c;
+	A::AVector2 t;
 };
 struct AVertexIW
 {
 	float			i[4]; //index
 	float			w[4]; //weight
-	T::TVector3		tan;  //tangent
+	A::AVector3		tan;  //tangent
 	AVertexIW()
 	{
 		i[0] = i[1] = i[2] = i[3] = 0;
@@ -28,12 +28,12 @@ struct AVertexIW
 struct ATrack
 {
 	UINT	iFrame;
-	TMatrix matTrack;
+	A::AMatrix matTrack;
 
 	//SRT 값
-	T::TVector3		s;
-	T::TQuaternion	r; //Rotation은 TQuaternion로 해야 짐벌현상이 발생하지 않는다.
-	T::TVector3		t;
+	A::AVector3		s;
+	A::AQuaternion	r; //Rotation은 TQuaternion로 해야 짐벌현상이 발생하지 않는다.
+	A::AVector3		t;
 };
 
 struct AWeight					//가중치
@@ -56,8 +56,8 @@ public:
 	int			m_iIndex = -1;
 	bool		m_bSkinned = false;
 
-	TMatrix		m_matLocal;
-	TMatrix		m_matAnim;
+	A::AMatrix		m_matLocal;
+	A::AMatrix		m_matAnim;
 
 	FbxNode*	m_pFbxParent = nullptr;
 	FbxNode*	m_pFbxNode = nullptr;
@@ -79,7 +79,7 @@ public:
 	vector<ATexture*>		m_pTextureList;
 
 	vector<ATrack>			m_AnimTrack;
-	map<wstring, TMatrix>	m_dxMatrixBindPoseMap;
+	map<wstring, A::AMatrix>	m_dxMatrixBindPoseMap;
 	ACamera*				m_pMainCamera;
 
 public:
@@ -146,9 +146,9 @@ public:
 	int				GetSubMaterialIndex(int iPoly, FbxLayerElementMaterial* pMtrlSetList);
 
 public:
-	TMatrix			DxConvertMatrix(TMatrix m);
-	TMatrix			ConvertMatrix(FbxMatrix& m);
-	TMatrix			ConvertAMatrix(FbxAMatrix& m);
+	A::AMatrix			DxConvertMatrix(A::AMatrix m);
+	A::AMatrix			ConvertMatrix(FbxMatrix& m);
+	A::AMatrix			ConvertAMatrix(FbxAMatrix& m);
 	void			ParseAnimation();
 
 public:

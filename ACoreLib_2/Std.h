@@ -20,6 +20,7 @@
 #include <DirectXCollision.h>
 #include "AMath.h"
 
+#include <bit>
 
 //#define Tex_Size		6
 //#define Plane_Size	6

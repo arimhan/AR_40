@@ -33,7 +33,7 @@ public:
 	bool	Render();
 	bool	Release();
 	DWORD   GetKey(DWORD dwKey);
-	T::TVector2	GetDelta();
+	A::AVector2	GetDelta();
 private:
 	AInput();
 public:

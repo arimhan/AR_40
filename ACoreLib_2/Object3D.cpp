@@ -57,6 +57,7 @@ void AObject3D::UpdateData()
 {
 	//카메라 행렬 세팅
 	//Right(우측, 사이드), Up(Top), Look(eye) 3가지 관점에서의 벡터값
+	//Right -> Light?
 	m_vRight.x = m_matWorld._11;
 	m_vRight.y = m_matWorld._12;
 	m_vRight.z = m_matWorld._13;
@@ -73,7 +74,7 @@ void AObject3D::UpdateData()
 	A::D3DXVec3Normalize(&m_vUp, &m_vUp);
 	A::D3DXVec3Normalize(&m_vLook, &m_vLook);
 }
-void AObject3D::SeAMatrix(A::AMatrix* matWorld, A::AMatrix* matView, A::AMatrix* matProj)
+void AObject3D::SetMatrix(A::AMatrix* matWorld, A::AMatrix* matView, A::AMatrix* matProj)
 {
 	//각 월드 전환 시 필요한 값 세팅 
 	//상수버퍼리스트 내 월드행렬 전치시킨다.해당하는 행렬이 존재하면 현재 받은 행렬을 전치시킨다.
@@ -143,7 +144,7 @@ void AObject3D::UpdateCollision()
 			m_BoxCollision.vMax.z = pos.z;
 		}
 	}
-	A::AVector3 vHalf = m_BoxCollision.vMax - m_BoxCollision.vMiddle;
+	A::AVector3 vHalf = m_BoxCollision.vMax - m_BoxCollision.vMiddle;	//Center;
 	m_BoxCollision.size.x = fabs(A::D3DXVec3Dot(&m_BoxCollision.vAxis[0], &vHalf));
 	m_BoxCollision.size.y = fabs(A::D3DXVec3Dot(&m_BoxCollision.vAxis[1], &vHalf));
 	m_BoxCollision.size.z = fabs(A::D3DXVec3Dot(&m_BoxCollision.vAxis[2], &vHalf));

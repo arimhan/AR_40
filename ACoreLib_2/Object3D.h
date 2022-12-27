@@ -31,7 +31,7 @@ public:
 	virtual bool		Frame() override;
 	bool				Load(ID3D11Device* pd3dDevice, wstring filename);
 	virtual void		UpdateData();
-	virtual void		SeAMatrix(A::AMatrix* matWorld, A::AMatrix* matView, A::AMatrix* matProj);
+	virtual void		SetMatrix(A::AMatrix* matWorld, A::AMatrix* matView, A::AMatrix* matProj);
 public:
 	virtual void		UpdateCollision();
 	virtual void		GenAABB();

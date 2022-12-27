@@ -159,8 +159,8 @@ bool AFbxModel::Release()
 
 void AFbxModel::GenAABB()
 {
-	m_BoxCollision.vMin = T::TVector3(100000, 100000, 100000);
-	m_BoxCollision.vMax = T::TVector3(-100000, -100000, -100000);
+	m_BoxCollision.vMin = A::AVector3(100000, 100000, 100000);
+	m_BoxCollision.vMax = A::AVector3(-100000, -100000, -100000);
 
 	for (int iMtrl = 0; iMtrl < m_pSubVertexList.size(); iMtrl++)
 	{
@@ -195,21 +195,21 @@ void AFbxModel::GenAABB()
 		}
 	}
 
-	m_BoxCollision.vList[0] = T::TVector3(//각VB의 좌표값을 위치 min,max로 표기한다. (-1,1,-1)
+	m_BoxCollision.vList[0] = A::AVector3(//각VB의 좌표값을 위치 min,max로 표기한다. (-1,1,-1)
 		m_BoxCollision.vMin.x, m_BoxCollision.vMax.y, m_BoxCollision.vMin.z);
-	m_BoxCollision.vList[1] = T::TVector3(
+	m_BoxCollision.vList[1] = A::AVector3(
 		m_BoxCollision.vMax.x, m_BoxCollision.vMax.y, m_BoxCollision.vMin.z);
-	m_BoxCollision.vList[2] = T::TVector3(
+	m_BoxCollision.vList[2] = A::AVector3(
 		m_BoxCollision.vMin.x, m_BoxCollision.vMin.y, m_BoxCollision.vMin.z);
-	m_BoxCollision.vList[3] = T::TVector3(
+	m_BoxCollision.vList[3] = A::AVector3(
 		m_BoxCollision.vMax.x, m_BoxCollision.vMin.y, m_BoxCollision.vMin.z);
 
-	m_BoxCollision.vList[4] = T::TVector3(
+	m_BoxCollision.vList[4] = A::AVector3(
 		m_BoxCollision.vMin.x, m_BoxCollision.vMax.y, m_BoxCollision.vMax.z);
-	m_BoxCollision.vList[5] = T::TVector3(
+	m_BoxCollision.vList[5] = A::AVector3(
 		m_BoxCollision.vMax.x, m_BoxCollision.vMax.y, m_BoxCollision.vMax.z);
-	m_BoxCollision.vList[6] = T::TVector3(
+	m_BoxCollision.vList[6] = A::AVector3(
 		m_BoxCollision.vMin.x, m_BoxCollision.vMin.y, m_BoxCollision.vMax.z);
-	m_BoxCollision.vList[7] = T::TVector3(
+	m_BoxCollision.vList[7] = A::AVector3(
 		m_BoxCollision.vMax.x, m_BoxCollision.vMin.y, m_BoxCollision.vMax.z);
 }

@@ -15,32 +15,32 @@ public:
 	float				m_fRoll = 0.0f;
 	float				m_fRadius = 10.0f;
 
-	T::TQuaternion		m_qRoration;
-	T::TVector3			m_vRight;	//X
-	T::TVector3			m_vUp;		//Y
-	T::TVector3			m_vLook;	//Z
+	A::AQuaternion		m_qRoration;
+	A::AVector3			m_vRight;	//X
+	A::AVector3			m_vUp;		//Y
+	A::AVector3			m_vLook;	//Z
 
 	//카메라 벡터
-	T::TVector3			m_vCamera;
-	T::TVector3			m_vTarget;
-	T::TVector3			m_vDefaultUp;
+	A::AVector3			m_vCamera;
+	A::AVector3			m_vTarget;
+	A::AVector3			m_vDefaultUp;
 
 	//행렬
-	T::TMatrix			m_matWorld;
-	T::TMatrix			m_matView;
-	T::TMatrix			m_matProj;
+	A::AMatrix			m_matWorld;
+	A::AMatrix			m_matView;
+	A::AMatrix			m_matProj;
 
 public:
 	virtual bool	Init();
 	virtual bool	Frame();
-	virtual bool	Update(T::TVector4 vDirValue);
+	virtual bool	Update(A::AVector4 vDirValue);
 	void			MoveLook(float fValue);
 	void			MoveSide(float fValue);
 	void			MoveUp(float fValue);
 	bool			UpdateVector();
 public:
-	void	CreateViewMatrix(T::TVector3 p, T::TVector3 t = T::TVector3(0, 0, 0), 
-							T::TVector3 u = T::TVector3(0, 1, 0));
+	void	CreateViewMatrix(A::AVector3 p, A::AVector3 t = A::AVector3(0, 0, 0),
+								A::AVector3 u = A::AVector3(0, 1, 0));
 	void	CreateProjMatrix(float fovy = XM_PI * 0.25f, float Aspect = 1.44f,
 							float zn = 0.1f, float zf = 5000.f);
 public:

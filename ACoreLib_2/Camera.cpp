@@ -14,33 +14,33 @@ bool ACamera::Init()
 }
 bool ACamera::Frame()
 {
-    T::TVector2 dir = AInput::Get().GetDelta();
+    A::AVector2 dir = AInput::Get().GetDelta();
     if (AInput::Get().GetKey('W')) { MoveLook(g_fSecPerFrame * m_fSpeed); }
     if (AInput::Get().GetKey('S')) { MoveLook(-g_fSecPerFrame * m_fSpeed); }
     if (AInput::Get().GetKey('A')) { MoveSide(-g_fSecPerFrame * m_fSpeed); }
     if (AInput::Get().GetKey('D')) { MoveSide(g_fSecPerFrame * m_fSpeed); }
     //if (m_fSpeed < 100.0f) m_fSpeed = 100.0f;
-    Update(T::TVector4(-dir.x, -dir.y, 0, 0));
+    Update(A::AVector4(-dir.x, -dir.y, 0, 0));
     
     return true;
 }
 
-bool ACamera::Update(T::TVector4 vDirValue)
+bool ACamera::Update(A::AVector4 vDirValue)
 {
     m_fPitch += vDirValue.x;
     m_fYaw += vDirValue.y;
     m_fRoll += vDirValue.z;
 
-    T::TMatrix matRot;
-    T::D3DXQuaternionRotationYawPitchRoll(
+    A::AMatrix matRot;
+    A::D3DXQuaternionRotationYawPitchRoll(
         &m_qRoration, m_fYaw, m_fPitch, m_fRoll);
     //w값을 곱한 뒤, 이후 정규화를 해줄 예정.(?)
     m_vCamera += m_vLook * vDirValue.w;
     m_fRadius += vDirValue.w;
 
-    T::D3DXMatrixAffineTransformation(
+    A::D3DXMatrixAffineTransformation(
         &matRot, 1.0f, NULL, &m_qRoration, &m_vCamera);
-    T::D3DXMatrixInverse(&m_matView, NULL, &matRot);
+    A::D3DXMatrixInverse(&m_matView, NULL, &matRot);
 
     return UpdateVector();
 }
@@ -68,16 +68,16 @@ bool ACamera::UpdateVector()
 }
 
 
-void ACamera::CreateViewMatrix(T::TVector3 p, T::TVector3 t, T::TVector3 u)
+void ACamera::CreateViewMatrix(A::AVector3 p, A::AVector3 t, A::AVector3 u)
 {
     m_vCamera = p;
     m_vTarget = t;
     m_vUp = u;
-    T::D3DXMatrixLookAtLH(&m_matView, &m_vCamera, &m_vTarget, &m_vUp);
+    A::D3DXMatrixLookAtLH(&m_matView, &m_vCamera, &m_vTarget, &m_vUp);
 
-    T::TMatrix matInvView;
+    A::AMatrix matInvView;
     D3DXMatrixInverse(&matInvView, NULL, &m_matView);
-    TVector3* pZBasis = (TVector3*)&matInvView._31;
+    A::AVector3* pZBasis = (A::AVector3*)&matInvView._31;
     m_fYaw = atan2f(pZBasis->x, pZBasis->z);
     float fLen = sqrtf(pZBasis->z * pZBasis->z + pZBasis->x * pZBasis->x);
     m_fPitch = -atan2f(pZBasis->y, fLen);
@@ -88,7 +88,7 @@ void ACamera::CreateProjMatrix(float fovy, float Aspect, float zn, float zf)
 {
     m_fFarDistance = zf;
     m_fNearDistance = zn;
-    T::D3DXMatrixPerspectiveFovLH(&m_matProj, fovy, Aspect, zn, zf);
+    A::D3DXMatrixPerspectiveFovLH(&m_matProj, fovy, Aspect, zn, zf);
 }
 
 ACamera::ACamera() 
@@ -99,7 +99,7 @@ ACamera::ACamera()
     m_vTarget.x = 0;
     m_vTarget.y = 0;
     m_vTarget.z = 100;
-    m_vUp = m_vDefaultUp = T::TVector3(0, 1, 0);
+    m_vUp = m_vDefaultUp = A::AVector3(0, 1, 0);
     m_fSpeed = 100.0f;
 }
 ACamera:: ~ACamera() {}

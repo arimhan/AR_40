@@ -80,13 +80,13 @@ bool AInput::Frame()
 bool AInput::Render() { return true; }
 bool AInput::Release() { return true; }
 DWORD AInput::GetKey(DWORD dwKey) { return m_dwKeyState[dwKey]; }
-T::TVector2	AInput::GetDelta()
+A::AVector2	AInput::GetDelta()
 {
-	T::TVector2 ret;
+	A::AVector2 ret;
 	m_fRadianY = (AInput::Get().m_ptDeltaMouse.x / (float)g_rtClient.right) * ABASIS_PI;
 	m_fRadianX = (AInput::Get().m_ptDeltaMouse.y / (float)g_rtClient.bottom) * ABASIS_PI;
 
-	return TVector2(m_fRadianX, m_fRadianY);
+	return A::AVector2(m_fRadianX, m_fRadianY);
 }
 AInput::AInput()
 {

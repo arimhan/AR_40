@@ -27,13 +27,13 @@ bool ACore::CoreInit()
 
 	//m_DefaultCamera를 세팅한 후 메인카메라로 지정.
 	m_DefaultCamera.Init();
-	m_DefaultCamera.CreateViewMatrix(T::TVector3(0, 500.0f, -100.0f), T::TVector3(0, 0.0f, 0));
+	m_DefaultCamera.CreateViewMatrix(A::AVector3(0, 500.0f, -100.0f), A::AVector3(0, 0.0f, 0));
 	m_DefaultCamera.CreateProjMatrix(XM_PI * 0.25f, 
 		(float)g_rtClient.right / (float)g_rtClient.bottom, 0.1f, 5000.0f);
 	m_DefaultCamera.m_pColorTex = I_Texture.Load(L"../../data/Img/charport.bmp");
-	m_DefaultCamera.m_pVShader = I_Shader.CreateVertexShader(m_pd3dDevice.Get(), L"Box.hlsl", "VSColor");
-	m_DefaultCamera.m_pPShader = I_Shader.CreatePixelShader(m_pd3dDevice.Get(), L"Box.hlsl", "PSColor");
-	m_DefaultCamera.SetPosition(T::TVector3(0.0f, 1.0f, 0.0f));
+	m_DefaultCamera.m_pVShader = I_Shader.CreateVertexShader(m_pd3dDevice.Get(), L"../../data/shader/Box.hlsl", "VSColor");
+	m_DefaultCamera.m_pPShader = I_Shader.CreatePixelShader(m_pd3dDevice.Get(), L"../../data/shader/Box.hlsl", "PSColor");
+	m_DefaultCamera.SetPosition(A::AVector3(0.0f, 1.0f, 0.0f));
 	if(!m_DefaultCamera.Create(m_pd3dDevice.Get(), m_pImmediateContext.Get()))
 	{
 		return false;
@@ -41,10 +41,10 @@ bool ACore::CoreInit()
 	m_pMainCamera = &m_DefaultCamera;
 
 	m_SkyObj.Init();
-	m_SkyObj.SetPosition(T::TVector3(0.0f, 0.0f, 0.0f));
+	m_SkyObj.SetPosition(A::AVector3(0.0f, 0.0f, 0.0f));
 
-	if(!m_SkyObj.Create(m_pd3dDevice.Get(), m_pImmediateContext.Get(), 
-		L"sky.hlsl", L"../../data/sky/skybox02.dds"))
+	if (!m_SkyObj.Create(m_pd3dDevice.Get(), m_pImmediateContext.Get(),
+		L"../../data/shader/sky.hlsl", L"../../data/sky/skybox02.dds"))
 	{
 		return false;
 	}
@@ -111,7 +111,7 @@ bool ACore::CoreRender()
 	m_SkyObj.m_matView._41 = 0;
 	m_SkyObj.m_matView._42 = 0;
 	m_SkyObj.m_matView._43 = 0;
-	T::TMatrix matRotation, matScale;
+	A::AMatrix matRotation, matScale;
 	m_SkyObj.SetMatrix(NULL, &m_SkyObj.m_matView, &m_pMainCamera->m_matProj);
 	m_pImmediateContext->RSSetState(ADxState::g_pRSNoneCullSolid);
 	m_SkyObj.Render();
@@ -164,7 +164,7 @@ void ACore::DrawDebugInit(ID3D11Device* pd3dDevice, ID3D11DeviceContext* pContex
 	m_BoxDebug.m_pColorTex = I_Texture.Load(L"../../data/charport.bmp");
 	m_BoxDebug.m_pVShader = I_Shader.CreateVertexShader(pd3dDevice, L"Box.hlsl", "VSColor");
 	m_BoxDebug.m_pPShader = I_Shader.CreatePixelShader(pd3dDevice, L"Box.hlsl", "PSColor");
-	m_BoxDebug.SetPosition(T::TVector3(0.0f, 1.0f, 0.0f));
+	m_BoxDebug.SetPosition(A::AVector3(0.0f, 1.0f, 0.0f));
 	if (!m_BoxDebug.Create(pd3dDevice, pContext)) { return; }
 }
 

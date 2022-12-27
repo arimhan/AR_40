@@ -105,9 +105,6 @@
     <ClCompile Include="Node.cpp">
       <Filter>Obj</Filter>
     </ClCompile>
-    <ClCompile Include="SkyObj.cpp">
-      <Filter>Obj</Filter>
-    </ClCompile>
     <ClCompile Include="Map.cpp">
       <Filter>Map</Filter>
     </ClCompile>
@@ -201,9 +198,6 @@
       <Filter>Obj</Filter>
     </ClInclude>
     <ClInclude Include="BoxObj.h">
-      <Filter>Obj</Filter>
-    </ClInclude>
-    <ClInclude Include="SkyObj.h">
       <Filter>Obj</Filter>
     </ClInclude>
     <ClInclude Include="Node.h">

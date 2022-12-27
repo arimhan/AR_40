@@ -4,7 +4,7 @@
 class ASkyObj : public AObject3D
 {
 public:
-	//T::TMatrix		m_matViewSky;
+	//AMatrix			m_matViewSky;
 	ATexture*		m_pTexArray[6];
 	ATexture*		m_pTexCube;
 	ComPtr<ID3D11ShaderResourceView>	m_pSRVArray[6];

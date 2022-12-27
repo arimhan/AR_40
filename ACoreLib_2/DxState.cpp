@@ -13,12 +13,14 @@ ID3D11SamplerState* ADxState::g_pSSMirrorPoint = nullptr;
 ID3D11SamplerState* ADxState::g_pSSClampLinear = nullptr;
 ID3D11SamplerState* ADxState::g_pSSClampPoint = nullptr;
 
+ID3D11SamplerState* ADxState::g_pSSShadowMap = nullptr;
 
 ID3D11RasterizerState* ADxState::g_pRSBackCullSolid = nullptr;
 ID3D11RasterizerState* ADxState::g_pRSNoneCullSolid = nullptr;
+ID3D11RasterizerState* ADxState::g_pRSBackCullWireFrame	= nullptr;
+ID3D11RasterizerState* ADxState::g_pRSNoneCullWireFrame	= nullptr;
+ID3D11RasterizerState* ADxState::g_pRSSlopeScaledDepthBias = nullptr;
 
-ID3D11RasterizerState*		ADxState::g_pRSBackCullWireFrame	= nullptr;
-ID3D11RasterizerState*		ADxState::g_pRSNoneCullWireFrame	= nullptr;
 ID3D11DepthStencilState*	ADxState::g_pDSSDepthEnable			= nullptr;
 ID3D11DepthStencilState*	ADxState::g_pDSSDepthDisable		= nullptr;
 
@@ -50,6 +52,9 @@ bool ADxState::SetState(ID3D11Device* pd3dDevice)
 	blenddesc.RenderTarget[0].BlendEnable = FALSE;
 	hr = pd3dDevice->CreateBlendState(&blenddesc, &m_AlphaBlendDisable);
 
+	blenddesc.RenderTarget[0].RenderTargetWriteMask = 0;
+	hr = pd3dDevice->CreateBlendState(&blenddesc, &m_BSNoneColor);
+
 	D3D11_SAMPLER_DESC sd;
 	ZeroMemory(&sd, sizeof(D3D11_SAMPLER_DESC));
 	sd.Filter = D3D11_FILTER_MIN_MAG_MIP_LINEAR;
@@ -67,49 +72,63 @@ bool ADxState::SetState(ID3D11Device* pd3dDevice)
 	sd.AddressV = D3D11_TEXTURE_ADDRESS_MIRROR;
 	sd.AddressW = D3D11_TEXTURE_ADDRESS_MIRROR;
 	sd.Filter = D3D11_FILTER_MIN_MAG_MIP_LINEAR;
-	if (FAILED(hr = pd3dDevice->CreateSamplerState(&sd, &ADxState::g_pSSMirrorLinear))) return hr;
+	if (FAILED(hr = pd3dDevice->CreateSamplerState(&sd, &g_pSSMirrorLinear))) return hr;
 
 	sd.AddressU = D3D11_TEXTURE_ADDRESS_MIRROR;
 	sd.AddressV = D3D11_TEXTURE_ADDRESS_MIRROR;
 	sd.AddressW = D3D11_TEXTURE_ADDRESS_MIRROR;
 	sd.Filter = D3D11_FILTER_MIN_MAG_MIP_POINT;
-	if (FAILED(hr = pd3dDevice->CreateSamplerState(&sd, &ADxState::g_pSSMirrorPoint))) return hr;
+	if (FAILED(hr = pd3dDevice->CreateSamplerState(&sd, &g_pSSMirrorPoint))) return hr;
 
 	//g_pSSClamp
 	sd.AddressU = D3D11_TEXTURE_ADDRESS_CLAMP;
 	sd.AddressV = D3D11_TEXTURE_ADDRESS_CLAMP;
 	sd.AddressW = D3D11_TEXTURE_ADDRESS_CLAMP;
 	sd.Filter = D3D11_FILTER_MIN_MAG_MIP_LINEAR;
-	if (FAILED(hr = pd3dDevice->CreateSamplerState(&sd, &ADxState::g_pSSClampLinear))) return hr;
+	if (FAILED(hr = pd3dDevice->CreateSamplerState(&sd, &g_pSSClampLinear))) return hr;
 
 	sd.AddressU = D3D11_TEXTURE_ADDRESS_CLAMP;
 	sd.AddressV = D3D11_TEXTURE_ADDRESS_CLAMP;
 	sd.AddressW = D3D11_TEXTURE_ADDRESS_CLAMP;
 	sd.Filter = D3D11_FILTER_MIN_MAG_MIP_POINT;
-	if (FAILED(hr = pd3dDevice->CreateSamplerState(&sd, &ADxState::g_pSSClampPoint))) return hr;
+	if (FAILED(hr = pd3dDevice->CreateSamplerState(&sd, &g_pSSClampPoint))) return hr;
 
+	D3D11_SAMPLER_DESC SamDescShad =
+	{
+		D3D11_FILTER_COMPARISON_MIN_LINEAR_MAG_MIP_POINT, //D3D11_FILTER Filter;
+		D3D11_TEXTURE_ADDRESS_BORDER,	//D3D11_TEXTURE_ADDRESS_MODE AddressU,V,W;
+		D3D11_TEXTURE_ADDRESS_BORDER,
+		D3D11_TEXTURE_ADDRESS_BORDER,
+		0,	//Float MipLODBias;
+		0,  //UINT MaxAnisotropy;
+		D3D11_COMPARISON_LESS, //D3D11_COMPARISON_FUNC ComparisonFunc;
+		0.0, 0.0, 0.0, 0.0, //Float BorderColor[4];
+		0, //Float MinLOD;
+		0  //Float MaxLOD;
+	};
+	if (FAILED(hr = pd3dDevice->CreateSamplerState(&SamDescShad, &g_pSSShadowMap))) return hr;
 
 	D3D11_RASTERIZER_DESC rsDesc;
 	ZeroMemory(&rsDesc, sizeof(rsDesc));
 	rsDesc.DepthClipEnable = TRUE;
 	rsDesc.FillMode = D3D11_FILL_SOLID;
 	rsDesc.CullMode = D3D11_CULL_BACK;
-	if (FAILED(hr = pd3dDevice->CreateRasterizerState(&rsDesc, &ADxState::g_pRSBackCullSolid))) return hr;
+	if (FAILED(hr = pd3dDevice->CreateRasterizerState(&rsDesc, &g_pRSBackCullSolid))) return hr;
 
 	rsDesc.DepthClipEnable = TRUE;
 	rsDesc.FillMode = D3D11_FILL_SOLID;
 	rsDesc.CullMode = D3D11_CULL_NONE;
-	if (FAILED(hr = pd3dDevice->CreateRasterizerState(&rsDesc, &ADxState::g_pRSNoneCullSolid))) return hr;
+	if (FAILED(hr = pd3dDevice->CreateRasterizerState(&rsDesc, &g_pRSNoneCullSolid))) return hr;
 
 	rsDesc.DepthClipEnable = TRUE;
 	rsDesc.FillMode = D3D11_FILL_WIREFRAME;
 	rsDesc.CullMode = D3D11_CULL_BACK;
-	if (FAILED(hr = pd3dDevice->CreateRasterizerState(&rsDesc, &ADxState::g_pRSBackCullWireFrame))) return hr;
+	if (FAILED(hr = pd3dDevice->CreateRasterizerState(&rsDesc, &g_pRSBackCullWireFrame))) return hr;
 
 	rsDesc.DepthClipEnable = TRUE;
 	rsDesc.FillMode = D3D11_FILL_WIREFRAME;
 	rsDesc.CullMode = D3D11_CULL_NONE;
-	if (FAILED(hr = pd3dDevice->CreateRasterizerState(&rsDesc, &ADxState::g_pRSNoneCullWireFrame))) return hr;
+	if (FAILED(hr = pd3dDevice->CreateRasterizerState(&rsDesc, &g_pRSNoneCullWireFrame))) return hr;
 
 	D3D11_DEPTH_STENCIL_DESC dsDescDepth;
 	ZeroMemory(&dsDescDepth, sizeof(D3D11_DEPTH_STENCIL_DESC));
@@ -150,6 +169,7 @@ bool ADxState::Release()
 	if (g_pRSNoneCullSolid)					g_pRSNoneCullSolid->Release();
 	if (g_pRSBackCullWireFrame)				g_pRSBackCullWireFrame->Release();
 	if (g_pRSNoneCullWireFrame)				g_pRSNoneCullWireFrame->Release();
+	if (g_pRSSlopeScaledDepthBias)			g_pRSSlopeScaledDepthBias->Release();
 
 	if (g_pDSSDepthEnable)					g_pDSSDepthEnable->Release();
 	if (g_pDSSDepthDisable)					g_pDSSDepthDisable->Release();
@@ -158,9 +178,11 @@ bool ADxState::Release()
 
 	if (m_AlphaBlend)						m_AlphaBlend->Release();
 	if (m_AlphaBlendDisable)				m_AlphaBlendDisable->Release();
+	if (m_BSNoneColor)						m_BSNoneColor->Release();
 
 	m_AlphaBlend = nullptr;
 	m_AlphaBlendDisable = nullptr;
+	m_BSNoneColor = nullptr;
 
 	if (m_pSSLinear)			m_pSSLinear->Release();
 	if (m_pSSPoint)				m_pSSPoint->Release();
@@ -168,6 +190,7 @@ bool ADxState::Release()
 	if (g_pSSMirrorPoint)		g_pSSMirrorPoint->Release();
 	if (g_pSSClampLinear)		g_pSSClampLinear->Release();
 	if (g_pSSClampPoint)		g_pSSClampPoint->Release();
+	if (g_pSSShadowMap)			g_pSSShadowMap->Release();
 	return true;
 }
 

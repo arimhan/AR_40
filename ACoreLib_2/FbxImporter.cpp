@@ -354,7 +354,7 @@ bool AFbxImporter::ParseMeshSkinning(FbxMesh* pFbxMesh, AFbxModel* pObject)
 			pCluster->GetTransformMatrix(matReferenceGlobalInitPosition);
 			FbxMatrix matBindPose = matReferenceGlobalInitPosition.Inverse() * matXBindPose;
 
-			TMatrix matInvBindPos = DxConvertMatrix(ConvertMatrix(matBindPose));
+			A::AMatrix matInvBindPos = DxConvertMatrix(ConvertMatrix(matBindPose));
 			matInvBindPos = matInvBindPos.Invert();
 			int  iBoneIndex = m_pFbxNodeMap.find(pCluster->GetLink())->second;
 			std::wstring name = m_pTreeList[iBoneIndex]->m_csName;
@@ -383,9 +383,9 @@ bool AFbxImporter::ParseMeshSkinning(FbxMesh* pFbxMesh, AFbxModel* pObject)
 //-------------------------  Animation  -----------------------------------
 
 //Animation 추가
-TMatrix	AFbxImporter::DxConvertMatrix(TMatrix m)
+A::AMatrix	AFbxImporter::DxConvertMatrix(A::AMatrix m)
 {
-	TMatrix mat;
+	A::AMatrix mat;
 	mat._11 = m._11;	mat._12 = m._13;	mat._13 = m._12;
 	mat._21 = m._31;	mat._22 = m._33;	mat._23 = m._32;
 	mat._31 = m._21;	mat._32 = m._23;	mat._33 = m._22;
@@ -397,9 +397,9 @@ TMatrix	AFbxImporter::DxConvertMatrix(TMatrix m)
 	return mat;
 }
 
-TMatrix	AFbxImporter::ConvertMatrix(FbxMatrix& m)
+A::AMatrix	AFbxImporter::ConvertMatrix(FbxMatrix& m)
 {
-	TMatrix mat;
+	A::AMatrix mat;
 	float* pMatArray = reinterpret_cast<float*>(&mat);
 	double* pSrcArray = reinterpret_cast<double*>(&m);
 
@@ -410,9 +410,9 @@ TMatrix	AFbxImporter::ConvertMatrix(FbxMatrix& m)
 	return mat;
 }
 
-TMatrix	AFbxImporter::ConvertAMatrix(FbxAMatrix& m)
+A::AMatrix	AFbxImporter::ConvertAMatrix(FbxAMatrix& m)
 {
-	TMatrix mat;
+	A::AMatrix mat;
 	float* pMatArray = reinterpret_cast<float*>(&mat);
 	double* pSrcArray = reinterpret_cast<double*>(&m);
 
@@ -456,7 +456,7 @@ void AFbxImporter::ParseAnimation()
 			aTrack.matTrack = DxConvertMatrix(ConvertAMatrix(matGlobal));
 
 			//행렬 SRT를 분해하여 요소 전달
-			T::D3DXMatrixDecompose(&aTrack.s, &aTrack.r, &aTrack.t, &aTrack.matTrack);
+			A::D3DXMatrixDecompose(&aTrack.s, &aTrack.r, &aTrack.t, &aTrack.matTrack);
 			m_pTreeList[iObj]->m_AnimTrack.push_back(aTrack);
 		}
 	}
